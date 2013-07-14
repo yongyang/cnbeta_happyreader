@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/search_item"
+            android:title="@string/search_item"
+            android:orderInCategory="100"
+            android:showAsAction="always"
+            android:actionViewClass="android.widget.SearchView"/>
+    <item
+            android:id="@+id/refresh_item"
+            android:title="@string/refresh_item"
+            android:orderInCategory="100"
+            android:showAsAction="always"
+            android:icon="@drawable/ic_refresh"/>
+
+    <item
+            android:id="@+id/more_item"
+            android:title="@string/more_item"
+            android:showAsAction="always"
+            android:orderInCategory="101"
+            android:icon="@drawable/ic_menu_more">
+        <menu>
+            <!-- 定义一组允许复选的菜单项 -->
+            <group>
+                <!-- 定义3个菜单项 -->
+                <item
+                        android:id="@+id/setting_item"
+                        android:title="@string/setting_item"/>
+                <item
+                        android:id="@+id/green_font"
+                        android:title="@string/green_title"/>
+                <item
+                        android:id="@+id/aboutus_item"
+                        android:title="@string/aboutus_item"/>
+            </group>
+        </menu>
+    </item>
+</menu>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">cnBeta乐读</string>
+    <string name="article_content">阅读新闻</string>
+
+    <string name="search_item">Settings</string>
+
+    <string name="refresh_item">刷新</string>
+    <string name="more_item">更多选项</string>
+    <string name="setting_item">设置</string>
+   	<string name="green_title">绿色</string>
+    <string name="aboutus_item">关于</string>
+    <string name="comment_item">评论</string>
+
+</resources>
