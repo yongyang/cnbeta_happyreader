@@ -25,45 +25,42 @@ public class ContentActivity extends Activity implements ActionBar.TabListener, 
 
    		setContentView(R.layout.content);
    		final ActionBar actionBar = getActionBar();
-		// ÉèÖÃActionBarÊÇ·ñÏÔÊ¾±êÌâ
 		actionBar.setDisplayShowTitleEnabled(true);
-   		// ÉèÖÃActionBarµÄµ¼º½·½Ê½£ºTabµ¼º½
    		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setDisplayHomeAsUpEnabled(true);
-   		// ÒÀ´ÎÌí¼Ó3¸öTabÒ³£¬²¢Îª3¸öTab±êÇ©Ìí¼ÓÊÂ¼þ¼àÌýÆ÷
-   		actionBar.addTab(actionBar.newTab().setText("ÕýÎÄ").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setText("ÆÀÂÛ").setTabListener(this));
+   		actionBar.addTab(actionBar.newTab().setText("æ­£æ–‡").setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setText("è¯„è®º").setTabListener(this));
    	}
 
    	@Override
    	public void onRestoreInstanceState(Bundle savedInstanceState){
    		if (savedInstanceState.containsKey(SELECTED_ITEM)){
-   			// Ñ¡ÖÐÇ°Ãæ±£´æµÄË÷Òý¶ÔÓ¦µÄFragmentÒ³
+   			// Ñ¡ï¿½ï¿½Ç°ï¿½æ±£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½FragmentÒ³
    			getActionBar().setSelectedNavigationItem(savedInstanceState.getInt(SELECTED_ITEM));
    		}
    	}
 
    	@Override
    	public void onSaveInstanceState(Bundle outState){
-   		// ½«µ±Ç°Ñ¡ÖÐµÄFragmentÒ³µÄË÷Òý±£´æµ½BundleÖÐ
+   		// ï¿½ï¿½ï¿½ï¿½Ç°Ñ¡ï¿½Ðµï¿½FragmentÒ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æµ½Bundleï¿½ï¿½
    		outState.putInt(SELECTED_ITEM, getActionBar().getSelectedNavigationIndex());
    	}
 
-    // µ±Ö¸¶¨Tab±»Ñ¡ÖÐÊ±¼¤·¢¸Ã·½·¨
+    // ï¿½ï¿½Ö¸ï¿½ï¿½Tabï¿½ï¿½Ñ¡ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        // ´´½¨Ò»¸öÐÂµÄFragment¶ÔÏó
+        // ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Âµï¿½Fragmentï¿½ï¿½ï¿½ï¿½
         Fragment fragment = new ArticleContentFragment();
-        // ´´½¨Ò»¸öBundle¶ÔÏó£¬ÓÃÓÚÏòFragment´«Èë²ÎÊý
+        // ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Bundleï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Fragmentï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         Bundle args = new Bundle();
         args.putInt(ArticleListFragment.ARG_SECTION_NUMBER,
                 tab.getPosition() + 1);
-        // Ïòfragment´«Èë²ÎÊý
+        // ï¿½ï¿½fragmentï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         fragment.setArguments(args);
-        // »ñÈ¡FragmentTransaction¶ÔÏó
+        // ï¿½ï¿½È¡FragmentTransactionï¿½ï¿½ï¿½ï¿½
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        // Ê¹ÓÃfragment´úÌæ¸ÃActivityÖÐµÄcontainer×é¼þ
+        // Ê¹ï¿½ï¿½fragmentï¿½ï¿½ï¿½ï¿½ï¿½Activityï¿½Ðµï¿½containerï¿½ï¿½ï¿½
         ft.replace(R.id.contentLayout, fragment);
-        // Ìá½»ÊÂÎñ
+        // ï¿½á½»ï¿½ï¿½ï¿½ï¿½
         ft.commit();
     }
 
@@ -74,7 +71,7 @@ public class ContentActivity extends Activity implements ActionBar.TabListener, 
 
     }
 
-	// µ±µ¼º½Ïî±»Ñ¡ÖÐÊ±¼¤·¢¸Ã·½·¨
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½î±»Ñ¡ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½
 	public boolean onNavigationItemSelected(int position, long id) {
         Toast.makeText(this, "abc", 1000).show();
         return true;
@@ -114,13 +111,13 @@ public class ContentActivity extends Activity implements ActionBar.TabListener, 
    		return true;
    	}
     @Override
-   	// Ñ¡Ïî²Ëµ¥µÄ²Ëµ¥Ïî±»µ¥»÷ºóµÄ»Øµ÷·½·¨
+   	// Ñ¡ï¿½ï¿½Ëµï¿½ï¿½Ä²Ëµï¿½ï¿½î±»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»Øµï¿½ï¿½ï¿½ï¿½ï¿½
    	public boolean onOptionsItemSelected(MenuItem mi) {
         if(mi.isCheckable())
       		{
-      			mi.setChecked(true);  //¢Ú
+      			mi.setChecked(true);  //ï¿½ï¿½
       		}
-      		// ÅÐ¶Ïµ¥»÷µÄÊÇÄÄ¸ö²Ëµ¥Ïî£¬²¢Õë¶ÔÐÔµÄ×÷³öÏìÓ¦¡£
+      		// ï¿½Ð¶Ïµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½Ëµï¿½ï¿½î£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½
       		switch (mi.getItemId()) {
                 case android.R.id.home:
                     Intent intent = new Intent(this, MainActivity.class);
@@ -128,7 +125,7 @@ public class ContentActivity extends Activity implements ActionBar.TabListener, 
                     break;
                 case R.id.more_item:
                 default:
-                    Toast.makeText(this, "Äúµ¥»÷ÁË²Ëµ¥Ïî" + mi.toString(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "ï¿½ï¿½ï¿½ï¿½Ë²Ëµï¿½ï¿½ï¿½" + mi.toString(),Toast.LENGTH_SHORT).show();
 
             }
 

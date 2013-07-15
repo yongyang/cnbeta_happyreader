@@ -24,46 +24,46 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
    		setContentView(R.layout.main);
    		final ActionBar actionBar = getActionBar();
-		// ÉèÖÃActionBarÊÇ·ñÏÔÊ¾±êÌâ
+		// ï¿½ï¿½ï¿½ï¿½ActionBarï¿½Ç·ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
 		actionBar.setDisplayShowTitleEnabled(true);
-   		// ÉèÖÃActionBarµÄµ¼º½·½Ê½£ºTabµ¼º½
+   		// ï¿½ï¿½ï¿½ï¿½ActionBarï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½Tabï¿½ï¿½ï¿½ï¿½
    		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-   		// ÒÀ´ÎÌí¼Ó3¸öTabÒ³£¬²¢Îª3¸öTab±êÇ©Ìí¼ÓÊÂ¼ş¼àÌıÆ÷
-   		actionBar.addTab(actionBar.newTab().setText("ÈÈµãĞÂÎÅ").setTabListener(this));
-   		actionBar.addTab(actionBar.newTab().setText("ÊµÊ±¸üĞÂ").setTabListener(this));
+   		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½3ï¿½ï¿½TabÒ³ï¿½ï¿½ï¿½ï¿½Îª3ï¿½ï¿½Tabï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+   		actionBar.addTab(actionBar.newTab().setText("æœ€æ–°æ–°é—»").setTabListener(this));
+   		actionBar.addTab(actionBar.newTab().setText("æ—¶äº‹è¦ç‚¹").setTabListener(this));
    		actionBar.addTab(actionBar.newTab().setText("TOP10").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setText("ÎÒµÄÊÕ²Ø").setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setText("æˆ‘çš„æ”¶è—").setTabListener(this));
    	}
 
    	@Override
    	public void onRestoreInstanceState(Bundle savedInstanceState){
    		if (savedInstanceState.containsKey(SELECTED_ITEM)){
-   			// Ñ¡ÖĞÇ°Ãæ±£´æµÄË÷Òı¶ÔÓ¦µÄFragmentÒ³
+   			// Ñ¡ï¿½ï¿½Ç°ï¿½æ±£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½FragmentÒ³
    			getActionBar().setSelectedNavigationItem(savedInstanceState.getInt(SELECTED_ITEM));
    		}
    	}
 
    	@Override
    	public void onSaveInstanceState(Bundle outState){
-   		// ½«µ±Ç°Ñ¡ÖĞµÄFragmentÒ³µÄË÷Òı±£´æµ½BundleÖĞ
+   		// ï¿½ï¿½ï¿½ï¿½Ç°Ñ¡ï¿½Ğµï¿½FragmentÒ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æµ½Bundleï¿½ï¿½
    		outState.putInt(SELECTED_ITEM, getActionBar().getSelectedNavigationIndex());
    	}
 
-    // µ±Ö¸¶¨Tab±»Ñ¡ÖĞÊ±¼¤·¢¸Ã·½·¨
+    // ï¿½ï¿½Ö¸ï¿½ï¿½Tabï¿½ï¿½Ñ¡ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        // ´´½¨Ò»¸öĞÂµÄFragment¶ÔÏó
+        // ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Âµï¿½Fragmentï¿½ï¿½ï¿½ï¿½
         Fragment fragment = new ArticleListFragment();
-        // ´´½¨Ò»¸öBundle¶ÔÏó£¬ÓÃÓÚÏòFragment´«Èë²ÎÊı
+        // ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Bundleï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Fragmentï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         Bundle args = new Bundle();
         args.putInt(ArticleListFragment.ARG_SECTION_NUMBER,
                 tab.getPosition() + 1);
-        // Ïòfragment´«Èë²ÎÊı
+        // ï¿½ï¿½fragmentï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         fragment.setArguments(args);
-        // »ñÈ¡FragmentTransaction¶ÔÏó
+        // ï¿½ï¿½È¡FragmentTransactionï¿½ï¿½ï¿½ï¿½
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        // Ê¹ÓÃfragment´úÌæ¸ÃActivityÖĞµÄcontainer×é¼ş
+        // Ê¹ï¿½ï¿½fragmentï¿½ï¿½ï¿½ï¿½ï¿½Activityï¿½Ğµï¿½containerï¿½ï¿½ï¿½
         ft.replace(R.id.container, fragment);
-        // Ìá½»ÊÂÎñ
+        // ï¿½á½»ï¿½ï¿½ï¿½ï¿½
         ft.commit();
     }
 
@@ -109,13 +109,13 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
    		return true;
    	}
     @Override
-   	// Ñ¡Ïî²Ëµ¥µÄ²Ëµ¥Ïî±»µ¥»÷ºóµÄ»Øµ÷·½·¨
+   	// Ñ¡ï¿½ï¿½Ëµï¿½ï¿½Ä²Ëµï¿½ï¿½î±»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»Øµï¿½ï¿½ï¿½ï¿½ï¿½
    	public boolean onOptionsItemSelected(MenuItem mi) {
         if(mi.isCheckable())
       		{
-      			mi.setChecked(true);  //¢Ú
+      			mi.setChecked(true);  //ï¿½ï¿½
       		}
-      		// ÅĞ¶Ïµ¥»÷µÄÊÇÄÄ¸ö²Ëµ¥Ïî£¬²¢Õë¶ÔĞÔµÄ×÷³öÏìÓ¦¡£
+      		// ï¿½Ğ¶Ïµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½Ëµï¿½ï¿½î£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½
       		switch (mi.getItemId()) {
                 case android.R.id.home:
                 case R.id.more_item:
@@ -126,7 +126,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                     this.startActivity(intent);
                     break;
                 default:
-                    Toast.makeText(this, "Äúµ¥»÷ÁË²Ëµ¥Ïî" + mi.toString(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "ï¿½ï¿½ï¿½ï¿½Ë²Ëµï¿½ï¿½ï¿½" + mi.toString(),Toast.LENGTH_SHORT).show();
 
             }
 
