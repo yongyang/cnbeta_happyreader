@@ -1,4 +1,4 @@
-package org.jandroid.cnbeta.http;
+package org.jandroid.cnbeta.client;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -270,7 +270,7 @@ public class CnBetaHttpClient {
         switch (Integer.valueOf(Integer.parseInt(paramString.substring(0, 1))).intValue())
         {
         case 0:
-          Toast.makeText(Comment.this, "ÄúÒªÆÀÂÛµÄÐÂÎÅ²»´æÔÚ", 0).show();
+          Toast.makeText(Comment.this, "ï¿½ï¿½Òªï¿½ï¿½ï¿½Ûµï¿½ï¿½ï¿½ï¿½Å²ï¿½ï¿½ï¿½ï¿½ï¿½", 0).show();
           Comment.this.fabiaoDialog.dismiss();
         case 1:
         case 2:
@@ -285,9 +285,9 @@ public class CnBetaHttpClient {
       }
       catch (Exception localException)
       {
-        Toast.makeText(Comment.this, "Î´Öª´íÎó", 0).show();
+        Toast.makeText(Comment.this, "Î´Öªï¿½ï¿½ï¿½ï¿½", 0).show();
       }
-      Toast.makeText(Comment.this, "ÑéÖ¤Âë²»ÕýÈ·", 0).show();
+      Toast.makeText(Comment.this, "ï¿½ï¿½Ö¤ï¿½ë²»ï¿½ï¿½È·", 0).show();
       Comment.this.fabiaoDialog.findViewById(2131296264).setVisibility(0);
       Comment.this.fabiaoDialog.findViewById(2131296263).setVisibility(8);
       ((EditText)Comment.this.fabiaoDialog.findViewById(2131296262)).setText("");
@@ -296,31 +296,31 @@ public class CnBetaHttpClient {
       arrayOfString[0] = "";
       localImageCodeTask.execute(arrayOfString);
       return;
-      Toast.makeText(Comment.this, "30ÃëÄÚ²»ÔÊÐíÔÙ´ÎÆÀÂÛ", 0).show();
+      Toast.makeText(Comment.this, "30ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù´ï¿½ï¿½ï¿½ï¿½ï¿½", 0).show();
       Comment.this.fabiaoDialog.dismiss();
       return;
-      Toast.makeText(Comment.this, "ÇëÌîÐ´ÆÀÂÛºóÔÙÌá½»", 0).show();
+      Toast.makeText(Comment.this, "ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½Ûºï¿½ï¿½ï¿½ï¿½á½»", 0).show();
       return;
-      Toast.makeText(Comment.this, "ÆÀÂÛ×ÖÊý³¬¹ýÏÞÖÆ", 0).show();
+      Toast.makeText(Comment.this, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", 0).show();
       return;
-      Toast.makeText(Comment.this, "·¢ËÍÆÀÂÛ³É¹¦£¬Ë¢ÐÂºóÏÔÊ¾", 0).show();
+      Toast.makeText(Comment.this, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û³É¹ï¿½ï¿½ï¿½Ë¢ï¿½Âºï¿½ï¿½ï¿½Ê¾", 0).show();
       Comment.this.fabiaoDialog.dismiss();
       return;
-      Toast.makeText(Comment.this, "CBFW¼ì²âµ½ÄúÊäÈëÁË²»ÊÊµ±×Ö´Ê£¬Çë¾ÀÕý", 0).show();
+      Toast.makeText(Comment.this, "CBFWï¿½ï¿½âµ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë²ï¿½ï¿½Êµï¿½ï¿½Ö´Ê£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", 0).show();
       return;
-      Toast.makeText(Comment.this, "ÄúµÄÆÀÂÛÐèÉóºËºó²ÅÄÜÏÔÊ¾", 0).show();
+      Toast.makeText(Comment.this, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾", 0).show();
       Comment.this.fabiaoDialog.dismiss();
       return;
-      Toast.makeText(Comment.this, "ÓÉÓÚÖÖÖÖÔ­Òò£¬ÕâÌõÐÂÎÅ²»¿ª·ÅÆÀÂÛ£¬Çë¼ûÁÂ", 0).show();
+      Toast.makeText(Comment.this, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", 0).show();
       Comment.this.fabiaoDialog.dismiss();
       return;
-      Toast.makeText(Comment.this, "ÆÀÂÛÏµÍ³Î¬»¤ÖÐ", 0).show();
+      Toast.makeText(Comment.this, "ï¿½ï¿½ï¿½ï¿½ÏµÍ³Î¬ï¿½ï¿½ï¿½ï¿½", 0).show();
       Comment.this.fabiaoDialog.dismiss();
     }
 
     protected void onPreExecute()
     {
-      Comment.this.fabiaoProgressDialog = ProgressDialog.show(Comment.this, "", "ÆÀÂÛ·¢±íÖÐ£¬ÇëÉÔºò...", true, true);
+      Comment.this.fabiaoProgressDialog = ProgressDialog.show(Comment.this, "", "ï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½Ôºï¿½...", true, true);
     }
   }
 
@@ -357,17 +357,17 @@ public class CnBetaHttpClient {
     {
       Comment.this.fabiaoProgressDialog.dismiss();
       if (paramString.substring(0, 1).equals("0"))
-        Toast.makeText(Comment.this, "Ð»Ð»ÄúµÄ²ÎÓë", 0).show();
+        Toast.makeText(Comment.this, "Ð»Ð»ï¿½ï¿½Ä²ï¿½ï¿½ï¿½", 0).show();
       while (true)
       {
         return;
-        Toast.makeText(Comment.this, "ÄãÒÑ¾­Í¶¹ýÆ±ÁË", 0).show();
+        Toast.makeText(Comment.this, "ï¿½ï¿½ï¿½Ñ¾ï¿½Í¶ï¿½ï¿½Æ±ï¿½ï¿½", 0).show();
       }
     }
 
     protected void onPreExecute()
     {
-      Comment.this.fabiaoProgressDialog = ProgressDialog.show(Comment.this, "", "Í¶Æ±ÖÐ£¬ÇëÉÔºò...", true, true);
+      Comment.this.fabiaoProgressDialog = ProgressDialog.show(Comment.this, "", "Í¶Æ±ï¿½Ð£ï¿½ï¿½ï¿½ï¿½Ôºï¿½...", true, true);
     }
   }
 

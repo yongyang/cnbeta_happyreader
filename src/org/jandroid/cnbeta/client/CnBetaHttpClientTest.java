@@ -1,4 +1,4 @@
-package org.jandroid.cnbeta.http;
+package org.jandroid.cnbeta.client;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;

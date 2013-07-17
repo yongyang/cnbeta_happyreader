@@ -14,9 +14,8 @@ import android.widget.Toast;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.fragment.ArticleContentFragment;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
-import org.jandroid.cnbeta.task.EntityLoader;
 
-public class ContentActivity extends Activity implements ActionBar.TabListener, ActionBar.OnNavigationListener {
+public class ContentActivity extends Activity implements ActionBar.TabListener {
     private static final String SELECTED_ITEM = "selected_item";
 
    	@Override
@@ -69,39 +68,6 @@ public class ContentActivity extends Activity implements ActionBar.TabListener, 
 
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
 
-    }
-
-	// �������ѡ��ʱ�����÷���
-	public boolean onNavigationItemSelected(int position, long id) {
-        Toast.makeText(this, "abc", 1000).show();
-        return true;
-	}
-    private void execAsyncEntityLoader(final EntityLoader entityLoader){
-        final ProgressDialog dialog = new ProgressDialog(this);
-
-        new AsyncTask<EntityLoader, Integer, Article>(){
-
-            @Override
-            protected Article doInBackground(EntityLoader... params) {
-                params[0].load();
-
-                return new Article();
-            }
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                dialog.setTitle("");
-                dialog.setMessage(entityLoader.getTitle());
-                dialog.show();
-            }
-
-            @Override
-            protected void onPostExecute(Article article) {
-                super.onPostExecute(article);
-                dialog.dismiss();
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, entityLoader);
     }
 
     @Override

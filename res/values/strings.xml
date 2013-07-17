@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">cnBeta乐读</string>
-    <string name="article_content">阅读新闻</string>
+    <string name="label_article_content">阅读新闻</string>
 
     <string name="search_item">Settings</string>
 

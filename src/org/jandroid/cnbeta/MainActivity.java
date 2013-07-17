@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
-import org.jandroid.cnbeta.task.EntityLoader;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
     private static final String SELECTED_ITEM = "selected_item";
@@ -29,10 +28,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
    		// ����ActionBar�ĵ�����ʽ��Tab����
    		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
    		// �������3��Tabҳ����Ϊ3��Tab��ǩ����¼�������
-   		actionBar.addTab(actionBar.newTab().setText("最新新闻").setTabListener(this));
-   		actionBar.addTab(actionBar.newTab().setText("时事要点").setTabListener(this));
-   		actionBar.addTab(actionBar.newTab().setText("TOP10").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setText("我的收藏").setTabListener(this));
+   		actionBar.addTab(actionBar.newTab().setText("全部").setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setText("实时").setTabListener(this));
+   		actionBar.addTab(actionBar.newTab().setText("DIG").setTabListener(this));
+//        actionBar.addTab(actionBar.newTab().setText("软件").setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setText("热点").setTabListener(this));
    	}
 
    	@Override
@@ -74,6 +74,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
     }
 
+/*
     private void execAsyncEntityLoader(final EntityLoader entityLoader){
         final ProgressDialog dialog = new ProgressDialog(this);
 
@@ -102,6 +103,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, entityLoader);
     }
 
+*/
     @Override
    	public boolean onCreateOptionsMenu(Menu menu)
    	{

@@ -1,4 +1,4 @@
-package org.jandroid.cnbeta.http;
+package org.jandroid.cnbeta.client;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -6,7 +6,7 @@ package org.jandroid.cnbeta.http;
 public class UnicodeUtils {
 
     /**
-     * ÖÐÎÄ×ª³Éunicode
+     * ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½unicode
      * @param chineseString
      * @return
      */
@@ -22,16 +22,16 @@ public class UnicodeUtils {
             }
             Character.UnicodeBlock ub = Character.UnicodeBlock.of(ch);
             if (ub == Character.UnicodeBlock.BASIC_LATIN) {
-                //Ó¢ÎÄ¼°Êý×ÖµÈ
+                //Ó¢ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Öµï¿½
                 sb.append(myBuffer[i]);
             }
             else if (ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS) {
-                //È«½Ç°ë½Ç×Ö·û
+                //È«ï¿½Ç°ï¿½ï¿½ï¿½Ö·ï¿½
                 int j = (int) myBuffer[i] - 65248;
                 sb.append((char) j);
             }
             else {
-                //ºº×Ö
+                //ï¿½ï¿½ï¿½ï¿½
                 short s = (short) myBuffer[i];
                 String hexS = Integer.toHexString(s);
                 String unicode = "\\u" + hexS;
@@ -42,7 +42,7 @@ public class UnicodeUtils {
     }
 
     /**
-     * unicode ×ª»»³É ÖÐÎÄ
+     * unicode ×ªï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
      */
     public static String unicode2Chinese(String unicodeString) {
         char aChar;
@@ -112,9 +112,9 @@ public class UnicodeUtils {
     }
 
         /**
-         * ÖÐÎÄ×ªunicode
+         * ï¿½ï¿½ï¿½ï¿½×ªunicode
          * @param str
-         * @return ·´»Øunicode±àÂë
+         * @return ï¿½ï¿½ï¿½ï¿½unicodeï¿½ï¿½ï¿½ï¿½
          */
         public static String  chinaToUnicode(String str)
         {
