@@ -34,32 +34,22 @@ public class ContentActivity extends Activity implements ActionBar.TabListener {
    	@Override
    	public void onRestoreInstanceState(Bundle savedInstanceState){
    		if (savedInstanceState.containsKey(SELECTED_ITEM)){
-   			// ѡ��ǰ�汣��������Ӧ��Fragmentҳ
    			getActionBar().setSelectedNavigationItem(savedInstanceState.getInt(SELECTED_ITEM));
    		}
    	}
 
    	@Override
    	public void onSaveInstanceState(Bundle outState){
-   		// ����ǰѡ�е�Fragmentҳ������浽Bundle��
    		outState.putInt(SELECTED_ITEM, getActionBar().getSelectedNavigationIndex());
    	}
 
-    // ��ָ��Tab��ѡ��ʱ�����÷���
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        // ����һ���µ�Fragment����
         Fragment fragment = new ArticleContentFragment();
-        // ����һ��Bundle����������Fragment�������
         Bundle args = new Bundle();
-        args.putInt(ArticleListFragment.ARG_SECTION_NUMBER,
-                tab.getPosition() + 1);
-        // ��fragment�������
+        args.putInt(ArticleListFragment.ARG_SECTION_NUMBER, tab.getPosition() + 1);
         fragment.setArguments(args);
-        // ��ȡFragmentTransaction����
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        // ʹ��fragment�����Activity�е�container���
         ft.replace(R.id.contentLayout, fragment);
-        // �ύ����
         ft.commit();
     }
 
@@ -77,13 +67,11 @@ public class ContentActivity extends Activity implements ActionBar.TabListener {
    		return true;
    	}
     @Override
-   	// ѡ��˵��Ĳ˵��������Ļص�����
    	public boolean onOptionsItemSelected(MenuItem mi) {
         if(mi.isCheckable())
       		{
-      			mi.setChecked(true);  //��
+      			mi.setChecked(true);
       		}
-      		// �жϵ��������ĸ��˵��������Ե�������Ӧ��
       		switch (mi.getItemId()) {
                 case android.R.id.home:
                     Intent intent = new Intent(this, MainActivity.class);
@@ -91,7 +79,7 @@ public class ContentActivity extends Activity implements ActionBar.TabListener {
                     break;
                 case R.id.more_item:
                 default:
-                    Toast.makeText(this, "����˲˵���" + mi.toString(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "点击了" + mi.toString(),Toast.LENGTH_SHORT).show();
 
             }
 

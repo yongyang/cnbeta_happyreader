@@ -6,13 +6,16 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import org.jandroid.cnbeta.async.ArticleListAsyncTask;
+import org.jandroid.cnbeta.async.AsyncResult;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
+
+import java.util.List;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
     private static final String SELECTED_ITEM = "selected_item";
@@ -23,11 +26,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
    		setContentView(R.layout.main);
    		final ActionBar actionBar = getActionBar();
-		// ����ActionBar�Ƿ���ʾ����
 		actionBar.setDisplayShowTitleEnabled(true);
-   		// ����ActionBar�ĵ�����ʽ��Tab����
    		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-   		// �������3��Tabҳ����Ϊ3��Tab��ǩ����¼�������
    		actionBar.addTab(actionBar.newTab().setText("全部").setTabListener(this));
         actionBar.addTab(actionBar.newTab().setText("实时").setTabListener(this));
    		actionBar.addTab(actionBar.newTab().setText("DIG").setTabListener(this));
@@ -38,32 +38,22 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
    	@Override
    	public void onRestoreInstanceState(Bundle savedInstanceState){
    		if (savedInstanceState.containsKey(SELECTED_ITEM)){
-   			// ѡ��ǰ�汣��������Ӧ��Fragmentҳ
    			getActionBar().setSelectedNavigationItem(savedInstanceState.getInt(SELECTED_ITEM));
    		}
    	}
 
    	@Override
    	public void onSaveInstanceState(Bundle outState){
-   		// ����ǰѡ�е�Fragmentҳ������浽Bundle��
    		outState.putInt(SELECTED_ITEM, getActionBar().getSelectedNavigationIndex());
    	}
 
-    // ��ָ��Tab��ѡ��ʱ�����÷���
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        // ����һ���µ�Fragment����
         Fragment fragment = new ArticleListFragment();
-        // ����һ��Bundle����������Fragment�������
         Bundle args = new Bundle();
-        args.putInt(ArticleListFragment.ARG_SECTION_NUMBER,
-                tab.getPosition() + 1);
-        // ��fragment�������
+        args.putInt(ArticleListFragment.ARG_SECTION_NUMBER, tab.getPosition() + 1);
         fragment.setArguments(args);
-        // ��ȡFragmentTransaction����
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        // ʹ��fragment�����Activity�е�container���
         ft.replace(R.id.container, fragment);
-        // �ύ����
         ft.commit();
     }
 
@@ -74,50 +64,34 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
     }
 
-/*
-    private void execAsyncEntityLoader(final EntityLoader entityLoader){
-        final ProgressDialog dialog = new ProgressDialog(this);
-
-        new AsyncTask<EntityLoader, Integer, Article>(){
-
+    public void loadArticleList(final String category, final int page) {
+        new ArticleListAsyncTask(category, page){
             @Override
-            protected Article doInBackground(EntityLoader... params) {
-                params[0].load();
-
-                return new Article();
+            public ProgressDialog getProgressDialog() {
+                ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+                progressDialog.setMessage("加载新闻列表");
+                return progressDialog;
             }
 
             @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                dialog.setTitle("");
-                dialog.setMessage(entityLoader.getTitle());
-                dialog.show();
+            protected void onPostExecute(AsyncResult<List<Article>> listAsyncResult) {
+                super.onPostExecute(listAsyncResult);
+                List<Article> articles = listAsyncResult.getResult();
             }
-
-            @Override
-            protected void onPostExecute(Article article) {
-                super.onPostExecute(article);
-                dialog.dismiss();
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, entityLoader);
+        }.executeMultiThread();
     }
 
-*/
     @Override
-   	public boolean onCreateOptionsMenu(Menu menu)
-   	{
+   	public boolean onCreateOptionsMenu(Menu menu) {
    		getMenuInflater().inflate(R.menu.article_list_menu, menu);
    		return true;
    	}
     @Override
-   	// ѡ��˵��Ĳ˵��������Ļص�����
    	public boolean onOptionsItemSelected(MenuItem mi) {
         if(mi.isCheckable())
       		{
-      			mi.setChecked(true);  //��
+      			mi.setChecked(true);
       		}
-      		// �жϵ��������ĸ��˵��������Ե�������Ӧ��
       		switch (mi.getItemId()) {
                 case android.R.id.home:
                 case R.id.more_item:
@@ -128,10 +102,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                     this.startActivity(intent);
                     break;
                 default:
-                    Toast.makeText(this, "����˲˵���" + mi.toString(),Toast.LENGTH_SHORT).show();
-
-            }
-
+                    Toast.makeText(this, "点击了" + mi.toString(),Toast.LENGTH_SHORT).show();            }
    		return true;
    	}
 
