@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        android:gravity="center"
+        android:id="@+id/loading_bar"
+        android:padding="0.0dip"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+            android:layout_gravity="center"
+            android:id="@+id/discuss_more"
+            android:background="@drawable/btn_load_more_bg_selector"
+            android:paddingTop="10.0dip"
+            android:paddingBottom="10.0dip"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8.0dip"
+            android:layout_marginTop="10.0dip"
+            android:layout_marginRight="8.0dip"
+            android:layout_marginBottom="20.0dip">
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+
+            <ProgressBar
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/tv_loading_progressBar"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5.0dip"
+                    android:indeterminate="true"
+                    android:indeterminateDrawable="@drawable/progressbar"
+                    style="?android:attr/progressBarStyleSmallInverse"/>
+
+            <TextView
+                    android:textSize="@dimen/lookmore_bar_txt_size"
+                    android:textColor="@color/lookmore_bar_txt"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/tv_loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/loadmore"
+                    android:singleLine="true"/>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

@@ -118,4 +118,5 @@
     <color name="dim_foreground_orange">#ffeb620e</color>
     <color name="dim_foreground_orange_disabled">#80ff9100</color>
     <color name="bright_foreground_orange">#ffff6400</color>
+    <color name="lookmore_bar_txt">#ff606466</color>
 </resources>

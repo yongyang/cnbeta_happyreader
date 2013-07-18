@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="lookmore_bar_txt_size">15.0sp</dimen>
+    <dimen name="lookmore_bar_height">50.0dip</dimen>
+</resources>
