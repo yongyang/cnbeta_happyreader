@@ -56,15 +56,16 @@ public class ArticleListLoader extends LoaderTask<List<Article>> {
         //user json-simple to parse returned json string
         String response = CnBetaHttpClient.getInstance().httpGet(url);
         String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
-        JSONObject responseJSON = (JSONObject)JSONValue.parse(responseJSONString);
-        JSONArray articleListJSONArray= (JSONArray)responseJSON.get("result");
+        return parseArticleListJSON(responseJSONString);
+    }
 
+    private List<Article> parseArticleListJSON(String articleListJSON){
+        JSONObject responseJSON = (JSONObject)JSONValue.parse(articleListJSON);
+        JSONArray articleListJSONArray= (JSONArray)responseJSON.get("result");
         List<Article> articleList = new ArrayList<Article>(articleListJSONArray.size());
         for(int i=0; i<articleListJSONArray.size(); i++){
             JSONObject jsonObject = (JSONObject)articleListJSONArray.get(i);
-            Article article = new Article();
-            article.sid = Integer.parseInt(jsonObject.get("sid").toString());
-            article.titleShow = jsonObject.get("title_show").toString();
+            Article article = new Article(jsonObject);
             articleList.add(article);
         }
         return articleList;
@@ -72,12 +73,16 @@ public class ArticleListLoader extends LoaderTask<List<Article>> {
 
     @Override
     public List<Article> fromDisk() throws Exception {
+        //TODO: read json file from SD Card
         return null;
     }
 
     @Override
     public void toDisk(List<Article> articles) throws Exception {
-
+        //TODO: write articleListJSON json string
+        for(Article article : articles){
+            article.toJSONString();
+        }
     }
 }
 /*
@@ -89,7 +94,8 @@ http://www.cnbeta.com/more.htm?jsoncallback=jQuery180028785929968214596_13736118
 /*
 jQuery18008753548712314047_1374591752967(
 {"status":"success","result":
-{"list":[{"sid":"245736","title_show":"金色iPhone5S与廉价iPhone、iPhone5对比照曝光","hometext_show_short":"感谢T客在线的投递前几天微博用户@C科技为我们带来了两张金色iPhone5S的谍照，今天他又放出了一组iPhone5S谍照，其中包括廉价iPhone、iPhone5、金色iPhone5S后...","logo":"http://static.cnbetacdn.com/newsimg/2013/0723/01374586704.jpg_w600.jpg_180x132.jpg","url_show":"/articles/245736.htm","counter":"1959","comments":"5","score":"-20","time":"2013-07-23 21:38:27"},{"sid":"245735","title_show":"苹果新专利：保持通话时让等待用户欣赏照片和音乐","hometext_show_short":"美国专利和商标局本周二通过了一项苹果申请的名为“用户通信设备的保持通话可视菜单”，专利中提到的系统可以让用户在通话中更方便的分享数据。专利中提到的技术为了替代传统“保持通话时发送信息”功能。","logo":"http://static.cnbetacdn.com/newsimg/2013/0723/01374586633.jpg_w600.jpg_180x132.jpg","url_show":"/articles/245735.htm","counter":"536","comments":"7","score":"0","time":"2013-07-23 21:37:22"},{"sid":"245734","title_show":"三星周五发布第二季度财报 预计将无太大惊喜","hometext_show_short":"全球最大的智能手机制造商三星电子将于周五发布该公司受市场密切关注的第二季度财报。虽然三星电子上一季度的运营利润有望创出历史新高，但是这并不足以安抚旗舰智能手机Galaxy S4出货增速放缓引发的市场顾虑。","logo":"http://static.cnbetacdn.com/newsimg/2013/0723/01374586321.jpg_180x132.jpg","url_show":"/articles/245734.htm","counter":"260","comments":"3","score":"0","time":"2013-07-23 21:32:01"},{"sid":"245733","title_show":"传Moto X定价将与Nexus 4相同 299美元起","hometext_show_short":"国外媒体称，来自中国的泄露信息，摩托罗拉Moto X新机的售价将和Nexus
+{"list":[
+{"sid":"245736","title_show":"金色iPhone5S与廉价iPhone、iPhone5对比照曝光","hometext_show_short":"感谢T客在线的投递前几天微博用户@C科技为我们带来了两张金色iPhone5S的谍照，今天他又放出了一组iPhone5S谍照，其中包括廉价iPhone、iPhone5、金色iPhone5S后...","logo":"http://static.cnbetacdn.com/newsimg/2013/0723/01374586704.jpg_w600.jpg_180x132.jpg","url_show":"/articles/245736.htm","counter":"1959","comments":"5","score":"-20","time":"2013-07-23 21:38:27"},{"sid":"245735","title_show":"苹果新专利：保持通话时让等待用户欣赏照片和音乐","hometext_show_short":"美国专利和商标局本周二通过了一项苹果申请的名为“用户通信设备的保持通话可视菜单”，专利中提到的系统可以让用户在通话中更方便的分享数据。专利中提到的技术为了替代传统“保持通话时发送信息”功能。","logo":"http://static.cnbetacdn.com/newsimg/2013/0723/01374586633.jpg_w600.jpg_180x132.jpg","url_show":"/articles/245735.htm","counter":"536","comments":"7","score":"0","time":"2013-07-23 21:37:22"},{"sid":"245734","title_show":"三星周五发布第二季度财报 预计将无太大惊喜","hometext_show_short":"全球最大的智能手机制造商三星电子将于周五发布该公司受市场密切关注的第二季度财报。虽然三星电子上一季度的运营利润有望创出历史新高，但是这并不足以安抚旗舰智能手机Galaxy S4出货增速放缓引发的市场顾虑。","logo":"http://static.cnbetacdn.com/newsimg/2013/0723/01374586321.jpg_180x132.jpg","url_show":"/articles/245734.htm","counter":"260","comments":"3","score":"0","time":"2013-07-23 21:32:01"},{"sid":"245733","title_show":"传Moto X定价将与Nexus 4相同 299美元起","hometext_show_short":"国外媒体称，来自中国的泄露信息，摩托罗拉Moto X新机的售价将和Nexus
 4持平，16GB版无合约裸机的价格是299美元（约合人民币1836元），32GB版售价349美元...","logo":"http://static.cnbetacdn.com/newsimg/2013/0723/01374585827.jpg_180x132.jpg","url_show":"/articles/245733.htm","counter":"4040","comments":"28","score":"64","time":"2013-07-23 21:23:49"},{"sid":"245732","title_show":"PS4已通过美国联邦委员会审核 文档显示CPU主频2.75Ghz","hometext_show_short":"索尼PS4已经通过了美国联邦委员会的审核批准。这款即将在今年年底上市的新款游戏机的申请文档中显示，此设备的制造国家包含了中国和日本，这应当也表明索尼期望尽可能减少PS4上市时供货不足的问题出现几率。","logo":"http://static.cnbetacdn.com/newsimg/2013/0723/01374584646.jpg_w600.jpg_180x132.jpg","url_show":"/articles/245732.htm","counter":"1223","comments":"8","score":"0","time":"2013-07-23 21:04:12"},{"sid":"245730","title_show":"全球最薄又能如何？华为P6视频评测","hometext_show_short":"感谢爱极客的投递有这样一款手机，只有6.18mm全球第一薄，还在架构上领先iPhone 5一年！现如今敢如此叫板苹果的厂商可不多见，哪怕三星诺基亚，也不...","logo":"http://static.cnbetacdn.com/newsimg/2013/0723/01374583478.png_w600.png_180x132.png","url_show":"/articles/245730.htm","counter":"6418","comments":"29","score":"-24","time":"2013-07-23 20:45:08"},{"sid":"245729","title_show":"Quora 精选: iPhone 内置铃声的故事","hometext_show_short":"电话机发明人贝尔选择的电话铃声是线圈控制铁的槌敲打铃体，和80后回忆里的上课铃声一样。时代快进到iPhone兴起， 「马林巴琴（marimba）」当道的年代...","logo":"http://static.cnbetacdn.com/newsimg/2013/0723/01374583277.jpg_180x132.jpg","url_show":"/articles/245729.htm","counter":"2008","comments":"7","score":"5","time":"2013-07-23 20:41:17"},{"sid":"245728","title_show":"Mozilla Firefox 23.0 Beta 8 发布","hometext_show_short":"Firefox 23.0的进展相当迅速，Beta 8已经来到Beta测试目录中，新版开始采用Gecko 23内核，预计正式发布时间2013年8月，Moziila在新版本23中加入了混合内容锁定...","logo":"http://static.cnbetacdn.com/topics/firefox.gif","url_show":"/articles/245728.htm","counter":"1137","comments":"7","score":"15","time":"2013-07-23 20:39:37"},{"sid":"245727","title_show":"Moto X拍照应用UI多图泄露 重在手势操作","hometext_show_short":"虽然不知道各位同学是否已对Moto
 X的泄露信息感到厌烦，好在这款手机终于很快就要发布了。而现在，我们还是继续来谈谈泄露信息。国外媒体AndroidPo...","logo":"http://static.cnbetacdn.com/newsimg/2013/0723/33_1374581839.jpg_w600.jpg_180x132.jpg","url_show":"/articles/245727.htm","counter":"2702","comments":"8","score":"14","time":"2013-07-23 20:22:19"},{"sid":"245726","title_show":"ATM吞钱银行不急 改口说吐钱银行急了","hometext_show_short":"7月18日晚，安庆市民何先生在该市人民路一家银行的ATM机取款，不料机器只发出数钱声，却不吐钱，最后银行卡也被吞了。何先生拨打银行客服电话，对...","logo":"http://static.cnbetacdn.com/topics/alert.png","url_show":"/articles/245726.htm","counter":"8135","comments":"40","score":"64","time":"2013-07-23 20:21:43"},{"sid":"245725","title_show":"统计：今年一季度全球平均网速首超4Mbps 移动流量翻番","hometext_show_short":"来自美国服务商Akamai的最新发布的季度统计《2013年第一季度互联网现状报告（State of the Internet report of
 Q1 2013）》，全球互联网平均连接速度首度超过了...","logo":"http://static.cnbetacdn.com/newsimg/2013/0723/01374580367.png_180x132.png","url_show":"/articles/245725.htm","counter":"918","comments":"7","score":"-20","time":"2013-07-23 19:52:51"},{"sid":"245724","title_show":"明年ARM处理器主频将达到3Ghz","hometext_show_short":"目前市面上绝大部分平板和智能手机都采用了ARM芯片，而这种处理器也随着台积电（TSMC）、格罗方德（GlobalFoundries）等的工艺进步

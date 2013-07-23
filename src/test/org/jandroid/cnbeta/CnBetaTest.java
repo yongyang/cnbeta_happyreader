@@ -26,7 +26,7 @@ public class CnBetaTest extends TestCase {
         ArticleListLoader loader = new ArticleListLoader(ArticleListLoader.Type.ALL, 1);
         List<Article> articleList = loader.fromHttp();
         String s = Arrays.toString(articleList.toArray(new Article[articleList.size()]));
-        Assert.fail(s);
+//        Assert.fail(s);
         Assert.assertTrue(!articleList.isEmpty());
     }
 }
