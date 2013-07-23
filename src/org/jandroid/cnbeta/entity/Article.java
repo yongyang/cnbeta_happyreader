@@ -5,12 +5,14 @@ package org.jandroid.cnbeta.entity;
  */
 public class Article {
 
+    public int sid;
+    public String titleShow;
+
     public boolean bFavored;
     public boolean bReaded;
     public int nCommentsTimes;
     public int nEventScore;
     public int nFavoredTime;
-    public int nId;
     public int nQualityScore;
     public int nReadTimes;
     public int nReadedTime;
@@ -22,4 +24,12 @@ public class Article {
     public String strCatalogName;
     public String strPublishDate;
     public String strTitle;
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "sid=" + sid +
+                ", titleShow='" + titleShow + '\'' +
+                '}';
+    }
 }

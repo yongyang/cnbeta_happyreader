@@ -80,6 +80,7 @@ public class CnBetaHttpClient {
         httpGet.addHeader("Accept-Encoding", "gzip, deflate");
         httpGet.addHeader("Accept", "*/*");
         httpGet.addHeader("User-Agent", "Mozilla/5.0 AppleWebKit/533.1 (KHTML, like Gecko)");
+        httpGet.addHeader("Connection",	"keep-alive");
 
         try {
             HttpResponse response = httpClient.execute(httpGet);
@@ -96,7 +97,8 @@ public class CnBetaHttpClient {
                 result = EntityUtils.toString(httpEntity, encoding);
             }
             httpEntity.consumeContent();
-            return result;
+            // convert unicode chars to chinese
+            return UnicodeUtils.unicode2Chinese(result);
         }
         catch (IOException e) {
             httpGet.abort();
