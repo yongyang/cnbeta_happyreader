@@ -15,9 +15,9 @@ public abstract class LoaderTask<T> {
         this.taskName = taskName;
     }
 
-    public abstract T fromHttp();
+    public abstract T fromHttp() throws Exception;
 
-    public abstract T fromDisk();
+    public abstract T fromDisk() throws Exception;
 
-    public abstract void toDisk(T t);
+    public abstract void toDisk(T t) throws Exception;
 }

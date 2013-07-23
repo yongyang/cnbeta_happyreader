@@ -1,25 +1,48 @@
 package org.jandroid.cnbeta.loader;
 
+import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.cnbeta.entity.Article;
-import org.jandroid.cnbeta.loader.LoaderTask;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class ArticleListLoader extends LoaderTask<List<Article>> {
+class ArticleListLoader extends LoaderTask<List<Article>> {
 
-    private String category;
+    public static String URL_FORMAT = "http://www.cnbeta.com/more.htm?jsoncallback=jQuery_{0}&type={1}&_={2}";
+    private Type type;
     private int page;
 
-    public ArticleListLoader(String category, int page) {
-        this.category = category;
+    public static enum Type {
+        ALL("all"),
+        REALTIME("realtime"),
+        DIG("dig"),
+        SOFT("soft"),
+        INDUSTRY("industry"),
+        INTERACT("interact");
+        private String type;
+
+        private Type(String type) {
+            this.type = type;
+        }
+
+        public String getTypeString() {
+            return type;
+        }
+    }
+
+    public ArticleListLoader(Type type, int page) {
+        this.type = type;
         this.page = page;
     }
 
-    public String getCategory() {
-        return category;
+    public Type getType() {
+        return type;
     }
 
     public int getPage() {
@@ -27,18 +50,29 @@ public class ArticleListLoader extends LoaderTask<List<Article>> {
     }
 
     @Override
-    public List<Article> fromHttp() {
+    public List<Article> fromHttp() throws Exception {
+        String url = String.format(URL_FORMAT, System.currentTimeMillis(), getType().getTypeString(), System.currentTimeMillis()+1);
         //TODO: user json-simple to parse returned json string
+        String articleListJSON = CnBetaHttpClient.getInstance().httpGet(url);
+        JSONArray jsonArray = (JSONArray)JSONValue.parse(articleListJSON);
+
+        List<Article> articleList = new ArrayList<Article>(jsonArray.size());
+        for(int i=0; i<jsonArray.size(); i++){
+            JSONObject jsonObject = (JSONObject)jsonArray.get(i);
+            Article article = new Article();
+            article.bReaded = (Boolean)jsonObject.get("bReaded");
+        }
+
         return null;
     }
 
     @Override
-    public List<Article> fromDisk() {
+    public List<Article> fromDisk() throws Exception {
         return null;
     }
 
     @Override
-    public void toDisk(List<Article> articles) {
+    public void toDisk(List<Article> articles) throws Exception {
 
     }
 }

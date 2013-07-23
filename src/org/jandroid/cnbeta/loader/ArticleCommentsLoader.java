@@ -1,26 +1,25 @@
 package org.jandroid.cnbeta.loader;
 
 import org.jandroid.cnbeta.entity.Comment;
-import org.jandroid.cnbeta.entity.Content;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class ArticleCommentsLoader extends LoaderTask<Comment>  {
+class ArticleCommentsLoader extends LoaderTask<Comment>  {
 
 
     @Override
-    public Comment fromHttp() {
+    public Comment fromHttp() throws Exception {
         return null;
     }
 
     @Override
-    public Comment fromDisk() {
+    public Comment fromDisk() throws Exception {
         return null;
     }
 
     @Override
-    public void toDisk(Comment comment) {
+    public void toDisk(Comment comment) throws Exception {
 
     }
 }

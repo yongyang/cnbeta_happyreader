@@ -9,17 +9,17 @@ public class ArticleContentLoader extends LoaderTask<Content>  {
 
 
     @Override
-    public Content fromHttp() {
+    public Content fromHttp() throws Exception {
         return null;
     }
 
     @Override
-    public Content fromDisk() {
+    public Content fromDisk() throws Exception {
         return null;
     }
 
     @Override
-    public void toDisk(Content content) {
+    public void toDisk(Content content) throws Exception {
 
     }
 }

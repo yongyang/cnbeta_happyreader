@@ -13,6 +13,8 @@ public abstract class ProgressDialogAsyncTask<P, I, R> extends AsyncTask<P, I ,R
 
     @SuppressWarnings("unchecked")
     public AsyncTask<P, I ,R> executeMultiThread() {
+        //TODO: check network status here
+
         return executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 

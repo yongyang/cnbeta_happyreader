@@ -11,7 +11,8 @@ public class CnBetaHttpClientTest extends TestCase {
     public void testHttpGet() throws Exception {
 //        Log.v(this.getClass().getPackage().getName(), HttpUtils.httpGet("http://www.cnbeta.com/"));
 //        assertNotSame("", HttpUtils.httpGet("http://www.cnbeta.com/"));
-        String url = "http://www.cnbeta.com/more.htm?jsoncallback=jQuery" + System.currentTimeMillis() + "&type=all&page=1&_=" + System.currentTimeMillis();
+        long millis = System.currentTimeMillis();
+        String url = "http://www.cnbeta.com/more.htm?jsoncallback=jQuery18008753548712314047_" + millis + "&type=all&page=1&_=" + (millis + 1);
         Assert.fail(UnicodeUtils.unicode2Chinese(CnBetaHttpClient.getInstance().httpGet(url)));
     }
 }

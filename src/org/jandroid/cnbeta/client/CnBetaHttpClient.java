@@ -1,5 +1,7 @@
 package org.jandroid.cnbeta.client;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -17,7 +19,10 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.EntityUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -70,13 +75,26 @@ public class CnBetaHttpClient {
     public String httpGet(String url, String encoding) throws Exception {
         String result = "";
         HttpGet httpGet = newHttpGet(url, encoding);
+        //TODO:  Must add Referer, so site ruturn data
+        httpGet.addHeader("Referer", "http://www.cnbeta.com/");
+        httpGet.addHeader("Accept-Encoding", "gzip, deflate");
+        httpGet.addHeader("Accept", "*/*");
+        httpGet.addHeader("User-Agent", "Mozilla/5.0 AppleWebKit/533.1 (KHTML, like Gecko)");
+
         try {
             HttpResponse response = httpClient.execute(httpGet);
             if (response.getStatusLine().getStatusCode() != HTTP_OK) {
                 throw new Exception("Server Error: " + response.getStatusLine().toString());
             }
             HttpEntity httpEntity = response.getEntity();
-            result = EntityUtils.toString(httpEntity, encoding);
+            Header contentEncodingHeader = response.getFirstHeader("Content-Encoding");
+            if(contentEncodingHeader!=null && contentEncodingHeader.getValue().contains("zip")){
+                GZIPInputStream gzipInputStream = new GZIPInputStream(new ByteArrayInputStream(EntityUtils.toByteArray(httpEntity)));
+                result = new String(IOUtils.toByteArray(gzipInputStream), encoding);
+            }
+            else {
+                result = EntityUtils.toString(httpEntity, encoding);
+            }
             httpEntity.consumeContent();
             return result;
         }
