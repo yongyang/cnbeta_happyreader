@@ -20,6 +20,8 @@ import java.util.List;
 public class MainActivity extends Activity implements ActionBar.TabListener {
     private static final String SELECTED_ITEM = "selected_item";
 
+    public final static long[] tabs = new long[]{};
+
    	@Override
    	public void onCreate(Bundle savedInstanceState){
    		super.onCreate(savedInstanceState);
@@ -28,11 +30,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
    		final ActionBar actionBar = getActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
    		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-   		actionBar.addTab(actionBar.newTab().setText("全部").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setText("实时").setTabListener(this));
-   		actionBar.addTab(actionBar.newTab().setText("DIG").setTabListener(this));
+   		actionBar.addTab(actionBar.newTab().setText("全部资讯").setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setText("实时更新").setTabListener(this));
+//   		actionBar.addTab(actionBar.newTab().setText("DIG").setTabListener(this));
 //        actionBar.addTab(actionBar.newTab().setText("软件").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setText("热点").setTabListener(this));
+//        actionBar.addTab(actionBar.newTab().setText("热点").setTabListener(this));
    	}
 
    	@Override
@@ -53,7 +55,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         args.putInt(ArticleListFragment.ARG_SECTION_NUMBER, tab.getPosition() + 1);
         fragment.setArguments(args);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.container, fragment);
+        ft.replace(R.id.fragment_container, fragment);
         ft.commit();
     }
 
@@ -108,7 +110,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
+        // 每次都会调用该方法, 可以动态改变 menu
         return super.onPrepareOptionsMenu(menu);
     }
 }
