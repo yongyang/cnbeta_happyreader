@@ -12,6 +12,11 @@
     <string name="aboutus_item">关于</string>
     <string name="comment_item">评论</string>
 
-    <string name="loadmore">更 多</string>
+    <string name="loadmore">更多</string>
+    
+    <string name="tab_quanbuzixun">全部资讯</string>
+    <string name="tab_tag_quanbuzixun">all</string>
+    <string name="tab_shishigengxin">实时更新</string>
+    <string name="tab_tag_shishigengxin">realtime</string>
 
 </resources>

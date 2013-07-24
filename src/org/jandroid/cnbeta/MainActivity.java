@@ -15,13 +15,20 @@ import org.jandroid.cnbeta.async.AsyncResult;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
     private static final String SELECTED_ITEM = "selected_item";
 
-    public final static long[] tabs = new long[]{};
-
+    public final static int[] tabs = new int[]{R.string.tab_quanbuzixun, R.string.tab_shishigengxin};
+    public final static int[] tags = new int[]{R.string.tab_tag_quanbuzixun, R.string.tab_tag_shishigengxin};
+    
+    // all articles for tabs, tab_tag => articles
+    private Map<String, List<Article>> articles = new HashMap<String, List<Article>>();
+    
+    
    	@Override
    	public void onCreate(Bundle savedInstanceState){
    		super.onCreate(savedInstanceState);
@@ -30,8 +37,13 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
    		final ActionBar actionBar = getActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
    		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-   		actionBar.addTab(actionBar.newTab().setText("全部资讯").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setText("实时更新").setTabListener(this));
+        for(int i=0; i< tabs.length; i++) {
+            int resourceId = tabs[i];
+            int tagResourceId = tags[i];
+            actionBar.addTab(actionBar.newTab().setText(resourceId).setTag(getResources().getString(tagResourceId)).setTabListener(this));
+        }
+//   		actionBar.addTab(actionBar.newTab().setText("全部资讯").setTabListener(this));
+//        actionBar.addTab(actionBar.newTab().setText("实时更新").setTabListener(this));
 //   		actionBar.addTab(actionBar.newTab().setText("DIG").setTabListener(this));
 //        actionBar.addTab(actionBar.newTab().setText("软件").setTabListener(this));
 //        actionBar.addTab(actionBar.newTab().setText("热点").setTabListener(this));
@@ -52,7 +64,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         Fragment fragment = new ArticleListFragment();
         Bundle args = new Bundle();
-        args.putInt(ArticleListFragment.ARG_SECTION_NUMBER, tab.getPosition() + 1);
+//        args.putInt(ArticleListFragment.ARG_SECTION_NUMBER, tab.getPosition() + 1);
         fragment.setArguments(args);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, fragment);
@@ -113,4 +125,9 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         // 每次都会调用该方法, 可以动态改变 menu
         return super.onPrepareOptionsMenu(menu);
     }
+    
+    public void reloadArticles(ActionBar.Tab tab) {
+        
+    }
+    
 }

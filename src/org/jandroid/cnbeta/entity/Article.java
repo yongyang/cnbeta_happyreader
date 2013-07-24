@@ -2,6 +2,8 @@ package org.jandroid.cnbeta.entity;
 
 import org.json.simple.JSONObject;
 
+import java.util.Map;
+
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
@@ -63,6 +65,10 @@ public class Article {
     }
 
     public JSONObject getJSONObject() {
+        return jSONObject;
+    }
+    
+    public Map<String, Object> toMap() {
         return jSONObject;
     }
 
