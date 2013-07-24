@@ -62,6 +62,9 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
    	}
 
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+//        Fragment fragment = getFragmentManager().findFragmentByTag(tab.getTag().toString());
+//        ft.add(fragment, tab.getTag().toString());
+
         Fragment fragment = new ArticleListFragment();
         Bundle args = new Bundle();
 //        args.putInt(ArticleListFragment.ARG_SECTION_NUMBER, tab.getPosition() + 1);
