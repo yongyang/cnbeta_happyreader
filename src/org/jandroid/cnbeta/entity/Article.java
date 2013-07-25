@@ -20,7 +20,7 @@ public class Article {
 
     private JSONObject jSONObject;
 
-    private int sid;
+    private long sid;
     private String titleShow;
     private String hometextShowShort;
     private String logo;
@@ -54,7 +54,7 @@ public class Article {
     }
     
     private void parse() {
-        this.setSid(Integer.parseInt(jSONObject.get("sid").toString()));
+        this.setSid(Long.parseLong(jSONObject.get("sid").toString()));
         this.setTitleShow(jSONObject.get("title_show").toString());
         this.setUrlShow(jSONObject.get("url_show").toString());
         this.setHometextShowShort(jSONObject.get("hometext_show_short").toString());
@@ -76,11 +76,11 @@ public class Article {
         return jSONObject.toJSONString();
     }
 
-    public int getSid() {
+    public long getSid() {
         return sid;
     }
 
-    public void setSid(int sid) {
+    public void setSid(long sid) {
         this.sid = sid;
     }
 
@@ -163,13 +163,13 @@ public class Article {
 
         Article article = (Article) o;
 
-        if (sid != this.sid) return false;
+        if (sid != article.sid) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return sid;
+        return (int) (sid ^ (sid >>> 32));
     }
 }

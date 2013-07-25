@@ -71,6 +71,6 @@ public class ArticleListFragment extends Fragment {
     }
    
     public static interface ArticleListListener {
-        void onArticleItemClick();
+        void onArticleItemClick(long articleId);
     }
 }

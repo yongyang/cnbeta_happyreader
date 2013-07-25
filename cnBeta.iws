@@ -28,10 +28,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d19a8d43-8193-4e6c-9396-02f5dc4bd005" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jandroid/cnbeta/entity/Article.java" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/entity/Article.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ArticleListFragment.java" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ArticleListFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jandroid/cnbeta/MainActivity.java" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/org/jandroid/cnbeta/Manifest.java" afterPath="$PROJECT_DIR$/gen/org/jandroid/cnbeta/Manifest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/org/jandroid/cnbeta/R.java" afterPath="$PROJECT_DIR$/gen/org/jandroid/cnbeta/R.java" />
     </list>
     <ignored path="cnBeta.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -111,10 +109,10 @@
     <file path="E:/Android/apps/cnbeta/cnbeta_mobilewiz/com.mobilewiz.newsreader.cnbeta/src/com/mobilewiz/newsreader/cnbeta/CNNewsCommentActivity.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1374548348544" ignored="false" />
     <file path="E:/Android/apps/cnbeta/cnbeta_mobilewiz/com.mobilewiz.newsreader.cnbeta/src/com/mobilewiz/newsreader/cnbeta/CNSubmitCommentActivity.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1374548348544" ignored="false" />
     <file path="E:/Android/apps/cnbeta/cnbeta_mobilewiz/com.mobilewiz.newsreader.cnbeta/src/com/mobilewiz/newsreader/c/b.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1374548411034" ignored="false" />
-    <file path="/Article.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1374597530676" ignored="false" />
+    <file path="/Article.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1374740556610" ignored="false" />
     <file path="/a.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1374595854349" ignored="false" />
     <file path="/article_list_menu.xml" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1374635445169" ignored="false" />
-    <file path="/ArticleListFragment.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1374739801602" ignored="false" />
+    <file path="/ArticleListFragment.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1374740519792" ignored="false" />
     <file path="/article_list_view.xml" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1374724180374" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -310,10 +308,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ArticleListFragment.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="ArticleListFragment.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ArticleListFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="13" selection-start="711" selection-end="711" vertical-scroll-proportion="0.0">
+            <state line="73" column="46" selection-start="2470" selection-end="2470" vertical-scroll-proportion="0.77130044">
               <folding>
                 <element signature="e#900#916#0" expanded="true" />
               </folding>
@@ -321,10 +319,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainActivity.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Article.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/entity/Article.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="74" column="19" selection-start="3134" selection-end="3134" vertical-scroll-proportion="0.54260087">
+            <state line="66" column="40" selection-start="2772" selection-end="2772" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -368,7 +375,6 @@
       <list>
         <option value="$PROJECT_DIR$/src/test/org/jandroid/cnbeta/CnBetaHttpClientTest.java" />
         <option value="$PROJECT_DIR$/src/test/org/jandroid/cnbeta/CnBetaTest.java" />
-        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/entity/Article.java" />
         <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/ArticleListLoader.java" />
         <option value="$PROJECT_DIR$/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/RankListLoader.java" />
@@ -380,8 +386,9 @@
         <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ArticleContentFragment.java" />
         <option value="$PROJECT_DIR$/res/layout/main.xml" />
         <option value="$PROJECT_DIR$/res/layout/article_list_view.xml" />
-        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ArticleListFragment.java" />
         <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/MainActivity.java" />
+        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ArticleListFragment.java" />
+        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/entity/Article.java" />
       </list>
     </option>
   </component>
@@ -1635,15 +1642,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ArticleListFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="13" selection-start="711" selection-end="711" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#900#916#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../android/android-sdk-linux/sources/android-17/android/app/ActionBar.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="899" column="20" selection-start="33640" selection-end="33640" vertical-scroll-proportion="0.0">
@@ -1651,10 +1649,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/entity/Article.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="74" column="19" selection-start="3134" selection-end="3134" vertical-scroll-proportion="0.54260087">
+        <state line="66" column="40" selection-start="2772" selection-end="2772" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ArticleListFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="73" column="46" selection-start="2470" selection-end="2470" vertical-scroll-proportion="0.77130044">
+          <folding>
+            <element signature="e#900#916#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
