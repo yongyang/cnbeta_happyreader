@@ -15,7 +15,7 @@ import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.fragment.ArticleContentFragment;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
 
-public class ContentActivity extends Activity implements ActionBar.TabListener {
+public class ArticleContentActivity extends Activity implements ActionBar.TabListener {
     private static final String SELECTED_ITEM = "selected_item";
 
    	@Override
@@ -46,7 +46,7 @@ public class ContentActivity extends Activity implements ActionBar.TabListener {
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         Fragment fragment = new ArticleContentFragment();
         Bundle args = new Bundle();
-        args.putInt(ArticleListFragment.ARG_SECTION_NUMBER, tab.getPosition() + 1);
+//        args.putInt(ArticleListFragment.ARG_SECTION_NUMBER, tab.getPosition() + 1);
         fragment.setArguments(args);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.contentLayout, fragment);

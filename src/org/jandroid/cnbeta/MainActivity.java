@@ -71,6 +71,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         fragment.setArguments(args);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, fragment);
+//        ft.addToBackStack(null);
         ft.commit();
     }
 
@@ -115,7 +116,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                     break;
                 case R.id.aboutus_item:
                     //TODO:  for test
-                    Intent intent = new Intent(this, ContentActivity.class);
+                    Intent intent = new Intent(this, ArticleContentActivity.class);
                     this.startActivity(intent);
                     break;
                 default:

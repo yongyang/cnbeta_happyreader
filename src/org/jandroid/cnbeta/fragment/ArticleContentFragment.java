@@ -14,19 +14,25 @@ import android.widget.TextView;
 public class ArticleContentFragment extends Fragment
 {
 	public static final String ARG_SECTION_NUMBER = "section_number";
-	// ¸Ã·½·¨µÄ·µ»ØÖµ¾ÍÊÇ¸ÃFragmentÏÔÊ¾µÄView×é¼þ
+	// ï¿½Ã·ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Ç¸ï¿½Fragmentï¿½ï¿½Ê¾ï¿½ï¿½Viewï¿½ï¿½ï¿½
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
 		TextView textView = new TextView(getActivity());
 		textView.setGravity(Gravity.CENTER_HORIZONTAL);
-		// »ñÈ¡´´½¨¸ÃFragmentÊ±´«ÈëµÄ²ÎÊýBundle
+		// ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½FragmentÊ±ï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½Bundle
 		Bundle args = getArguments();
-		// ÉèÖÃTextViewÏÔÊ¾µÄÎÄ±¾
+		// ï¿½ï¿½ï¿½ï¿½TextViewï¿½ï¿½Ê¾ï¿½ï¿½ï¿½Ä±ï¿½
 		textView.setText(args.getInt(ARG_SECTION_NUMBER) + "");
 		textView.setTextSize(30);
-		// ·µ»Ø¸ÃTextView
+		// ï¿½ï¿½ï¿½Ø¸ï¿½TextView
 		return textView;
 	}
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 }

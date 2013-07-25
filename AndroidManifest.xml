@@ -21,7 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ContentActivity" android:label="@string/label_article_content"/>
+        <activity android:name=".ArticleContentActivity" android:label="@string/label_article_content"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"/>
