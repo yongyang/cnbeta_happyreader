@@ -62,10 +62,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
    	}
 
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-//        Fragment fragment = getFragmentManager().findFragmentByTag(tab.getTag().toString());
-//        ft.add(fragment, tab.getTag().toString());
-
-        Fragment fragment = new ArticleListFragment();
+        Fragment fragment = getFragmentManager().findFragmentByTag(tab.getTag().toString());
+        if(fragment == null) {
+            fragment = new ArticleListFragment();
+        }
         Bundle args = new Bundle();
 //        args.putInt(ArticleListFragment.ARG_SECTION_NUMBER, tab.getPosition() + 1);
         fragment.setArguments(args);
@@ -79,7 +79,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
    	}
 
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
+        //TODO: update datas or ignore
     }
 
     public void loadArticleList(final String category, final int page) {
