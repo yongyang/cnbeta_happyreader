@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +34,14 @@ public class ArticleListFragment extends Fragment {
     private SimpleAdapter simpleAdapter;
     
     private List<Map<String, ?>> articleMapList = new ArrayList<Map<String, ?>>();
-        
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Override
     public void onAttach(Activity activity) {
         if(!(activity instanceof ArticleListListener)) {
@@ -46,8 +56,8 @@ public class ArticleListFragment extends Fragment {
         listView = (ListView)rootView.findViewById(R.id.article_listview);
         TextView emptyText = (TextView)rootView.findViewById(R.id.empty_textview);
         listView.setEmptyView(emptyText);
-//        simpleAdapter = new SimpleAdapter(getActivity(), articleMapList, R.layout.article_list_item, new String[]{}, new int[]{});
-//        listView.setAdapter(simpleAdapter);
+        simpleAdapter = new SimpleAdapter(getActivity(), articleMapList, R.layout.article_list_item, new String[]{}, new int[]{});
+        listView.setAdapter(simpleAdapter);
         listView.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 return false;  //To change body of implemented methods use File | Settings | File Templates.
@@ -69,7 +79,17 @@ public class ArticleListFragment extends Fragment {
         }
         simpleAdapter.notifyDataSetChanged();
     }
-   
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
     public static interface ArticleListListener {
         void onArticleItemClick(long articleId);
     }
