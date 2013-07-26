@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
         }
 
         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-
+            mViewPager.setCurrentItem(MainActivity.this.getActionBar().getSelectedNavigationIndex());
         }
 
         public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
@@ -70,7 +70,7 @@ public class MainActivity extends Activity {
         }
 
         public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-            mViewPager.setCurrentItem(MainActivity.this.getActionBar().getSelectedNavigationIndex());
+
         }
     };
 
