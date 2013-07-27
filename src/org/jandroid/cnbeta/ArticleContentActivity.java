@@ -3,33 +3,97 @@ package org.jandroid.cnbeta;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import org.jandroid.cnbeta.entity.Article;
+import org.jandroid.cnbeta.fragment.ArticleCommentsFragment;
 import org.jandroid.cnbeta.fragment.ArticleContentFragment;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
 
-public class ArticleContentActivity extends Activity implements ActionBar.TabListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class ArticleContentActivity extends Activity {
     private static final String SELECTED_ITEM = "selected_item";
+    public final static int[] tabs = new int[]{R.string.tab_zhengwen, R.string.tab_pinglun};
+    private List<Fragment> tabFragments = new ArrayList<Fragment>();
+
+    private ViewPager mViewPager;
+    private ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
+
+        @Override
+        public int getCount() {
+            return ArticleContentActivity.this.getActionBar().getTabCount();
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return tabFragments.get(position);
+        }
+
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        public void onPageSelected(int position) {
+            final ActionBar actionBar = getActionBar();
+            actionBar.setSelectedNavigationItem(position);
+
+        }
+
+        public void onPageScrollStateChanged(int state) {
+
+        }
+
+        public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+            mViewPager.setCurrentItem(ArticleContentActivity.this.getActionBar().getSelectedNavigationIndex());
+        }
+
+        public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+        }
+
+        public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+        }
+    };
+
 
    	@Override
    	public void onCreate(Bundle savedInstanceState){
    		super.onCreate(savedInstanceState);
 
    		setContentView(R.layout.content);
-   		final ActionBar actionBar = getActionBar();
-		actionBar.setDisplayShowTitleEnabled(true);
-   		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-   		actionBar.addTab(actionBar.newTab().setText("正文").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setText("评论").setTabListener(this));
+        setUpViewPager();
+        setUpActionBar();
+
    	}
+
+    private void setUpActionBar() {
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+
+        actionBar.addTab(actionBar.newTab().setText(R.string.tab_zhengwen).setTabListener(pagerAdapter));
+        tabFragments.add(new ArticleContentFragment());
+        actionBar.addTab(actionBar.newTab().setText(R.string.tab_pinglun).setTabListener(pagerAdapter));
+        tabFragments.add(new ArticleCommentsFragment());
+        pagerAdapter.notifyDataSetChanged();
+    }
+
+    private void setUpViewPager() {
+        mViewPager = (ViewPager) findViewById(R.id.content_viewpager);
+        mViewPager.setAdapter(pagerAdapter);
+        mViewPager.setOnPageChangeListener(pagerAdapter);
+    }
 
    	@Override
    	public void onRestoreInstanceState(Bundle savedInstanceState){
@@ -43,28 +107,10 @@ public class ArticleContentActivity extends Activity implements ActionBar.TabLis
    		outState.putInt(SELECTED_ITEM, getActionBar().getSelectedNavigationIndex());
    	}
 
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        Fragment fragment = new ArticleContentFragment();
-        Bundle args = new Bundle();
-//        args.putInt(ArticleListFragment.ARG_SECTION_NUMBER, tab.getPosition() + 1);
-        fragment.setArguments(args);
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.contentLayout, fragment);
-        ft.commit();
-    }
-
-   	public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-   	}
-
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-    }
-
     @Override
-   	public boolean onCreateOptionsMenu(Menu menu)
-   	{
-   		getMenuInflater().inflate(R.menu.article_content_menu, menu);
-   		return true;
+   	public boolean onCreateOptionsMenu(Menu menu) {
+   		getMenuInflater().inflate(R.menu.main_menu, menu);
+   		return super.onCreateOptionsMenu(menu);
    	}
     @Override
    	public boolean onOptionsItemSelected(MenuItem mi) {
@@ -91,4 +137,11 @@ public class ArticleContentActivity extends Activity implements ActionBar.TabLis
 
         return super.onPrepareOptionsMenu(menu);
     }
+
+    public static abstract class ActionTabFragmentPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
+        protected ActionTabFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+    }
+
 }

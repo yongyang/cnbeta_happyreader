@@ -127,11 +127,24 @@ public class ArticleListFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        //add  refresh actionitem
+        inflater.inflate(R.menu.article_list_fragment_menu, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        if (item.isCheckable()) {
+            item.setChecked(true);
+        }
+        switch (item.getItemId()) {
+            case R.id.more_item:
+                break;
+            case R.id.refresh_item:
+                //TODO:
+                Toast.makeText(getActivity(), "您点击了" + item.toString(), Toast.LENGTH_SHORT).show();
+            default:
+        }
+        return true;
     }
 
     public static interface ArticleListListener {

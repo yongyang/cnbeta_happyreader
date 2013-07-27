@@ -4,9 +4,13 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import org.jandroid.cnbeta.R;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -14,19 +18,15 @@ import android.widget.TextView;
 public class ArticleContentFragment extends Fragment
 {
 	public static final String ARG_SECTION_NUMBER = "section_number";
-	// �÷����ķ���ֵ���Ǹ�Fragment��ʾ��View���
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
 		TextView textView = new TextView(getActivity());
 		textView.setGravity(Gravity.CENTER_HORIZONTAL);
-		// ��ȡ������Fragmentʱ����Ĳ���Bundle
 		Bundle args = getArguments();
-		// ����TextView��ʾ���ı�
-		textView.setText(args.getInt(ARG_SECTION_NUMBER) + "");
+//		textView.setText(args.getInt(ARG_SECTION_NUMBER) + "");
 		textView.setTextSize(30);
-		// ���ظ�TextView
 		return textView;
 	}
 
@@ -34,5 +34,12 @@ public class ArticleContentFragment extends Fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.article_content_fragment_menu, menu);
+        menu.add("MENU").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }
