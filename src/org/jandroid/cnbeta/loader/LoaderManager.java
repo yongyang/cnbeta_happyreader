@@ -25,7 +25,7 @@ public class LoaderManager {
         return INSTANCE;
     }
 
-    public List<Article> loadArticleList(String category, int page) {
+    public List<Article> loadArticleList(String category, int page) throws Exception {
         //TODO:
         /*
          * 1. 判断是否有网络连接
@@ -34,7 +34,7 @@ public class LoaderManager {
          * 3.1 parse，然后写入磁盘
          * 4. 返回结果
          */
-        return null;
+        return new ArticleListLoader(ArticleListLoader.Type.ALL, 1).fromHttp();
     }
 
     public Article loadArticleContent(String id) {

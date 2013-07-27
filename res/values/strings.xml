@@ -18,5 +18,6 @@
     <string name="tab_tag_quanbuzixun">all</string>
     <string name="tab_shishigengxin">实时更新</string>
     <string name="tab_tag_shishigengxin">realtime</string>
+    <string name="tab_yuedulishi">阅读历史</string>
 
 </resources>

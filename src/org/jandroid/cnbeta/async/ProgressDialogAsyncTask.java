@@ -9,6 +9,8 @@ import android.os.AsyncTask;
  */
 public abstract class ProgressDialogAsyncTask<P, I, R> extends AsyncTask<P, I ,R> {
 
+    private ProgressDialog progressDialog;
+
     public abstract ProgressDialog getProgressDialog();
 
     @SuppressWarnings("unchecked")
@@ -18,4 +20,17 @@ public abstract class ProgressDialogAsyncTask<P, I, R> extends AsyncTask<P, I ,R
         return executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressDialog = getProgressDialog();
+        progressDialog.show();
+    }
+
+    @Override
+    protected void onPostExecute(R r) {
+        super.onPostExecute(r);
+        progressDialog.dismiss();
+    }
 }

@@ -26,8 +26,7 @@ import java.util.Map;
 public class MainActivity extends Activity {
     private static final String SELECTED_ITEM = "selected_item";
 
-    public final static int[] tabs = new int[]{R.string.tab_quanbuzixun, R.string.tab_shishigengxin};
-    public final static int[] tags = new int[]{R.string.tab_tag_quanbuzixun, R.string.tab_tag_shishigengxin};
+    public final static int[] tabs = new int[]{R.string.tab_quanbuzixun, R.string.tab_shishigengxin, R.string.tab_yuedulishi};
 
     // all articles for tabs, tab_tag => articles
     private Map<String, List<Article>> articles = new HashMap<String, List<Article>>();
@@ -94,8 +93,7 @@ public class MainActivity extends Activity {
 
         for (int i = 0; i < tabs.length; i++) {
             int resourceId = tabs[i];
-            int tagResourceId = tags[i];
-            ActionBar.Tab tab = actionBar.newTab().setText(resourceId).setTag(getResources().getString(tagResourceId)).setTabListener(pagerAdapter);
+            ActionBar.Tab tab = actionBar.newTab().setText(resourceId).setTabListener(pagerAdapter);
             tabFragments.add(new ArticleListFragment());
             actionBar.addTab(tab);
             pagerAdapter.notifyDataSetChanged();
@@ -121,6 +119,7 @@ public class MainActivity extends Activity {
     }
 
     public void loadArticleList(final String category, final int page) {
+/*
         new ArticleListAsyncTask(category, page) {
             @Override
             public ProgressDialog getProgressDialog() {
@@ -135,6 +134,7 @@ public class MainActivity extends Activity {
                 List<Article> articles = listAsyncResult.getResult();
             }
         }.executeMultiThread();
+*/
     }
 
     @Override

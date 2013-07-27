@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class ArticleListAsyncTask extends ProgressDialogAsyncTask<Void, Integer, AsyncResult<List<Article>>> {
+public abstract class ArticleListAsyncTask extends ProgressDialogAsyncTask<Object, Integer, AsyncResult> {
 
     private String category;
     private int page;
@@ -28,14 +28,14 @@ public abstract class ArticleListAsyncTask extends ProgressDialogAsyncTask<Void,
     }
 
     @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-    }
-
-    @Override
-    protected AsyncResult<List<Article>> doInBackground(Void... params) {
-        List<Article> articles = LoaderManager.getInstance().loadArticleList(getCategory(),getPage());
-        return AsyncResult.successResult(articles);
+    protected AsyncResult doInBackground(Object... params) {
+        try {
+            List<Article> articles = LoaderManager.getInstance().loadArticleList(getCategory(),getPage());
+            return AsyncResult.successResult(articles);
+        }
+        catch (Exception e) {
+            return AsyncResult.errorResult(e.getMessage());
+        }
     }
 
 }

@@ -2,6 +2,7 @@ package org.jandroid.cnbeta.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,8 +15,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 import org.jandroid.cnbeta.R;
+import org.jandroid.cnbeta.async.ArticleListAsyncTask;
+import org.jandroid.cnbeta.async.AsyncResult;
 import org.jandroid.cnbeta.entity.Article;
 
 import java.util.ArrayList;
@@ -26,15 +30,13 @@ import java.util.Map;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 
-//TODO: NOT use flipper to display article category for now
 public class ArticleListFragment extends Fragment {
-    
+
     private ListView listView;
     
     private SimpleAdapter simpleAdapter;
     
     private List<Map<String, ?>> articleMapList = new ArrayList<Map<String, ?>>();
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,8 +56,9 @@ public class ArticleListFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.article_list_view, container, false);
         listView = (ListView)rootView.findViewById(R.id.article_listview);
-        TextView emptyText = (TextView)rootView.findViewById(R.id.empty_textview);
-        listView.setEmptyView(emptyText);
+//        TextView emptyText = (TextView)rootView.findViewById(R.id.empty_textview);
+//        listView.setEmptyView(emptyText);
+/*
         simpleAdapter = new SimpleAdapter(getActivity(), articleMapList, R.layout.article_list_item, new String[]{}, new int[]{});
         listView.setAdapter(simpleAdapter);
         listView.setOnTouchListener(new View.OnTouchListener() {
@@ -63,13 +66,54 @@ public class ArticleListFragment extends Fragment {
                 return false;  //To change body of implemented methods use File | Settings | File Templates.
             }
         });
+*/
+
+//        View loadMoreView = inflater.inflate(R.layout.bar_load_more, listView, false);
 		return rootView;
 	}
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //TODO: loading data
+        View loadMoreView = getActivity().getLayoutInflater().inflate(R.layout.bar_load_more, listView,false);
+        listView.addFooterView(loadMoreView);
+        loadMoreView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "load more", Toast.LENGTH_LONG).show();
+
+            }
+        });
+        simpleAdapter = new SimpleAdapter(getActivity(), articleMapList, R.layout.article_list_item,
+                new String[]{"title_show"},
+                new int[]{R.id.tile_show});
+        listView.setAdapter(simpleAdapter);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+                //TODO: loading data
+
+        new ArticleListAsyncTask("all", 1) {
+            @Override
+            public ProgressDialog getProgressDialog() {
+                ProgressDialog progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setMessage("loading articles...");
+                return progressDialog;
+            }
+
+            @Override
+            protected void onPostExecute(AsyncResult listAsyncResult) {
+                super.onPostExecute(listAsyncResult);
+                if(listAsyncResult.isSuccess()) {
+                    List<Article> articles = (List<Article>)listAsyncResult.getResult();
+                    updateArticles(articles);
+                }
+                else {
+                    Toast.makeText(getActivity(), listAsyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }.executeMultiThread();
     }
 
     public void updateArticles(List<Article> articles){
