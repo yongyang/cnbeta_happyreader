@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsListView.OnScrollListener{
 
-    //TODO: cache
+    //TODO: don't need to use memory canche, use disk cache in ImageLoader instead
     
     private final Handler postHandler = new Handler(); 
 
@@ -71,8 +71,37 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
      * @param srcUrl
      */
     protected void queueLoadImage(final int position, final ImageView imageView, final String srcUrl) {
-        QueueImageLoader queueImageLoader = new QueueImageLoader(position, imageView, srcUrl);
+        final QueueImageLoader queueImageLoader = new QueueImageLoader(position, imageView, srcUrl);
         queuedImageLoaders.put(position, queueImageLoader);
+
+        //load first page immediately
+        if(position < 20) { //TODO: 20 or other number
+            new LoadImageAsyncTask(queueImageLoader.getSrcUrl()){
+                @Override
+                protected void onPostExecute(final AsyncResult bitmapAsyncResult) {
+                    super.onPostExecute(bitmapAsyncResult);
+                    if(bitmapAsyncResult.isSuccess()) {
+                        //TODO: synchronize
+                    postHandler.post(new Runnable() {
+                        public void run() {
+                            queueImageLoader.getImageView().setImageDrawable(new BitmapDrawable((Bitmap)bitmapAsyncResult.getResult()));
+                        }
+                    });
+                    }
+                    else {
+                        //TODO: toast or anything
+                    }
+                }
+                @Override
+                protected void onCancelled() {
+                }
+
+                @Override
+                protected void onCancelled(AsyncResult bitmapAsyncResult) {
+                }
+            }.executeMultiThread();
+
+        }
         //TODO: queue to loading
     }
     
@@ -92,7 +121,7 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
                     super.onPostExecute(bitmapAsyncResult);
                     if(bitmapAsyncResult.isSuccess()) {
                         //TODO: synchronize
-//                    loadingPositions.remove(position);
+//                    loadingPositions.remove((Object)position);
                     postHandler.post(new Runnable() {
                         public void run() {
                           imageLoadInfo.getImageView().setImageDrawable(new BitmapDrawable((Bitmap)bitmapAsyncResult.getResult()));

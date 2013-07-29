@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -115,6 +116,7 @@ public class ArticleListFragment extends Fragment {
                 TextView tv = (TextView)convertView.findViewById(R.id.tile_show);
                 tv.setText(article.getTitleShow());
                 ImageView iv = (ImageView) convertView.findViewById(R.id.item_logo);
+                // queue to image load list
                 queueLoadImage(position, iv, article.getLogo());
                 return convertView;
             }
@@ -122,6 +124,8 @@ public class ArticleListFragment extends Fragment {
         //TODO: other textview
         listView.setAdapter(asyncImageAdapter);
         listView.setOnScrollListener(asyncImageAdapter);
+        //TODO: for listview loadimage on the firstpage loaded
+//        asyncImageAdapter.onScrollStateChanged(listView, AbsListView.OnScrollListener.SCROLL_STATE_IDLE);
     }
 
     @Override
