@@ -1,5 +1,6 @@
 package org.jandroid.cnbeta.loader;
 
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.entity.Comment;
@@ -42,6 +43,10 @@ public class LoaderManager {
     }
 
     public List<Comment> loadArticleComments(String articleId) {
+        return null;
+    }
+    
+    public Bitmap loadImage(String url){
         return null;
     }
 }
