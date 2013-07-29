@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import org.jandroid.cnbeta.async.AsyncResult;
 import org.jandroid.cnbeta.async.LoadImageAsyncTask;
 
@@ -27,7 +28,8 @@ import java.util.Map;
  * @create 7/29/13 3:23 PM
  */
 public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsListView.OnScrollListener{
-    
+
+    //TODO: cache
     
     private final Handler postHandler = new Handler(); 
 
@@ -39,15 +41,18 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
     public abstract int getCount();
     public abstract Object getItem(int position);
     public abstract long getItemId(int position);
-    public abstract int[] getVisiblePositions();
 
+    public abstract int getFirstVisibleItemPosition();
+    public abstract int getLastVisibleItemPosition();
+
+//    public abstract void onImageLoadFailure();
 
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         switch (scrollState) {
             case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
-            case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
                 loadQueuedImages();
                 break;
+            case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
             case AbsListView.OnScrollListener.SCROLL_STATE_FLING:
             default:
                 break;
@@ -73,23 +78,30 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
     
     protected void loadQueuedImages(){      
         // only load image for visible lines of ListView
-        for(final int position : getVisiblePositions()){
+        for(int pos = getFirstVisibleItemPosition(); pos<= getLastVisibleItemPosition(); pos++){
+            final int position = pos;
             if(loadingPositions.contains(position)) {
                 // 正在加载，跳过
                 continue;
             }
             loadingPositions.add(position);
             final QueueImageLoader imageLoadInfo = queuedImageLoaders.get(position);            
-            new LoadImageAsyncTask(){
+            new LoadImageAsyncTask(imageLoadInfo.getSrcUrl()){
                 @Override
-                protected void onPostExecute(final AsyncResult<Bitmap> bitmapAsyncResult) {
+                protected void onPostExecute(final AsyncResult bitmapAsyncResult) {
                     super.onPostExecute(bitmapAsyncResult);
-                    loadingPositions.remove(position);
+                    if(bitmapAsyncResult.isSuccess()) {
+                        //TODO: synchronize
+//                    loadingPositions.remove(position);
                     postHandler.post(new Runnable() {
                         public void run() {
-                            imageLoadInfo.imageView.setImageDrawable(new BitmapDrawable(bitmapAsyncResult.getResult()));
+                          imageLoadInfo.getImageView().setImageDrawable(new BitmapDrawable((Bitmap)bitmapAsyncResult.getResult()));
                         }
                     });
+                    }
+                    else {
+                        //TODO: toast or anything
+                    }
                 }
                 @Override
                 protected void onCancelled() {
@@ -97,7 +109,7 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
                 }
 
                 @Override
-                protected void onCancelled(AsyncResult<Bitmap> bitmapAsyncResult) {
+                protected void onCancelled(AsyncResult bitmapAsyncResult) {
                     loadingPositions.remove(position);
                 }
             }.executeMultiThread();
@@ -115,6 +127,18 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
             this.position = position;
             this.imageView = imageView;
             this.srcUrl = srcUrl;
+        }
+
+        ImageView getImageView() {
+            return imageView;
+        }
+
+        int getPosition() {
+            return position;
+        }
+
+        String getSrcUrl() {
+            return srcUrl;
         }
     }
     

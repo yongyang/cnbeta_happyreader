@@ -1,5 +1,6 @@
 package test.org.jandroid.cnbeta;
 
+import android.graphics.Bitmap;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
@@ -28,5 +29,11 @@ public class CnBetaTest extends TestCase {
         String s = Arrays.toString(articleList.toArray(new Article[articleList.size()]));
 //        Assert.fail(s);
         Assert.assertTrue(!articleList.isEmpty());
+    }
+
+    public void testHttpGetImage() throws Exception {
+        Bitmap image = CnBetaHttpClient.getInstance().httpGetImage("http://static.cnbetacdn.com/newsimg/2013/0729/01375107904.jpg_180x132.jpg");
+//        Assert.fail(image.toString());
+        Assert.assertTrue(image.getWidth() > 0);
     }
 }

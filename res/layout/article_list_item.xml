@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="match_parent"
   xmlns:android="http://schemas.android.com/apk/res/android">
-    <ImageView android:layout_gravity="center_vertical" android:id="@+id/mainImg" android:padding="2.0dip" android:layout_width="60.0dip" android:layout_height="60.0dip" android:src="@drawable/default_img" />
+    <ImageView android:layout_gravity="center_vertical" android:id="@+id/item_logo" android:padding="2.0dip" android:layout_width="60.0dip" android:layout_height="60.0dip" android:src="@drawable/default_img" />
     <LinearLayout android:layout_gravity="center_vertical" android:orientation="vertical" android:paddingLeft="3.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content">
         <TextView android:textSize="14.0sp" android:textColor="@color/color_title" android:id="@+id/tile_show" android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true" />
         <TextView android:textSize="12.0sp" android:textColor="@color/color_desc" android:id="@+id/mainInfo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true" />

@@ -8,23 +8,20 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
 import org.jandroid.cnbeta.R;
+import org.jandroid.cnbeta.adapter.AsyncImageBaseAdapter;
 import org.jandroid.cnbeta.async.ArticleListAsyncTask;
 import org.jandroid.cnbeta.async.AsyncResult;
 import org.jandroid.cnbeta.entity.Article;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -34,9 +31,9 @@ public class ArticleListFragment extends Fragment {
 
     private ListView listView;
     
-    private SimpleAdapter simpleAdapter;
+    private AsyncImageBaseAdapter asyncImageAdapter;
     
-    private List<Map<String, ?>> articleMapList = new ArrayList<Map<String, ?>>();
+    private List<Article> loadedArticles = new ArrayList<Article>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,10 +80,48 @@ public class ArticleListFragment extends Fragment {
 
             }
         });
-        simpleAdapter = new SimpleAdapter(getActivity(), articleMapList, R.layout.article_list_item,
-                new String[]{"title_show"},
-                new int[]{R.id.tile_show});
-        listView.setAdapter(simpleAdapter);
+
+        asyncImageAdapter = new AsyncImageBaseAdapter() {
+            @Override
+            public int getCount() {
+                return loadedArticles.size();
+            }
+
+            @Override
+            public Object getItem(int position) {
+                return loadedArticles.get(position);
+            }
+
+            @Override
+            public long getItemId(int position) {
+                return position;
+            }
+
+            @Override
+            public int getFirstVisibleItemPosition() {
+                return listView.getFirstVisiblePosition();
+            }
+
+            @Override
+            public int getLastVisibleItemPosition() {
+                return listView.getLastVisiblePosition();
+            }
+
+            public View getView(int position, View convertView, ViewGroup parent) {
+                if(convertView == null) {
+                    convertView = getActivity().getLayoutInflater().inflate(R.layout.article_list_item, null);
+                }
+                Article article = loadedArticles.get(position);
+                TextView tv = (TextView)convertView.findViewById(R.id.tile_show);
+                tv.setText(article.getTitleShow());
+                ImageView iv = (ImageView) convertView.findViewById(R.id.item_logo);
+                queueLoadImage(position, iv, article.getLogo());
+                return convertView;
+            }
+        };
+        //TODO: other textview
+        listView.setAdapter(asyncImageAdapter);
+        listView.setOnScrollListener(asyncImageAdapter);
     }
 
     @Override
@@ -117,11 +152,16 @@ public class ArticleListFragment extends Fragment {
     }
 
     public void updateArticles(List<Article> articles){
-        articleMapList.clear();
+        loadedArticles.clear();
         for(Article article : articles){
-            articleMapList.add(article.toMap());
+            loadedArticles.addAll(articles);
         }
-        simpleAdapter.notifyDataSetChanged();
+        asyncImageAdapter.notifyDataSetChanged();
+    }
+
+    public void appendArticles(List<Article> articles){
+        loadedArticles.addAll(articles);
+        asyncImageAdapter.notifyDataSetChanged();
     }
 
     @Override

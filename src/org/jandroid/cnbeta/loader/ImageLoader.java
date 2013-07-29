@@ -1,6 +1,7 @@
 package org.jandroid.cnbeta.loader;
 
 import android.graphics.Bitmap;
+import org.jandroid.cnbeta.client.CnBetaHttpClient;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
@@ -8,9 +9,15 @@ import android.graphics.Bitmap;
  */
 public class ImageLoader extends LoaderTask<Bitmap>{
 
+    private String url;
+
+    public ImageLoader(String url) {
+        this.url = url;
+    }
+
     @Override
     public Bitmap fromHttp() throws Exception {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return CnBetaHttpClient.getInstance().httpGetImage(url);
     }
 
     @Override

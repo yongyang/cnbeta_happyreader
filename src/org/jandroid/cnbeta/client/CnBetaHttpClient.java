@@ -1,9 +1,12 @@
 package org.jandroid.cnbeta.client;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.params.ConnManagerParams;
@@ -21,6 +24,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -29,7 +33,6 @@ import java.util.zip.GZIPOutputStream;
  */
 public class CnBetaHttpClient {
 
-    public static final int HTTP_OK = 200;
     public static final String DEFAULT_ENCODING = "utf-8";
 
     public static final int MAX_TOTAL_CONNECTIONS = 20;
@@ -72,119 +75,146 @@ public class CnBetaHttpClient {
         return httpGet(url, "utf-8");
     }
 
+    private static void addDefaultHeaders(HttpGet httpGet){
+
+    }
+
     public String httpGet(String url, String encoding) throws Exception {
         String result = "";
         HttpGet httpGet = newHttpGet(url, encoding);
-        //TODO:  Must add Referer, so site ruturn data
-        httpGet.addHeader("Referer", "http://www.cnbeta.com/");
-        httpGet.addHeader("Accept-Encoding", "gzip, deflate");
-        httpGet.addHeader("Accept", "*/*");
-        httpGet.addHeader("User-Agent", "Mozilla/5.0 AppleWebKit/533.1 (KHTML, like Gecko)");
-        httpGet.addHeader("Connection",	"keep-alive");
-
+        HttpResponse response = httpClient.execute(httpGet);
         try {
-            HttpResponse response = httpClient.execute(httpGet);
-            if (response.getStatusLine().getStatusCode() != HTTP_OK) {
+            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
                 throw new Exception("Server Error: " + response.getStatusLine().toString());
             }
             HttpEntity httpEntity = response.getEntity();
-            Header contentEncodingHeader = response.getFirstHeader("Content-Encoding");
-            if(contentEncodingHeader!=null && contentEncodingHeader.getValue().contains("zip")){
-                GZIPInputStream gzipInputStream = new GZIPInputStream(new ByteArrayInputStream(EntityUtils.toByteArray(httpEntity)));
-                result = new String(IOUtils.toByteArray(gzipInputStream), encoding);
+            try {
+                Header contentEncodingHeader = response.getFirstHeader("Content-Encoding");
+                if (contentEncodingHeader != null && contentEncodingHeader.getValue().contains("zip")) {
+                    GZIPInputStream gzipInputStream = new GZIPInputStream(new ByteArrayInputStream(EntityUtils.toByteArray(httpEntity)));
+                    result = new String(IOUtils.toByteArray(gzipInputStream), encoding);
+                }
+                else {
+                    result = EntityUtils.toString(httpEntity, encoding);
+                }
+                // convert unicode chars to chinese
+                return UnicodeUtils.unicode2Chinese(result);
             }
-            else {
-                result = EntityUtils.toString(httpEntity, encoding);
+            finally {
+                httpEntity.consumeContent();
             }
-            httpEntity.consumeContent();
-            // convert unicode chars to chinese
-            return UnicodeUtils.unicode2Chinese(result);
         }
         catch (IOException e) {
             httpGet.abort();
             throw e;
         }
     }
+    public static HttpGet newHttpGet(String url) {
+        return newHttpGet(url, "ISO-8859-1");
+    }
 
-    public static HttpGet newHttpGet(String url, String encoding){
+    public static HttpGet newHttpGet(String url, String encoding) {
         HttpGet httpGet = new HttpGet(url);
 //        httpGet.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, encoding);
+       // Must add Referer, so site ruturn data
+        httpGet.addHeader("Referer", "http://www.cnbeta.com/");
+        httpGet.addHeader("Accept-Encoding", "gzip, deflate");
+        httpGet.addHeader("Accept", "*/*");
+        httpGet.addHeader("User-Agent", "Mozilla/5.0 AppleWebKit/533.1 (KHTML, like Gecko)");
+        httpGet.addHeader("Connection", "keep-alive");
         return httpGet;
     }
 
-    //TODO:
-    public byte[] getImage(String url){
-        return null;
+    public Bitmap httpGetImage(String url) throws Exception {
+        final HttpGet request = newHttpGet(url);
+        try {
+            HttpResponse response = httpClient.execute(request);
+            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+                throw new Exception("Server Error: " + response.getStatusLine().toString());
+            }
+            final HttpEntity entity = response.getEntity();
+            try {
+                // Bug on slow connections, fixed in future release.
+                return BitmapFactory.decodeStream(new ByteArrayInputStream(EntityUtils.toByteArray(entity)));
+            }
+            finally {
+                entity.consumeContent();
+            }
+        }
+        catch (Exception e) {
+            request.abort();
+            throw e;
+        }
     }
 }
 
 /**
-    public String Get(String paramString1, String paramString2, Boolean paramBoolean, String paramString3, CookieStore paramCookieStore)
-      throws Exception
-    {
-      BasicHttpParams localBasicHttpParams = new BasicHttpParams();
-      if (paramBoolean.booleanValue())
-      {
-        localBasicHttpParams.setParameter("http.route.default-proxy", new HttpHost(Proxy.getDefaultHost(), Proxy.getDefaultPort()));
-        paramString2 = "utf8";
-      }
-      HttpConnectionParams.setConnectionTimeout(localBasicHttpParams, 50000);
-      HttpConnectionParams.setSoTimeout(localBasicHttpParams, 300000);
-      DefaultHttpClient localDefaultHttpClient = new DefaultHttpClient(localBasicHttpParams);
-      if (paramCookieStore != null)
-        localDefaultHttpClient.setCookieStore(paramCookieStore);
-      HttpGet localHttpGet = new HttpGet(paramString1);
-      localHttpGet.addHeader("Accept-Encoding", "gzip,deflate");
-      localHttpGet.addHeader("Accept", "* / *");
-      localHttpGet.addHeader("User-Agent", "Mozilla/5.0 AppleWebKit/533.1 (KHTML, like Gecko)");
-      if ((paramString3 != null) && (!paramString3.equals("")))
-        localHttpGet.addHeader("Referer", paramString3);
-      HttpResponse localHttpResponse = localDefaultHttpClient.execute(localHttpGet);
-      Object localObject = localHttpResponse.getEntity().getContent();
-      Header localHeader = localHttpResponse.getFirstHeader("Content-Encoding");
-      if ((localHeader != null) && (localHeader.getValue().equalsIgnoreCase("gzip")))
-        localObject = new GZIPInputStream((InputStream)localObject);
-      return Utility.convertStreamToString((InputStream)localObject, paramString2);
-    }
+ public String Get(String paramString1, String paramString2, Boolean paramBoolean, String paramString3, CookieStore paramCookieStore)
+ throws Exception
+ {
+ BasicHttpParams localBasicHttpParams = new BasicHttpParams();
+ if (paramBoolean.booleanValue())
+ {
+ localBasicHttpParams.setParameter("http.route.default-proxy", new HttpHost(Proxy.getDefaultHost(), Proxy.getDefaultPort()));
+ paramString2 = "utf8";
+ }
+ HttpConnectionParams.setConnectionTimeout(localBasicHttpParams, 50000);
+ HttpConnectionParams.setSoTimeout(localBasicHttpParams, 300000);
+ DefaultHttpClient localDefaultHttpClient = new DefaultHttpClient(localBasicHttpParams);
+ if (paramCookieStore != null)
+ localDefaultHttpClient.setCookieStore(paramCookieStore);
+ HttpGet localHttpGet = new HttpGet(paramString1);
+ localHttpGet.addHeader("Accept-Encoding", "gzip,deflate");
+ localHttpGet.addHeader("Accept", "* / *");
+ localHttpGet.addHeader("User-Agent", "Mozilla/5.0 AppleWebKit/533.1 (KHTML, like Gecko)");
+ if ((paramString3 != null) && (!paramString3.equals("")))
+ localHttpGet.addHeader("Referer", paramString3);
+ HttpResponse localHttpResponse = localDefaultHttpClient.execute(localHttpGet);
+ Object localObject = localHttpResponse.getEntity().getContent();
+ Header localHeader = localHttpResponse.getFirstHeader("Content-Encoding");
+ if ((localHeader != null) && (localHeader.getValue().equalsIgnoreCase("gzip")))
+ localObject = new GZIPInputStream((InputStream)localObject);
+ return Utility.convertStreamToString((InputStream)localObject, paramString2);
+ }
 
-    public Bitmap GetImage(String paramString, Boolean paramBoolean)
-      throws Exception
-    {
-      return GetImage(paramString, paramBoolean, null, null);
-    }
+ public Bitmap GetImage(String paramString, Boolean paramBoolean)
+ throws Exception
+ {
+ return GetImage(paramString, paramBoolean, null, null);
+ }
 
-    public Bitmap GetImage(String paramString1, Boolean paramBoolean, String paramString2)
-      throws Exception
-    {
-      return GetImage(paramString1, paramBoolean, paramString2, null);
-    }
+ public Bitmap GetImage(String paramString1, Boolean paramBoolean, String paramString2)
+ throws Exception
+ {
+ return GetImage(paramString1, paramBoolean, paramString2, null);
+ }
 
-    public Bitmap GetImage(String paramString1, Boolean paramBoolean, String paramString2, CookieStore paramCookieStore)
-      throws Exception
-    {
-      BasicHttpParams localBasicHttpParams = new BasicHttpParams();
-      if (paramBoolean.booleanValue())
-        localBasicHttpParams.setParameter("http.route.default-proxy", new HttpHost(Proxy.getDefaultHost(), Proxy.getDefaultPort()));
-      HttpConnectionParams.setConnectionTimeout(localBasicHttpParams, 50000);
-      HttpConnectionParams.setSoTimeout(localBasicHttpParams, 300000);
-      DefaultHttpClient localDefaultHttpClient = new DefaultHttpClient(localBasicHttpParams);
-      HttpGet localHttpGet = new HttpGet(paramString1);
-      localHttpGet.addHeader("Accept-Encoding", "gzip,deflate");
-      localHttpGet.addHeader("Accept", "* / *");
-      localHttpGet.addHeader("User-Agent", "Mozilla/5.0 AppleWebKit/533.1 (KHTML, like Gecko)");
-      if ((paramString2 != null) && (!paramString2.equals("")))
-        localHttpGet.addHeader("Referer", paramString2);
-      if (paramCookieStore != null)
-        localDefaultHttpClient.setCookieStore(paramCookieStore);
-      HttpResponse localHttpResponse = localDefaultHttpClient.execute(localHttpGet);
-      Object localObject = localHttpResponse.getEntity().getContent();
-      Header localHeader = localHttpResponse.getFirstHeader("Content-Encoding");
-      if ((localHeader != null) && (localHeader.getValue().equalsIgnoreCase("gzip")))
-        localObject = new GZIPInputStream((InputStream)localObject);
-      return BitmapFactory.decodeStream((InputStream)localObject);
-    }
+ public Bitmap GetImage(String paramString1, Boolean paramBoolean, String paramString2, CookieStore paramCookieStore)
+ throws Exception
+ {
+ BasicHttpParams localBasicHttpParams = new BasicHttpParams();
+ if (paramBoolean.booleanValue())
+ localBasicHttpParams.setParameter("http.route.default-proxy", new HttpHost(Proxy.getDefaultHost(), Proxy.getDefaultPort()));
+ HttpConnectionParams.setConnectionTimeout(localBasicHttpParams, 50000);
+ HttpConnectionParams.setSoTimeout(localBasicHttpParams, 300000);
+ DefaultHttpClient localDefaultHttpClient = new DefaultHttpClient(localBasicHttpParams);
+ HttpGet localHttpGet = new HttpGet(paramString1);
+ localHttpGet.addHeader("Accept-Encoding", "gzip,deflate");
+ localHttpGet.addHeader("Accept", "* / *");
+ localHttpGet.addHeader("User-Agent", "Mozilla/5.0 AppleWebKit/533.1 (KHTML, like Gecko)");
+ if ((paramString2 != null) && (!paramString2.equals("")))
+ localHttpGet.addHeader("Referer", paramString2);
+ if (paramCookieStore != null)
+ localDefaultHttpClient.setCookieStore(paramCookieStore);
+ HttpResponse localHttpResponse = localDefaultHttpClient.execute(localHttpGet);
+ Object localObject = localHttpResponse.getEntity().getContent();
+ Header localHeader = localHttpResponse.getFirstHeader("Content-Encoding");
+ if ((localHeader != null) && (localHeader.getValue().equalsIgnoreCase("gzip")))
+ localObject = new GZIPInputStream((InputStream)localObject);
+ return BitmapFactory.decodeStream((InputStream)localObject);
+ }
 
-*/
+ */
 
 /*
 

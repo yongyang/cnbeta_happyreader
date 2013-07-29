@@ -46,7 +46,7 @@ public class LoaderManager {
         return null;
     }
     
-    public Bitmap loadImage(String url){
-        return null;
+    public Bitmap loadImage(String url) throws Exception{
+        return new ImageLoader(url).fromHttp();
     }
 }
