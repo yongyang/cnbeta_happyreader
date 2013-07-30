@@ -35,7 +35,8 @@ public class LoaderManager {
          * 3.1 parse，然后写入磁盘
          * 4. 返回结果
          */
-        return new ArticleListLoader(ArticleListLoader.Type.ALL, 1).fromHttp();
+        //TODO:
+        return new ArticleListLoader(ArticleListLoader.Type.ALL, page).fromHttp();
     }
 
     public Article loadArticleContent(String id) {

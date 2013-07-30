@@ -36,6 +36,7 @@ public class AsyncResult<T> {
             return "success";
         }
         else {
+            //TODO: result may be null
             return result.toString();
         }
     }

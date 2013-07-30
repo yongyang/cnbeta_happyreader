@@ -34,7 +34,8 @@ public abstract class ArticleListAsyncTask extends ProgressDialogAsyncTask<Objec
             return AsyncResult.successResult(articles);
         }
         catch (Exception e) {
-            return AsyncResult.errorResult(e.getMessage());
+            e.printStackTrace();
+            return AsyncResult.errorResult(e.toString());
         }
     }
 

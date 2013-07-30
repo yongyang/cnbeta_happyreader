@@ -2,16 +2,11 @@ package org.jandroid.cnbeta.adapter;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.view.View;
-import android.view.ViewGroup;
+import android.util.Log;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 import org.jandroid.cnbeta.async.AsyncResult;
 import org.jandroid.cnbeta.async.LoadImageAsyncTask;
 
@@ -36,7 +31,7 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
     private Map<Integer, QueueImageLoader> queuedImageLoaders = new HashMap<Integer, QueueImageLoader>();
 
     //TODO: 需要解决 重复加载 的问题
-    private List<Integer> loadingPositions = new ArrayList<Integer>();
+    private List<String> loadingImages = new ArrayList<String>();
     
     public abstract int getCount();
     public abstract Object getItem(int position);
@@ -72,8 +67,6 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
      */
     protected void queueLoadImage(final int position, final ImageView imageView, final String srcUrl) {
         final QueueImageLoader queueImageLoader = new QueueImageLoader(position, imageView, srcUrl);
-        queuedImageLoaders.put(position, queueImageLoader);
-
         //load first page immediately
         if(position < 20) { //TODO: 20 or other number
             new LoadImageAsyncTask(queueImageLoader.getSrcUrl()){
@@ -102,31 +95,44 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
             }.executeMultiThread();
 
         }
+        else {
+            queuedImageLoaders.put(position, queueImageLoader);
+        }
         //TODO: queue to loading
     }
     
     protected void loadQueuedImages(){      
         // only load image for visible lines of ListView
-        for(int pos = getFirstVisibleItemPosition(); pos<= getLastVisibleItemPosition(); pos++){
+        int lastPosition = getLastVisibleItemPosition();
+        if(lastPosition == 0) {
+            Log.w(getClass().getSimpleName(), "last position 0, please check!");
+            return;
+        }
+        if(lastPosition > getCount()) {
+            lastPosition = getCount();
+        }
+        for(int pos = getFirstVisibleItemPosition(); pos <= lastPosition; pos++){
             final int position = pos;
-            if(loadingPositions.contains(position)) {
+            if(loadingImages.contains(position)) {
                 // 正在加载，跳过
                 continue;
             }
-            loadingPositions.add(position);
-            final QueueImageLoader imageLoadInfo = queuedImageLoaders.get(position);            
-            new LoadImageAsyncTask(imageLoadInfo.getSrcUrl()){
+            final QueueImageLoader imageLoadInfo = queuedImageLoaders.get(position);
+            final String imgUrl = imageLoadInfo.getSrcUrl();
+            loadingImages.add(imgUrl);
+
+            new LoadImageAsyncTask(imgUrl){
                 @Override
                 protected void onPostExecute(final AsyncResult bitmapAsyncResult) {
                     super.onPostExecute(bitmapAsyncResult);
                     if(bitmapAsyncResult.isSuccess()) {
-                        //TODO: synchronize
-//                    loadingPositions.remove((Object)position);
-                    postHandler.post(new Runnable() {
-                        public void run() {
-                          imageLoadInfo.getImageView().setImageDrawable(new BitmapDrawable((Bitmap)bitmapAsyncResult.getResult()));
-                        }
-                    });
+                        //TODO: synchronize, throws exceptions???
+                        loadingImages.remove(imgUrl);
+                        postHandler.post(new Runnable() {
+                            public void run() {
+                                imageLoadInfo.getImageView().setImageDrawable(new BitmapDrawable((Bitmap)bitmapAsyncResult.getResult()));
+                            }
+                        });
                     }
                     else {
                         //TODO: toast or anything
@@ -134,12 +140,12 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
                 }
                 @Override
                 protected void onCancelled() {
-                    loadingPositions.remove(position);
+                    loadingImages.remove(position);
                 }
 
                 @Override
                 protected void onCancelled(AsyncResult bitmapAsyncResult) {
-                    loadingPositions.remove(position);
+                    loadingImages.remove(position);
                 }
             }.executeMultiThread();
         }
@@ -148,9 +154,9 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
     }
     
     static class QueueImageLoader {
-        int position;
-        ImageView imageView;
-        String srcUrl;
+        private int position;
+        private ImageView imageView;
+        private String srcUrl;
 
         QueueImageLoader(int position, ImageView imageView, String srcUrl) {
             this.position = position;
