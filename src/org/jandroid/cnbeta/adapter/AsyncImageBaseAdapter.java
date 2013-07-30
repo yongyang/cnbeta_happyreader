@@ -118,7 +118,10 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
                 continue;
             }
             final QueueImageLoader imageLoadInfo = queuedImageLoaders.get(position);
+            //TODO ?? why null
+            if(imageLoadInfo == null) return;
             final String imgUrl = imageLoadInfo.getSrcUrl();
+            if(imgUrl == null) return;
             loadingImages.add(imgUrl);
 
             new LoadImageAsyncTask(imgUrl){

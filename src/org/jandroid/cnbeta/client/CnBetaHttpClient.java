@@ -24,9 +24,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -98,7 +96,7 @@ public class CnBetaHttpClient {
                     result = EntityUtils.toString(httpEntity, encoding);
                 }
                 // convert unicode chars to chinese
-                return UnicodeUtils.unicode2Chinese2(result);
+                return UnicodeUtils.unicode2Chinese(result);
             }
             finally {
                 httpEntity.consumeContent();

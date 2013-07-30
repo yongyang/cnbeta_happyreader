@@ -61,7 +61,7 @@ public class ArticleListLoader extends LoaderTask<List<Article>> {
 
     private List<Article> parseArticleListJSON(String articleListJSON){
         JSONObject responseJSON = (JSONObject)JSONValue.parse(articleListJSON);
-        JSONArray articleListJSONArray= (JSONArray)responseJSON.get("result");
+        JSONArray articleListJSONArray = (JSONArray)((JSONObject)responseJSON.get("result")).get("list");
         List<Article> articleList = new ArrayList<Article>(articleListJSONArray.size());
         for(int i=0; i<articleListJSONArray.size(); i++){
             JSONObject jsonObject = (JSONObject)articleListJSONArray.get(i);
