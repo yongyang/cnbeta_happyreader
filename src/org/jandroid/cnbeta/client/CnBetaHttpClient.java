@@ -98,7 +98,7 @@ public class CnBetaHttpClient {
                     result = EntityUtils.toString(httpEntity, encoding);
                 }
                 // convert unicode chars to chinese
-                return UnicodeUtils.unicode2Chinese(result);
+                return UnicodeUtils.unicode2Chinese2(result);
             }
             finally {
                 httpEntity.consumeContent();
