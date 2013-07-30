@@ -14,12 +14,16 @@ public class UnicodeUtils {
         StringReader sr = new StringReader(str);
         UnicodeUnescapeReader uur = new UnicodeUnescapeReader(sr);
 
-        StringBuffer buf = new StringBuffer();
-        for(int c = uur.read(); c != -1; c = uur.read())
-        {
-            buf.append((char)c);
+        StringBuilder sb = new StringBuilder();
+        try {
+            for (int c = uur.read(); c != -1; c = uur.read()) {
+                sb.append((char) c);
+            }
+            return sb.toString();
         }
-        return buf.toString();
+        finally {
+            uur.close();
+        }
     }
 }
 
@@ -33,7 +37,9 @@ public class UnicodeUtils {
 class UnicodeUnescapeReader extends Reader {
     private final PushbackReader reader;
 
-    /** The buffer used to read unicode escape sequences. */
+    /**
+     * The buffer used to read unicode escape sequences.
+     */
     private final char[] sequence = new char[5];
 
     UnicodeUnescapeReader(Reader reader) {
@@ -56,7 +62,8 @@ class UnicodeUnescapeReader extends Reader {
                     // unicode escape found
                     c = Integer.parseInt(new String(sequence, 1, 4), 16);
 
-                } else if (len > 0) {
+                }
+                else if (len > 0) {
                     // put the characters back in the stream
                     reader.unread(sequence, 0, len);
                 }

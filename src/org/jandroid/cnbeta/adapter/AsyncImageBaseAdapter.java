@@ -24,14 +24,14 @@ import java.util.Map;
  */
 public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsListView.OnScrollListener{
 
-    //TODO: don't need to use memory canche, use disk cache in ImageLoader instead
+    //TODO: don't need to use memory cache, use disk cache in ImageLoader instead
     
     private final Handler postHandler = new Handler(); 
 
     private Map<Integer, QueueImageLoader> queuedImageLoaders = new HashMap<Integer, QueueImageLoader>();
 
     //TODO: 需要解决 重复加载 的问题
-    private List<String> loadingImages = new ArrayList<String>();
+    private final List<String> loadingImages = new ArrayList<String>();
     
     public abstract int getCount();
     public abstract Object getItem(int position);
@@ -40,6 +40,7 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
     public abstract int getFirstVisibleItemPosition();
     public abstract int getLastVisibleItemPosition();
 
+    //TODO:
 //    public abstract void onImageLoadFailure();
 
     public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -67,14 +68,13 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
      */
     protected void queueLoadImage(final int position, final ImageView imageView, final String srcUrl) {
         final QueueImageLoader queueImageLoader = new QueueImageLoader(position, imageView, srcUrl);
-        //load first page immediately
-        if(position < 20) { //TODO: 20 or other number
+        //load first page immediately, assume 10 items
+        if(position < 10) { //TODO: 10 or other number
             new LoadImageAsyncTask(queueImageLoader.getSrcUrl()){
                 @Override
                 protected void onPostExecute(final AsyncResult bitmapAsyncResult) {
                     super.onPostExecute(bitmapAsyncResult);
                     if(bitmapAsyncResult.isSuccess()) {
-                        //TODO: synchronize
                     postHandler.post(new Runnable() {
                         public void run() {
                             queueImageLoader.getImageView().setImageDrawable(new BitmapDrawable((Bitmap)bitmapAsyncResult.getResult()));
@@ -113,15 +113,17 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
         }
         for(int pos = getFirstVisibleItemPosition(); pos <= lastPosition; pos++){
             final int position = pos;
-            if(loadingImages.contains(position)) {
-                // 正在加载，跳过
-                continue;
-            }
             final QueueImageLoader imageLoadInfo = queuedImageLoaders.get(position);
             //TODO ?? why null
             if(imageLoadInfo == null) return;
             final String imgUrl = imageLoadInfo.getSrcUrl();
             if(imgUrl == null) return;
+
+            if(loadingImages.contains(imageLoadInfo.getSrcUrl())) {
+                // 正在加载，跳过
+                continue;
+            }
+
             loadingImages.add(imgUrl);
 
             new LoadImageAsyncTask(imgUrl){
@@ -129,11 +131,10 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
                 protected void onPostExecute(final AsyncResult bitmapAsyncResult) {
                     super.onPostExecute(bitmapAsyncResult);
                     if(bitmapAsyncResult.isSuccess()) {
-                        //TODO: synchronize, throws exceptions???
                         loadingImages.remove(imgUrl);
                         postHandler.post(new Runnable() {
                             public void run() {
-                                imageLoadInfo.getImageView().setImageDrawable(new BitmapDrawable((Bitmap)bitmapAsyncResult.getResult()));
+                                imageLoadInfo.getImageView().setImageBitmap((Bitmap)bitmapAsyncResult.getResult());
                             }
                         });
                     }

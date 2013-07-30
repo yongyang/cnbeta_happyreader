@@ -10,8 +10,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +20,8 @@ import org.jandroid.cnbeta.adapter.AsyncImageBaseAdapter;
 import org.jandroid.cnbeta.async.ArticleListAsyncTask;
 import org.jandroid.cnbeta.async.AsyncResult;
 import org.jandroid.cnbeta.entity.Article;
+import org.jandroid.cnbeta.loader.ArticleListLoader;
+import org.jandroid.cnbeta.util.EnvironmentUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +32,24 @@ import java.util.List;
 
 public class ArticleListFragment extends Fragment {
 
-    private ListView listView;
+    private ListView lvArticleList;
     
     private AsyncImageBaseAdapter asyncImageAdapter;
     
     private List<Article> loadedArticles = new ArrayList<Article>();
+
+    
+    // 新闻分类
+    private ArticleListLoader.Type category;
+    private int loadedPage = 0;
+
+    public ArticleListFragment(ArticleListLoader.Type category) {
+        this.category = category;
+    }
+
+    public ArticleListLoader.Type getCategory() {
+        return category;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,29 +68,26 @@ public class ArticleListFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.article_list_view, container, false);
-        listView = (ListView)rootView.findViewById(R.id.article_listview);
-//        TextView emptyText = (TextView)rootView.findViewById(R.id.empty_textview);
-//        listView.setEmptyView(emptyText);
-/*
-        simpleAdapter = new SimpleAdapter(getActivity(), articleMapList, R.layout.article_list_item, new String[]{}, new int[]{});
-        listView.setAdapter(simpleAdapter);
-        listView.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;  //To change body of implemented methods use File | Settings | File Templates.
-            }
-        });
-*/
-
-//        View loadMoreView = inflater.inflate(R.layout.bar_load_more, listView, false);
+        lvArticleList = (ListView)rootView.findViewById(R.id.article_listview);
 		return rootView;
 	}
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        View loadMoreView = getActivity().getLayoutInflater().inflate(R.layout.bar_load_more, listView,false);
-        listView.addFooterView(loadMoreView);
-        loadMoreView.setOnClickListener(new View.OnClickListener() {
+        
+        LinearLayout llLoadMore = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.bar_load_more, lvArticleList,false);
+        lvArticleList.addFooterView(llLoadMore);
+
+        llLoadMore.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //TODO:
+                loadArticles();
+                
+            }
+        });
+        
+        llLoadMore.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "load more", Toast.LENGTH_LONG).show();
 
@@ -100,12 +112,12 @@ public class ArticleListFragment extends Fragment {
 
             @Override
             public int getFirstVisibleItemPosition() {
-                return listView.getFirstVisiblePosition();
+                return lvArticleList.getFirstVisiblePosition();
             }
 
             @Override
             public int getLastVisibleItemPosition() {
-                return listView.getLastVisiblePosition();
+                return lvArticleList.getLastVisiblePosition();
             }
 
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -122,18 +134,25 @@ public class ArticleListFragment extends Fragment {
             }
         };
         //TODO: other textview
-        listView.setAdapter(asyncImageAdapter);
-        listView.setOnScrollListener(asyncImageAdapter);
+        lvArticleList.setAdapter(asyncImageAdapter);
+        lvArticleList.setOnScrollListener(asyncImageAdapter);
         //TODO: for listview loadimage on the firstpage loaded
 //        asyncImageAdapter.onScrollStateChanged(listView, AbsListView.OnScrollListener.SCROLL_STATE_IDLE);
+        loadArticles();
+        
     }
 
     @Override
     public void onStart() {
         super.onStart();
-                //TODO: loading data
+    }
+    
+    private void loadArticles(){
+        EnvironmentUtils.checkConnectionStatus(getActivity());
+        
+        //loading data
+        new ArticleListAsyncTask(getCategory(), ++loadedPage) {
 
-        new ArticleListAsyncTask("all", 1) {
             @Override
             public ProgressDialog getProgressDialog() {
                 ProgressDialog progressDialog = new ProgressDialog(getActivity());
@@ -146,24 +165,24 @@ public class ArticleListFragment extends Fragment {
                 super.onPostExecute(listAsyncResult);
                 if(listAsyncResult.isSuccess()) {
                     List<Article> articles = (List<Article>)listAsyncResult.getResult();
-                    updateArticles(articles);
+                    appendArticles(articles);
                 }
                 else {
                     Toast.makeText(getActivity(), listAsyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
                 }
             }
-        }.executeMultiThread();
+        }.executeMultiThread();        
     }
 
-    public void updateArticles(List<Article> articles){
+    // refresh
+    private void refresh() {
         loadedArticles.clear();
-        for(Article article : articles){
-            loadedArticles.addAll(articles);
-        }
-        asyncImageAdapter.notifyDataSetChanged();
+        loadedPage = 0;
+        loadArticles();
     }
 
-    public void appendArticles(List<Article> articles){
+    // load more
+    private void appendArticles(List<Article> articles){
         loadedArticles.addAll(articles);
         asyncImageAdapter.notifyDataSetChanged();
     }
@@ -184,7 +203,7 @@ public class ArticleListFragment extends Fragment {
             case R.id.more_item:
                 break;
             case R.id.refresh_item:
-                //TODO:
+                refresh();
                 Toast.makeText(getActivity(), "您点击了" + item.toString(), Toast.LENGTH_SHORT).show();
             default:
         }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
+import org.jandroid.cnbeta.util.EnvironmentUtils;
 import org.jandroid.cnbeta.util.IntentUtils;
 
 /**
@@ -22,6 +23,10 @@ public class SplashActivity extends Activity {
    		super.onCreate(savedInstanceState);
    		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
    		getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.splash_load));
+
+        //TODO: setup all needed configurations, network and others, such directories
+        EnvironmentUtils.checkConnectionStatus(this);
+        EnvironmentUtils.checkSdCardMounted(this);
    	}
 
    	protected void onResume() {

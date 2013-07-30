@@ -2,6 +2,7 @@ package org.jandroid.cnbeta.async;
 
 import android.os.AsyncTask;
 import org.jandroid.cnbeta.entity.Article;
+import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.cnbeta.loader.LoaderManager;
 
 import java.util.List;
@@ -11,15 +12,15 @@ import java.util.List;
  */
 public abstract class ArticleListAsyncTask extends ProgressDialogAsyncTask<Object, Integer, AsyncResult> {
 
-    private String category;
+    private ArticleListLoader.Type category;
     private int page;
 
-    protected ArticleListAsyncTask(String category, int page) {
+    protected ArticleListAsyncTask(ArticleListLoader.Type category, int page) {
         this.category = category;
         this.page = page;
     }
 
-    public String getCategory() {
+    public ArticleListLoader.Type getCategory() {
         return category;
     }
 
@@ -30,7 +31,7 @@ public abstract class ArticleListAsyncTask extends ProgressDialogAsyncTask<Objec
     @Override
     protected AsyncResult doInBackground(Object... params) {
         try {
-            List<Article> articles = LoaderManager.getInstance().loadArticleList(getCategory(),getPage());
+            List<Article> articles = LoaderManager.getInstance().loadArticleList(getCategory(),getPage(), isOnline());
             return AsyncResult.successResult(articles);
         }
         catch (Exception e) {

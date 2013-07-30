@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.entity.Comment;
+import org.jandroid.cnbeta.util.EnvironmentUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,21 @@ public class LoaderManager {
         return INSTANCE;
     }
 
-    public List<Article> loadArticleList(String category, int page) throws Exception {
+    public List<Article> loadArticleList(ArticleListLoader.Type category, int page, boolean online) throws Exception {
+        List<Article> articles;
+        ArticleListLoader loader = new ArticleListLoader(category, page);
+        if(online) {
+            articles = loader.fromHttp();
+            // write to disk
+            loader.toDisk(articles);
+        }
+        else {
+            articles = loader.fromDisk();
+        }
+        return articles;    
+    }
+    
+    public List<Article> loadArticleList(ArticleListLoader.Type category, int page) throws Exception {        
         //TODO:
         /*
          * 1. 判断是否有网络连接
@@ -36,7 +51,18 @@ public class LoaderManager {
          * 4. 返回结果
          */
         //TODO:
-        return new ArticleListLoader(ArticleListLoader.Type.ALL, page).fromHttp();
+        List<Article> articles;
+        ArticleListLoader loader = new ArticleListLoader(category, page);
+        if(EnvironmentUtils.hasNetworkConnection()) {
+            articles = loader.fromHttp();
+            // write to disk
+            loader.toDisk(articles);
+        }
+        else {
+            articles = loader.fromDisk();
+        }
+        return articles;
+
     }
 
     public Article loadArticleContent(String id) {

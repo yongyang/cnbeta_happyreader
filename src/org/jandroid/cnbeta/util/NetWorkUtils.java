@@ -3,6 +3,7 @@ package org.jandroid.cnbeta.util;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.widget.Toast;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -26,10 +27,10 @@ public class NetWorkUtils {
         }
     }
 
-    public static ConnectionStatus getConnectionStatus(Context paramContext) {
+    public static ConnectionStatus getConnectionStatus(Context theContext) {
         ConnectionStatus connectionStatus;
         try {
-            NetworkInfo networkInfo = ((ConnectivityManager) paramContext.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+            NetworkInfo networkInfo = ((ConnectivityManager) theContext.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
             if(!networkInfo.isAvailable()) {
                 connectionStatus = ConnectionStatus.NONE;
             }
@@ -48,4 +49,10 @@ public class NetWorkUtils {
         return connectionStatus;
     }
 
+    public static void checkConnectionStatus(Context theContext){
+        NetWorkUtils.ConnectionStatus connectionStatus = NetWorkUtils.getConnectionStatus(theContext);
+        if(connectionStatus.equals(NetWorkUtils.ConnectionStatus.NONE)) {
+            Toast.makeText(theContext, "没有网络，只能浏览离线数据", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

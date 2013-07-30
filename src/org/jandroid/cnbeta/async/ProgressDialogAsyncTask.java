@@ -1,25 +1,17 @@
 package org.jandroid.cnbeta.async;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
+import org.jandroid.cnbeta.util.NetWorkUtils;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class ProgressDialogAsyncTask<P, I, R> extends AsyncTask<P, I ,R> {
+public abstract class ProgressDialogAsyncTask<Params, Progress, Result> extends BaseAsyncTask<Params, Progress, Result> {
 
     private ProgressDialog progressDialog;
 
     public abstract ProgressDialog getProgressDialog();
-
-    @SuppressWarnings("unchecked")
-    public AsyncTask<P, I ,R> executeMultiThread() {
-        //TODO: check network status here
-
-        return executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
 
     @Override
     protected void onPreExecute() {
@@ -29,8 +21,14 @@ public abstract class ProgressDialogAsyncTask<P, I, R> extends AsyncTask<P, I ,R
     }
 
     @Override
-    protected void onPostExecute(R r) {
+    protected void onPostExecute(Result r) {
         super.onPostExecute(r);
         progressDialog.dismiss();
     }
+
+    @SuppressWarnings("unchecked")
+    public AsyncTask<Params, Progress, Result> executeMultiThread() {
+        return executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
 }

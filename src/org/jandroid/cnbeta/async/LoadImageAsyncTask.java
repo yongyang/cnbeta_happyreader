@@ -8,14 +8,14 @@ import org.jandroid.cnbeta.loader.LoaderManager;
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  * @create 7/29/13 3:21 PM
  */
-public class LoadImageAsyncTask extends AsyncTask<String, Integer, AsyncResult> {
+public abstract class LoadImageAsyncTask extends BaseAsyncTask<String, Integer, AsyncResult> {
 
     private String imgUrl;
 
     public LoadImageAsyncTask(String imgUrl) {
         this.imgUrl = imgUrl;
     }
-
+    
     @Override
     protected AsyncResult doInBackground(String... params) {
         try {

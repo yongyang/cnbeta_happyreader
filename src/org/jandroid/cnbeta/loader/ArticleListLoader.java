@@ -1,11 +1,15 @@
 package org.jandroid.cnbeta.loader;
 
+import org.apache.commons.io.FileUtils;
+import org.jandroid.cnbeta.Constants;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.cnbeta.entity.Article;
+import org.jandroid.cnbeta.util.EnvironmentUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,12 +60,13 @@ public class ArticleListLoader extends LoaderTask<List<Article>> {
         //user json-simple to parse returned json string
         String response = CnBetaHttpClient.getInstance().httpGet(url);
         String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
-        return parseArticleListJSON(responseJSONString);
+        JSONObject responseJSON = (JSONObject)JSONValue.parse(responseJSONString);
+        JSONArray articleListJSONArray = (JSONArray)((JSONObject)responseJSON.get("result")).get("list");
+        
+        return parseArticleListJSON(articleListJSONArray);
     }
 
-    private List<Article> parseArticleListJSON(String articleListJSON){
-        JSONObject responseJSON = (JSONObject)JSONValue.parse(articleListJSON);
-        JSONArray articleListJSONArray = (JSONArray)((JSONObject)responseJSON.get("result")).get("list");
+    private List<Article> parseArticleListJSON(JSONArray articleListJSONArray){
         List<Article> articleList = new ArrayList<Article>(articleListJSONArray.size());
         for(int i=0; i<articleListJSONArray.size(); i++){
             JSONObject jsonObject = (JSONObject)articleListJSONArray.get(i);
@@ -73,16 +78,34 @@ public class ArticleListLoader extends LoaderTask<List<Article>> {
 
     @Override
     public List<Article> fromDisk() throws Exception {
-        //TODO: read json file from SD Card
-        return null;
+        if(EnvironmentUtils.hasSdCard()){
+            //read json file from SD Card
+            String articleListJSONString = FileUtils.readFileToString(getFile());
+            JSONArray articleListJSONArray = (JSONArray)JSONValue.parse(articleListJSONString);
+            return parseArticleListJSON(articleListJSONArray);
+        }
+        return new ArrayList<Article>(0);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void toDisk(List<Article> articles) throws Exception {
-        //TODO: write articleListJSON json string
+        //write articleListJSON json string, don't need to save article separately
+        JSONArray articleListJSONArray = new JSONArray();
         for(Article article : articles){
-            article.toJSONString();
+            articleListJSONArray.add(article.getJSONObject());
         }
+        if(EnvironmentUtils.hasSdCard()){
+            FileUtils.writeStringToFile(getFile(), articleListJSONArray.toJSONString());
+        }
+        else {
+            //TODO: 手机内置存储器
+        }
+
+    }
+    
+    private File getFile(){
+        return new File(Constants.getBaseDir(), "" + getType().getTypeString() + "_" + getPage());
     }
 }
 /*
