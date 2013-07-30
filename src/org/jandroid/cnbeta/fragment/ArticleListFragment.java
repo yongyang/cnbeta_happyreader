@@ -125,11 +125,16 @@ public class ArticleListFragment extends Fragment {
                     convertView = getActivity().getLayoutInflater().inflate(R.layout.article_list_item, null);
                 }
                 Article article = loadedArticles.get(position);
-                TextView tv = (TextView)convertView.findViewById(R.id.tile_show);
-                tv.setText(article.getTitleShow());
-                ImageView iv = (ImageView) convertView.findViewById(R.id.item_logo);
+                TextView tvTitleShow = (TextView)convertView.findViewById(R.id.tile_show);
+                tvTitleShow.setText(article.getTitleShow());
+                TextView tvHometextShowShort = (TextView)convertView.findViewById(R.id.hometext_show_short);
+                tvHometextShowShort.setText(article.getHometextShowShort());
+                TextView tvComments = (TextView)convertView.findViewById(R.id.comments);
+                tvComments.setText(""+article.getComments());
+
+                ImageView ivLogo = (ImageView) convertView.findViewById(R.id.item_logo);
                 // queue to image load list
-                queueLoadImage(position, iv, article.getLogo());
+                queueLoadImage(position, ivLogo, article.getLogo());
                 return convertView;
             }
         };
