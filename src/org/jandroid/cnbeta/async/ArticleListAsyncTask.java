@@ -31,7 +31,7 @@ public abstract class ArticleListAsyncTask extends ProgressDialogAsyncTask<Objec
     @Override
     protected AsyncResult doInBackground(Object... params) {
         try {
-            List<Article> articles = LoaderManager.getInstance().loadArticleList(getCategory(),getPage(), isOnline());
+            List<Article> articles = LoaderManager.getInstance().loadArticleList(getCategory(),getPage());
             return AsyncResult.successResult(articles);
         }
         catch (Exception e) {

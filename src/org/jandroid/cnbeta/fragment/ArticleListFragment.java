@@ -143,13 +143,13 @@ public class ArticleListFragment extends Fragment {
         lvArticleList.setOnScrollListener(asyncImageAdapter);
         //TODO: for listview loadimage on the firstpage loaded
 //        asyncImageAdapter.onScrollStateChanged(listView, AbsListView.OnScrollListener.SCROLL_STATE_IDLE);
-        loadArticles();
-        
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        loadArticles();
     }
     
     private void loadArticles(){

@@ -28,37 +28,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d19a8d43-8193-4e6c-9396-02f5dc4bd005" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/async/BaseAsyncTask.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/Constants.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/Status.java" />
+      <change type="DELETED" beforePath="D:\workspace\cnbeta\src\org\jandroid\cnbeta\util\NetWorkUtils.java" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jandroid/cnbeta/async/ArticleListAsyncTask.java" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/async/ArticleListAsyncTask.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ArticleListFragment.java" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ArticleListFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/ArticleListLoader.java" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/ArticleListLoader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jandroid/cnbeta/adapter/AsyncImageBaseAdapter.java" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/adapter/AsyncImageBaseAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jandroid/cnbeta/CnBetaApplication.java" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/CnBetaApplication.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jandroid/cnbeta/util/EnvironmentUtils.java" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/util/EnvironmentUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jandroid/cnbeta/async/LoadImageAsyncTask.java" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/async/LoadImageAsyncTask.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/LoaderManager.java" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/LoaderManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jandroid/cnbeta/util/NetWorkUtils.java" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/util/NetWorkUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jandroid/cnbeta/async/ProgressDialogAsyncTask.java" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/async/ProgressDialogAsyncTask.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jandroid/cnbeta/SplashActivity.java" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/SplashActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jandroid/cnbeta/client/UnicodeUtils.java" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/client/UnicodeUtils.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/jandroid/cnbeta/MainActivity.java" afterPath="$PROJECT_DIR$/src/org/jandroid/cnbeta/MainActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/org/jandroid/cnbeta/Manifest.java" afterPath="$PROJECT_DIR$/gen/org/jandroid/cnbeta/Manifest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/org/jandroid/cnbeta/R.java" afterPath="$PROJECT_DIR$/gen/org/jandroid/cnbeta/R.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cnBeta.iws" afterPath="$PROJECT_DIR$/cnBeta.iws" />
     </list>
     <ignored path="cnBeta.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/HttpUtils.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1373557463718" ignored="false" />
     <file path="/HttpUitlsTest.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1373470418479" ignored="false" />
-    <file path="/Dummy.txt" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375168934189" ignored="false" />
-    <file path="/fragment.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375152216056" ignored="false" />
-    <file path="/AndroidManifest.xml" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1374591704759" ignored="false" />
+    <file path="/Dummy.txt" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375197139133" ignored="false" />
+    <file path="/fragment.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375198672577" ignored="false" />
+    <file path="/AndroidManifest.xml" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375198589058" ignored="false" />
     <file path="/HttpUtilsTest.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1373558098418" ignored="false" />
     <file path="/CnBetaHttpClient.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1374591035525" ignored="false" />
     <file path="/a.xml" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1373595308544" ignored="false" />
     <file path="/LoadingTask.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1373604157199" ignored="false" />
     <file path="/GetArticleListTask.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1373902539698" ignored="false" />
     <file path="/PageAsyncTask.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1373608868750" ignored="false" />
-    <file path="/MainActivity.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1374831304930" ignored="false" />
+    <file path="/MainActivity.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375197633103" ignored="false" />
     <file path="/EntityLoader.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1373610243940" ignored="false" />
     <file path="/CnBetaHttpClientTest.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1374595157907" ignored="false" />
     <file path="/UnicodeUtils.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375168033265" ignored="false" />
@@ -129,21 +122,21 @@
     <file path="/ArticleListFragment.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375171856068" ignored="false" />
     <file path="/article_list_view.xml" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1374724180374" ignored="false" />
     <file path="/ActionTabsFragmentPagerAdapter.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1374826156573" ignored="false" />
-    <file path="$PROJECT_DIR$/../../DistGIT/apache-parent/apache-parent.spec" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375084219902" ignored="false" />
+    <file path="D:/DistGIT/apache-parent/apache-parent.spec" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375084219902" ignored="false" />
     <file path="$PROJECT_DIR$/../TestSyncListView/src/cindy/android/test/synclistview/BookItemAdapter.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375081618082" ignored="false" />
     <file path="/BookItemAdapter.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375081607214" ignored="false" />
     <file path="/ImageLoader.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375082216725" ignored="false" />
     <file path="/LoadImageAsyncTask.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375172246438" ignored="false" />
     <file path="/AsyncImageAdatper.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375087399122" ignored="false" />
     <file path="/apache-parent.spec" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375084219485" ignored="false" />
-    <file path="$PROJECT_DIR$/../../DistGIT/apache-parent/sources-mead-url" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375085472382" ignored="false" />
+    <file path="D:/DistGIT/apache-parent/sources-mead-url" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375085472382" ignored="false" />
     <file path="/sources-mead-url" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375085472382" ignored="false" />
-    <file path="$PROJECT_DIR$/../../DistGIT/apache-parent/maven-build-arguments" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375084350541" ignored="false" />
+    <file path="D:/DistGIT/apache-parent/maven-build-arguments" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375084350541" ignored="false" />
     <file path="/AsyncImageAdapter.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375084678168" ignored="false" />
     <file path="$PROJECT_DIR$/res/values/strings.xml" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375167967379" ignored="false" />
     <file path="/NetWorkUtils.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375169809201" ignored="false" />
     <file path="/AsyncImageBaseAdapter.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375171034983" ignored="false" />
-    <file path="/EnvironmentUtils.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375173176002" ignored="false" />
+    <file path="/EnvironmentUtils.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375199567012" ignored="false" />
     <file path="/BaseAsyncTask.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375172161646" ignored="false" />
     <file path="/Status.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375172329794" ignored="false" />
     <file path="/CnBetaApplication.java" changelist="d19a8d43-8193-4e6c-9396-02f5dc4bd005" time="1375172501117" ignored="false" />
@@ -163,6 +156,7 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint url="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/ArticleContentActivity.java" line="24" class="org.jandroid.cnbeta.ArticleContentActivity" package="org.jandroid.cnbeta">
         <option name="ENABLED" value="true" />
@@ -179,7 +173,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/MainActivity.java" line="98" class="org.jandroid.cnbeta.MainActivity" package="org.jandroid.cnbeta">
+      <breakpoint url="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/MainActivity.java" line="103" class="org.jandroid.cnbeta.MainActivity" package="org.jandroid.cnbeta">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -194,7 +188,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/MainActivity.java" line="130" class="org.jandroid.cnbeta.MainActivity" package="org.jandroid.cnbeta">
+      <breakpoint url="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/MainActivity.java" line="135" class="org.jandroid.cnbeta.MainActivity" package="org.jandroid.cnbeta">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -224,7 +218,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/async/ArticleListAsyncTask.java" line="12" class="org.jandroid.cnbeta.async.ArticleListAsyncTask" package="org.jandroid.cnbeta.async">
+      <breakpoint url="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/LoaderManager.java" line="54" class="org.jandroid.cnbeta.loader.LoaderManager" package="org.jandroid.cnbeta.loader">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -238,6 +232,36 @@
         <option name="INSTANCE_FILTERS_ENABLED" value="false" />
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/ArticleListLoader.java" line="63" class="org.jandroid.cnbeta.loader.ArticleListLoader" package="org.jandroid.cnbeta.loader">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ArticleListFragment.java" line="155" class="org.jandroid.cnbeta.fragment.ArticleListFragment" package="org.jandroid.cnbeta.fragment">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="&#13;&#13;JAVA" />
+        <option name="LOG_MESSAGE" value="&#13;&#13;JAVA" />
       </breakpoint>
     </line_breakpoints>
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
@@ -276,7 +300,6 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -289,38 +312,48 @@
       <file leaf-file-name="LoaderManager.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/LoaderManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="58" column="25" selection-start="1777" selection-end="1777" vertical-scroll-proportion="0.0">
+            <state line="60" column="14" selection-start="1813" selection-end="1813" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ArticleListLoader.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/ArticleListLoader.java">
+      <file leaf-file-name="MainActivity.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="98" column="0" selection-start="3431" selection-end="3431" vertical-scroll-proportion="0.4622871">
+            <state line="35" column="0" selection-start="1222" selection-end="1222" vertical-scroll-proportion="0.0">
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#3037#3067#0" expanded="true" />
+                <element signature="e#858#868#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JSONArray.class" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://$PROJECT_DIR$/libs/json-simple-1.1.1.jar!/org/json/simple/JSONArray.class">
+      <file leaf-file-name="ViewPager.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://D:/android-sdk-windows/extras/android/support/v4/src/java/android/support/v4/view/ViewPager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="11" selection-start="367" selection-end="367" vertical-scroll-proportion="-5.44">
+            <state line="250" column="21" selection-start="8943" selection-end="8943" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="File.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../android/android-sdk-linux/sources/android-17/java/io/File.java">
+      <file leaf-file-name="ArticleListFragment.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ArticleListFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="122" column="11" selection-start="4674" selection-end="4674" vertical-scroll-proportion="0.0">
+            <state line="155" column="16" selection-start="5154" selection-end="5154" vertical-scroll-proportion="0.5694051">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ArticleListLoader.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/ArticleListLoader.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="27" column="8" selection-start="854" selection-end="854" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -329,9 +362,7 @@
         <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/Constants.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="17" column="77" selection-start="460" selection-end="460" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -339,7 +370,25 @@
       <file leaf-file-name="EnvironmentUtils.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/util/EnvironmentUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="79" column="8" selection-start="2710" selection-end="2710" vertical-scroll-proportion="0.0">
+            <state line="80" column="29" selection-start="2623" selection-end="2623" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NetworkInfo.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://D:/android-sdk-windows/sources/android-17/android/net/NetworkInfo.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="259" column="19" selection-start="9744" selection-end="9744" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AndroidManifest.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="9" column="0" selection-start="437" selection-end="437" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -349,9 +398,7 @@
         <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/CnBetaApplication.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="12" column="25" selection-start="307" selection-end="307" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -369,6 +416,15 @@
         <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/SplashActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="9" column="3" selection-start="246" selection-end="246" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ArticleListAsyncTask.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/async/ArticleListAsyncTask.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="33" column="0" selection-start="856" selection-end="856" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -392,38 +448,30 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ArticleContentFragment.java" />
-        <option value="$PROJECT_DIR$/res/layout/article_list_view.xml" />
-        <option value="$PROJECT_DIR$/res/layout/main.xml" />
-        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/TabsAdapter.java" />
-        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ActionTabsFragmentPagerAdapter.java" />
-        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/MainActivity.java" />
-        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/ImageLoader.java" />
-        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/adapter/AsyncImageAdatper.java" />
-        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/adapter/AsyncImageListAdapter.java" />
-        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/adapter/AsyncImageAdapter.java" />
-        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/client/CnBetaHttpClient.java" />
-        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/client/UnicodeUtils.java" />
         <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/util/NetWorkUtils.java" />
-        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/async/ArticleListAsyncTask.java" />
         <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/async/LoadImageAsyncTask.java" />
         <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/adapter/AsyncImageBaseAdapter.java" />
         <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/Status.java" />
-        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ArticleListFragment.java" />
         <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/async/ProgressDialogAsyncTask.java" />
         <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/async/BaseAsyncTask.java" />
         <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/CnBetaApplication.java" />
-        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/util/EnvironmentUtils.java" />
         <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/SplashActivity.java" />
         <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/LoaderManager.java" />
         <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/Constants.java" />
         <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/ArticleListLoader.java" />
+        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/async/ArticleListAsyncTask.java" />
+        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/MainActivity.java" />
+        <option value="$PROJECT_DIR$/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/util/EnvironmentUtils.java" />
+        <option value="$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ArticleListFragment.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="width" value="1920" />
-    <option name="height" value="1017" />
+    <option name="x" value="-4" />
+    <option name="y" value="-4" />
+    <option name="width" value="1448" />
+    <option name="height" value="864" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -705,6 +753,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -909,6 +958,32 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="net" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cnBeta" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="&lt; Android 4.2.2 Platform &gt;" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="android.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="graphics" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -1029,6 +1104,28 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="util" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cnBeta" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cnbeta" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cnbeta" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="loader" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -1043,7 +1140,15 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cnbeta" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fragment" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1057,103 +1162,34 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
+              <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnBeta" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="cnbeta" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="drawable" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnBeta" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnbeta" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="libs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="json-simple-1.1.1.jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="simple" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnBeta" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnbeta" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="libs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="json-simple-1.1.1.jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnBeta" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnbeta" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="libs" />
+              <option name="myItemId" value="async" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="213" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="239" />
-    <property name="project.structure.proportion" value="0.15" />
     <property name="OverrideImplement.combined" value="true" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="239" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="261" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
-    <property name="MemberChooser.sorted" value="false" />
     <property name="recentsLimit" value="5" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="261" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../TestSyncListView" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="245" />
@@ -1170,9 +1206,9 @@
     <property name="FullScreen" value="false" />
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="options.splitter.details.proportions" value="0.35054022" />
-    <property name="last_directory_selection" value="$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
     <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
@@ -1181,8 +1217,8 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="restartRequiresConfirmation" value="true" />
-    <property name="dynamic.classpath" value="false" />
     <property name="options.searchVisible" value="true" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -1374,6 +1410,9 @@
     </configuration>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="StructureViewFactory">
+    <option name="ACTIVE_ACTIONS" value="ALPHA_COMPARATOR" />
+  </component>
   <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false" cleanupOnStartRun="false" SSL_PROTOCOLS="all">
     <option name="USER" value="" />
     <option name="PASSWORD" value="" />
@@ -1406,39 +1445,39 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1017" extended-state="0" />
-    <editor active="true" />
+    <frame x="-4" y="-4" width="1448" height="864" extended-state="0" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3294964" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35467625" sideWeight="0.6024423" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32882884" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32971016" sideWeight="0.59559834" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.59559834" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.48846677" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.53595656" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6280992" sideWeight="0.1259484" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32971016" sideWeight="0.59559834" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="17" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4617117" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3283582" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3294964" sideWeight="0.5088195" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32971507" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18897216" sideWeight="0.6711712" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18848921" sideWeight="0.4640434" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21895075" sideWeight="0.6711712" order="3" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41304347" sideWeight="0.8740516" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19856115" sideWeight="0.58751696" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.41248304" sideWeight="0.8740516" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.8046133" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32971016" sideWeight="0.59559834" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="17" side_tool="false" content_ui="tabs" />
-      <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3294964" sideWeight="0.5088195" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Maven projects" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2087518" sideWeight="0.6702849" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35467625" sideWeight="0.6024423" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3283582" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32882884" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="EJB" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1506,122 +1545,17 @@
     <MESSAGE value="Add Referer, gzip, so HttpClient returns Data" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <breakpoints-dialog>
+        <breakpoints-dialog />
+      </breakpoints-dialog>
+    </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/res/drawable/default_img.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../android/android-sdk-linux/sources/android-17/android/view/View.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15094" column="22" selection-start="583473" selection-end="583473" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../android/android-sdk-linux/sources/android-17/android/widget/ImageView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="417" column="16" selection-start="13891" selection-end="13891" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/async/AsyncResult.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="13" selection-start="170" selection-end="170" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../android/android-sdk-linux/sources/android-17/android/graphics/drawable/BitmapDrawable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="100" column="11" selection-start="3682" selection-end="3682" vertical-scroll-proportion="-0.16526946">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/util/NetWorkUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="42" selection-start="711" selection-end="711" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../android/android-sdk-linux/sources/android-17/android/os/AsyncTask.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="176" column="57" selection-start="8572" selection-end="8598" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/async/LoadImageAsyncTask.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="15" selection-start="256" selection-end="256" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#792#822#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/Status.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="0" selection-start="146" selection-end="146" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ArticleListFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="153" column="23" selection-start="4900" selection-end="4900" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#2457#2624#0" expanded="true" />
-            <element signature="e#2613#2614#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/async/ArticleListAsyncTask.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="64" selection-start="371" selection-end="371" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/async/ProgressDialogAsyncTask.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="86" selection-start="305" selection-end="305" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/async/BaseAsyncTask.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="0" selection-start="270" selection-end="270" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#274#304#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/adapter/AsyncImageBaseAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="83" column="26" selection-start="3112" selection-end="3112" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#958#985#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/RankListLoader.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="5" column="13" selection-start="122" selection-end="122" vertical-scroll-proportion="0.0">
@@ -1643,32 +1577,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/util/EnvironmentUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="79" column="8" selection-start="2710" selection-end="2710" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/LoaderManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="25" selection-start="1777" selection-end="1777" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/CnBetaApplication.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="12" column="25" selection-start="307" selection-end="307" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../android/android-sdk-linux/sources/android-17/java/io/File.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="122" column="11" selection-start="4674" selection-end="4674" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -1676,9 +1587,7 @@
     <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/Constants.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="17" column="77" selection-start="460" selection-end="460" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1691,25 +1600,75 @@
     </entry>
     <entry file="jar://$PROJECT_DIR$/libs/json-simple-1.1.1.jar!/org/json/simple/JSONArray.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="11" selection-start="367" selection-end="367" vertical-scroll-proportion="-5.44">
+        <state line="9" column="11" selection-start="367" selection-end="367" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../android/android-sdk-linux/sources/android-17/android/os/Environment.java">
+    <entry file="file://D:/android-sdk-windows/extras/android/support/v4/src/java/android/support/v4/view/ViewPager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="243" column="30" selection-start="8912" selection-end="8912" vertical-scroll-proportion="0.33293414">
+        <state line="250" column="21" selection-start="8943" selection-end="8943" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="0" selection-start="437" selection-end="437" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/android-sdk-windows/sources/android-17/android/net/NetworkInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="259" column="19" selection-start="9744" selection-end="9744" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/util/EnvironmentUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="80" column="29" selection-start="2623" selection-end="2623" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/async/ArticleListAsyncTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="0" selection-start="856" selection-end="856" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/LoaderManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="60" column="14" selection-start="1813" selection-end="1813" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/loader/ArticleListLoader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="98" column="0" selection-start="3431" selection-end="3431" vertical-scroll-proportion="0.4622871">
+        <state line="27" column="8" selection-start="854" selection-end="854" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3037#3067#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="35" column="0" selection-start="1222" selection-end="1222" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#858#868#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/jandroid/cnbeta/fragment/ArticleListFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="155" column="16" selection-start="5154" selection-end="5154" vertical-scroll-proportion="0.5694051">
+          <folding />
         </state>
       </provider>
     </entry>

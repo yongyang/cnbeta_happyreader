@@ -18,6 +18,7 @@ public class EnvironmentUtils {
     private static boolean IS_SD_CARD_MOUNTED = false;
 
     public static enum ConnectionStatus {
+        MOBILE("MOBILE"),
         WIFI("WIFI"),
         WAP("WAP"),
         NET("NET"),
@@ -41,8 +42,13 @@ public class EnvironmentUtils {
             if(!networkInfo.isAvailable()) {
                 connectionStatus = ConnectionStatus.NONE;
             }
+            else if(!networkInfo.isConnected()) {
+                connectionStatus = ConnectionStatus.NONE;
+            }
             else if (networkInfo.getTypeName().toLowerCase().equals("wifi"))
                 connectionStatus = ConnectionStatus.WIFI;
+            else if (networkInfo.getTypeName().toLowerCase().equals("mobile"))
+                connectionStatus = ConnectionStatus.MOBILE;
             else if (networkInfo.getExtraInfo().toLowerCase().contains("wap"))
                 connectionStatus = ConnectionStatus.WAP;
             else if (networkInfo.getExtraInfo() == null)
@@ -57,8 +63,8 @@ public class EnvironmentUtils {
     }
     
     public static void checkConnectionStatus(Context theContext){
-        NetWorkUtils.ConnectionStatus connectionStatus = NetWorkUtils.getConnectionStatus(theContext);
-        if(connectionStatus.equals(NetWorkUtils.ConnectionStatus.NONE) || connectionStatus.equals(NetWorkUtils.ConnectionStatus.WAP)) {
+        ConnectionStatus connectionStatus = getConnectionStatus(theContext);
+        if(connectionStatus.equals(ConnectionStatus.NONE) || connectionStatus.equals(ConnectionStatus.WAP)) {
             IS_ONLINE = false;
             Toast.makeText(theContext, "没有网络，只能浏览离线数据", Toast.LENGTH_SHORT).show();
         }
@@ -68,7 +74,7 @@ public class EnvironmentUtils {
     }
 
     public static boolean hasNetworkConnection(){
-        return IS_SD_CARD_MOUNTED;
+        return IS_ONLINE;
     }
 
 

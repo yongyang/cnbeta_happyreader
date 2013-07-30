@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
+import org.jandroid.cnbeta.loader.ArticleListLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,13 +81,17 @@ public class MainActivity extends Activity {
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        for (int i = 0; i < tabs.length; i++) {
-            int resourceId = tabs[i];
-            ActionBar.Tab tab = actionBar.newTab().setText(resourceId).setTabListener(pagerAdapter);
-            tabFragments.add(new ArticleListFragment());
-            actionBar.addTab(tab);
-            pagerAdapter.notifyDataSetChanged();
-        }
+        //全部资讯
+        actionBar.addTab(actionBar.newTab().setText(R.string.tab_quanbuzixun).setTabListener(pagerAdapter));
+        tabFragments.add(new ArticleListFragment(ArticleListLoader.Type.ALL));
+        //实时更新
+        actionBar.addTab(actionBar.newTab().setText(R.string.tab_shishigengxin).setTabListener(pagerAdapter));
+        tabFragments.add(new ArticleListFragment(ArticleListLoader.Type.REALTIME));
+        //TODO: 阅读历史 tab
+        actionBar.addTab(actionBar.newTab().setText(R.string.tab_yuedulishi).setTabListener(pagerAdapter));
+        tabFragments.add(new ArticleListFragment(ArticleListLoader.Type.DIG));
+
+        pagerAdapter.notifyDataSetChanged();
     }
 
     private void setUpViewPager() {
