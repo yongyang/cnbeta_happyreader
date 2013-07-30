@@ -149,7 +149,7 @@ public class ArticleListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        loadArticles();
+        refresh();
     }
     
     private void loadArticles(){
