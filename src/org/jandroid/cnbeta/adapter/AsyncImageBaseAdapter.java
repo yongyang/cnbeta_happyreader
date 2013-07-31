@@ -84,11 +84,10 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
             QueueImageView tempImageLoadInfo;
             synchronized (queuedImageViews) {
                 tempImageLoadInfo = queuedImageViews.remove(position);
+                //TODO ?? why null, maybe done by other thread or don't need to load because have loaded
                 if (tempImageLoadInfo == null) continue;
             }
             final QueueImageView imageLoadInfo = tempImageLoadInfo;
-
-            //TODO ?? why null, maybe done by other thread or don't need to load because have loaded
             final String imageUrl = imageLoadInfo.getImageUrl();
             if (imageUrl == null) continue; //TODO: why null???
 
