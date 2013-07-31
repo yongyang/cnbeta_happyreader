@@ -34,7 +34,18 @@ public class MainActivity extends Activity {
         @Override
         public Fragment getItem(int position) {
             //TODO: use this method: return Fragment.instantiate();
-            return tabFragments.get(position);
+            switch (position) {
+                case 0:
+                    return new ArticleListFragment(ArticleListLoader.Type.ALL);
+                case 1:
+                    new ArticleListFragment(ArticleListLoader.Type.REALTIME);
+                case 2:
+                    //TODO: 阅读历史 tab
+                    return new ArticleListFragment(ArticleListLoader.Type.DIG);
+                default:
+                    return null;
+            }
+//            return tabFragments.get(position);
         }
 
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -84,13 +95,13 @@ public class MainActivity extends Activity {
 
         //全部资讯
         actionBar.addTab(actionBar.newTab().setText(R.string.tab_quanbuzixun).setTabListener(pagerAdapter));
-        tabFragments.add(new ArticleListFragment(ArticleListLoader.Type.ALL));
+//        tabFragments.add(new ArticleListFragment(ArticleListLoader.Type.ALL));
         //实时更新
         actionBar.addTab(actionBar.newTab().setText(R.string.tab_shishigengxin).setTabListener(pagerAdapter));
-        tabFragments.add(new ArticleListFragment(ArticleListLoader.Type.REALTIME));
+//        tabFragments.add(new ArticleListFragment(ArticleListLoader.Type.REALTIME));
         //TODO: 阅读历史 tab
         actionBar.addTab(actionBar.newTab().setText(R.string.tab_yuedulishi).setTabListener(pagerAdapter));
-        tabFragments.add(new ArticleListFragment(ArticleListLoader.Type.DIG));
+//        tabFragments.add(new ArticleListFragment(ArticleListLoader.Type.DIG));
 
         pagerAdapter.notifyDataSetChanged();
     }
