@@ -27,7 +27,7 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
 
     private final Handler postHandler = new Handler();
 
-    private Map<Integer, QueueImageLoader> queuedImageLoaders = new ConcurrentHashMap<Integer, QueueImageLoader>();
+    private final Map<Integer, QueueImageLoader> queuedImageLoaders = new ConcurrentHashMap<Integer, QueueImageLoader>();
 
     //TODO: 需要解决 重复加载 的问题
     private final List<String> loadingImages = new ArrayList<String>();
@@ -73,7 +73,9 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
      */
     protected void queueLoadImage(final int position, final ImageView imageView, final String srcUrl) {
         final QueueImageLoader queueImageLoader = new QueueImageLoader(position, imageView, srcUrl);
-        queuedImageLoaders.put(position, queueImageLoader);
+        synchronized (queuedImageLoaders) {
+            queuedImageLoaders.put(position, queueImageLoader);
+        }
     }
 
     private void loadQueuedImages() {
@@ -88,7 +90,11 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
         }
         for (int pos = getFirstVisibleItemPosition(); pos <= lastPosition; pos++) {
             final int position = pos;
-            final QueueImageLoader imageLoadInfo = queuedImageLoaders.get(position);
+            QueueImageLoader tempImageLoadInfo;
+            synchronized (queuedImageLoaders) {
+                tempImageLoadInfo = queuedImageLoaders.get(position);
+            }
+            final QueueImageLoader imageLoadInfo = tempImageLoadInfo; 
             //TODO ?? why null
             if (imageLoadInfo == null) return;
             final String imgUrl = imageLoadInfo.getSrcUrl();
@@ -135,9 +141,14 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
 
     private void loadQueuedImages(int firstPosition, int count) {
         for (int i = 0; i < count; i++) {
-            final int position = firstPosition + count;
-            final QueueImageLoader imageLoadInfo = queuedImageLoaders.remove(position);
-            //TODO ?? why null
+            final int position = firstPosition + i;
+            QueueImageLoader tempImageLoadInfo;
+            synchronized (queuedImageLoaders) {
+                tempImageLoadInfo = queuedImageLoaders.remove(position);
+            }
+            final QueueImageLoader imageLoadInfo = tempImageLoadInfo;
+
+            //TODO ?? why null, maybe done by other thread
             if (imageLoadInfo == null) return;
             final String imgUrl = imageLoadInfo.getSrcUrl();
             if (imgUrl == null) return;
@@ -187,7 +198,7 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
             }.executeMultiThread();
         }
         // clear all queued loaders
-        queuedImageLoaders.clear();
+//        queuedImageLoaders.clear();
     }
 
     static class QueueImageLoader {
