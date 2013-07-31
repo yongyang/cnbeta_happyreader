@@ -30,7 +30,7 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
     private final Map<Integer, QueueImageLoader> queuedImageLoaders = new ConcurrentHashMap<Integer, QueueImageLoader>();
 
     //TODO: 需要解决 重复加载 的问题
-    private final List<String> loadingImages = new ArrayList<String>();
+//    private final List<String> loadingImages = new ArrayList<String>();
 
     public abstract int getCount();
 
@@ -40,23 +40,30 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
 
     //TODO:
 //    public abstract void onImageLoadFailure();
-
+    
+    private volatile int firstVisiblePosition = 0;
+    private volatile int lastVisiblePosition = 0;
+    private volatile int scrollState = AbsListView.OnScrollListener.SCROLL_STATE_IDLE;
+    
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-/*
         switch (scrollState) {
             case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
-                loadQueuedImages();
+                loadQueuedImages(firstVisiblePosition, lastVisiblePosition);
                 break;
             case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
             case AbsListView.OnScrollListener.SCROLL_STATE_FLING:
             default:
                 break;
         }
-*/
+        this.scrollState = scrollState;
     }
 
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        loadQueuedImages(firstVisibleItem, visibleItemCount);
+        this.firstVisiblePosition = firstVisibleItem;
+        this.lastVisiblePosition = firstVisibleItem + visibleItemCount;
+        if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+            loadQueuedImages(firstVisiblePosition, lastVisiblePosition);
+        }
     }
 
     /**
@@ -73,9 +80,9 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
         }
     }
 
-    private void loadQueuedImages(int firstPosition, int count) {
-        for (int i = 0; i < count; i++) {
-            final int position = firstPosition + i;
+    private void loadQueuedImages(int firstPosition, int lastPosition) {
+        for (int pos = firstPosition; pos < lastPosition; pos++) {
+            final int position = pos;
             QueueImageLoader tempImageLoadInfo;
             synchronized (queuedImageLoaders) {
                 tempImageLoadInfo = queuedImageLoaders.remove(position);
@@ -87,6 +94,7 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
             final String imgUrl = imageLoadInfo.getSrcUrl();
             if (imgUrl == null) return;
 
+/*
             synchronized (loadingImages) {
                 if (loadingImages.contains(imageLoadInfo.getSrcUrl())) {
                     // 正在加载，跳过
@@ -95,6 +103,7 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
 
                 loadingImages.add(imgUrl);
             }
+*/
 
             new LoadImageAsyncTask(imgUrl) {
                 @Override
@@ -106,9 +115,11 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
                                 imageLoadInfo.getImageView().setImageBitmap((Bitmap) bitmapAsyncResult.getResult());
                             }
                         });
+/*
                         synchronized (loadingImages) {
                             loadingImages.remove(imgUrl);
                         }
+*/
                     }
                     else {
                         //TODO: toast or anything
@@ -118,16 +129,20 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
 
                 @Override
                 protected void onCancelled() {
+/*
                     synchronized (loadingImages) {
                         loadingImages.remove(position);
                     }
+*/
                 }
 
                 @Override
                 protected void onCancelled(AsyncResult bitmapAsyncResult) {
+/*
                     synchronized (loadingImages) {
                         loadingImages.remove(position);
                     }
+*/
                 }
             }.executeMultiThread();
         }
