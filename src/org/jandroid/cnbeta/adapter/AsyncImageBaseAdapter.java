@@ -38,10 +38,6 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
 
     public abstract long getItemId(int position);
 
-    public abstract int getFirstVisibleItemPosition();
-
-    public abstract int getLastVisibleItemPosition();
-
     //TODO:
 //    public abstract void onImageLoadFailure();
 
@@ -60,7 +56,6 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
     }
 
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        //TODO: performance
         loadQueuedImages(firstVisibleItem, visibleItemCount);
     }
 
@@ -76,67 +71,6 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
         synchronized (queuedImageLoaders) {
             queuedImageLoaders.put(position, queueImageLoader);
         }
-    }
-
-    private void loadQueuedImages() {
-        // only load image for visible lines of ListView
-        int lastPosition = getLastVisibleItemPosition();
-        if (lastPosition <= 0) {
-            Log.w(getClass().getSimpleName(), "last position " + lastPosition + ", please check!");
-            return;
-        }
-        if (lastPosition > getCount()) {
-            lastPosition = getCount();
-        }
-        for (int pos = getFirstVisibleItemPosition(); pos <= lastPosition; pos++) {
-            final int position = pos;
-            QueueImageLoader tempImageLoadInfo;
-            synchronized (queuedImageLoaders) {
-                tempImageLoadInfo = queuedImageLoaders.get(position);
-            }
-            final QueueImageLoader imageLoadInfo = tempImageLoadInfo; 
-            //TODO ?? why null
-            if (imageLoadInfo == null) return;
-            final String imgUrl = imageLoadInfo.getSrcUrl();
-            if (imgUrl == null) return;
-
-            if (loadingImages.contains(imageLoadInfo.getSrcUrl())) {
-                // 正在加载，跳过
-                continue;
-            }
-
-            loadingImages.add(imgUrl);
-
-            new LoadImageAsyncTask(imgUrl) {
-                @Override
-                protected void onPostExecute(final AsyncResult bitmapAsyncResult) {
-                    super.onPostExecute(bitmapAsyncResult);
-                    if (bitmapAsyncResult.isSuccess()) {
-                        loadingImages.remove(imgUrl);
-                        postHandler.post(new Runnable() {
-                            public void run() {
-                                imageLoadInfo.getImageView().setImageBitmap((Bitmap) bitmapAsyncResult.getResult());
-                            }
-                        });
-                    }
-                    else {
-                        //TODO: toast or anything
-                    }
-                }
-
-                @Override
-                protected void onCancelled() {
-                    loadingImages.remove(position);
-                }
-
-                @Override
-                protected void onCancelled(AsyncResult bitmapAsyncResult) {
-                    loadingImages.remove(position);
-                }
-            }.executeMultiThread();
-        }
-        // clear all queued loaders
-        queuedImageLoaders.clear();
     }
 
     private void loadQueuedImages(int firstPosition, int count) {

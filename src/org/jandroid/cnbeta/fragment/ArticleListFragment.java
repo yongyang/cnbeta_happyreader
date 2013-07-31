@@ -111,16 +111,6 @@ public class ArticleListFragment extends Fragment {
                 return position;
             }
 
-            @Override
-            public int getFirstVisibleItemPosition() {
-                return lvArticleList.getFirstVisiblePosition();
-            }
-
-            @Override
-            public int getLastVisibleItemPosition() {
-                return lvArticleList.getLastVisiblePosition();
-            }
-
             public View getView(int position, View convertView, ViewGroup parent) {
                 if(convertView == null) {
                     convertView = getActivity().getLayoutInflater().inflate(R.layout.article_list_item, null);
