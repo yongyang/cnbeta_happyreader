@@ -21,7 +21,6 @@ public class MainActivity extends Activity {
     private static final String SELECTED_ITEM = "selected_item";
 
     public final static int[] tabs = new int[]{R.string.tab_quanbuzixun, R.string.tab_shishigengxin, R.string.tab_yuedulishi};
-    private List<Fragment> tabFragments = new ArrayList<Fragment>();
 
     private ViewPager mViewPager;
     private ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
@@ -33,7 +32,6 @@ public class MainActivity extends Activity {
 
         @Override
         public Fragment getItem(int position) {
-            //TODO: use this method: return Fragment.instantiate();
             switch (position) {
                 case 0:
                     return new ArticleListFragment(ArticleListLoader.Type.ALL);
@@ -43,9 +41,9 @@ public class MainActivity extends Activity {
                     //TODO: 阅读历史 tab
                     return new ArticleListFragment(ArticleListLoader.Type.DIG);
                 default:
+                    // only 3 tabs
                     return null;
             }
-//            return tabFragments.get(position);
         }
 
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -93,16 +91,10 @@ public class MainActivity extends Activity {
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        //全部资讯
-        actionBar.addTab(actionBar.newTab().setText(R.string.tab_quanbuzixun).setTabListener(pagerAdapter));
-//        tabFragments.add(new ArticleListFragment(ArticleListLoader.Type.ALL));
-        //实时更新
-        actionBar.addTab(actionBar.newTab().setText(R.string.tab_shishigengxin).setTabListener(pagerAdapter));
-//        tabFragments.add(new ArticleListFragment(ArticleListLoader.Type.REALTIME));
-        //TODO: 阅读历史 tab
-        actionBar.addTab(actionBar.newTab().setText(R.string.tab_yuedulishi).setTabListener(pagerAdapter));
-//        tabFragments.add(new ArticleListFragment(ArticleListLoader.Type.DIG));
-
+        for(int resourceId : tabs){
+            //全部资讯, 实时更新, 阅读历史
+            actionBar.addTab(actionBar.newTab().setText(resourceId).setTabListener(pagerAdapter));
+        }
         pagerAdapter.notifyDataSetChanged();
     }
 
