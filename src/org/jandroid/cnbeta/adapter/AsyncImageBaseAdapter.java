@@ -9,8 +9,6 @@ import android.widget.ImageView;
 import org.jandroid.cnbeta.async.AsyncResult;
 import org.jandroid.cnbeta.async.LoadImageAsyncTask;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,9 +25,9 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
 
     private final Handler postHandler = new Handler();
 
-    private final Map<Integer, QueueImageLoader> queuedImageLoaders = new ConcurrentHashMap<Integer, QueueImageLoader>();
+    private final Map<Integer, QueueImageView> queuedImageViews = new ConcurrentHashMap<Integer, QueueImageView>();
 
-    //TODO: 需要解决 重复加载 的问题
+    //TODO: 需要解决 重复加载 的问题, 需要 cancel 之前的 AsyncTask
 //    private final List<String> loadingImages = new ArrayList<String>();
 
     public abstract int getCount();
@@ -71,28 +69,28 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
      *
      * @param position, the position in the ListView, used to determine if really need to load after scroll stopped
      * @param imageView
-     * @param srcUrl
+     * @param imageUrl
      */
-    protected void queueLoadImage(final int position, final ImageView imageView, final String srcUrl) {
-        final QueueImageLoader queueImageLoader = new QueueImageLoader(position, imageView, srcUrl);
-        synchronized (queuedImageLoaders) {
-            queuedImageLoaders.put(position, queueImageLoader);
+    protected void queueImageView(final int position, final ImageView imageView, final String imageUrl) {
+        final QueueImageView queueImageView = new QueueImageView(imageView, imageUrl);
+        synchronized (queuedImageViews) {
+            queuedImageViews.put(position, queueImageView);
         }
     }
 
     private void loadQueuedImages(int firstPosition, int lastPosition) {
         for (int pos = firstPosition; pos < lastPosition; pos++) {
             final int position = pos;
-            QueueImageLoader tempImageLoadInfo;
-            synchronized (queuedImageLoaders) {
-                tempImageLoadInfo = queuedImageLoaders.remove(position);
+            QueueImageView tempImageLoadInfo;
+            synchronized (queuedImageViews) {
+                tempImageLoadInfo = queuedImageViews.remove(position);
+                if (tempImageLoadInfo == null) continue;
             }
-            final QueueImageLoader imageLoadInfo = tempImageLoadInfo;
+            final QueueImageView imageLoadInfo = tempImageLoadInfo;
 
-            //TODO ?? why null, maybe done by other thread
-            if (imageLoadInfo == null) return;
-            final String imgUrl = imageLoadInfo.getSrcUrl();
-            if (imgUrl == null) return;
+            //TODO ?? why null, maybe done by other thread or don't need to load because have loaded
+            final String imageUrl = imageLoadInfo.getImageUrl();
+            if (imageUrl == null) continue; //TODO: why null???
 
 /*
             synchronized (loadingImages) {
@@ -101,11 +99,11 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
                     continue;
                 }
 
-                loadingImages.add(imgUrl);
+                loadingImages.add(imageUrl);
             }
 */
 
-            new LoadImageAsyncTask(imgUrl) {
+            new LoadImageAsyncTask(imageUrl) {
                 @Override
                 protected void onPostExecute(final AsyncResult bitmapAsyncResult) {
                     super.onPostExecute(bitmapAsyncResult);
@@ -117,7 +115,7 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
                         });
 /*
                         synchronized (loadingImages) {
-                            loadingImages.remove(imgUrl);
+                            loadingImages.remove(imageUrl);
                         }
 */
                     }
@@ -150,29 +148,21 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
 //        queuedImageLoaders.clear();
     }
 
-    static class QueueImageLoader {
-        private int position;
+    static class QueueImageView {
         private ImageView imageView;
-        private String srcUrl;
+        private String imageUrl;
 
-        QueueImageLoader(int position, ImageView imageView, String srcUrl) {
-            this.position = position;
+        QueueImageView(ImageView imageView, String imageUrl) {
             this.imageView = imageView;
-            this.srcUrl = srcUrl;
+            this.imageUrl = imageUrl;
         }
 
         ImageView getImageView() {
             return imageView;
         }
 
-        int getPosition() {
-            return position;
-        }
-
-        String getSrcUrl() {
-            return srcUrl;
+        String getImageUrl() {
+            return imageUrl;
         }
     }
-
-
 }

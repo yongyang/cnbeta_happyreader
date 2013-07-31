@@ -135,7 +135,7 @@ public class ArticleListFragment extends Fragment {
                 ImageView ivLogo = (ImageView) convertView.findViewById(R.id.item_logo);
                 ivLogo.setImageResource(R.drawable.default_img);
                 // queue to image load list
-                queueLoadImage(position, ivLogo, article.getLogo());
+                queueImageView(position, ivLogo, article.getLogo());
                 return convertView;
             }
         };
