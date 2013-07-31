@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,7 +39,7 @@ public class ArticleListFragment extends Fragment {
     
     private List<Article> loadedArticles = new ArrayList<Article>();
 
-    
+    private Handler handler = new Handler();
     // 新闻分类
     private ArticleListLoader.Type category;
     private int loadedPage = 0;
@@ -131,8 +132,18 @@ public class ArticleListFragment extends Fragment {
                 tvHometextShowShort.setText(article.getHometextShowShort());
                 TextView tvComments = (TextView)convertView.findViewById(R.id.comments);
                 tvComments.setText(""+article.getComments());
+                TextView tvCounter = (TextView)convertView.findViewById(R.id.counter);
+                tvCounter.setText(""+article.getCounter());
+                TextView tvTime = (TextView)convertView.findViewById(R.id.time);
+                tvTime.setText(""+article.getTime());
+/*
+                TextView tvScore = (TextView)convertView.findViewById(R.id.score);
+                tvScore.setText(""+article.getScore());
+*/
+
 
                 ImageView ivLogo = (ImageView) convertView.findViewById(R.id.item_logo);
+                ivLogo.setImageResource(R.drawable.default_img);
                 // queue to image load list
                 queueLoadImage(position, ivLogo, article.getLogo());
                 return convertView;
@@ -149,7 +160,14 @@ public class ArticleListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        refresh();
+        reloadArticles();
+/*
+        getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+                asyncImageAdapter.loadQueuedImages();
+            }
+        });
+*/
     }
     
     private void loadArticles(){
@@ -180,7 +198,7 @@ public class ArticleListFragment extends Fragment {
     }
 
     // refresh
-    private void refresh() {
+    private void reloadArticles() {
         loadedArticles.clear();
         loadedPage = 0;
         loadArticles();
@@ -208,7 +226,7 @@ public class ArticleListFragment extends Fragment {
             case R.id.more_item:
                 break;
             case R.id.refresh_item:
-                refresh();
+                reloadArticles();
                 Toast.makeText(getActivity(), "您点击了" + item.toString(), Toast.LENGTH_SHORT).show();
             default:
         }

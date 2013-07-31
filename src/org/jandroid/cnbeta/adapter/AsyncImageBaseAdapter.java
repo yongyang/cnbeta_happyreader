@@ -56,7 +56,8 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
     }
     
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
+        //TODO: performance
+        loadQueuedImages();
     }
 
     /**
@@ -69,6 +70,7 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
     protected void queueLoadImage(final int position, final ImageView imageView, final String srcUrl) {
         final QueueImageLoader queueImageLoader = new QueueImageLoader(position, imageView, srcUrl);
         //load first page immediately, assume 10 items
+/*
         if(position < 10) { //TODO: 10 or other number
             new LoadImageAsyncTask(queueImageLoader.getSrcUrl()){
                 @Override
@@ -96,16 +98,17 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
 
         }
         else {
+*/
             queuedImageLoaders.put(position, queueImageLoader);
-        }
+//        }
         //TODO: queue to loading
     }
     
-    protected void loadQueuedImages(){      
+    public void loadQueuedImages(){
         // only load image for visible lines of ListView
         int lastPosition = getLastVisibleItemPosition();
-        if(lastPosition == 0) {
-            Log.w(getClass().getSimpleName(), "last position 0, please check!");
+        if(lastPosition <= 0) {
+            Log.w(getClass().getSimpleName(), "last position " + lastPosition + ", please check!");
             return;
         }
         if(lastPosition > getCount()) {

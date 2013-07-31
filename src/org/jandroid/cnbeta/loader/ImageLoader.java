@@ -1,7 +1,11 @@
 package org.jandroid.cnbeta.loader;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
+
+import java.net.URLEncoder;
+import java.security.MessageDigest;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
@@ -28,5 +32,15 @@ public class ImageLoader extends LoaderTask<Bitmap>{
     @Override
     public void toDisk(Bitmap bitmap) throws Exception {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    private String getFilename(){
+        try {
+            return URLEncoder.encode(url,"utf-8");
+        }
+        catch (Exception e) {
+            Log.w(this.getClass().getSimpleName(), "URLEncoder exception", e);
+            return url;
+        }
     }
 }
