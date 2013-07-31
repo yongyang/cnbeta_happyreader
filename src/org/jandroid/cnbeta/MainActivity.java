@@ -33,6 +33,7 @@ public class MainActivity extends Activity {
 
         @Override
         public Fragment getItem(int position) {
+            //TODO: use this method: return Fragment.instantiate();
             return tabFragments.get(position);
         }
 
