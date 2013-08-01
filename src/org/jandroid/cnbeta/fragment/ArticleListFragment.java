@@ -73,7 +73,7 @@ public class ArticleListFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.lv_article, container, false);
+        View rootView = inflater.inflate(R.layout.lv_article_list, container, false);
         lvArticleList = (ListView)rootView.findViewById(R.id.article_listview);
 		return rootView;
 	}
@@ -82,7 +82,7 @@ public class ArticleListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         
-        LinearLayout linearLayoutLoadMore = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.bar_load_more, lvArticleList,false);
+        LinearLayout linearLayoutLoadMore = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.lv_load_more_bar, lvArticleList,false);
         lvArticleList.addFooterView(linearLayoutLoadMore);
 
         linearLayoutLoadMore.setOnClickListener(new View.OnClickListener() {

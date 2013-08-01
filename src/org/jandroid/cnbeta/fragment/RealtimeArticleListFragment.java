@@ -3,8 +3,6 @@ package org.jandroid.cnbeta.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -14,22 +12,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
-import org.jandroid.cnbeta.adapter.AsyncImageAdapter;
-import org.jandroid.cnbeta.async.ArticleListAsyncTask;
 import org.jandroid.cnbeta.async.AsyncResult;
-import org.jandroid.cnbeta.async.LoadImageAsyncTask;
 import org.jandroid.cnbeta.async.RealtimeArticleListAsyncTask;
-import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.entity.RealtimeArticle;
-import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.util.EnvironmentUtils;
 
 import java.util.ArrayList;
@@ -69,7 +60,7 @@ public class RealtimeArticleListFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.lv_article, container, false);
+        View rootView = inflater.inflate(R.layout.lv_article_list, container, false);
         lvArticleList = (ListView)rootView.findViewById(R.id.article_listview);
 		return rootView;
 	}
@@ -78,7 +69,7 @@ public class RealtimeArticleListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         
-        LinearLayout linearLayoutLoadMore = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.bar_load_more, lvArticleList,false);
+        LinearLayout linearLayoutLoadMore = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.lv_load_more_bar, lvArticleList,false);
         lvArticleList.addFooterView(linearLayoutLoadMore);
 
         linearLayoutLoadMore.setOnClickListener(new View.OnClickListener() {
