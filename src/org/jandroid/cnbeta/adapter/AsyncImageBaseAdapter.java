@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import org.jandroid.cnbeta.async.AsyncResult;
 import org.jandroid.cnbeta.async.LoadImageAsyncTask;
 
+import java.lang.ref.SoftReference;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,20 +23,26 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsListView.OnScrollListener {
 
-    //TODO: don't need to use memory cache, use disk cache in ImageLoader instead
+    public static final int CACHE_SIZE = 60;
+    //memory cache, for sync load in getView, url=>SoftReference
+    private static Map<String, Bitmap> cachedBitmaps = new LinkedHashMap<String, Bitmap>(CACHE_SIZE) {
+        @Override
+        protected boolean removeEldestEntry(Entry<String, Bitmap> eldest) {
+            return this.size() > CACHE_SIZE;
+        }
+    };
 
     private final Handler postHandler = new Handler();
 
     private final Map<Integer, QueueImageView> queuedImageViews = new ConcurrentHashMap<Integer, QueueImageView>();
-
-    //TODO: 需要解决 重复加载 的问题, 需要 cancel 之前的 AsyncTask
-//    private final List<String> loadingImages = new ArrayList<String>();
 
     public abstract int getCount();
 
     public abstract Object getItem(int position);
 
     public abstract long getItemId(int position);
+
+    public abstract Bitmap getDefaultBitmap();
 
     //TODO:
 //    public abstract void onImageLoadFailure();
@@ -71,11 +79,25 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
      * @param imageView
      * @param imageUrl
      */
-    protected void queueImageView(final int position, final ImageView imageView, final String imageUrl) {
-        final QueueImageView queueImageView = new QueueImageView(imageView, imageUrl);
-        synchronized (queuedImageViews) {
-            queuedImageViews.put(position, queueImageView);
+    protected Bitmap queueImageView(final int position, final ImageView imageView, final String imageUrl) {
+        Bitmap bitmap = cachedBitmaps.get(imageUrl);
+/*
+        if(cachedBitmaps.containsKey(imageUrl)) {
+            SoftReference<Bitmap> bitmapSoftReference = cachedBitmaps.get(imageUrl);
+            bitmap = bitmapSoftReference.get();
+            if(bitmap == null) {
+                cachedBitmaps.remove(imageUrl);
+            }
         }
+*/
+        if(bitmap == null) { //not cached
+            bitmap = getDefaultBitmap(); // return default bitmap temporarily
+            final QueueImageView queueImageView = new QueueImageView(imageView, imageUrl);
+            synchronized (queuedImageViews) {
+                queuedImageViews.put(position, queueImageView);
+            }
+        }
+        return bitmap;
     }
 
     private void loadQueuedImages(int firstPosition, int lastPosition) {
@@ -107,6 +129,8 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
                 protected void onPostExecute(final AsyncResult bitmapAsyncResult) {
                     super.onPostExecute(bitmapAsyncResult);
                     if (bitmapAsyncResult.isSuccess()) {
+                        Bitmap bitmap = (Bitmap) bitmapAsyncResult.getResult();
+                        cachedBitmaps.put(imageUrl, (bitmap));
                         postHandler.post(new Runnable() {
                             public void run() {
                                 imageLoadInfo.getImageView().setImageBitmap((Bitmap) bitmapAsyncResult.getResult());

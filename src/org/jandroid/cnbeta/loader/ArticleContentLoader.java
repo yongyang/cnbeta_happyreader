@@ -5,7 +5,7 @@ import org.jandroid.cnbeta.entity.Content;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class ArticleContentLoader extends LoaderTask<Content>  {
+public class ArticleContentLoader extends AbstractLoader<Content> {
 
 
     @Override

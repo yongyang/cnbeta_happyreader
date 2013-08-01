@@ -2,7 +2,11 @@ package org.jandroid.cnbeta.async;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.Log;
 import org.jandroid.cnbeta.loader.LoaderManager;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
@@ -10,16 +14,21 @@ import org.jandroid.cnbeta.loader.LoaderManager;
  */
 public abstract class LoadImageAsyncTask extends BaseAsyncTask<String, Integer, AsyncResult> {
 
-    private String imgUrl;
+    private String imageUrl;
 
-    public LoadImageAsyncTask(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public LoadImageAsyncTask(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
     
     @Override
     protected AsyncResult doInBackground(String... params) {
         try {
-            Bitmap bitmap = LoaderManager.getInstance().loadImage(imgUrl);
+
+            if(imageUrl.toLowerCase().endsWith(".gif")) {
+                Log.d(this.getClass().getSimpleName(), imageUrl);
+            }
+
+            Bitmap bitmap = LoaderManager.getInstance().loadImage(imageUrl);
             return AsyncResult.successResult(bitmap);
         }
         catch (Exception e) {

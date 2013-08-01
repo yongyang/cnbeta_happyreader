@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class ArticleListLoader extends LoaderTask<List<Article>> {
+public class ArticleListLoader extends AbstractLoader<List<Article>> {
 
     public static String URL_FORMAT = "http://www.cnbeta.com/more.htm?jsoncallback=jQuery18008753548712314047_{0}s&type={1}&page={2}&_={3}";
     private Type type;
@@ -61,7 +61,13 @@ public class ArticleListLoader extends LoaderTask<List<Article>> {
         String response = CnBetaHttpClient.getInstance().httpGet(url);
         String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
         JSONObject responseJSON = (JSONObject)JSONValue.parse(responseJSONString);
-        JSONArray articleListJSONArray = (JSONArray)((JSONObject)responseJSON.get("result")).get("list");
+        JSONArray articleListJSONArray;
+        if(getType().equals(Type.REALTIME)) { // realtime has different json structure with others
+            articleListJSONArray = (JSONArray)responseJSON.get("result");
+        }
+        else {
+            articleListJSONArray = (JSONArray)((JSONObject)responseJSON.get("result")).get("list");
+        }
         
         return parseArticleListJSON(articleListJSONArray);
     }

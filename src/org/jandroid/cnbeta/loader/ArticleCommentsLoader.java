@@ -5,7 +5,7 @@ import org.jandroid.cnbeta.entity.Comment;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-class ArticleCommentsLoader extends LoaderTask<Comment>  {
+class ArticleCommentsLoader extends AbstractLoader<Comment> {
 
 
     @Override

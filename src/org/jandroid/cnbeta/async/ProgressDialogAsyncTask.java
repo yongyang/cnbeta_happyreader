@@ -2,7 +2,6 @@ package org.jandroid.cnbeta.async;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import org.jandroid.cnbeta.util.NetWorkUtils;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>

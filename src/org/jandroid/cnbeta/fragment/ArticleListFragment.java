@@ -3,6 +3,8 @@ package org.jandroid.cnbeta.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -111,6 +113,11 @@ public class ArticleListFragment extends Fragment {
                 return position;
             }
 
+            @Override
+            public Bitmap getDefaultBitmap() {
+                return BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.default_img);
+            }
+
             public View getView(int position, View convertView, ViewGroup parent) {
                 if(convertView == null) {
                     convertView = getActivity().getLayoutInflater().inflate(R.layout.article_list_item, null);
@@ -133,9 +140,8 @@ public class ArticleListFragment extends Fragment {
 
 
                 ImageView ivLogo = (ImageView) convertView.findViewById(R.id.item_logo);
-                ivLogo.setImageResource(R.drawable.default_img);
-                // queue to image load list
-                queueImageView(position, ivLogo, article.getLogo());
+                // queue to image load list or set a cached bitmap if has been cached
+                ivLogo.setImageBitmap(queueImageView(position, ivLogo, article.getLogo()));
                 return convertView;
             }
         };
@@ -151,13 +157,6 @@ public class ArticleListFragment extends Fragment {
     public void onStart() {
         super.onStart();
         reloadArticles();
-/*
-        getActivity().runOnUiThread(new Runnable() {
-            public void run() {
-                asyncImageAdapter.loadQueuedImages();
-            }
-        });
-*/
     }
     
     private void loadArticles(){

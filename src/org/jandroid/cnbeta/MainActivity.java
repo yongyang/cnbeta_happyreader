@@ -17,10 +17,12 @@ import org.jandroid.cnbeta.loader.ArticleListLoader;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO: 动态替换 tabs 来显示各分类文章，而不是新建 Activity
 public class MainActivity extends Activity {
     private static final String SELECTED_ITEM = "selected_item";
 
     public final static int[] tabs = new int[]{R.string.tab_quanbuzixun, R.string.tab_shishigengxin, R.string.tab_yuedulishi};
+    private final Fragment[] fragments = new Fragment[tabs.length];
 
     private ViewPager mViewPager;
     private ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
@@ -34,12 +36,22 @@ public class MainActivity extends Activity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new ArticleListFragment(ArticleListLoader.Type.ALL);
+                    if(fragments[0] == null) {
+                        fragments[0] = new ArticleListFragment(ArticleListLoader.Type.ALL);
+                    }
+                    return fragments[0];
                 case 1:
-                    new ArticleListFragment(ArticleListLoader.Type.REALTIME);
+                    if(fragments[1] == null) {
+                        fragments[1] = new ArticleListFragment(ArticleListLoader.Type.REALTIME);
+                    }
+                    return fragments[1];
                 case 2:
                     //TODO: 阅读历史 tab
-                    return new ArticleListFragment(ArticleListLoader.Type.DIG);
+                    if(fragments[2] == null) {
+                        fragments[2] = new ArticleListFragment(ArticleListLoader.Type.DIG);
+                    }
+                    return fragments[2];
+
                 default:
                     // only 3 tabs
                     return null;
@@ -95,6 +107,7 @@ public class MainActivity extends Activity {
             //全部资讯, 实时更新, 阅读历史
             actionBar.addTab(actionBar.newTab().setText(resourceId).setTabListener(pagerAdapter));
         }
+//        actionBar.addTab(actionBar.newTab().setText(R.string.tab_yuedulishi).setTabListener(pagerAdapter));
         pagerAdapter.notifyDataSetChanged();
     }
 
