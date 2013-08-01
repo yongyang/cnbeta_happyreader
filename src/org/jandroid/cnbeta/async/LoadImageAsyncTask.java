@@ -35,6 +35,7 @@ public abstract class LoadImageAsyncTask extends BaseAsyncTask<String, Integer, 
     }
     
     protected Bitmap loadImage(String url) throws Exception {
+        //TODO: fromDisk, toDisk
         return new ImageLoader(url).fromHttp();
     }
 
