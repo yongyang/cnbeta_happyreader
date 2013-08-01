@@ -30,7 +30,6 @@ public abstract class LoadImageAsyncTask extends BaseAsyncTask<String, Integer, 
 
     @SuppressWarnings("unchecked")
     public AsyncTask<String, Integer, AsyncResult> executeMultiThread() {
-        //TODO: check network status here
         return executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
     
