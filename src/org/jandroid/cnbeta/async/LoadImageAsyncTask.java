@@ -20,11 +20,6 @@ public abstract class LoadImageAsyncTask extends BaseAsyncTask<String, Integer, 
     @Override
     protected AsyncResult doInBackground(String... params) {
         try {
-
-            if(imageUrl.toLowerCase().endsWith(".gif")) {
-                Log.d(this.getClass().getSimpleName(), imageUrl);
-            }
-
             Bitmap bitmap = loadImage(imageUrl);
             return AsyncResult.successResult(bitmap);
         }
