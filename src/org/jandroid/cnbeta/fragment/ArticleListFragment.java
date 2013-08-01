@@ -21,9 +21,10 @@ import android.widget.Toast;
 import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
-import org.jandroid.cnbeta.adapter.AsyncImageBaseAdapter;
+import org.jandroid.cnbeta.adapter.AsyncImageAdapter;
 import org.jandroid.cnbeta.async.ArticleListAsyncTask;
 import org.jandroid.cnbeta.async.AsyncResult;
+import org.jandroid.cnbeta.async.LoadImageAsyncTask;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.util.EnvironmentUtils;
@@ -39,7 +40,7 @@ public class ArticleListFragment extends Fragment {
 
     private ListView lvArticleList;
     
-    private AsyncImageBaseAdapter asyncImageAdapter;
+    private AsyncImageAdapter asyncImageAdapter;
     
     private List<Article> loadedArticles = new ArrayList<Article>();
 
@@ -72,7 +73,7 @@ public class ArticleListFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.article_list_view, container, false);
+        View rootView = inflater.inflate(R.layout.lv_article, container, false);
         lvArticleList = (ListView)rootView.findViewById(R.id.article_listview);
 		return rootView;
 	}
@@ -91,15 +92,8 @@ public class ArticleListFragment extends Fragment {
 
             }
         });
-        
-        linearLayoutLoadMore.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "load more", Toast.LENGTH_LONG).show();
 
-            }
-        });
-
-        asyncImageAdapter = new AsyncImageBaseAdapter() {
+        asyncImageAdapter = new AsyncImageAdapter() {
             @Override
             public int getCount() {
                 return loadedArticles.size();
@@ -120,9 +114,47 @@ public class ArticleListFragment extends Fragment {
                 return BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.default_img);
             }
 
+            @Override
+            protected void loadImageAsync(final String imageUrl, final OnAsyncImageLoadListener onAsyncImageLoadListener) {
+                new LoadImageAsyncTask() {
+
+                    @Override
+                    public CnBetaApplicationContext getCnBetaApplicationContext() {
+                        return (CnBetaApplication)getActivity().getApplication();
+                    }
+
+                    @Override
+                    protected String getImageUrl() {
+                        return imageUrl;
+                    }
+
+                    @Override
+                    protected void onPostExecute(final AsyncResult bitmapAsyncResult) {
+                        super.onPostExecute(bitmapAsyncResult);
+                        if (bitmapAsyncResult.isSuccess()) {
+                            Bitmap bitmap = (Bitmap) bitmapAsyncResult.getResult();
+                            onAsyncImageLoadListener.onLoaded(bitmap);
+                        }
+                        else {
+                            onAsyncImageLoadListener.onLoadFailed(bitmapAsyncResult.getErrorMsg(), bitmapAsyncResult.getException());
+                        }
+                    }
+
+                    @Override
+                    protected void onCancelled() {
+                        onAsyncImageLoadListener.onLoadFailed("Cancelled", null);
+                    }
+
+                    @Override
+                    protected void onCancelled(AsyncResult bitmapAsyncResult) {
+                        onAsyncImageLoadListener.onLoadFailed("Cancelled", null);
+                    }
+                }.executeMultiThread();
+            }
+
             public View getView(int position, View convertView, ViewGroup parent) {
                 if(convertView == null) {
-                    convertView = getActivity().getLayoutInflater().inflate(R.layout.article_list_item, null);
+                    convertView = getActivity().getLayoutInflater().inflate(R.layout.lv_article_item, null);
                 }
                 Article article = loadedArticles.get(position);
                 TextView tvTitleShow = (TextView)convertView.findViewById(R.id.tile_show);
@@ -147,12 +179,8 @@ public class ArticleListFragment extends Fragment {
                 return convertView;
             }
         };
-        //TODO: other textview
         lvArticleList.setAdapter(asyncImageAdapter);
         lvArticleList.setOnScrollListener(asyncImageAdapter);
-        //TODO: for listview loadimage on the firstpage loaded
-//        asyncImageAdapter.onScrollStateChanged(listView, AbsListView.OnScrollListener.SCROLL_STATE_IDLE);
-
     }
 
     @Override
@@ -165,11 +193,21 @@ public class ArticleListFragment extends Fragment {
         EnvironmentUtils.checkNetworkConnected(getActivity());
         
         //loading data
-        new ArticleListAsyncTask(getCategory(), ++loadedPage) {
+        new ArticleListAsyncTask() {
 
             @Override
             public CnBetaApplicationContext getCnBetaApplicationContext() {
                 return (CnBetaApplication)getActivity().getApplication();
+            }
+
+            @Override
+            protected ArticleListLoader.Type getCategory() {
+                return ArticleListFragment.this.getCategory();
+            }
+
+            @Override
+            protected int getPage() {
+                return ++loadedPage;
             }
 
             @Override

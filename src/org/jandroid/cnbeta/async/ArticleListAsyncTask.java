@@ -12,21 +12,9 @@ import java.util.List;
  */
 public abstract class ArticleListAsyncTask extends ProgressDialogAsyncTask<Object, Integer, AsyncResult> {
 
-    private ArticleListLoader.Type category;
-    private int page;
+    protected abstract ArticleListLoader.Type getCategory();
 
-    protected ArticleListAsyncTask(ArticleListLoader.Type category, int page) {
-        this.category = category;
-        this.page = page;
-    }
-
-    public ArticleListLoader.Type getCategory() {
-        return category;
-    }
-
-    public int getPage() {
-        return page;
-    }
+    protected abstract int getPage();
 
     @Override
     protected AsyncResult doInBackground(Object... params) {
@@ -47,13 +35,12 @@ public abstract class ArticleListAsyncTask extends ProgressDialogAsyncTask<Objec
         if(hasNetwork) {
             List<Article> articles = articleListLoader.fromHttp();
             if(hasSdCard) {
-                //TODO:
-                articleListLoader.toDisk(articles);
+                articleListLoader.toDisk(getCnBetaApplicationContext().getBaseDir(), articles);
             }
             return articles;
         }
         else {
-            List<Article> articles = new ArticleListLoader(getCategory(), getPage()).fromDisk();
+            List<Article> articles = new ArticleListLoader(getCategory(), getPage()).fromDisk(getCnBetaApplicationContext().getBaseDir());
             return articles;
         }
 

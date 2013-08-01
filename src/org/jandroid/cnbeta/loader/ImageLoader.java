@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 
+import java.io.File;
 import java.net.URLEncoder;
 
 /**
@@ -26,13 +27,13 @@ public class ImageLoader extends AbstractLoader<Bitmap> {
     }
 
     @Override
-    public Bitmap fromDisk() throws Exception {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public Bitmap fromDisk(File baseDir) throws Exception {
+        return null;
     }
 
     @Override
-    public void toDisk(Bitmap bitmap) throws Exception {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void toDisk(File baseDir, Bitmap bitmap) throws Exception {
+
     }
 
     private String getFilename(){

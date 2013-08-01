@@ -6,63 +6,59 @@ import android.app.AlertDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Window;
-import org.jandroid.util.LogUtil;
+import org.jandroid.util.Logger;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 public class BaseActivity extends Activity {
-
-    private static final String TAG = "BaseActivity";
-
+    
+    protected Logger logger = Logger.newLogger(this.getClass());
+    
    	protected AlertDialog mAlertDialog;
    	protected AsyncTask mRunningTask;
 
    	/******************************** 【Activity LifeCycle For Debug】 *******************************************/
    	@Override
    	protected void onCreate(Bundle savedInstanceState) {
-   		LogUtil.d(TAG, this.getClass().getSimpleName()
-                + " onCreate() invoked!!");
+        logger.d("onCreate() invoked!!");
    		super.onCreate(savedInstanceState);
    		requestWindowFeature(Window.FEATURE_NO_TITLE);
    	}
 
    	@Override
    	protected void onStart() {
-   		LogUtil.d(TAG, this.getClass().getSimpleName() + " onStart() invoked!!");
+   		logger.d(" onStart() invoked!!");
    		super.onStart();
    	}
 
    	@Override
    	protected void onRestart() {
-   		LogUtil.d(TAG, this.getClass().getSimpleName()
-   				+ " onRestart() invoked!!");
+   		logger.d(" onRestart() invoked!!");
    		super.onRestart();
    	}
 
    	@Override
    	protected void onResume() {
-   		LogUtil.d(TAG, this.getClass().getSimpleName()
-                + " onResume() invoked!!");
+   		logger.d(" onResume() invoked!!");
    		super.onResume();
    	}
 
    	@Override
    	protected void onPause() {
-   		LogUtil.d(TAG, this.getClass().getSimpleName() + " onPause() invoked!!");
+   		logger.d(" onPause() invoked!!");
    		super.onPause();
    	}
 
    	@Override
    	protected void onStop() {
-   		LogUtil.d(TAG, this.getClass().getSimpleName() + " onStop() invoked!!");
+   		logger.d(" onStop() invoked!!");
    		super.onStop();
    	}
 
    	@Override
    	public void onDestroy() {
-   		LogUtil.d(TAG, this.getClass().getSimpleName()
-   				+ " onDestroy() invoked!!");
+   		logger.d(" onDestroy() invoked!!");
    		super.onDestroy();
 
    		if (mRunningTask != null && mRunningTask.isCancelled() == false) {

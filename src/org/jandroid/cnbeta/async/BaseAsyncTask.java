@@ -9,6 +9,18 @@ import org.jandroid.cnbeta.CnBetaApplicationContext;
  */
 public abstract class BaseAsyncTask<Params, Progress, Result>  extends AsyncTask<Params, Progress, Result> {
 
+    // if only load from local storage, when List init, need to load cache data first from local
+    private boolean localLoad;
+
+    public boolean isLocalLoad() {
+        return localLoad;
+    }
+
+    public BaseAsyncTask setLocalLoad(boolean localLoad) {
+        this.localLoad = localLoad;
+        return this;
+    }
+
     public abstract CnBetaApplicationContext getCnBetaApplicationContext();
 
     @SuppressWarnings("unchecked")

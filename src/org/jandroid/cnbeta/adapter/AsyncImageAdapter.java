@@ -6,10 +6,7 @@ import android.util.Log;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import org.jandroid.cnbeta.async.AsyncResult;
-import org.jandroid.cnbeta.async.LoadImageAsyncTask;
 
-import java.lang.ref.SoftReference;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,9 +18,15 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  * @create 7/29/13 3:23 PM
  */
-public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsListView.OnScrollListener {
+public abstract class AsyncImageAdapter extends BaseAdapter implements AbsListView.OnScrollListener {
+
+    public static interface OnAsyncImageLoadListener {
+        void onLoaded(Bitmap bitmap);
+        void onLoadFailed(String errorMsg, Throwable e);
+    }
 
     public static final int CACHE_SIZE = 60;
+
     //memory cache, for sync load in getView, url=>SoftReference
     private static Map<String, Bitmap> cachedBitmaps = new LinkedHashMap<String, Bitmap>(CACHE_SIZE) {
         @Override
@@ -44,9 +47,8 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
 
     public abstract Bitmap getDefaultBitmap();
 
-    //TODO:
-//    public abstract void onImageLoadFailure();
-    
+    protected abstract void loadImageAsync(String url, OnAsyncImageLoadListener listener);
+
     private volatile int firstVisiblePosition = 0;
     private volatile int lastVisiblePosition = 0;
     private volatile int scrollState = AbsListView.OnScrollListener.SCROLL_STATE_IDLE;
@@ -101,8 +103,7 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
     }
 
     private void loadQueuedImages(int firstPosition, int lastPosition) {
-        for (int pos = firstPosition; pos < lastPosition; pos++) {
-            final int position = pos;
+        for (int position = firstPosition; position < lastPosition; position++) {
             QueueImageView tempImageLoadInfo;
             synchronized (queuedImageViews) {
                 tempImageLoadInfo = queuedImageViews.remove(position);
@@ -113,62 +114,20 @@ public abstract class AsyncImageBaseAdapter extends BaseAdapter implements AbsLi
             final String imageUrl = imageLoadInfo.getImageUrl();
             if (imageUrl == null) continue; //TODO: why null???
 
-/*
-            synchronized (loadingImages) {
-                if (loadingImages.contains(imageLoadInfo.getSrcUrl())) {
-                    // 正在加载，跳过
-                    continue;
-                }
-
-                loadingImages.add(imageUrl);
-            }
-*/
-
-            new LoadImageAsyncTask(imageUrl) {
-                @Override
-                protected void onPostExecute(final AsyncResult bitmapAsyncResult) {
-                    super.onPostExecute(bitmapAsyncResult);
-                    if (bitmapAsyncResult.isSuccess()) {
-                        Bitmap bitmap = (Bitmap) bitmapAsyncResult.getResult();
-                        cachedBitmaps.put(imageUrl, (bitmap));
-                        postHandler.post(new Runnable() {
-                            public void run() {
-                                imageLoadInfo.getImageView().setImageBitmap((Bitmap) bitmapAsyncResult.getResult());
-                            }
-                        });
-/*
-                        synchronized (loadingImages) {
-                            loadingImages.remove(imageUrl);
+            loadImageAsync(imageUrl, new OnAsyncImageLoadListener() {
+                public void onLoaded(final Bitmap bitmap) {
+                    cachedBitmaps.put(imageUrl, (bitmap));
+                    postHandler.post(new Runnable() {
+                        public void run() {
+                            imageLoadInfo.getImageView().setImageBitmap((Bitmap) bitmap);
                         }
-*/
-                    }
-                    else {
-                        //TODO: toast or anything
-                        Log.w(this.getClass().getSimpleName(), bitmapAsyncResult.getErrorMsg());
-                    }
+                    });
                 }
-
-                @Override
-                protected void onCancelled() {
-/*
-                    synchronized (loadingImages) {
-                        loadingImages.remove(position);
-                    }
-*/
+                public void onLoadFailed(String errorMsg, Throwable e) {
+                    Log.w(this.getClass().getSimpleName(), errorMsg, e);
                 }
-
-                @Override
-                protected void onCancelled(AsyncResult bitmapAsyncResult) {
-/*
-                    synchronized (loadingImages) {
-                        loadingImages.remove(position);
-                    }
-*/
-                }
-            }.executeMultiThread();
+            });
         }
-        // clear all queued loaders
-//        queuedImageLoaders.clear();
     }
 
     static class QueueImageView {

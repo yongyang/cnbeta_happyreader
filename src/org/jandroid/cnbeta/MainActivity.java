@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
+import org.jandroid.cnbeta.fragment.RealtimeArticleListFragment;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class MainActivity extends Activity {
                     return fragments[0];
                 case 1:
                     if(fragments[1] == null) {
-                        fragments[1] = new ArticleListFragment(ArticleListLoader.Type.REALTIME);
+                        fragments[1] = new RealtimeArticleListFragment();
                     }
                     return fragments[1];
                 case 2:

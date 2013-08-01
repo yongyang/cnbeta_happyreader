@@ -11,16 +11,12 @@ import org.jandroid.cnbeta.loader.ImageLoader;
  */
 public abstract class LoadImageAsyncTask extends BaseAsyncTask<String, Integer, AsyncResult> {
 
-    private String imageUrl;
-
-    public LoadImageAsyncTask(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+    protected abstract String getImageUrl();
     
     @Override
     protected AsyncResult doInBackground(String... params) {
         try {
-            Bitmap bitmap = loadImage(imageUrl);
+            Bitmap bitmap = loadImage(getImageUrl());
             return AsyncResult.successResult(bitmap);
         }
         catch (Exception e) {

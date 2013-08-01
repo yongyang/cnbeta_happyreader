@@ -1,7 +1,9 @@
 package org.jandroid.cnbeta.async;
 
 import org.jandroid.cnbeta.entity.Article;
+import org.jandroid.cnbeta.entity.RealtimeArticle;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
+import org.jandroid.cnbeta.loader.RealtimeArticleListLoader;
 
 import java.util.List;
 
@@ -10,26 +12,11 @@ import java.util.List;
  */
 public abstract class RealtimeArticleListAsyncTask extends ProgressDialogAsyncTask<Object, Integer, AsyncResult> {
 
-    private ArticleListLoader.Type category;
-    private int page;
-
-    protected RealtimeArticleListAsyncTask(ArticleListLoader.Type category, int page) {
-        this.category = category;
-        this.page = page;
-    }
-
-    public ArticleListLoader.Type getCategory() {
-        return category;
-    }
-
-    public int getPage() {
-        return page;
-    }
 
     @Override
     protected AsyncResult doInBackground(Object... params) {
         try {
-            List<Article> articles = loadArticleList();
+            List<RealtimeArticle> articles = loadRealtimeArticleList();
             return AsyncResult.successResult(articles);
         }
         catch (Exception e) {
@@ -38,6 +25,22 @@ public abstract class RealtimeArticleListAsyncTask extends ProgressDialogAsyncTa
         }
     }
     
-    protected abstract List<Article> loadArticleList() throws Exception ;
+    protected  List<RealtimeArticle> loadRealtimeArticleList() throws Exception {
+        boolean hasNetwork = getCnBetaApplicationContext().isNetworkConnected();
+        boolean hasSdCard = getCnBetaApplicationContext().isSdCardMounted();
+        RealtimeArticleListLoader articleListLoader = new RealtimeArticleListLoader();
+        if(hasNetwork) {
+            List<RealtimeArticle> articles = articleListLoader.fromHttp();
+            if(hasSdCard) {
+                articleListLoader.toDisk(getCnBetaApplicationContext().getBaseDir(), articles);
+            }
+            return articles;
+        }
+        else {
+            List<RealtimeArticle> articles = new RealtimeArticleListLoader().fromDisk(getCnBetaApplicationContext().getBaseDir());
+            return articles;
+        }
+
+    }
 
 }
