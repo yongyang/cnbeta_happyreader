@@ -21,7 +21,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.EntityUtils;
-import org.jandroid.cnbeta.util.UnicodeUtils;
+import org.jandroid.util.UnicodeUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

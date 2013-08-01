@@ -1,4 +1,4 @@
-package org.jandroid.cnbeta.util;
+package org.jandroid.util;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>

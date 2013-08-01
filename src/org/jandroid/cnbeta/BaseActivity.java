@@ -1,22 +1,12 @@
 package org.jandroid.cnbeta;
 
-import android.*;
 import android.R;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
-import org.jandroid.cnbeta.util.LogUtil;
-
-import java.lang.reflect.Field;
+import org.jandroid.util.LogUtil;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>

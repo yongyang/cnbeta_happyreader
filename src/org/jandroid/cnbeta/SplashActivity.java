@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
-import org.jandroid.cnbeta.util.EnvironmentUtils;
-import org.jandroid.cnbeta.util.IntentUtils;
+import org.jandroid.util.EnvironmentUtils;
+import org.jandroid.util.IntentUtils;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>

@@ -1,10 +1,8 @@
 package org.jandroid.cnbeta.loader;
 
 import org.apache.commons.io.FileUtils;
-import org.jandroid.cnbeta.Constants;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.cnbeta.entity.Article;
-import org.jandroid.cnbeta.util.EnvironmentUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;

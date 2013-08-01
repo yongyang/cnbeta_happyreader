@@ -1,4 +1,4 @@
-package org.jandroid.cnbeta.util;
+package org.jandroid.util;
 
 import android.app.Activity;
 import android.content.Intent;

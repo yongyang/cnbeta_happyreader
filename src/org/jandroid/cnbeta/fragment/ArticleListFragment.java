@@ -19,13 +19,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.jandroid.cnbeta.CnBetaApplication;
+import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.adapter.AsyncImageBaseAdapter;
 import org.jandroid.cnbeta.async.ArticleListAsyncTask;
 import org.jandroid.cnbeta.async.AsyncResult;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
-import org.jandroid.cnbeta.util.EnvironmentUtils;
+import org.jandroid.util.EnvironmentUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -166,24 +167,9 @@ public class ArticleListFragment extends Fragment {
         //loading data
         new ArticleListAsyncTask(getCategory(), ++loadedPage) {
 
-
             @Override
-            protected List<Article> loadArticleList() throws Exception {
-                boolean hasNetwork = ((CnBetaApplication)getActivity().getApplication()).isNetworkConnected();
-                boolean hasSdCard = ((CnBetaApplication)getActivity().getApplication()).isSdCardMounted();
-                ArticleListLoader articleListLoader = new ArticleListLoader(getCategory(), getPage());
-                if(hasNetwork) {
-                    List<Article> articles = articleListLoader.fromHttp();
-                    if(hasSdCard) {
-                        //TODO: 
-                        articleListLoader.toDisk(articles);
-                    }
-                    return articles;
-                }
-                else {
-                    List<Article> articles = new ArticleListLoader(getCategory(), getPage()).fromDisk();
-                    return articles;
-                }
+            public CnBetaApplicationContext getCnBetaApplicationContext() {
+                return (CnBetaApplication)getActivity().getApplication();
             }
 
             @Override

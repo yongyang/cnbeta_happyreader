@@ -2,6 +2,7 @@ package org.jandroid.cnbeta.async;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import org.jandroid.cnbeta.CnBetaApplicationContext;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
