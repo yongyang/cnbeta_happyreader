@@ -1,4 +1,4 @@
-package org.jandroid.cnbeta.client;
+package org.jandroid.cnbeta.util;
 
 import java.io.IOException;
 import java.io.PushbackReader;

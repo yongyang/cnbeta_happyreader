@@ -1,33 +1,35 @@
 package org.jandroid.cnbeta.loader;
 
+import java.io.File;
+
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 public abstract class AbstractLoader<T> {
 
-    private String taskName;
+    protected byte[] loadedData;
+    protected T loadedObject;
 
-    private T loadedObject;
+    public byte[] getLoadedData() {
+        return loadedData;
+    }
 
-    public String getTaskName() {
-        return taskName;
+    public void setLoadedData(byte[] loadedData) {
+        this.loadedData = loadedData;
     }
 
     public T getLoadedObject() {
         return loadedObject;
     }
 
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
-    }
-
-    public final void load(){
-        //TODO:
+    public void setLoadedObject(T loadedObject) {
+        this.loadedObject = loadedObject;
     }
 
     public abstract T fromHttp() throws Exception;
 
-    public abstract T fromDisk() throws Exception;
+    public abstract T fromDisk(File baseDir) throws Exception;
 
-    public abstract void toDisk(T t) throws Exception;
+    
+    public abstract void toDisk(File baseDir, T t) throws Exception;
 }

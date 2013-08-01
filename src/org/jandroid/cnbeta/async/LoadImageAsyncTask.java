@@ -3,10 +3,7 @@ package org.jandroid.cnbeta.async;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
-import org.jandroid.cnbeta.loader.LoaderManager;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import org.jandroid.cnbeta.loader.ImageLoader;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
@@ -28,7 +25,7 @@ public abstract class LoadImageAsyncTask extends BaseAsyncTask<String, Integer, 
                 Log.d(this.getClass().getSimpleName(), imageUrl);
             }
 
-            Bitmap bitmap = LoaderManager.getInstance().loadImage(imageUrl);
+            Bitmap bitmap = loadImage(imageUrl);
             return AsyncResult.successResult(bitmap);
         }
         catch (Exception e) {
@@ -40,6 +37,10 @@ public abstract class LoadImageAsyncTask extends BaseAsyncTask<String, Integer, 
     public AsyncTask<String, Integer, AsyncResult> executeMultiThread() {
         //TODO: check network status here
         return executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+    
+    protected Bitmap loadImage(String url) throws Exception {
+        return new ImageLoader(url).fromHttp();
     }
 
 }

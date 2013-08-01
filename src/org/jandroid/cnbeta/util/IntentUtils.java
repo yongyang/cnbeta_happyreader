@@ -8,6 +8,8 @@ import android.os.Bundle;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 public class IntentUtils {
+    
+    //TODO：仅仅只返回各种 Intent, 而交给调用者去 startActivity
 
     public static void startActivity(Activity activity, Class<?> cls) {
         startActivity(activity, cls, null);

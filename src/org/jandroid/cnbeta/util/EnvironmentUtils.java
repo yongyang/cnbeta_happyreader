@@ -14,9 +14,6 @@ import java.io.File;
  */
 public class EnvironmentUtils {
     
-    private static boolean IS_ONLINE = false;
-    private static boolean IS_SD_CARD_MOUNTED = false;
-
     public static enum ConnectionStatus {
         MOBILE("MOBILE"),
         WIFI("WIFI"),
@@ -62,38 +59,21 @@ public class EnvironmentUtils {
         return connectionStatus;
     }
     
-    public static void checkConnectionStatus(Context theContext){
+    public static boolean checkNetworkConnected(Context theContext){
         ConnectionStatus connectionStatus = getConnectionStatus(theContext);
-        if(connectionStatus.equals(ConnectionStatus.NONE) || connectionStatus.equals(ConnectionStatus.WAP)) {
-            IS_ONLINE = false;
-            Toast.makeText(theContext, "没有网络，只能浏览离线数据", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            IS_ONLINE = true;
-        }
-    }
-
-    public static boolean hasNetworkConnection(){
-        return IS_ONLINE;
+        return !(connectionStatus.equals(ConnectionStatus.NONE) || connectionStatus.equals(ConnectionStatus.WAP));
     }
 
 
+    /**
+     * 检测sdcard是否可用
+     *
+     * @return true为可用，否则为不可用
+     */
     public static boolean checkSdCardMounted(Context theContext) {
         String status = Environment.getExternalStorageState();
-        IS_SD_CARD_MOUNTED = status.equals(Environment.MEDIA_MOUNTED);
-        if(!IS_SD_CARD_MOUNTED) {
-            Toast.makeText(theContext, "没有SD卡，将使用手机内置存储器", Toast.LENGTH_SHORT).show();            
-        }
-        return IS_SD_CARD_MOUNTED;
+        return status.equals(Environment.MEDIA_MOUNTED);
     }
-    /**
-   	 * 检测sdcard是否可用
-   	 *
-   	 * @return true为可用，否则为不可用
-   	 */
-   	public static boolean hasSdCard() {
-   		return IS_SD_CARD_MOUNTED;
-   	}
 
    	/**
    	 * Checks if there is enough Space on SDCard

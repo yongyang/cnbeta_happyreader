@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.adapter.AsyncImageBaseAdapter;
 import org.jandroid.cnbeta.async.ArticleListAsyncTask;
@@ -79,18 +80,18 @@ public class ArticleListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         
-        LinearLayout llLoadMore = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.bar_load_more, lvArticleList,false);
-        lvArticleList.addFooterView(llLoadMore);
+        LinearLayout linearLayoutLoadMore = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.bar_load_more, lvArticleList,false);
+        lvArticleList.addFooterView(linearLayoutLoadMore);
 
-        llLoadMore.setOnClickListener(new View.OnClickListener() {
+        linearLayoutLoadMore.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //TODO:
                 loadArticles();
-                
+
             }
         });
         
-        llLoadMore.setOnClickListener(new View.OnClickListener() {
+        linearLayoutLoadMore.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "load more", Toast.LENGTH_LONG).show();
 
@@ -160,10 +161,30 @@ public class ArticleListFragment extends Fragment {
     }
     
     private void loadArticles(){
-        EnvironmentUtils.checkConnectionStatus(getActivity());
+        EnvironmentUtils.checkNetworkConnected(getActivity());
         
         //loading data
         new ArticleListAsyncTask(getCategory(), ++loadedPage) {
+
+
+            @Override
+            protected List<Article> loadArticleList() throws Exception {
+                boolean hasNetwork = ((CnBetaApplication)getActivity().getApplication()).isNetworkConnected();
+                boolean hasSdCard = ((CnBetaApplication)getActivity().getApplication()).isSdCardMounted();
+                ArticleListLoader articleListLoader = new ArticleListLoader(getCategory(), getPage());
+                if(hasNetwork) {
+                    List<Article> articles = articleListLoader.fromHttp();
+                    if(hasSdCard) {
+                        //TODO: 
+                        articleListLoader.toDisk(articles);
+                    }
+                    return articles;
+                }
+                else {
+                    List<Article> articles = new ArticleListLoader(getCategory(), getPage()).fromDisk();
+                    return articles;
+                }
+            }
 
             @Override
             public ProgressDialog getProgressDialog() {

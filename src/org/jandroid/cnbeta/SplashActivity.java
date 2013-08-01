@@ -25,7 +25,7 @@ public class SplashActivity extends Activity {
    		getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.splash_load));
 
         //TODO: setup all needed configurations, network and others, such directories
-        EnvironmentUtils.checkConnectionStatus(this);
+        EnvironmentUtils.checkNetworkConnected(this);
         EnvironmentUtils.checkSdCardMounted(this);
    	}
 

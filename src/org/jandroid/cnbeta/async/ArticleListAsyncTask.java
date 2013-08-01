@@ -1,9 +1,7 @@
 package org.jandroid.cnbeta.async;
 
-import android.os.AsyncTask;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
-import org.jandroid.cnbeta.loader.LoaderManager;
 
 import java.util.List;
 
@@ -31,7 +29,7 @@ public abstract class ArticleListAsyncTask extends ProgressDialogAsyncTask<Objec
     @Override
     protected AsyncResult doInBackground(Object... params) {
         try {
-            List<Article> articles = LoaderManager.getInstance().loadArticleList(getCategory(),getPage());
+            List<Article> articles = loadArticleList();
             return AsyncResult.successResult(articles);
         }
         catch (Exception e) {
@@ -39,5 +37,7 @@ public abstract class ArticleListAsyncTask extends ProgressDialogAsyncTask<Objec
             return AsyncResult.errorResult(e.toString());
         }
     }
+    
+    protected abstract List<Article> loadArticleList() throws Exception ;
 
 }

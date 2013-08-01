@@ -60,6 +60,7 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
         //user json-simple to parse returned json string
         String response = CnBetaHttpClient.getInstance().httpGet(url);
         String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
+        setLoadedData(responseJSONString.getBytes());
         JSONObject responseJSON = (JSONObject)JSONValue.parse(responseJSONString);
         JSONArray articleListJSONArray;
         if(getType().equals(Type.REALTIME)) { // realtime has different json structure with others
@@ -83,35 +84,33 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
     }
 
     @Override
-    public List<Article> fromDisk() throws Exception {
-        if(EnvironmentUtils.hasSdCard()){
+    public List<Article> fromDisk(File baseDir) throws Exception {
             //read json file from SD Card
-            String articleListJSONString = FileUtils.readFileToString(getFile());
+            String articleListJSONString = FileUtils.readFileToString(getFile(baseDir));
             JSONArray articleListJSONArray = (JSONArray)JSONValue.parse(articleListJSONString);
             return parseArticleListJSON(articleListJSONArray);
-        }
-        return new ArrayList<Article>(0);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void toDisk(List<Article> articles) throws Exception {
+    public void toDisk(File baseDir, List<Article> articles) throws Exception {
         //write articleListJSON json string, don't need to save article separately
-        JSONArray articleListJSONArray = new JSONArray();
-        for(Article article : articles){
-            articleListJSONArray.add(article.getJSONObject());
-        }
-        if(EnvironmentUtils.hasSdCard()){
-            FileUtils.writeStringToFile(getFile(), articleListJSONArray.toJSONString());
+        if(articles != getLoadedObject()) {
+            JSONArray articleListJSONArray = new JSONArray();
+            for(Article article : articles){
+                articleListJSONArray.add(article.getJSONObject());
+            }
+
+            FileUtils.writeStringToFile(getFile(baseDir), articleListJSONArray.toJSONString());
         }
         else {
-            //TODO: 手机内置存储器
+            FileUtils.writeStringToFile(getFile(baseDir), new String(getLoadedData()));
         }
 
     }
     
-    private File getFile(){
-        return new File(Constants.getBaseDir(), "" + getType().getTypeString() + "_" + getPage());
+    private File getFile(File dir){
+        return new File(dir , "" + getType().getTypeString() + "_" + getPage());
     }
 }
 /*
