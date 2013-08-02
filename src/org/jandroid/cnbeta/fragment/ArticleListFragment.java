@@ -2,7 +2,6 @@ package org.jandroid.cnbeta.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -50,7 +49,9 @@ public class ArticleListFragment extends Fragment {
     private ArticleListLoader.Type category;
     private int loadedPage = 0;
 
-    private ProgressBar loadMoreProgressBar;
+    private ProgressBar progressBarNextPage;
+    private LinearLayout lineLayoutNextPage;
+    private TextView tvPage;
 
     public ArticleListFragment(ArticleListLoader.Type category) {
         this.category = category;
@@ -85,11 +86,13 @@ public class ArticleListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         
-        LinearLayout linearLayoutLoadMore = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.lv_load_more_bar, lvArticleList,false);
-        loadMoreProgressBar = (ProgressBar)linearLayoutLoadMore.findViewById(R.id.tv_loading_progressBar);
-        lvArticleList.addFooterView(linearLayoutLoadMore);
+        LinearLayout footbarNextPage = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.footbar_next_page, lvArticleList,false);
+        lineLayoutNextPage = (LinearLayout)footbarNextPage.findViewById(R.id.lineLayout_next_page);
+        progressBarNextPage = (ProgressBar)footbarNextPage.findViewById(R.id.progressBar_next_page);
+        tvPage = (TextView)footbarNextPage.findViewById(R.id.tv_page);
+        lvArticleList.addFooterView(footbarNextPage);
 
-        linearLayoutLoadMore.setOnClickListener(new View.OnClickListener() {
+        footbarNextPage.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //TODO:
                 loadArticles();
@@ -212,32 +215,40 @@ public class ArticleListFragment extends Fragment {
 
             @Override
             protected int getPage() {
-                return ++loadedPage;
+                // nextPage
+                return loadedPage + 1;
             }
 
             @Override
             public void showProgressUI() {
+                // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
+                getActivity().setProgressBarIndeterminate(true);
                 getActivity().setProgressBarVisibility(true);
-                loadMoreProgressBar.setVisibility(View.VISIBLE);
-//                getActivity().setProgress(5000);
+                progressBarNextPage.setVisibility(View.VISIBLE);
+                lineLayoutNextPage.setVisibility(View.GONE);
+                //TODO: rotate refresh icon also
             }
 
             @Override
             public void dismissProgressUI() {
                 getActivity().setProgressBarVisibility(false);
-                loadMoreProgressBar.setVisibility(View.GONE);
+//                getActivity().setProgressBarIndeterminateVisibility(false);
+                progressBarNextPage.setVisibility(View.GONE);
+                lineLayoutNextPage.setVisibility(View.VISIBLE);
             }
 
             @Override
             protected void onPostExecute(AsyncResult listAsyncResult) {
                 super.onPostExecute(listAsyncResult);
                 if(listAsyncResult.isSuccess()) {
+                    loadedPage++;
                     List<Article> articles = (List<Article>)listAsyncResult.getResult();
                     appendArticles(articles);
                 }
                 else {
                     Toast.makeText(getActivity(), listAsyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
                 }
+                tvPage.setText("" + (loadedPage+1));
             }
         }.executeMultiThread();        
     }

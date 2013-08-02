@@ -88,8 +88,8 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
-        this.setProgressBarIndeterminate(true);
 //        this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        this.setProgressBarIndeterminate(true);
         setContentView(R.layout.main);
         setupViewPager();
         setupActionBar();
@@ -117,6 +117,11 @@ public class MainActivity extends Activity {
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setOnPageChangeListener(pagerAdapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override

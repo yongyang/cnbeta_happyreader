@@ -2,7 +2,6 @@ package org.jandroid.cnbeta.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -14,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
@@ -23,7 +23,10 @@ import org.jandroid.cnbeta.async.RealtimeArticleListAsyncTask;
 import org.jandroid.cnbeta.entity.RealtimeArticle;
 import org.jandroid.util.EnvironmentUtils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,6 +43,12 @@ public class RealtimeArticleListFragment extends Fragment {
     private Handler handler = new Handler();
 
     private BaseAdapter adapter;
+
+    private ProgressBar progressBarRefresh;
+    private LinearLayout lineLayoutRefresh;
+    private TextView tvLastTimeRefresh;
+
+    private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public RealtimeArticleListFragment() {
     }
@@ -69,10 +78,14 @@ public class RealtimeArticleListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         
-        LinearLayout linearLayoutLoadMore = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.lv_load_more_bar, lvArticleList,false);
-        lvArticleList.addFooterView(linearLayoutLoadMore);
+        LinearLayout footbarRefresh = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.lv_footbar_refresh, lvArticleList,false);
+        progressBarRefresh = (ProgressBar) footbarRefresh.findViewById(R.id.progressBar_refresh);
+        lineLayoutRefresh = (LinearLayout)footbarRefresh.findViewById(R.id.linelayout_refresh);
+        tvLastTimeRefresh = (TextView)footbarRefresh.findViewById(R.id.refresh_last_time);
 
-        linearLayoutLoadMore.setOnClickListener(new View.OnClickListener() {
+        lvArticleList.addFooterView(footbarRefresh);
+
+        footbarRefresh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //TODO:
                 loadArticles();
@@ -131,13 +144,17 @@ public class RealtimeArticleListFragment extends Fragment {
             }
 
             @Override
-            public void dismissProgressUI() {
-                getActivity().setProgressBarIndeterminateVisibility(true);
+            public void showProgressUI() {
+                getActivity().setProgressBarIndeterminateVisibility(false);
+                progressBarRefresh.setVisibility(View.VISIBLE);
+                lineLayoutRefresh.setVisibility(View.GONE);
             }
 
             @Override
-            public void showProgressUI() {
-                getActivity().setProgressBarIndeterminateVisibility(false);
+            public void dismissProgressUI() {
+                getActivity().setProgressBarIndeterminateVisibility(true);
+                progressBarRefresh.setVisibility(View.GONE);
+                lineLayoutRefresh.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -146,6 +163,7 @@ public class RealtimeArticleListFragment extends Fragment {
                 if(listAsyncResult.isSuccess()) {
                     List<RealtimeArticle> articles = (List<RealtimeArticle>)listAsyncResult.getResult();
                     if(articles != null) {
+                        tvLastTimeRefresh.setText(dateFormat.format(new Date()));
                         loadedArticles.addAll(articles);
                         adapter.notifyDataSetChanged();
                     }

@@ -61,13 +61,16 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
         setLoadedData(responseJSONString.getBytes());
         JSONObject responseJSON = (JSONObject)JSONValue.parse(responseJSONString);
         JSONArray articleListJSONArray;
-        if(getType().equals(Type.REALTIME)) { // realtime has different json structure with others
-            articleListJSONArray = (JSONArray)responseJSON.get("result");
+
+        // 返回的JSON结构偶尔会不一样
+        Object result = responseJSON.get("result");
+        if(result instanceof JSONArray){
+            articleListJSONArray = (JSONArray)result;
         }
         else {
             articleListJSONArray = (JSONArray)((JSONObject)responseJSON.get("result")).get("list");
         }
-        
+
         return parseArticleListJSON(articleListJSONArray);
     }
 
