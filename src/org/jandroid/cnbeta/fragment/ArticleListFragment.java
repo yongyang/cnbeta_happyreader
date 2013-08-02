@@ -244,7 +244,6 @@ public class ArticleListFragment extends Fragment {
             @Override
             public void dismissProgressUI() {
                 getActivity().setProgressBarVisibility(false);
-//                getActivity().setProgressBarIndeterminateVisibility(false);
                 progressBarNextPage.setVisibility(View.GONE);
                 lineLayoutNextPage.setVisibility(View.VISIBLE);
                 // stop refresh rotation anyway
