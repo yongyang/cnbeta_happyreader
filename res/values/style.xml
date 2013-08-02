@@ -10,7 +10,7 @@
     </style>
 
     <style name="ActionBar.Solid.CnBeta" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/blue2</item>
+        <item name="android:background">@color/cnBeta_bg_blue</item>
         <item name="android:backgroundStacked">@color/white</item>
     </style>
 
@@ -20,7 +20,7 @@
     </style>
 
     <style name="PopupMenu.CnBeta" parent="@android:style/Widget.Holo.ListPopupWindow">
-        <item name="android:popupBackground">@color/orange</item>
+        <item name="android:popupBackground">@color/cnBeta_bg_middle_blue</item>
     </style>
 
     <style name="TabText.CnBeta" parent="@android:style/Widget.ActionBar.TabText">

@@ -118,8 +118,21 @@
     <color name="dim_foreground_orange">#ffeb620e</color>
     <color name="dim_foreground_orange_disabled">#80ff9100</color>
     <color name="bright_foreground_orange">#ffff6400</color>
-    <color name="lookmore_bar_txt">#ff606466</color>
+
+
+
+
+
+
+    <color name="foot_bar_text">#ff606466</color>
     <color name="color_title">#ff000000</color>
-    <color name="color_desc">#ff4b4b4b</color>
+    <color name="cnBeta_text_description_gray">#666666</color>
+    <color name="cnBeta_text_status_gray">#999999</color>
+    <color name="cnBeta_text_status_realtime_green">#009900</color>
+    <color name="cnBeta_bg_blue">#214d7b</color>
+    <color name="cnBeta_bg_middle_blue">#31699c</color>
+    <color name="cnBeta_bg_light_blue">#528ac6</color>
+    <color name="cnBeta_text_blue">#003366</color>
+    <color name="cnBeta_text_light_blue">#319ace</color>
 
 </resources>

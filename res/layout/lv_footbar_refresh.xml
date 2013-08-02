@@ -44,7 +44,7 @@
 
                 <TextView
                         android:textSize="@dimen/lookmore_bar_txt_size"
-                        android:textColor="@color/lookmore_bar_txt"
+                        android:textColor="@color/foot_bar_text"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
@@ -54,7 +54,7 @@
 
                 <TextView
                         android:textSize="@dimen/foo_bar_refresh_time_size"
-                        android:textColor="@color/lookmore_bar_txt"
+                        android:textColor="@color/foot_bar_text"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:id="@+id/refresh_last_time"
