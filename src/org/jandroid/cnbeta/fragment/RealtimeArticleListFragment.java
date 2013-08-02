@@ -196,11 +196,9 @@ public class RealtimeArticleListFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        //add  refresh actionitem
+        //refresh actionitem
         inflater.inflate(R.menu.article_list_fragment_menu, menu);
         refreshMenuItem = menu.findItem(R.id.refresh_item);
-
-
     }
 
     @Override
