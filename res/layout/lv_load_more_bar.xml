@@ -34,7 +34,7 @@
                     android:layout_marginRight="5.0dip"
                     android:indeterminate="true"
                     android:indeterminateDrawable="@drawable/progressbar"
-                    style="?android:attr/progressBarStyleSmallInverse"/>
+                    style="?android:attr/progressBarStyleInverse"/>
 
             <TextView
                     android:textSize="@dimen/lookmore_bar_txt_size"

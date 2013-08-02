@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.jandroid.cnbeta.CnBetaApplication;
@@ -48,6 +49,8 @@ public class ArticleListFragment extends Fragment {
     // 新闻分类
     private ArticleListLoader.Type category;
     private int loadedPage = 0;
+
+    private ProgressBar loadMoreProgressBar;
 
     public ArticleListFragment(ArticleListLoader.Type category) {
         this.category = category;
@@ -83,6 +86,7 @@ public class ArticleListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         
         LinearLayout linearLayoutLoadMore = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.lv_load_more_bar, lvArticleList,false);
+        loadMoreProgressBar = (ProgressBar)linearLayoutLoadMore.findViewById(R.id.tv_loading_progressBar);
         lvArticleList.addFooterView(linearLayoutLoadMore);
 
         linearLayoutLoadMore.setOnClickListener(new View.OnClickListener() {
@@ -181,12 +185,13 @@ public class ArticleListFragment extends Fragment {
         };
         lvArticleList.setAdapter(asyncImageAdapter);
         lvArticleList.setOnScrollListener(asyncImageAdapter);
+
+        reloadArticles();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        reloadArticles();
     }
     
     private void loadArticles(){
@@ -211,10 +216,16 @@ public class ArticleListFragment extends Fragment {
             }
 
             @Override
-            public ProgressDialog getProgressDialog() {
-                ProgressDialog progressDialog = new ProgressDialog(getActivity());
-                progressDialog.setMessage("loading articles...");
-                return progressDialog;
+            public void showProgressUI() {
+                getActivity().setProgressBarVisibility(true);
+                loadMoreProgressBar.setVisibility(View.VISIBLE);
+//                getActivity().setProgress(5000);
+            }
+
+            @Override
+            public void dismissProgressUI() {
+                getActivity().setProgressBarVisibility(false);
+                loadMoreProgressBar.setVisibility(View.GONE);
             }
 
             @Override

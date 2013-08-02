@@ -131,10 +131,13 @@ public class RealtimeArticleListFragment extends Fragment {
             }
 
             @Override
-            public ProgressDialog getProgressDialog() {
-                ProgressDialog progressDialog = new ProgressDialog(getActivity());
-                progressDialog.setMessage("loading articles...");
-                return progressDialog;
+            public void dismissProgressUI() {
+                getActivity().setProgressBarIndeterminateVisibility(true);
+            }
+
+            @Override
+            public void showProgressUI() {
+                getActivity().setProgressBarIndeterminateVisibility(false);
             }
 
             @Override

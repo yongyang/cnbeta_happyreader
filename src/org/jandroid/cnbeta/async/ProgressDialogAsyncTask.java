@@ -9,21 +9,19 @@ import org.jandroid.cnbeta.CnBetaApplicationContext;
  */
 public abstract class ProgressDialogAsyncTask<Params, Progress, Result> extends BaseAsyncTask<Params, Progress, Result> {
 
-    private ProgressDialog progressDialog;
-
-    public abstract ProgressDialog getProgressDialog();
+    public abstract void showProgressUI();
+    public abstract void dismissProgressUI();
 
     @Override
     protected void onPreExecute() {
+        showProgressUI();
         super.onPreExecute();
-        progressDialog = getProgressDialog();
-        progressDialog.show();
     }
 
     @Override
     protected void onPostExecute(Result r) {
+        dismissProgressUI();
         super.onPostExecute(r);
-        progressDialog.dismiss();
     }
 
     @SuppressWarnings("unchecked")

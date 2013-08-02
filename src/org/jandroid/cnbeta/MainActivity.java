@@ -11,12 +11,10 @@ import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
 import org.jandroid.cnbeta.fragment.RealtimeArticleListFragment;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
-
-import java.util.ArrayList;
-import java.util.List;
 
 //TODO: 动态替换 tabs 来显示各分类文章，而不是新建 Activity
 public class MainActivity extends Activity {
@@ -89,9 +87,12 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_PROGRESS);
+        this.setProgressBarIndeterminate(true);
+//        this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.main);
-        setUpViewPager();
-        setUpActionBar();
+        setupViewPager();
+        setupActionBar();
 
         if (savedInstanceState != null) {
 //            getActionBar().setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
@@ -99,7 +100,7 @@ public class MainActivity extends Activity {
 
     }
 
-    private void setUpActionBar() {
+    private void setupActionBar() {
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -112,7 +113,7 @@ public class MainActivity extends Activity {
         pagerAdapter.notifyDataSetChanged();
     }
 
-    private void setUpViewPager() {
+    private void setupViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setOnPageChangeListener(pagerAdapter);
