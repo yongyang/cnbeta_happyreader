@@ -28,12 +28,13 @@ public class ImageLoader extends AbstractLoader<Bitmap> {
 
     @Override
     public Bitmap fromDisk(File baseDir) throws Exception {
+        //TODO:
         return null;
     }
 
     @Override
     public void toDisk(File baseDir, Bitmap bitmap) throws Exception {
-
+        //TODO:
     }
 
     private String getFilename(){
