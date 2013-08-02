@@ -28,7 +28,7 @@ public class ImageLoader extends AbstractLoader<Bitmap> {
 
     @Override
     public Bitmap fromDisk(File baseDir) throws Exception {
-        //TODO:
+        //TODO: 优先从Disk装载
         return null;
     }
 
