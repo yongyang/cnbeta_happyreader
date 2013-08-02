@@ -38,9 +38,9 @@ public class RealtimeArticleListFragment extends Fragment {
 
     private ListView lvArticleList;
 
-    private List<RealtimeArticle> loadedArticles = new ArrayList<RealtimeArticle>();
+    private final List<RealtimeArticle> loadedArticles = new ArrayList<RealtimeArticle>();
 
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
 
     private BaseAdapter adapter;
 
@@ -48,7 +48,7 @@ public class RealtimeArticleListFragment extends Fragment {
     private LinearLayout lineLayoutRefresh;
     private TextView tvLastTimeRefresh;
 
-    private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public RealtimeArticleListFragment() {
     }
@@ -87,9 +87,7 @@ public class RealtimeArticleListFragment extends Fragment {
 
         footbarRefresh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //TODO:
-                loadArticles();
-
+                reloadArticles();
             }
         });
 
@@ -131,10 +129,10 @@ public class RealtimeArticleListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        loadArticles();
+        reloadArticles();
     }
     
-    private void loadArticles(){
+    private void reloadArticles(){
         EnvironmentUtils.checkNetworkConnected(getActivity());
 
         new RealtimeArticleListAsyncTask(){
@@ -164,8 +162,10 @@ public class RealtimeArticleListFragment extends Fragment {
                     List<RealtimeArticle> articles = (List<RealtimeArticle>)listAsyncResult.getResult();
                     if(articles != null) {
                         tvLastTimeRefresh.setText(dateFormat.format(new Date()));
+                        loadedArticles.clear();
                         loadedArticles.addAll(articles);
                         adapter.notifyDataSetChanged();
+                        lvArticleList.smoothScrollToPosition(0);
                     }
                 }
                 else {
@@ -191,7 +191,7 @@ public class RealtimeArticleListFragment extends Fragment {
             case R.id.more_item:
                 break;
             case R.id.refresh_item:
-                loadArticles();
+                reloadArticles();
                 Toast.makeText(getActivity(), "您点击了" + item.toString(), Toast.LENGTH_SHORT).show();
             default:
         }
