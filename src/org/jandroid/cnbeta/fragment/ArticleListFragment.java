@@ -12,6 +12,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -53,6 +55,10 @@ public class ArticleListFragment extends Fragment {
     private LinearLayout lineLayoutNextPage;
     private TextView tvPage;
 
+    private MenuItem refreshMenuItem;
+    private ImageView refreshActionView;
+    private Animation clockWiseRotationAnimation;
+
     public ArticleListFragment(ArticleListLoader.Type category) {
         this.category = category;
     }
@@ -77,6 +83,11 @@ public class ArticleListFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        refreshActionView = (ImageView) inflater.inflate(R.layout.iv_refresh_action_view, null);
+        clockWiseRotationAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.clockwise_refresh);
+        clockWiseRotationAnimation.setRepeatCount(Animation.INFINITE);
+
+
         View rootView = inflater.inflate(R.layout.lv_article_list, container, false);
         lvArticleList = (ListView)rootView.findViewById(R.id.article_listview);
 		return rootView;
@@ -94,8 +105,7 @@ public class ArticleListFragment extends Fragment {
 
         footbarNextPage.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //TODO:
-                loadArticles();
+                loadNextPageArticles();
 
             }
         });
@@ -197,7 +207,7 @@ public class ArticleListFragment extends Fragment {
         super.onStart();
     }
     
-    private void loadArticles(){
+    private void loadNextPageArticles(){
         EnvironmentUtils.checkNetworkConnected(getActivity());
         
         //loading data
@@ -226,7 +236,9 @@ public class ArticleListFragment extends Fragment {
                 getActivity().setProgressBarVisibility(true);
                 progressBarNextPage.setVisibility(View.VISIBLE);
                 lineLayoutNextPage.setVisibility(View.GONE);
-                //TODO: rotate refresh icon also
+                if(getPage() ==1) { //page 1 is reload
+                    rotateRefreshActionView();
+                }
             }
 
             @Override
@@ -235,6 +247,10 @@ public class ArticleListFragment extends Fragment {
 //                getActivity().setProgressBarIndeterminateVisibility(false);
                 progressBarNextPage.setVisibility(View.GONE);
                 lineLayoutNextPage.setVisibility(View.VISIBLE);
+                // stop refresh rotation anyway
+                if(getPage() ==1) { //page 1 is reload
+                    dismissRefreshActionView();
+                }
             }
 
             @Override
@@ -257,7 +273,7 @@ public class ArticleListFragment extends Fragment {
     private void reloadArticles() {
         loadedArticles.clear();
         loadedPage = 0;
-        loadArticles();
+        loadNextPageArticles();
     }
 
     // load more
@@ -271,6 +287,7 @@ public class ArticleListFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         //add  refresh actionitem
         inflater.inflate(R.menu.article_list_fragment_menu, menu);
+        refreshMenuItem = menu.findItem(R.id.refresh_item);
     }
 
     @Override
@@ -287,6 +304,24 @@ public class ArticleListFragment extends Fragment {
             default:
         }
         return true;
+    }
+
+    private void rotateRefreshActionView() {
+        if(refreshMenuItem != null) {
+            /* Attach a rotating ImageView to the refresh item as an ActionView */
+            refreshActionView.startAnimation(clockWiseRotationAnimation);
+            refreshMenuItem.setActionView(refreshActionView);
+        }
+    }
+
+    private void dismissRefreshActionView() {
+        if(refreshMenuItem != null) {
+            View actionView = refreshMenuItem.getActionView();
+            if(actionView != null) {
+                actionView.clearAnimation();
+                refreshMenuItem.setActionView(null);
+            }
+        }
     }
 
     public static interface ArticleListListener {

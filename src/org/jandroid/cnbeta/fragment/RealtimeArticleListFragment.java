@@ -10,7 +10,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -50,6 +53,10 @@ public class RealtimeArticleListFragment extends Fragment {
 
     private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    private MenuItem refreshMenuItem;
+    private ImageView refreshActionView;
+    private Animation clockWiseRotationAnimation;
+
     public RealtimeArticleListFragment() {
     }
 
@@ -69,6 +76,11 @@ public class RealtimeArticleListFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        refreshActionView = (ImageView) inflater.inflate(R.layout.iv_refresh_action_view, null);
+        clockWiseRotationAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.clockwise_refresh);
+        clockWiseRotationAnimation.setRepeatCount(Animation.INFINITE);
+
         View rootView = inflater.inflate(R.layout.lv_article_list, container, false);
         lvArticleList = (ListView)rootView.findViewById(R.id.article_listview);
 		return rootView;
@@ -143,16 +155,22 @@ public class RealtimeArticleListFragment extends Fragment {
 
             @Override
             public void showProgressUI() {
-                getActivity().setProgressBarIndeterminateVisibility(false);
+                // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
+                getActivity().setProgressBarIndeterminate(true);
+                getActivity().setProgressBarVisibility(true);
                 progressBarRefresh.setVisibility(View.VISIBLE);
                 lineLayoutRefresh.setVisibility(View.GONE);
+                // rotate refresh item
+                rotateRefreshActionView();
             }
 
             @Override
             public void dismissProgressUI() {
-                getActivity().setProgressBarIndeterminateVisibility(true);
+                getActivity().setProgressBarVisibility(false);
                 progressBarRefresh.setVisibility(View.GONE);
                 lineLayoutRefresh.setVisibility(View.VISIBLE);
+                //Stop refresh animation anyway
+                dismissRefreshActionView();
             }
 
             @Override
@@ -180,6 +198,9 @@ public class RealtimeArticleListFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         //add  refresh actionitem
         inflater.inflate(R.menu.article_list_fragment_menu, menu);
+        refreshMenuItem = menu.findItem(R.id.refresh_item);
+
+
     }
 
     @Override
@@ -192,12 +213,28 @@ public class RealtimeArticleListFragment extends Fragment {
                 break;
             case R.id.refresh_item:
                 reloadArticles();
-                Toast.makeText(getActivity(), "您点击了" + item.toString(), Toast.LENGTH_SHORT).show();
             default:
         }
         return true;
     }
 
+    private void rotateRefreshActionView() {
+        if(refreshMenuItem != null) {
+            /* Attach a rotating ImageView to the refresh item as an ActionView */
+            refreshActionView.startAnimation(clockWiseRotationAnimation);
+            refreshMenuItem.setActionView(refreshActionView);
+        }
+    }
+
+    private void dismissRefreshActionView() {
+        if(refreshMenuItem != null) {
+            View actionView = refreshMenuItem.getActionView();
+            if(actionView != null) {
+                actionView.clearAnimation();
+                refreshMenuItem.setActionView(null);
+            }
+        }
+    }
     public static interface ArticleListListener {
         void onArticleItemClick(long articleId);
     }
