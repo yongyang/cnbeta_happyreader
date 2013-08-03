@@ -84,7 +84,7 @@ public class ArticleListFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         refreshActionView = (ImageView) inflater.inflate(R.layout.iv_refresh_action_view, null);
-        clockWiseRotationAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.clockwise_refresh);
+        clockWiseRotationAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotation_clockwise_refresh);
         clockWiseRotationAnimation.setRepeatCount(Animation.INFINITE);
 
 

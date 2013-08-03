@@ -15,9 +15,17 @@ import android.view.Window;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
 import org.jandroid.cnbeta.fragment.RealtimeArticleListFragment;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
+import org.jandroid.util.IntentUtils;
 
 //TODO: 动态替换 tabs 来显示各分类文章，而不是新建 Activity
 public class MainActivity extends Activity {
+
+    public static abstract class ActionTabFragmentPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
+        protected ActionTabFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+    }
+
     private static final String SELECTED_ITEM = "selected_item";
 
     public final static int[] tabs = new int[]{R.string.tab_quanbuzixun, R.string.tab_shishigengxin, R.string.tab_yuedulishi};
@@ -33,28 +41,28 @@ public class MainActivity extends Activity {
 
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    if(fragments[0] == null) {
-                        fragments[0] = new ArticleListFragment(ArticleListLoader.Type.ALL);
-                    }
-                    return fragments[0];
-                case 1:
-                    if(fragments[1] == null) {
-                        fragments[1] = new RealtimeArticleListFragment();
-                    }
-                    return fragments[1];
-                case 2:
-                    //TODO: 阅读历史 tab
-                    if(fragments[2] == null) {
-                        fragments[2] = new ArticleListFragment(ArticleListLoader.Type.DIG);
-                    }
-                    return fragments[2];
+                switch (position) {
+                    case 0:
+                        if(fragments[0] == null) {
+                            fragments[0] = new ArticleListFragment(ArticleListLoader.Type.ALL);
+                        }
+                        return fragments[0];
+                    case 1:
+                        if(fragments[1] == null) {
+                            fragments[1] = new RealtimeArticleListFragment();
+                        }
+                        return fragments[1];
+                    case 2:
+                        //TODO: 阅读历史 tab
+                        if(fragments[2] == null) {
+                            fragments[2] = new ArticleListFragment(ArticleListLoader.Type.DIG);
+                        }
+                        return fragments[2];
 
-                default:
-                    // only 3 tabs
-                    return null;
-            }
+                    default:
+                        // only 3 tabs
+                        return null;
+                }
         }
 
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -91,6 +99,11 @@ public class MainActivity extends Activity {
 //        this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         this.setProgressBarIndeterminate(true);
         setContentView(R.layout.main);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
         setupViewPager();
         setupActionBar();
 
@@ -102,14 +115,10 @@ public class MainActivity extends Activity {
 
     private void setupActionBar() {
         final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
         for(int resourceId : tabs){
             //全部资讯, 实时更新, 阅读历史
             actionBar.addTab(actionBar.newTab().setText(resourceId).setTabListener(pagerAdapter));
         }
-//        actionBar.addTab(actionBar.newTab().setText(R.string.tab_yuedulishi).setTabListener(pagerAdapter));
         pagerAdapter.notifyDataSetChanged();
     }
 
@@ -149,6 +158,12 @@ public class MainActivity extends Activity {
         }
         switch (mi.getItemId()) {
             case android.R.id.home:
+            case R.id.main:
+                break;
+            case R.id.dig_soft_industry_interact:
+                startActivity(IntentUtils.newIntent(this, TypesActivity.class));
+                this.overridePendingTransition(R.anim.activity_enter, R.anim.activity_exit);
+                break;
             case R.id.more_item:
                 break;
             case R.id.aboutus_item:
@@ -166,13 +181,4 @@ public class MainActivity extends Activity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    public void reloadArticles(ActionBar.Tab tab) {
-
-    }
-
-    public static abstract class ActionTabFragmentPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
-        protected ActionTabFragmentPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-    }
 }

@@ -5,48 +5,49 @@ import android.content.Intent;
 import android.os.Bundle;
 
 /**
+ * 返回各种 Intent, 方便调用者去 startActivity startService
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 public class IntentUtils {
     
-    //TODO：仅仅只返回各种 Intent, 而交给调用者去 startActivity
+    public static Intent newIntent(Activity thisActivity, Class<?> targetActivityClass) {
+        return newIntent(thisActivity, targetActivityClass, null);
+    }
 
-    public static void startActivity(Activity activity, Class<?> cls) {
-        startActivity(activity, cls, null);
-   	}
-
-    public static void startActivity(Activity activity, Class<?> cls, Bundle bundle) {
+    public static Intent newIntent(Activity thisActivity, Class<?> targetActivityClass, Bundle bundle) {
    		Intent intent=new Intent();
-   		intent.setClass(activity,cls);
+   		intent.setClass(thisActivity,targetActivityClass);
         if (bundle != null) {
             intent.putExtras(bundle);
         }
-   		activity.startActivity(intent);
+   		return intent;
    	}
 
+/*
     public static void startActivity(Activity activity, Class<?> cls, Bundle bundle, int enterAnim, int exitAnim) {
-        startActivity(activity, cls, bundle);
+        newIntent(activity, cls, bundle);
    		activity.overridePendingTransition(enterAnim, exitAnim);
    	}
+*/
 
-    public static void startActivity(Activity activity, String pAction) {
-   		startActivity(activity, pAction, null);
+    public static Intent newIntent(Activity thisActivity, String pAction) {
+   		return startActivity(thisActivity, pAction, null);
    	}
 
-   	public static void startActivity(Activity activity, String pAction, Bundle pBundle) {
+   	public static Intent startActivity(Activity thisActivity, String pAction, Bundle pBundle) {
    		Intent intent = new Intent(pAction);
    		if (pBundle != null) {
    			intent.putExtras(pBundle);
    		}
-   		activity.startActivity(intent);
+   		return intent;
    	}
 
-    public static void recommendToYourFriend(Activity activity, String url, String shareTitle) {
+    public static Intent recommendToYourFriend(Activity activity, String url, String shareTitle) {
    		Intent intent = new Intent(Intent.ACTION_SEND);
    		intent.setType("text/plain");
    		intent.putExtra(Intent.EXTRA_TEXT, shareTitle + "   " + url);
    		Intent chooserIntent = Intent.createChooser(intent, "分享");
-   		activity.startActivity(chooserIntent);
+   		return chooserIntent;
    	}
 
 }

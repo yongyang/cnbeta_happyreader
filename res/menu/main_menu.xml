@@ -14,17 +14,17 @@
                         android:title="全部 | 实时 | 历史"/>
                 <!-- 定义3个菜单项 -->
                 <item
-                        android:id="@+id/dig"
+                        android:id="@+id/dig_soft_industry_interact"
                         android:title="DIG | 软件 | 业界 | 互动"/>
                 <item
                         android:id="@+id/rank"
                         android:title="人气 | 争议 | 推荐"/>
                 <item
+                        android:id="@+id/offline_downloader"
+                        android:title="@string/offline_downloader"/>
+                <item
                         android:id="@+id/setting_item"
                         android:title="@string/setting_item"/>
-                <item
-                        android:id="@+id/green_font"
-                        android:title="@string/green_title"/>
                 <item
                         android:id="@+id/aboutus_item"
                         android:title="@string/aboutus_item"/>
