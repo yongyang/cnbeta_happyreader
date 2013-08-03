@@ -162,7 +162,7 @@ public class TypesActivity extends Activity {
             case android.R.id.home:
             case R.id.main:
                 startActivity(IntentUtils.newIntent(this, MainActivity.class));
-                this.overridePendingTransition(R.anim.activity_enter, R.anim.activity_exit);
+                this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 break;
             case R.id.dig_soft_industry_interact:
                 break;

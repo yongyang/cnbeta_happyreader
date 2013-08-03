@@ -124,7 +124,7 @@ public class CnBetaHttpClient {
         return httpGet;
     }
 
-    public Bitmap httpGetImage(String url) throws Exception {
+    public byte[] httpGetImage(String url) throws Exception {
         final HttpGet request = newHttpGet(url);
         try {
             HttpResponse response = httpClient.execute(request);
@@ -134,7 +134,7 @@ public class CnBetaHttpClient {
             final HttpEntity entity = response.getEntity();
             try {
                 // Bug on slow connections, fixed in future release.
-                return BitmapFactory.decodeStream(new ByteArrayInputStream(EntityUtils.toByteArray(entity)));
+                return EntityUtils.toByteArray(entity);
             }
             finally {
                 entity.consumeContent();

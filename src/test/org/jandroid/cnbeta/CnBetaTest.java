@@ -32,8 +32,8 @@ public class CnBetaTest extends TestCase {
     }
 
     public void testHttpGetImage() throws Exception {
-        Bitmap image = CnBetaHttpClient.getInstance().httpGetImage("http://static.cnbetacdn.com/newsimg/2013/0729/01375107904.jpg_180x132.jpg");
+        byte[] image = CnBetaHttpClient.getInstance().httpGetImage("http://static.cnbetacdn.com/newsimg/2013/0729/01375107904.jpg_180x132.jpg");
 //        Assert.fail(image.toString());
-        Assert.assertTrue(image.getWidth() > 0);
+        Assert.assertTrue(image!=null && image.length > 0);
     }
 }

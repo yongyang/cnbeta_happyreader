@@ -30,8 +30,16 @@ public abstract class LoadImageAsyncTask extends BaseAsyncTask<String, Integer, 
     }
     
     protected Bitmap loadImage(String url) throws Exception {
-        //TODO: fromDisk, toDisk
-        return new ImageLoader(url).fromHttp();
+        ImageLoader imageLoader = new ImageLoader(url);
+        //优先从Disk装载
+        if(imageLoader.isImageCached(getCnBetaApplicationContext().getBaseDir())) {
+            return imageLoader.fromDisk(getCnBetaApplicationContext().getBaseDir());
+        }
+        else {
+            Bitmap bitmap = imageLoader.fromHttp();
+            imageLoader.toDisk(getCnBetaApplicationContext().getBaseDir(), bitmap);
+            return bitmap;
+        }
     }
 
 }

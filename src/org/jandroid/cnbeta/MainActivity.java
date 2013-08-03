@@ -162,7 +162,7 @@ public class MainActivity extends Activity {
                 break;
             case R.id.dig_soft_industry_interact:
                 startActivity(IntentUtils.newIntent(this, TypesActivity.class));
-                this.overridePendingTransition(R.anim.activity_enter, R.anim.activity_exit);
+                this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 break;
             case R.id.more_item:
                 break;
