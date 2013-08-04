@@ -54,6 +54,7 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
 
     @Override
     public List<Article> fromHttp() throws Exception {
+        //TODO: clear cache if page=1, reload
         String url = MessageFormat.format(URL_FORMAT, ""+System.currentTimeMillis(), getType().getTypeString(), ""+getPage(), ""+(System.currentTimeMillis() + 1));
         //user json-simple to parse returned json string
         String response = CnBetaHttpClient.getInstance().httpGet(url);

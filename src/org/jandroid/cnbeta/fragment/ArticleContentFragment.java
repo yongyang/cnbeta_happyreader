@@ -15,8 +15,10 @@ import org.jandroid.cnbeta.R;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class ArticleContentFragment extends Fragment
-{
+public class ArticleContentFragment extends Fragment {
+
+    //TODO: 支持 视频？？？
+
 	public static final String ARG_SECTION_NUMBER = "section_number";
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -13,12 +13,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
-import org.jandroid.cnbeta.fragment.RealtimeArticleListFragment;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.util.IntentUtils;
 
-//TODO: 动态替换 tabs 来显示各分类文章，而不是新建 Activity
-public class MainActivity extends Activity {
+public class Top10Activity extends Activity {
+
+    //TODO: 这里多余的 </a> 导致 xml 结构错误，需要手动替换解决
+/*
+    <div class="pic">
+        <img src="http://static.cnbetacdn.com/newsimg/2013/0803/01375505447.jpg_180x132.jpg" /></a>
+    </div>
+*/
 
     public static abstract class ActionTabFragmentPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
         protected ActionTabFragmentPagerAdapter(FragmentManager fm) {
@@ -28,39 +33,42 @@ public class MainActivity extends Activity {
 
     private static final String SELECTED_ITEM = "selected_item";
 
-    public final static int[] tabs = new int[]{R.string.tab_quanbuzixun, R.string.tab_shishigengxin, R.string.tab_yuedulishi};
-    private final Fragment[] fragments = new Fragment[tabs.length];
+    public final static int[] tabs2 = new int[]{R.string.tab_dig, R.string.tab_software, R.string.tab_industry, R.string.tab_interact};
+    private final Fragment[] fragments2 = new Fragment[tabs2.length];
 
     private ViewPager mViewPager;
     private ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
 
         @Override
         public int getCount() {
-            return MainActivity.this.getActionBar().getTabCount();
+            return Top10Activity.this.getActionBar().getTabCount();
         }
 
         @Override
         public Fragment getItem(int position) {
                 switch (position) {
                     case 0:
-                        if(fragments[0] == null) {
-                            fragments[0] = new ArticleListFragment(ArticleListLoader.Type.ALL);
+                        if(fragments2[0] == null) {
+                            fragments2[0] = new ArticleListFragment(ArticleListLoader.Type.DIG);
                         }
-                        return fragments[0];
+                        return fragments2[0];
                     case 1:
-                        if(fragments[1] == null) {
-                            fragments[1] = new RealtimeArticleListFragment();
+                        if(fragments2[1] == null) {
+                            fragments2[1] = new ArticleListFragment(ArticleListLoader.Type.SOFT);
                         }
-                        return fragments[1];
+                        return fragments2[1];
                     case 2:
-                        //TODO: 阅读历史 tab
-                        if(fragments[2] == null) {
-                            fragments[2] = new ArticleListFragment(ArticleListLoader.Type.DIG);
+                        if(fragments2[2] == null) {
+                            fragments2[2] = new ArticleListFragment(ArticleListLoader.Type.INDUSTRY);
                         }
-                        return fragments[2];
-
+                        return fragments2[2];
+                    case 3:
+                        if(fragments2[3] == null) {
+                            fragments2[3] = new ArticleListFragment(ArticleListLoader.Type.INTERACT);
+                        }
+                        return fragments2[3];
                     default:
-                        // only 3 tabs
+                        // 4 tabs
                         return null;
                 }
         }
@@ -80,7 +88,7 @@ public class MainActivity extends Activity {
         }
 
         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-            mViewPager.setCurrentItem(MainActivity.this.getActionBar().getSelectedNavigationIndex());
+            mViewPager.setCurrentItem(Top10Activity.this.getActionBar().getSelectedNavigationIndex());
         }
 
         public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
@@ -104,8 +112,8 @@ public class MainActivity extends Activity {
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        initViewPager();
-        initActionBar();
+        setupViewPager();
+        setupActionBar();
 
         if (savedInstanceState != null) {
 //            getActionBar().setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
@@ -113,19 +121,19 @@ public class MainActivity extends Activity {
 
     }
 
-    private void initViewPager() {
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        mViewPager.setAdapter(pagerAdapter);
-        mViewPager.setOnPageChangeListener(pagerAdapter);
-    }
-
-    private void initActionBar() {
+    private void setupActionBar() {
         final ActionBar actionBar = getActionBar();
-        for(int resourceId : tabs){
+        for(int resourceId : tabs2){
             //全部资讯, 实时更新, 阅读历史
             actionBar.addTab(actionBar.newTab().setText(resourceId).setTabListener(pagerAdapter));
         }
         pagerAdapter.notifyDataSetChanged();
+    }
+
+    private void setupViewPager() {
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        mViewPager.setAdapter(pagerAdapter);
+        mViewPager.setOnPageChangeListener(pagerAdapter);
     }
 
     @Override
@@ -159,10 +167,10 @@ public class MainActivity extends Activity {
         switch (mi.getItemId()) {
             case android.R.id.home:
             case R.id.main:
+                startActivity(IntentUtils.newIntent(this, MainActivity.class));
+                this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 break;
             case R.id.dig_soft_industry_interact:
-                startActivity(IntentUtils.newIntent(this, TypesActivity.class));
-                this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 break;
             case R.id.more_item:
                 break;
@@ -180,7 +188,5 @@ public class MainActivity extends Activity {
         // 每次都会调用该方法, 可以动态改变 menu
         return super.onPrepareOptionsMenu(menu);
     }
-
-
 
 }
