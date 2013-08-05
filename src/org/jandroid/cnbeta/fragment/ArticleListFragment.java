@@ -323,6 +323,18 @@ public class ArticleListFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //TODO: 保存当前article列表
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        //TODO: 恢复保存的article列表
+        super.onViewStateRestored(savedInstanceState);
+    }
+
     public static interface ArticleListListener {
         void onArticleItemClick(long articleId);
     }

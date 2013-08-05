@@ -55,11 +55,12 @@ public class Top10Loader extends AbstractLoader<Map<String, List<Article>>>{
         return MessageFormat.format(URL_FORMAT, "" + System.currentTimeMillis());
     }
 
-    private void parsePage(String responseHTML){
+    private Map<String, List<Article>> parsePage(String responseHTML){
         //<img src="http://static.cnbetacdn.com/newsimg/2013/0803/01375505447.jpg_180x132.jpg" /></a>
         //删除掉多余的</a>
         String fixedHTML = patter.matcher(responseHTML).replaceAll("/>");
         Document document = Jsoup.parse(fixedHTML, "utf-8");
+        // select all div elements with class=mt10
         Elements elements = document.select("div.mt10");
         Element hits24Element = elements.get(0);
         Element hitsWeekElement = elements.get(1);
@@ -68,10 +69,11 @@ public class Top10Loader extends AbstractLoader<Map<String, List<Article>>>{
         Element commentsWeekElement = elements.get(4);
         Element commentsMonthElement = elements.get(5);
         Element recommendElement = elements.get(6);
+        return null;
     }
 
     private List<Article> parseElement(Element rankElement){
-
+        return null;
     }
 }
 
