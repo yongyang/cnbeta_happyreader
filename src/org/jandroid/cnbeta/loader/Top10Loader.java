@@ -88,6 +88,7 @@ public class Top10Loader extends AbstractLoader<Map<String, List<RankArticle>>>{
 
         for(Element rankItem : rankElement.select("dl")){
             String number = rankItem.getElementsByClass("number").first().text();
+            String comment = rankItem.getElementsByClass("comment").first().text();
             Element linkElement = rankItem.getElementsByTag("a").first();
             String title = linkElement.text();
             String url = linkElement.attr("href");
@@ -100,6 +101,7 @@ public class Top10Loader extends AbstractLoader<Map<String, List<RankArticle>>>{
 
             JSONObject rankArticleJSONObject = new JSONObject();
             rankArticleJSONObject.put("number", Integer.parseInt(number));
+            rankArticleJSONObject.put("comment", Integer.parseInt(comment));
             rankArticleJSONObject.put("sid", Integer.parseInt(sid));
             rankArticleJSONObject.put("title", title);
             rankArticleJSONObject.put("url", url);

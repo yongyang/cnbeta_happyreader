@@ -146,6 +146,9 @@ public class Top10ArticleListFragment extends Fragment {
                 RankArticle article = (RankArticle)getItem(position);
                 TextView tvTitle = (TextView)convertView.findViewById(R.id.tile);
                 tvTitle.setText(article.getTitle());
+                TextView tvComment = (TextView)convertView.findViewById(R.id.comment);
+                tvComment.setText("" + article.getComment());
+
                 TextView tvHometext = (TextView)convertView.findViewById(R.id.hometext);
                 tvHometext.setText(article.getHometext());
                 TextView tvTime = (TextView)convertView.findViewById(R.id.time);
@@ -192,6 +195,7 @@ public class Top10ArticleListFragment extends Fragment {
             public void onRankLoadFinished(Map<String, List<RankArticle>> allRankArticlesMap) {
                 Top10ArticleListFragment.this.allRankArticlesMap = allRankArticlesMap;
                 adapter.notifyDataSetChanged();
+                tvLastTimeRefresh.setText(dateFormat.format(new Date()));
                 lvArticleList.smoothScrollToPosition(0);
             }
         });

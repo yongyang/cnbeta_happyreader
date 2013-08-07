@@ -18,6 +18,7 @@ public class RankArticle {
     private String hometext;
     private String url;
     private String time;
+    private int comment;
 
     public RankArticle(JSONObject jSONObject) {
         this.jSONObject = jSONObject;
@@ -31,6 +32,7 @@ public class RankArticle {
         this.setUrl(jSONObject.get("url").toString());
         this.setHometext(jSONObject.get("hometext").toString());
         this.setTime(jSONObject.get("time").toString());
+        this.setComment(Integer.parseInt(jSONObject.get("comment").toString()));
     }
 
     public JSONObject getJSONObject() {
@@ -91,6 +93,14 @@ public class RankArticle {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public int getComment() {
+        return comment;
+    }
+
+    public void setComment(int comment) {
+        this.comment = comment;
     }
 
     @Override
