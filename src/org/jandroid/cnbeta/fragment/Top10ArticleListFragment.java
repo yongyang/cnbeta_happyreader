@@ -21,8 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
+import org.jandroid.cnbeta.Top10Activity;
 import org.jandroid.cnbeta.async.AsyncResult;
+import org.jandroid.cnbeta.async.RankArticleListAsyncTask;
 import org.jandroid.cnbeta.async.RealtimeArticleListAsyncTask;
+import org.jandroid.cnbeta.entity.RankArticle;
 import org.jandroid.cnbeta.entity.RealtimeArticle;
 import org.jandroid.util.EnvironmentUtils;
 
@@ -30,18 +33,26 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 
 public class Top10ArticleListFragment extends Fragment {
-    //TODO: 刷新的时候，将新文章添加到List顶部，而不是完全刷新
+
+    // onReselect tab 的时候进行切换
+    private Top10Activity.RankType[] rankTypes;
+    private Top10Activity.RankType currentRankType;
+
+
+    private Map<String, List<RankArticle>> allRankArticlesMap = new HashMap<String, List<RankArticle>>();
+
+
 
     private ListView lvArticleList;
-
-    private final List<RealtimeArticle> loadedArticles = new ArrayList<RealtimeArticle>();
 
     private final Handler handler = new Handler();
 
@@ -57,7 +68,9 @@ public class Top10ArticleListFragment extends Fragment {
     private ImageView refreshActionView;
     private Animation clockWiseRotationAnimation;
 
-    public Top10ArticleListFragment() {
+    public Top10ArticleListFragment(Top10Activity.RankType... rankTypes) {
+        this.rankTypes = rankTypes;
+        this.currentRankType = rankTypes[0];
     }
 
     @Override
@@ -105,11 +118,21 @@ public class Top10ArticleListFragment extends Fragment {
 
         adapter = new BaseAdapter() {
             public int getCount() {
-                return loadedArticles.size();
+                if(allRankArticlesMap.containsKey(currentRankType.getType())) {
+                    return allRankArticlesMap.get(currentRankType.getType()).size();
+                }
+                else {
+                    return 0;
+                }
             }
 
             public Object getItem(int position) {
-                return loadedArticles.get(position);
+                if(allRankArticlesMap.containsKey(currentRankType.getType())) {
+                    return allRankArticlesMap.get(currentRankType.getType()).get(position);
+                }
+                else {
+                    return null;
+                }
             }
 
             public long getItemId(int position) {
@@ -118,18 +141,15 @@ public class Top10ArticleListFragment extends Fragment {
 
             public View getView(int position, View convertView, ViewGroup parent) {
                 if(convertView == null) {
-                    convertView = getActivity().getLayoutInflater().inflate(R.layout.lv_realtime_article_item, null);
+                    convertView = getActivity().getLayoutInflater().inflate(R.layout.lv_rank_article_item, null);
                 }
-                RealtimeArticle article = loadedArticles.get(position);
+                RankArticle article = (RankArticle)getItem(position);
                 TextView tvTitle = (TextView)convertView.findViewById(R.id.tile);
                 tvTitle.setText(article.getTitle());
-                TextView tvHometextShowShort2 = (TextView)convertView.findViewById(R.id.hometext_show_short2);
-                tvHometextShowShort2.setText(article.getHometextShowShort2());
+                TextView tvHometext = (TextView)convertView.findViewById(R.id.hometext);
+                tvHometext.setText(article.getHometext());
                 TextView tvTime = (TextView)convertView.findViewById(R.id.time);
                 tvTime.setText("" + article.getTime());
-
-                TextView tvTimeShow = (TextView)convertView.findViewById(R.id.time_show);
-                tvTimeShow.setText("" + article.getTimeShow());
 
                 return convertView;
 
@@ -141,19 +161,15 @@ public class Top10ArticleListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        reloadArticles();
+        // 只需要第一个tab自动装载一次即可
+        if(rankTypes[0].equals(Top10Activity.RankType.HITS24)) {
+            reloadArticles();
+        }
     }
     
     private void reloadArticles(){
-        EnvironmentUtils.checkNetworkConnected(getActivity());
 
-        new RealtimeArticleListAsyncTask(){
-            @Override
-            public CnBetaApplicationContext getCnBetaApplicationContext() {
-                return (CnBetaApplicationContext)getActivity().getApplication();
-            }
-
-            @Override
+        ((Top10Activity)getActivity()).reloadRanks(new RankLoadCallback() {
             public void showProgressUI() {
                 // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
                 getActivity().setProgressBarIndeterminate(true);
@@ -162,9 +178,9 @@ public class Top10ArticleListFragment extends Fragment {
                 lineLayoutRefresh.setVisibility(View.GONE);
                 // rotate refresh item
                 rotateRefreshActionView();
+
             }
 
-            @Override
             public void dismissProgressUI() {
                 getActivity().setProgressBarVisibility(false);
                 progressBarRefresh.setVisibility(View.GONE);
@@ -173,24 +189,13 @@ public class Top10ArticleListFragment extends Fragment {
                 dismissRefreshActionView();
             }
 
-            @Override
-            protected void onPostExecute(AsyncResult listAsyncResult) {
-                super.onPostExecute(listAsyncResult);
-                if(listAsyncResult.isSuccess()) {
-                    List<RealtimeArticle> articles = (List<RealtimeArticle>)listAsyncResult.getResult();
-                    if(articles != null) {
-                        tvLastTimeRefresh.setText(dateFormat.format(new Date()));
-                        loadedArticles.clear();
-                        loadedArticles.addAll(articles);
-                        adapter.notifyDataSetChanged();
-                        lvArticleList.smoothScrollToPosition(0);
-                    }
-                }
-                else {
-                    Toast.makeText(getActivity(), listAsyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
-                }
+            public void onRankLoadFinished(Map<String, List<RankArticle>> allRankArticlesMap) {
+                Top10ArticleListFragment.this.allRankArticlesMap = allRankArticlesMap;
+                adapter.notifyDataSetChanged();
+                lvArticleList.smoothScrollToPosition(0);
             }
-        }.executeMultiThread();
+        });
+
     }
 
     @Override
@@ -235,5 +240,13 @@ public class Top10ArticleListFragment extends Fragment {
     }
     public static interface ArticleListListener {
         void onArticleItemClick(long articleId);
+    }
+
+    public interface RankLoadCallback {
+        public void showProgressUI();
+
+        public void dismissProgressUI();
+        void onRankLoadFinished(Map<String, List<RankArticle>> allRankArticlesMap);
+
     }
 }

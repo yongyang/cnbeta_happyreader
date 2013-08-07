@@ -1,7 +1,8 @@
 package org.jandroid.cnbeta.loader;
 
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
-import org.jandroid.cnbeta.entity.Article;
+import org.jandroid.cnbeta.entity.RankArticle;
+import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,6 +10,8 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -16,9 +19,9 @@ import java.util.regex.Pattern;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class Top10Loader extends AbstractLoader<Map<String, List<Article>>>{
+public class Top10Loader extends AbstractLoader<Map<String, List<RankArticle>>>{
     //分析该页面
-    public static final String URL_FORMAT = "http://www.cnbeta.com/top10.htm&_={0}";
+    public static final String URL_FORMAT = "http://www.cnbeta.com/top10.htm?_={0}";
 
     public static final String HITS24 = "hits24";
     public static final String HITS_WEEK = "hits_week";
@@ -28,26 +31,24 @@ public class Top10Loader extends AbstractLoader<Map<String, List<Article>>>{
     public static final String COMMENTS_WEEK = "comments_week";
     public static final String COMMENTS_MONTH = "comments_month";
 
-    //推荐
-    public static final String XPATH_EXPRESSION_RECOMMEND = "//div[contains(@class,'mt10'), not(@id)]";
-//    public static final String XPATH_EXPRESSION_RECOMMEND = "//div[contains(@class,'mt10'), last()]";
+    public static final String RECOMMEND = "recommend";
 
     public final static Pattern patter = Pattern.compile("/></a>");
 
     @Override
-    public Map<String, List<Article>> fromDisk(File baseDir) throws Exception {
+    public Map<String, List<RankArticle>> fromDisk(File baseDir) throws Exception {
         return null;
     }
 
     @Override
-    public Map<String, List<Article>> fromHttp() throws Exception {
+    public Map<String, List<RankArticle>> fromHttp() throws Exception {
         String url = getURL();
         String responseHTML = CnBetaHttpClient.getInstance().httpGet(url);
-        return null;
+        return parsePage(responseHTML);
     }
 
     @Override
-    public void toDisk(File baseDir, Map<String, List<Article>> stringListMap) throws Exception {
+    public void toDisk(File baseDir, Map<String, List<RankArticle>> stringListMap) throws Exception {
 
     }
 
@@ -55,26 +56,63 @@ public class Top10Loader extends AbstractLoader<Map<String, List<Article>>>{
         return MessageFormat.format(URL_FORMAT, "" + System.currentTimeMillis());
     }
 
-    private Map<String, List<Article>> parsePage(String responseHTML){
+    private Map<String, List<RankArticle>> parsePage(String responseHTML){
+        Map<String, List<RankArticle>> articlesMap = new HashMap<String, List<RankArticle>>();
         //<img src="http://static.cnbetacdn.com/newsimg/2013/0803/01375505447.jpg_180x132.jpg" /></a>
         //删除掉多余的</a>
-        String fixedHTML = patter.matcher(responseHTML).replaceAll("/>");
-        Document document = Jsoup.parse(fixedHTML, "utf-8");
+        Document document = Jsoup.parse(responseHTML, "utf-8");
         // select all div elements with class=mt10
         Elements elements = document.select("div.mt10");
+
         Element hits24Element = elements.get(0);
+        articlesMap.put(HITS24, parseRankTypeElement(hits24Element));
         Element hitsWeekElement = elements.get(1);
+        articlesMap.put(HITS_WEEK, parseRankTypeElement(hitsWeekElement));
         Element hitsMonthElement = elements.get(2);
+        articlesMap.put(HITS_MONTH, parseRankTypeElement(hitsMonthElement));
         Element comments24Element = elements.get(3);
+        articlesMap.put(COMMENTS24, parseRankTypeElement(comments24Element));
         Element commentsWeekElement = elements.get(4);
+        articlesMap.put(COMMENTS_WEEK, parseRankTypeElement(commentsWeekElement));
         Element commentsMonthElement = elements.get(5);
+        articlesMap.put(COMMENTS_MONTH, parseRankTypeElement(commentsMonthElement));
         Element recommendElement = elements.get(6);
-        return null;
+        articlesMap.put(RECOMMEND, parseRankTypeElement(recommendElement));
+
+        return articlesMap;
     }
 
-    private List<Article> parseElement(Element rankElement){
-        return null;
+    private List<RankArticle> parseRankTypeElement(Element rankElement){
+
+        List<RankArticle> rankArticles = new ArrayList<RankArticle>();
+
+        for(Element rankItem : rankElement.select("dl")){
+            String number = rankItem.getElementsByClass("number").first().text();
+            Element linkElement = rankItem.getElementsByTag("a").first();
+            String title = linkElement.text();
+            String url = linkElement.attr("href");
+            int sidFrom = url.length() - "246048.htm".length();
+            String sid = url.substring(sidFrom, sidFrom+6);
+            String logo =  rankItem.getElementsByTag("img").first().attr("src");
+            String hometext = rankItem.getElementsByTag("p").first().ownText();
+            String time = rankItem.getElementsByClass("time").first().text();
+            time = time.substring(time.length() - "2013-07-26 01:17:46".length(), time.length());
+
+            JSONObject rankArticleJSONObject = new JSONObject();
+            rankArticleJSONObject.put("number", Integer.parseInt(number));
+            rankArticleJSONObject.put("sid", Integer.parseInt(sid));
+            rankArticleJSONObject.put("title", title);
+            rankArticleJSONObject.put("url", url);
+            rankArticleJSONObject.put("logo", logo);
+            rankArticleJSONObject.put("hometext", hometext);
+            rankArticleJSONObject.put("time", time);
+
+            rankArticles.add(new RankArticle(rankArticleJSONObject));
+        }
+
+        return rankArticles;
     }
+
 }
 
 /*

@@ -11,13 +11,13 @@ public class RankArticle {
 
     private JSONObject jSONObject;
 
+    //排行序号
+    private int number;
     private long sid;
     private String title;
     private String hometext;
-    private String hometextShowShort2;
-    private String urlShow;
+    private String url;
     private String time;
-    private String timeShow;
 
     public RankArticle(JSONObject jSONObject) {
         this.jSONObject = jSONObject;
@@ -26,12 +26,11 @@ public class RankArticle {
 
     private void parse() {
         this.setSid(Long.parseLong(jSONObject.get("sid").toString()));
+        this.setNumber(Integer.parseInt(jSONObject.get("number").toString()));
         this.setTitle(jSONObject.get("title").toString());
-        this.setUrlShow(jSONObject.get("url_show").toString());
+        this.setUrl(jSONObject.get("url").toString());
         this.setHometext(jSONObject.get("hometext").toString());
-        this.setHometextShowShort2(jSONObject.get("hometext_show_short2").toString());
         this.setTime(jSONObject.get("time").toString());
-        this.setTimeShow(jSONObject.get("time_show").toString());
     }
 
     public JSONObject getJSONObject() {
@@ -54,13 +53,20 @@ public class RankArticle {
         this.sid = sid;
     }
 
-
-    public String getUrlShow() {
-        return urlShow;
+    public int getNumber() {
+        return number;
     }
 
-    public void setUrlShow(String urlShow) {
-        this.urlShow = urlShow;
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getHometext() {
@@ -69,22 +75,6 @@ public class RankArticle {
 
     public void setHometext(String hometext) {
         this.hometext = hometext;
-    }
-
-    public String getHometextShowShort2() {
-        return hometextShowShort2;
-    }
-
-    public void setHometextShowShort2(String hometextShowShort2) {
-        this.hometextShowShort2 = hometextShowShort2;
-    }
-
-    public String getTimeShow() {
-        return timeShow;
-    }
-
-    public void setTimeShow(String timeShow) {
-        this.timeShow = timeShow;
     }
 
     public String getTitle() {
@@ -130,17 +120,33 @@ public class RankArticle {
 }
 
 /*
-
-{"status": "success", "result": [
-    {
-        "title": "微软乌龙：将自家网站内容误当侵权内容 请求谷歌删除",
-        "hometext": "<p>本周一，微软委托一家负责帮助审查网上盗版内容的外包公司LeakID，向搜索巨头谷歌发出了一个奇怪的侵权查处请求，<strong>请求中表示，微软自己的Microsoft.com上面有6个特定网址，侵犯了微软自家产品的版权，请求谷歌移除搜索结果中的这些链接<\/strong>。微软后来证实这是该外包公司的工作失误。<\/p>",
-        "sid": "246775",
-        "time": "2013-07-31 23:24:44",
-        "time_show": "1小时前",
-        "hometext_show_short2": "本周一，微软委托一家负责帮助审查网上盗版内容的外包公司LeakID，向搜索巨...",
-        "url_show": "\/articles\/246775.htm"
-    }
-]}
-
+<dl class="item item_1">
+    <dt>
+        <i class="number">1</i>
+        <a href="/articles/246048.htm" target="_blank">微软发布开发者预览版IE 11 for Windows 7</a>
+    </dt>
+    <dd>
+        <div class="pic">
+            <img src="http://static.cnbetacdn.com/newsimg/2013/0725/01374766432.jpg_w600.jpg_180x132.jpg" />
+        </div>
+        <div class="newsinfo cf">
+            <p>微软刚刚为Windows 7与Windows Server 2008 R2系统发布了IE11开发者预览版。当然对于...                                <a href="/articles/246048.htm" target="_blank">阅读全文&gt;&gt;</a></p>
+            <div class="tools">
+                <div class="share">
+                    <ul>
+                        <li class="comment" title="评论">30</li>
+                        <li class="s-t"></li>
+                        <li class="sina"><a title="分享到新浪微博" href="javascript:void(0)" onclick="javascript:jump('weibosina',this)" target="_blank"></a></li>
+                        <li class="qq"><a title="分享到QQ空间" href="javascript:void(0)" onclick="javascript:jump('qq',this)" target="_blank"></a></li>
+                        <li class="blg"><a title="分享到搜狐微博" href="javascript:void(0)" onclick="javascript:jump('weibosohu',this)" target="_blank"></a></li>
+                        <li class="rrw"><a title="分享到人人网" href="javascript:void(0)" onclick="javascript:jump('renren',this)" target="_blank"></a></li>
+                        <li class="db"><a title="分享到豆瓣" href="javascript:void(0)" onclick="javascript:jump('douban',this)" target="_blank"></a></li>
+                        <li class="itb"><a title="分享到百度贴吧" href="javascript:void(0)" onclick="javascript:jump('itb',this)" target="_blank"></a></li>
+                    </ul>
+                </div>
+                <div class="time">illumi 发表于 2013-07-26 01:17:46</div>
+            </div>
+        </div>
+    </dd>
+</dl>
 */

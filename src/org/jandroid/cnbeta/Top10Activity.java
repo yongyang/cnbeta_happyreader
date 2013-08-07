@@ -11,19 +11,59 @@ import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
-import org.jandroid.cnbeta.fragment.ArticleListFragment;
-import org.jandroid.cnbeta.loader.ArticleListLoader;
+import android.widget.Toast;
+import org.jandroid.cnbeta.async.AsyncResult;
+import org.jandroid.cnbeta.async.RankArticleListAsyncTask;
+import org.jandroid.cnbeta.entity.RankArticle;
+import org.jandroid.cnbeta.fragment.Top10ArticleListFragment;
+import org.jandroid.util.EnvironmentUtils;
 import org.jandroid.util.IntentUtils;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Top10Activity extends Activity {
 
-    //TODO: 这里多余的 </a> 导致 xml 结构错误，需要手动替换解决
-/*
-    <div class="pic">
-        <img src="http://static.cnbetacdn.com/newsimg/2013/0803/01375505447.jpg_180x132.jpg" /></a>
-    </div>
-*/
+    private final Map<String, List<RankArticle>> allRankArticlesMap = new HashMap<String, List<RankArticle>>();
+
+    private static final String SELECTED_ITEM = "selected_item";
+
+    public final static int[] tabs = new int[]{R.string.tab_hits24, R.string.tab_comments24, R.string.tab_recommend};
+    private final Top10ArticleListFragment[] fragments = new Top10ArticleListFragment[tabs.length];
+
+    private ViewPager mViewPager;
+
+    public static enum RankType {
+        HITS24("hits24"),
+        HITS_WEEK("hits_week"),
+        HITS_MONTH("hits_month"),
+        COMMENTS24("comments24"),
+        COMMENTS_WEEK("comments_week"),
+        COMMENTS_MONTH("comments_month"),
+        RECOMMEND("recommend");
+
+        private String type;
+
+        private RankType(String type) {
+            this.type = type;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        @Override
+        public String toString() {
+            return "RankType{" +
+                    "type='" + type + '\'' +
+                    '}';
+        }
+    }
+
 
     public static abstract class ActionTabFragmentPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
         protected ActionTabFragmentPagerAdapter(FragmentManager fm) {
@@ -31,12 +71,7 @@ public class Top10Activity extends Activity {
         }
     }
 
-    private static final String SELECTED_ITEM = "selected_item";
 
-    public final static int[] tabs2 = new int[]{R.string.tab_dig, R.string.tab_software, R.string.tab_industry, R.string.tab_interact};
-    private final Fragment[] fragments2 = new Fragment[tabs2.length];
-
-    private ViewPager mViewPager;
     private ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
 
         @Override
@@ -48,27 +83,22 @@ public class Top10Activity extends Activity {
         public Fragment getItem(int position) {
                 switch (position) {
                     case 0:
-                        if(fragments2[0] == null) {
-                            fragments2[0] = new ArticleListFragment(ArticleListLoader.Type.DIG);
+                        if(fragments[0] == null) {
+                            fragments[0] = new Top10ArticleListFragment(RankType.HITS24, RankType.HITS_WEEK, RankType.HITS_MONTH);
                         }
-                        return fragments2[0];
+                        return fragments[0];
                     case 1:
-                        if(fragments2[1] == null) {
-                            fragments2[1] = new ArticleListFragment(ArticleListLoader.Type.SOFT);
+                        if(fragments[1] == null) {
+                            fragments[1] = new Top10ArticleListFragment(RankType.COMMENTS24, RankType.COMMENTS_WEEK, RankType.COMMENTS_MONTH);
                         }
-                        return fragments2[1];
+                        return fragments[1];
                     case 2:
-                        if(fragments2[2] == null) {
-                            fragments2[2] = new ArticleListFragment(ArticleListLoader.Type.INDUSTRY);
+                        if(fragments[2] == null) {
+                            fragments[2] = new Top10ArticleListFragment(RankType.RECOMMEND);
                         }
-                        return fragments2[2];
-                    case 3:
-                        if(fragments2[3] == null) {
-                            fragments2[3] = new ArticleListFragment(ArticleListLoader.Type.INTERACT);
-                        }
-                        return fragments2[3];
+                        return fragments[2];
                     default:
-                        // 4 tabs
+                        // 3 tabs
                         return null;
                 }
         }
@@ -123,7 +153,7 @@ public class Top10Activity extends Activity {
 
     private void setupActionBar() {
         final ActionBar actionBar = getActionBar();
-        for(int resourceId : tabs2){
+        for(int resourceId : tabs){
             //全部资讯, 实时更新, 阅读历史
             actionBar.addTab(actionBar.newTab().setText(resourceId).setTabListener(pagerAdapter));
         }
@@ -189,4 +219,40 @@ public class Top10Activity extends Activity {
         return super.onPrepareOptionsMenu(menu);
     }
 
+    public void reloadRanks(final Top10ArticleListFragment.RankLoadCallback callback){
+        EnvironmentUtils.checkNetworkConnected(this);
+
+        new RankArticleListAsyncTask(){
+            @Override
+            public CnBetaApplicationContext getCnBetaApplicationContext() {
+                return (CnBetaApplicationContext)getApplication();
+            }
+
+            @Override
+            public void showProgressUI() {
+                callback.showProgressUI();
+            }
+
+            @Override
+            public void dismissProgressUI() {
+                callback.dismissProgressUI();
+            }
+
+            @Override
+            protected void onPostExecute(AsyncResult asyncResult) {
+                super.onPostExecute(asyncResult);
+                if(asyncResult.isSuccess()) {
+                    Map<String, List<RankArticle>>  articlesMap = (Map<String, List<RankArticle>> )asyncResult.getResult();
+                    if(articlesMap != null) {
+                        allRankArticlesMap.clear();
+                        allRankArticlesMap.putAll(articlesMap);
+                        callback.onRankLoadFinished(articlesMap);
+                    }
+                }
+                else {
+                    Toast.makeText(Top10Activity.this, asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }.executeMultiThread();
+    }
 }

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">cnBeta乐读器</string>
+    <string name="ranks">排行榜</string>
+
     <string name="label_article_content">阅读新闻</string>
 
     <string name="search_item">Settings</string>
@@ -23,5 +25,13 @@
     <string name="tab_interact">互动</string>
     <string name="tab_zhengwen">正文</string>
     <string name="tab_pinglun">评论</string>
+    <string name="tab_hits24">人气·天</string>
+    <string name="tab_hits_week">人气·周</string>
+    <string name="tab_hits_month">人气·月</string>
+    <string name="tab_comments24">争议·天</string>
+    <string name="tab_comments_week">争议·周</string>
+    <string name="tab_comments_month">争议·月</string>
+    <string name="tab_recommend">推荐</string>
+
 
 </resources>

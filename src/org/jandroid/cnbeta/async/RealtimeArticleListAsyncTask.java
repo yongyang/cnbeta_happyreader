@@ -37,7 +37,7 @@ public abstract class RealtimeArticleListAsyncTask extends ProgressDialogAsyncTa
             return articles;
         }
         else {
-            List<RealtimeArticle> articles = new RealtimeArticleListLoader().fromDisk(getCnBetaApplicationContext().getBaseDir());
+            List<RealtimeArticle> articles = articleListLoader.fromDisk(getCnBetaApplicationContext().getBaseDir());
             return articles;
         }
 

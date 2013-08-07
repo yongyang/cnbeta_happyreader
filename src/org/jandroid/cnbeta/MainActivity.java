@@ -164,6 +164,10 @@ public class MainActivity extends Activity {
                 startActivity(IntentUtils.newIntent(this, TypesActivity.class));
                 this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 break;
+            case R.id.rank:
+                startActivity(IntentUtils.newIntent(this, Top10Activity.class));
+                this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                break;
             case R.id.more_item:
                 break;
             case R.id.aboutus_item:

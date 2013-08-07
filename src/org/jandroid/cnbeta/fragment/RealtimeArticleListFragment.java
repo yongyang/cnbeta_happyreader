@@ -37,7 +37,6 @@ import java.util.List;
  */
 
 public class RealtimeArticleListFragment extends Fragment {
-    //TODO: 刷新的时候，将新文章添加到List顶部，而不是完全刷新
 
     private ListView lvArticleList;
 
