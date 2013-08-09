@@ -56,6 +56,8 @@ public class RealtimeArticleListFragment extends Fragment {
     private ImageView refreshActionView;
     private Animation clockWiseRotationAnimation;
 
+    private LinearLayout footbarRefresh;
+
     public RealtimeArticleListFragment() {
     }
 
@@ -89,7 +91,7 @@ public class RealtimeArticleListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         
-        LinearLayout footbarRefresh = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.lv_footbar_refresh, lvArticleList,false);
+        footbarRefresh = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.lv_footbar_refresh, lvArticleList,false);
         progressBarRefresh = (ProgressBar) footbarRefresh.findViewById(R.id.progressBar_refresh);
         lineLayoutRefresh = (LinearLayout)footbarRefresh.findViewById(R.id.linelayout_refresh);
         tvLastTimeRefresh = (TextView)footbarRefresh.findViewById(R.id.refresh_last_time);
@@ -157,6 +159,7 @@ public class RealtimeArticleListFragment extends Fragment {
                 // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
                 getActivity().setProgressBarIndeterminate(true);
                 getActivity().setProgressBarVisibility(true);
+                footbarRefresh.setClickable(false);
                 progressBarRefresh.setVisibility(View.VISIBLE);
                 lineLayoutRefresh.setVisibility(View.GONE);
                 // rotate refresh item
@@ -170,6 +173,7 @@ public class RealtimeArticleListFragment extends Fragment {
                 lineLayoutRefresh.setVisibility(View.VISIBLE);
                 //Stop refresh animation anyway
                 dismissRefreshActionView();
+                footbarRefresh.setClickable(true);
             }
 
             @Override

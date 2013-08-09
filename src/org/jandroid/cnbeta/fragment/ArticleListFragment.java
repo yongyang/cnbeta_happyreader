@@ -59,6 +59,8 @@ public class ArticleListFragment extends Fragment {
     private ImageView refreshActionView;
     private Animation clockWiseRotationAnimation;
 
+    private LinearLayout footbarNextPage;
+
     public ArticleListFragment(ArticleListLoader.Type category) {
         this.category = category;
     }
@@ -97,7 +99,7 @@ public class ArticleListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         
-        LinearLayout footbarNextPage = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.footbar_next_page, lvArticleList,false);
+        footbarNextPage = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.footbar_next_page, lvArticleList,false);
         lineLayoutNextPage = (LinearLayout)footbarNextPage.findViewById(R.id.lineLayout_next_page);
         progressBarNextPage = (ProgressBar)footbarNextPage.findViewById(R.id.progressBar_next_page);
         tvPage = (TextView)footbarNextPage.findViewById(R.id.tv_page);
@@ -234,6 +236,7 @@ public class ArticleListFragment extends Fragment {
                 // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
                 getActivity().setProgressBarIndeterminate(true);
                 getActivity().setProgressBarVisibility(true);
+                footbarNextPage.setClickable(false);
                 progressBarNextPage.setVisibility(View.VISIBLE);
                 lineLayoutNextPage.setVisibility(View.GONE);
                 if(getPage() ==1) { //page 1 is reload
@@ -250,6 +253,7 @@ public class ArticleListFragment extends Fragment {
                 if(getPage() ==1) { //page 1 is reload
                     dismissRefreshActionView();
                 }
+                footbarNextPage.setClickable(true);
             }
 
             @Override

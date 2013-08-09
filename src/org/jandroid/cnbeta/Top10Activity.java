@@ -162,6 +162,8 @@ public class Top10Activity extends Activity {
 
     private void setupViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        //TODO: don't pre load next page
+        mViewPager.setOffscreenPageLimit(0);
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setOnPageChangeListener(pagerAdapter);
     }
@@ -254,5 +256,9 @@ public class Top10Activity extends Activity {
                 }
             }
         }.executeMultiThread();
+    }
+
+    public void loadRanks(final Top10ArticleListFragment.RankLoadCallback callback) {
+        callback.onRankLoadFinished(allRankArticlesMap);
     }
 }

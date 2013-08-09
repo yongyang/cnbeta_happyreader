@@ -16,6 +16,7 @@ public class RankArticle {
     private long sid;
     private String title;
     private String hometext;
+    private String logo;
     private String url;
     private String time;
     private int comment;
@@ -29,6 +30,7 @@ public class RankArticle {
         this.setSid(Long.parseLong(jSONObject.get("sid").toString()));
         this.setNumber(Integer.parseInt(jSONObject.get("number").toString()));
         this.setTitle(jSONObject.get("title").toString());
+        this.setLogo(jSONObject.get("logo").toString());
         this.setUrl(jSONObject.get("url").toString());
         this.setHometext(jSONObject.get("hometext").toString());
         this.setTime(jSONObject.get("time").toString());
@@ -85,6 +87,14 @@ public class RankArticle {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     public String getTime() {

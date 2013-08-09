@@ -17,6 +17,8 @@ import org.jandroid.cnbeta.fragment.RealtimeArticleListFragment;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.util.IntentUtils;
 
+import java.util.Date;
+
 //TODO: 动态替换 tabs 来显示各分类文章，而不是新建 Activity
 public class MainActivity extends Activity {
 
@@ -32,6 +34,10 @@ public class MainActivity extends Activity {
     private final Fragment[] fragments = new Fragment[tabs.length];
 
     private ViewPager mViewPager;
+
+    //TODO: set lastLoadTime to refresh time in Fragment
+    private Date lastLoadTime = new Date();
+
     private ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
 
         @Override
