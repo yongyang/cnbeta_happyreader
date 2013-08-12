@@ -14,4 +14,6 @@ public interface CnBetaApplicationContext {
     boolean isSdCardMounted();
 
     File getBaseDir();
+
+    String getSessionId();
 }

@@ -57,7 +57,8 @@ public class ImageLoader extends AbstractLoader<Bitmap> {
         }
         else {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            //TODO: 是否需要根据后缀名设置不同的Format
+            bitmap.compress(Bitmap.CompressFormat.PNG, 80, baos);
             FileUtils.writeByteArrayToFile(getFile(baseDir), baos.toByteArray());
         }
     }

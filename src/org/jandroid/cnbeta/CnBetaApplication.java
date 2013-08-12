@@ -38,4 +38,8 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         }
         return baseDir;
     }
+
+    public String getSessionId() {
+        return null;
+    }
 }
