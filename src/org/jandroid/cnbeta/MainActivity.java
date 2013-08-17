@@ -35,9 +35,6 @@ public class MainActivity extends Activity {
 
     private ViewPager mViewPager;
 
-    //TODO: set lastLoadTime to refresh time in Fragment
-    private Date lastLoadTime = new Date();
-
     private ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
 
         @Override

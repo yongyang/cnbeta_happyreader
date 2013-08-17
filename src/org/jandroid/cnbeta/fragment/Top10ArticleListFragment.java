@@ -62,13 +62,13 @@ public class Top10ArticleListFragment extends Fragment {
     private LinearLayout lineLayoutRefresh;
     private TextView tvLastTimeRefresh;
 
-    private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
     private MenuItem refreshMenuItem;
     private ImageView refreshActionView;
     private Animation clockWiseRotationAnimation;
 
     private LinearLayout footbarRefresh;
+
+    private Top10Activity top10Activity;
 
     public Top10ArticleListFragment(Top10Activity.RankType... rankTypes) {
         this.rankTypes = rankTypes;
@@ -83,9 +83,10 @@ public class Top10ArticleListFragment extends Fragment {
 
     @Override
     public void onAttach(Activity activity) {
-        if(!(activity instanceof ArticleListListener)) {
+        if(!(activity instanceof Top10Activity)) {
 
         }
+        this.top10Activity = (Top10Activity)activity;
         super.onAttach(activity);
     }
 
@@ -255,7 +256,7 @@ public class Top10ArticleListFragment extends Fragment {
                 Top10ArticleListFragment.this.allRankArticlesMap.clear();
                 Top10ArticleListFragment.this.allRankArticlesMap.putAll(allRankArticlesMap);
                 asyncImageAdapter.notifyDataSetChanged();
-                tvLastTimeRefresh.setText(dateFormat.format(new Date()));
+                tvLastTimeRefresh.setText(top10Activity.getLastLoadTimeText());
                 lvArticleList.smoothScrollToPosition(0);
             }
         });
@@ -276,7 +277,7 @@ public class Top10ArticleListFragment extends Fragment {
                 Top10ArticleListFragment.this.allRankArticlesMap.clear();
                 Top10ArticleListFragment.this.allRankArticlesMap.putAll(allRankArticlesMap);
                 asyncImageAdapter.notifyDataSetChanged();
-                tvLastTimeRefresh.setText(dateFormat.format(new Date()));
+                tvLastTimeRefresh.setText(top10Activity.getLastLoadTimeText());
             }
         });
     }

@@ -44,6 +44,9 @@ public class CnBetaHttpClient {
 
     private HttpClient httpClient;
 
+    //TODO: sessionId 是什么时候得到的
+    private String sessionId;
+
     private CnBetaHttpClient() {
         HttpParams httpParams = new BasicHttpParams();
         ConnManagerParams.setMaxTotalConnections(httpParams, MAX_TOTAL_CONNECTIONS);

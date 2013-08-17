@@ -21,6 +21,8 @@ import org.jandroid.cnbeta.fragment.Top10ArticleListFragment;
 import org.jandroid.util.EnvironmentUtils;
 import org.jandroid.util.IntentUtils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +31,10 @@ import java.util.Map;
 public class Top10Activity extends Activity {
 
     private final Map<String, List<RankArticle>> allRankArticlesMap = new HashMap<String, List<RankArticle>>();
+
+   //TODO: set lastLoadTime to refresh time in Fragment
+    private Date lastLoadTime = new Date();
+    private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final String SELECTED_ITEM = "selected_item";
 
@@ -246,6 +252,7 @@ public class Top10Activity extends Activity {
                 if(asyncResult.isSuccess()) {
                     Map<String, List<RankArticle>>  articlesMap = (Map<String, List<RankArticle>> )asyncResult.getResult();
                     if(articlesMap != null) {
+                        lastLoadTime = new Date();
                         allRankArticlesMap.clear();
                         allRankArticlesMap.putAll(articlesMap);
                         callback.onRankLoadFinished(articlesMap);
@@ -260,5 +267,9 @@ public class Top10Activity extends Activity {
 
     public void loadRanks(final Top10ArticleListFragment.RankLoadCallback callback) {
         callback.onRankLoadFinished(allRankArticlesMap);
+    }
+
+    public String getLastLoadTimeText() {
+        return dateFormat.format(lastLoadTime);
     }
 }

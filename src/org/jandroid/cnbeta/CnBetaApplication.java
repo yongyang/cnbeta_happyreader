@@ -40,6 +40,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     }
 
     public String getSessionId() {
+        //TODO: sessionId 是什么时候得到的
         return null;
     }
 }
