@@ -10,12 +10,6 @@ import java.io.File;
  */
 public class Constants {
     public static final String BASE_URL = "http://www.cnbeta.com";
-    public static final String BASE_DIR = "cnBeta_jandroid";
-    
-    
-    
-    public static File getBaseDir(){
-        //TODO: if now external storage, use internal storage
-        return new File(Environment.getExternalStorageDirectory(), BASE_DIR);
-    }
+    public static final String BASE_DIR = "cnBeta_jAndroid";
+
 }

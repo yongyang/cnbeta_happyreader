@@ -1,6 +1,7 @@
 package org.jandroid.cnbeta;
 
 import android.app.Application;
+import android.os.Environment;
 import org.apache.commons.io.FileUtils;
 import org.jandroid.util.EnvironmentUtils;
 import org.jandroid.util.Logger;
@@ -13,7 +14,7 @@ import java.io.IOException;
  */
 public class CnBetaApplication extends Application implements CnBetaApplicationContext{
 
-    Logger logger = Logger.newLogger(this.getClass());
+    static Logger logger = Logger.newLogger(CnBetaApplication.class);
 
     @Override
     public void onCreate() {
@@ -29,12 +30,20 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     }
 
     public File getBaseDir() {
-        File baseDir = Constants.getBaseDir();
+        File baseDir;
+        if(EnvironmentUtils.checkSdCardMounted(this)) {
+            // SD
+            baseDir = new File(Environment.getExternalStorageDirectory(), Constants.BASE_DIR);
+        }
+        else {
+            //内置存储器
+            baseDir = this.getFilesDir();
+        }
         try {
             FileUtils.forceMkdir(baseDir);
         }
         catch (IOException e) {
-            e.printStackTrace();
+            logger.w("Couldn't make base dir", e);
         }
         return baseDir;
     }

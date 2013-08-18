@@ -20,6 +20,9 @@
                         android:id="@+id/rank"
                         android:title="人气 | 争议 | 推荐"/>
                 <item
+                        android:id="@+id/topics"
+                        android:title="主题分类阅读"/>
+                <item
                         android:id="@+id/offline_downloader"
                         android:title="@string/offline_downloader"/>
                 <item
