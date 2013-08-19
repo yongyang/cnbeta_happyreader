@@ -266,11 +266,11 @@ public class Top10ArticleListFragment extends Fragment {
     private void loadArticles(){
         ((Top10Activity)getActivity()).loadRanks(new RankLoadCallback() {
             public void showProgressUI() {
-
+                // do nothing
             }
 
             public void dismissProgressUI() {
-
+                // do nothing
             }
 
             public void onRankLoadFinished(Map<String, List<RankArticle>> allRankArticlesMap) {

@@ -24,6 +24,7 @@ import org.jandroid.util.IntentUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +44,10 @@ public class Top10Activity extends Activity {
     private final Top10ArticleListFragment[] fragments = new Top10ArticleListFragment[tabs.length];
 
     private ViewPager mViewPager;
+
+    // 当前是否正在加载数据，避免多次加载
+    private volatile boolean isLoading = false;
+    private final List<Top10ArticleListFragment.RankLoadCallback> pendingCallbacks = new ArrayList<Top10ArticleListFragment.RankLoadCallback>();
 
     public static enum RankType {
         HITS24("hits24"),
@@ -228,6 +233,14 @@ public class Top10Activity extends Activity {
     }
 
     public void reloadRanks(final Top10ArticleListFragment.RankLoadCallback callback){
+        if(!isLoading){
+            isLoading = true;
+        }
+        else {
+            pendingCallbacks.add(callback);
+            return;
+        }
+
         EnvironmentUtils.checkNetworkConnected(this);
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -254,6 +267,7 @@ public class Top10Activity extends Activity {
             @Override
             protected void onPostExecute(AsyncResult asyncResult) {
                 super.onPostExecute(asyncResult);
+                isLoading = false;
                 if(asyncResult.isSuccess()) {
                     Map<String, List<RankArticle>>  articlesMap = (Map<String, List<RankArticle>> )asyncResult.getResult();
                     if(articlesMap != null) {
@@ -261,6 +275,12 @@ public class Top10Activity extends Activity {
                         allRankArticlesMap.clear();
                         allRankArticlesMap.putAll(articlesMap);
                         callback.onRankLoadFinished(articlesMap);
+                        synchronized (pendingCallbacks) {
+                            for(Top10ArticleListFragment.RankLoadCallback rankLoadCallback : pendingCallbacks){
+                                rankLoadCallback.onRankLoadFinished(articlesMap);
+                            }
+                            pendingCallbacks.clear();
+                        }
                     }
                 }
                 else {
