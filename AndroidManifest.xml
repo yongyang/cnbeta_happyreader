@@ -39,7 +39,7 @@
                 android:label="@string/ranks"
                 android:launchMode="singleTask"/>
         <activity
-                android:name=".ArticleContentActivity"
+                android:name=".ContentActivity"
                 android:label="@string/label_article_content"/>
     </application>
 

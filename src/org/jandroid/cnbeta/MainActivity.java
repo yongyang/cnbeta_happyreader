@@ -17,8 +17,6 @@ import org.jandroid.cnbeta.fragment.RealtimeArticleListFragment;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.util.IntentUtils;
 
-import java.util.Date;
-
 //TODO: 动态替换 tabs 来显示各分类文章，而不是新建 Activity
 public class MainActivity extends Activity {
 
@@ -175,7 +173,7 @@ public class MainActivity extends Activity {
                 break;
             case R.id.aboutus_item:
                 //TODO:  for test
-                Intent intent = new Intent(this, ArticleContentActivity.class);
+                Intent intent = new Intent(this, ContentActivity.class);
                 this.startActivity(intent);
                 break;
         }

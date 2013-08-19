@@ -2,12 +2,13 @@ package org.jandroid.cnbeta.entity;
 
 import org.json.simple.JSONObject;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class Article {
+public class Article implements Serializable{
 // {"sid":"245736",
 // "title_show":"金色iPhone5S与廉价iPhone、iPhone5对比照曝光",
 // "hometext_show_short":"感谢T客在线的投递前几天微博用户@C科技为我们带来了两张金色iPhone5S的谍照，今天他又放出了一组iPhone5S谍照，其中包括廉价iPhone、iPhone5、金色iPhone5S后...",

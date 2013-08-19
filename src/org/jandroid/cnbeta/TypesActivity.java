@@ -170,7 +170,7 @@ public class TypesActivity extends Activity {
                 break;
             case R.id.aboutus_item:
                 //TODO:  for test
-                Intent intent = new Intent(this, ArticleContentActivity.class);
+                Intent intent = new Intent(this, ContentActivity.class);
                 this.startActivity(intent);
                 break;
         }

@@ -2,6 +2,7 @@ package org.jandroid.cnbeta.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
+import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.adapter.AsyncImageAdapter;
 import org.jandroid.cnbeta.async.ArticleListAsyncTask;
@@ -30,6 +33,7 @@ import org.jandroid.cnbeta.async.LoadImageAsyncTask;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.util.EnvironmentUtils;
+import org.jandroid.util.IntentUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -201,6 +205,17 @@ public class ArticleListFragment extends Fragment {
         lvArticleList.setAdapter(asyncImageAdapter);
         lvArticleList.setOnScrollListener(asyncImageAdapter);
 
+
+        lvArticleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Article article = loadedArticles.get(position);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("article", article);
+                Intent intent = IntentUtils.newIntent(getActivity(), ContentActivity.class, bundle);
+                getActivity().startActivity(intent);
+            }
+        });
+
         reloadArticles();
     }
 
@@ -340,6 +355,6 @@ public class ArticleListFragment extends Fragment {
     }
 
     public static interface ArticleListListener {
-        void onArticleItemClick(long articleId);
+        void onArticleClick(Article article);
     }
 }

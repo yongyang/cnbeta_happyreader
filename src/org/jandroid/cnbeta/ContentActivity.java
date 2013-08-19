@@ -14,12 +14,11 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import org.jandroid.cnbeta.fragment.ArticleCommentsFragment;
 import org.jandroid.cnbeta.fragment.ArticleContentFragment;
-import org.jandroid.cnbeta.fragment.ArticleListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArticleContentActivity extends Activity {
+public class ContentActivity extends Activity {
     private static final String SELECTED_ITEM = "selected_item";
     public final static int[] tabs = new int[]{R.string.tab_zhengwen, R.string.tab_pinglun};
     private List<Fragment> tabFragments = new ArrayList<Fragment>();
@@ -29,7 +28,7 @@ public class ArticleContentActivity extends Activity {
 
         @Override
         public int getCount() {
-            return ArticleContentActivity.this.getActionBar().getTabCount();
+            return ContentActivity.this.getActionBar().getTabCount();
         }
 
         @Override
@@ -52,7 +51,7 @@ public class ArticleContentActivity extends Activity {
         }
 
         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-            mViewPager.setCurrentItem(ArticleContentActivity.this.getActionBar().getSelectedNavigationIndex());
+            mViewPager.setCurrentItem(ContentActivity.this.getActionBar().getSelectedNavigationIndex());
         }
 
         public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {

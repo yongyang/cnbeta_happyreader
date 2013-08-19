@@ -12,7 +12,6 @@ import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 import org.jandroid.cnbeta.async.AsyncResult;
@@ -124,6 +123,7 @@ public class Top10Activity extends Activity {
 
         public void onPageSelected(int position) {
             final ActionBar actionBar = getActionBar();
+            //未选中时才调用setSelectedNavigationItem,
             if(position != actionBar.getSelectedNavigationIndex()){
                 actionBar.setSelectedNavigationItem(position);
             }
@@ -235,7 +235,7 @@ public class Top10Activity extends Activity {
                 break;
             case R.id.aboutus_item:
                 //TODO:  for test
-                Intent intent = new Intent(this, ArticleContentActivity.class);
+                Intent intent = new Intent(this, ContentActivity.class);
                 this.startActivity(intent);
                 break;
         }
