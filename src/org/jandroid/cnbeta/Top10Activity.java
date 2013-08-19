@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -168,8 +169,7 @@ public class Top10Activity extends Activity {
 
     private void setupViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        //TODO: don't pre load next page
-        mViewPager.setOffscreenPageLimit(0);
+        mViewPager.setOffscreenPageLimit(1);
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setOnPageChangeListener(pagerAdapter);
     }
@@ -230,6 +230,9 @@ public class Top10Activity extends Activity {
     public void reloadRanks(final Top10ArticleListFragment.RankLoadCallback callback){
         EnvironmentUtils.checkNetworkConnected(this);
 
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("加载排行信息中...");
+
         new RankArticleListAsyncTask(){
             @Override
             public CnBetaApplicationContext getCnBetaApplicationContext() {
@@ -238,12 +241,14 @@ public class Top10Activity extends Activity {
 
             @Override
             public void showProgressUI() {
+                progressDialog.show();
                 callback.showProgressUI();
             }
 
             @Override
             public void dismissProgressUI() {
                 callback.dismissProgressUI();
+                progressDialog.dismiss();
             }
 
             @Override

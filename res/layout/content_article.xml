@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
-        layout_weight="wrap_content"
-        layout_height="wrap_content"
-        />
-<!--
-<ScrollView android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb" android:id="@id/scrollView" android:background="@color/article_bg" android:layout_width="fill_parent" android:layout_height="fill_parent"
-  xmlns:android="http://schemas.android.com/apk/res/android">
-    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
-        <LinearLayout android:background="@drawable/header" android:layout_width="fill_parent" android:layout_height="wrap_content">
-            <TextView android:textSize="14.0dip" android:textColor="@*android:color/white" android:gravity="center_horizontal" android:id="@id/TxtArtTitle" android:padding="5.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:singleLine="true" />
-        </LinearLayout>
-        <FrameLayout android:paddingLeft="7.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content">
-            <RelativeLayout android:layout_gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content">
-                <ImageView android:background="@drawable/loading_bannar" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="15.0dip" android:layout_centerInParent="true" />
-            </RelativeLayout>
-            <WebView android:id="@id/WebArtContent" android:fitsSystemWindows="true" android:layout_width="fill_parent" android:layout_height="wrap_content" />
-        </FrameLayout>
-        <RelativeLayout android:layout_gravity="center_horizontal" android:id="@id/footer" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="7.0dip">
-            <ImageView android:id="@id/pull_to_load_image" android:background="@drawable/arrow" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="70.0dip" android:layout_toLeftOf="@id/footerTV" />
-            <TextView android:textSize="16.0dip" android:textColor="@color/gray" android:id="@id/pull_to_load_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="8.0dip" android:text="点击查看众喷评论" android:layout_centerInParent="true" />
-        </RelativeLayout>
+<ScrollView
+        android:id="@+id/contentScrollView"
+        android:background="#fffcfcfc"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:textSize="14.0dip"
+                android:textColor="@color/white"
+                android:gravity="center_horizontal"
+                android:id="@+id/articleTitle"
+                android:padding="5.0dip"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"/>
+
+        <WebView
+                android:id="@+id/articleContent"
+                android:fitsSystemWindows="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+
+        <RatingBar
+                android:id="@+id/rating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
     </LinearLayout>
-</ScrollView>-->
+</ScrollView>

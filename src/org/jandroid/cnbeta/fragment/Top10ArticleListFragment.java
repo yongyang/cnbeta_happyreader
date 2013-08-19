@@ -218,7 +218,7 @@ public class Top10ArticleListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        // 只有第一次打开第一个tab才自动装载
+        // 只有第一次打开第一个tab才自动重装载
         if(loadTimes == 0 && currentRankType.equals(rankTypes[0])) {
             reloadArticles();
         }
