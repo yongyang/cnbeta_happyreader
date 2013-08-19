@@ -41,6 +41,9 @@ public class Top10Activity extends Activity {
     private static final String SELECTED_ITEM = "selected_item";
 
     public final static int[] tabs = new int[]{R.string.tab_hits24, R.string.tab_comments24, R.string.tab_recommend};
+    public final static int[] tabGroup_hits = new int[]{R.string.tab_hits24, R.string.tab_hits_week, R.string.tab_hits_month};
+    public final static int[] tabGroup_comments = new int[]{R.string.tab_comments24, R.string.tab_comments_week, R.string.tab_comments_month};
+
     private final Top10ArticleListFragment[] fragments = new Top10ArticleListFragment[tabs.length];
 
     private ViewPager mViewPager;
@@ -121,8 +124,9 @@ public class Top10Activity extends Activity {
 
         public void onPageSelected(int position) {
             final ActionBar actionBar = getActionBar();
-            actionBar.setSelectedNavigationItem(position);
-
+            if(position != actionBar.getSelectedNavigationIndex()){
+                actionBar.setSelectedNavigationItem(position);
+            }
         }
 
         public void onPageScrollStateChanged(int state) {
@@ -138,6 +142,18 @@ public class Top10Activity extends Activity {
         }
 
         public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+            //切换排行类型，如：人气-天/周/月
+            int index = Top10Activity.this.getActionBar().getSelectedNavigationIndex();
+            Top10ArticleListFragment fragment = (Top10ArticleListFragment)getItem(index);
+            fragment.switchRankType();
+            RankType rankType = fragment.getCurrentRankType();
+            int rankTypeIndex = fragment.getCurrentRankTypeIndex();
+            if(rankType.getType().contains("hits")){
+                tab.setText(tabGroup_hits[rankTypeIndex]);
+            }
+            else if(rankType.getType().contains("comments")){
+                tab.setText(tabGroup_comments[rankTypeIndex]);
+            }
 
         }
     };

@@ -45,9 +45,9 @@ public class Top10ArticleListFragment extends Fragment {
 
     // onReselect tab 的时候进行切换
     private Top10Activity.RankType[] rankTypes;
-    private Top10Activity.RankType currentRankType;
+    private int currentRankTypeIndex = 0;
 
-
+    // all articles, RankType=>List of articles
     private final Map<String, List<RankArticle>> allRankArticlesMap = new HashMap<String, List<RankArticle>>();
 
     private int loadTimes = 0;
@@ -72,8 +72,17 @@ public class Top10ArticleListFragment extends Fragment {
 
     public Top10ArticleListFragment(Top10Activity.RankType... rankTypes) {
         this.rankTypes = rankTypes;
-        this.currentRankType = rankTypes[0];
+        this.currentRankTypeIndex = 0;
     }
+
+    public Top10Activity.RankType getCurrentRankType() {
+        return rankTypes[currentRankTypeIndex];
+    }
+
+    public int getCurrentRankTypeIndex() {
+        return currentRankTypeIndex;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,8 +133,8 @@ public class Top10ArticleListFragment extends Fragment {
         asyncImageAdapter = new AsyncImageAdapter() {
             @Override
             public int getCount() {
-                if(allRankArticlesMap.containsKey(currentRankType.getType())) {
-                    return allRankArticlesMap.get(currentRankType.getType()).size();
+                if(allRankArticlesMap.containsKey(rankTypes[currentRankTypeIndex].getType())) {
+                    return allRankArticlesMap.get(rankTypes[currentRankTypeIndex].getType()).size();
                 }
                 else {
                     return 0;
@@ -134,8 +143,8 @@ public class Top10ArticleListFragment extends Fragment {
 
             @Override
             public Object getItem(int position) {
-                if(allRankArticlesMap.containsKey(currentRankType.getType())) {
-                    return allRankArticlesMap.get(currentRankType.getType()).get(position);
+                if(allRankArticlesMap.containsKey(rankTypes[currentRankTypeIndex].getType())) {
+                    return allRankArticlesMap.get(rankTypes[currentRankTypeIndex].getType()).get(position);
                 }
                 else {
                     return null;
@@ -219,13 +228,25 @@ public class Top10ArticleListFragment extends Fragment {
     public void onStart() {
         super.onStart();
         // 只有第一次打开第一个tab才自动重装载
-        if(loadTimes == 0 && currentRankType.equals(rankTypes[0])) {
+        if(loadTimes == 0 && rankTypes[currentRankTypeIndex].equals(rankTypes[0])) {
             reloadArticles();
         }
         else {
             loadArticles();
         }
         loadTimes++;
+    }
+
+    public void switchRankType(){
+        if(rankTypes.length > 1) {
+            if(rankTypes.length > currentRankTypeIndex+1){
+                currentRankTypeIndex++;
+            }
+            else {
+                currentRankTypeIndex=0;
+            }
+            asyncImageAdapter.notifyDataSetChanged();
+        }
     }
     
     private void reloadArticles(){
@@ -322,6 +343,9 @@ public class Top10ArticleListFragment extends Fragment {
             }
         }
     }
+
+
+
     public static interface ArticleListListener {
         void onArticleItemClick(long articleId);
     }
