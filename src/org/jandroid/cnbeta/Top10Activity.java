@@ -34,7 +34,7 @@ public class Top10Activity extends Activity {
     private final Map<String, List<RankArticle>> allRankArticlesMap = new HashMap<String, List<RankArticle>>();
 
    //TODO: set lastLoadTime to refresh time in Fragment
-    private Date lastLoadTime = new Date();
+    private Date lastLoadTime = null;
     private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final String SELECTED_ITEM = "selected_item";
@@ -249,6 +249,12 @@ public class Top10Activity extends Activity {
     }
 
     public void reloadRanks(final Top10ArticleListFragment.RankLoadCallback callback){
+        // 如果最后一次 reload 时间小于2分钟，则直接返回
+        if(lastLoadTime != null && (System.currentTimeMillis() - lastLoadTime.getTime() < 2*60*1000) && !allRankArticlesMap.isEmpty()) {
+            callback.onRankLoadFinished(allRankArticlesMap);
+            return;
+        }
+
         if(!isLoading){
             isLoading = true;
         }
@@ -270,14 +276,19 @@ public class Top10Activity extends Activity {
 
             @Override
             public void showProgressUI() {
-                progressDialog.show();
+                //只有加载 hits24 时才显示 ProgressDialog, 否则选择第二tab的时候，因为预加载会导致显示 ProgressDialog
+                if(getActionBar().getSelectedNavigationIndex() == 0) {
+                    progressDialog.show();
+                }
                 callback.showProgressUI();
             }
 
             @Override
             public void dismissProgressUI() {
                 callback.dismissProgressUI();
-                progressDialog.dismiss();
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
             }
 
             @Override
