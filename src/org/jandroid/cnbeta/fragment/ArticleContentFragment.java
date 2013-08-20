@@ -46,7 +46,7 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)	{
-        View root = inflater.inflate(R.layout.content_article, container);
+        View root = inflater.inflate(R.layout.content_article, null);
         TextView titleTextView = (TextView)root.findViewById(R.id.tv_articleTitle);
         RatingBar ratingBar = (RatingBar)root.findViewById(R.id.rating);
         WebView contentWebView = (WebView)root.findViewById(R.id.wv_articleContent);

@@ -47,7 +47,6 @@ public class ContentActivity extends Activity {
         public void onPageSelected(int position) {
             final ActionBar actionBar = getActionBar();
             actionBar.setSelectedNavigationItem(position);
-
         }
 
         public void onPageScrollStateChanged(int state) {
@@ -103,6 +102,7 @@ public class ContentActivity extends Activity {
    		getMenuInflater().inflate(R.menu.main_menu, menu);
    		return super.onCreateOptionsMenu(menu);
    	}
+
     @Override
    	public boolean onOptionsItemSelected(MenuItem mi) {
         if(mi.isCheckable())
@@ -125,7 +125,6 @@ public class ContentActivity extends Activity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
         return super.onPrepareOptionsMenu(menu);
     }
 
