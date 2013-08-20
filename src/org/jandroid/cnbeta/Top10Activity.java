@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//TODO: 由 Activity 加载数据，然后去更新 Fragment
+
 public class Top10Activity extends Activity {
 
     private final Map<String, List<RankArticle>> allRankArticlesMap = new HashMap<String, List<RankArticle>>();
@@ -198,6 +200,7 @@ public class Top10Activity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
+        //TODO: 立即加载数据，然后更新 Fragment
     }
 
     @Override

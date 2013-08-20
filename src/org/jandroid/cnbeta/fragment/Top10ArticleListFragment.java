@@ -261,7 +261,6 @@ public class Top10ArticleListFragment extends Fragment {
                 lineLayoutRefresh.setVisibility(View.GONE);
                 // rotate refresh item
                 rotateRefreshActionView();
-
             }
 
             public void dismissProgressUI() {
@@ -354,7 +353,6 @@ public class Top10ArticleListFragment extends Fragment {
         public void showProgressUI();
 
         public void dismissProgressUI();
-        void onRankLoadFinished(Map<String, List<RankArticle>> allRankArticlesMap);
-
+        void onRankLoadFinished(Map<String, List<RankArticle>> allRankArticlesMap);        
     }
 }

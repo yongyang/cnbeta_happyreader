@@ -12,6 +12,9 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import org.jandroid.cnbeta.async.ArticleContentAsyncTask;
+import org.jandroid.cnbeta.async.AsyncResult;
+import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.fragment.ArticleCommentsFragment;
 import org.jandroid.cnbeta.fragment.ArticleContentFragment;
 
@@ -19,10 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContentActivity extends Activity {
-    private static final String SELECTED_ITEM = "selected_item";
     public final static int[] tabs = new int[]{R.string.tab_zhengwen, R.string.tab_pinglun};
     private List<Fragment> tabFragments = new ArrayList<Fragment>();
 
+    private final Content content = new Content();
+    
     private ViewPager mViewPager;
     private ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
 
@@ -69,12 +73,12 @@ public class ContentActivity extends Activity {
    		super.onCreate(savedInstanceState);
 
    		setContentView(R.layout.content);
-        setUpViewPager();
-        setUpActionBar();
+        setupViewPager();
+        setupActionBar();
 
    	}
 
-    private void setUpActionBar() {
+    private void setupActionBar() {
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -88,23 +92,11 @@ public class ContentActivity extends Activity {
         pagerAdapter.notifyDataSetChanged();
     }
 
-    private void setUpViewPager() {
+    private void setupViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.content_viewpager);
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setOnPageChangeListener(pagerAdapter);
     }
-
-   	@Override
-   	public void onRestoreInstanceState(Bundle savedInstanceState){
-   		if (savedInstanceState.containsKey(SELECTED_ITEM)){
-   			getActionBar().setSelectedNavigationItem(savedInstanceState.getInt(SELECTED_ITEM));
-   		}
-   	}
-
-   	@Override
-   	public void onSaveInstanceState(Bundle outState){
-   		outState.putInt(SELECTED_ITEM, getActionBar().getSelectedNavigationIndex());
-   	}
 
     @Override
    	public boolean onCreateOptionsMenu(Menu menu) {
@@ -142,5 +134,49 @@ public class ContentActivity extends Activity {
             super(fm);
         }
     }
+
+    
+    //TODO:
+    public void updateContentFragment() {
+        
+    }
+
+    //TODO:
+    public void updateCommentFragment() {
+        
+    }
+
+    private void loadContent(){
+        new ArticleContentAsyncTask(){
+
+            @Override
+            protected int getSid() {
+                return 0;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void showProgressUI() {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void dismissProgressUI() {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public CnBetaApplicationContext getCnBetaApplicationContext() {
+                return (CnBetaApplicationContext)getApplicationContext();
+            }
+
+            @Override
+            protected void onPostExecute(AsyncResult r) {
+                super.onPostExecute(r);
+                //TODO: update content in ContentActivity
+                //TODO: load info and comments by ArticleCommentsLoader Async
+            }
+        }.executeMultiThread();
+    }
+
 
 }

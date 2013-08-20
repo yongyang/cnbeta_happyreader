@@ -17,7 +17,7 @@ import org.jandroid.cnbeta.R;
 public class ArticleCommentsFragment extends Fragment
 {
 	public static final String ARG_SECTION_NUMBER = "section_number";
-	// �÷����ķ���ֵ���Ǹ�Fragment��ʾ��View���
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)

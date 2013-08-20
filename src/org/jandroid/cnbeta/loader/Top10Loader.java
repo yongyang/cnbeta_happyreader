@@ -58,8 +58,6 @@ public class Top10Loader extends AbstractLoader<Map<String, List<RankArticle>>>{
 
     private Map<String, List<RankArticle>> parsePage(String responseHTML){
         Map<String, List<RankArticle>> articlesMap = new HashMap<String, List<RankArticle>>();
-        //<img src="http://static.cnbetacdn.com/newsimg/2013/0803/01375505447.jpg_180x132.jpg" /></a>
-        //删除掉多余的</a>
         Document document = Jsoup.parse(responseHTML, "utf-8");
         // select all div elements with class=mt10
         Elements elements = document.select("div.mt10");
