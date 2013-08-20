@@ -7,14 +7,8 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,12 +21,8 @@ import org.jandroid.cnbeta.Top10Activity;
 import org.jandroid.cnbeta.adapter.AsyncImageAdapter;
 import org.jandroid.cnbeta.async.AsyncResult;
 import org.jandroid.cnbeta.async.LoadImageAsyncTask;
-import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.entity.RankArticle;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,8 +40,6 @@ public class Top10ArticleListFragment extends Fragment {
     // all articles, RankType=>List of articles
     private final Map<String, List<RankArticle>> allRankArticlesMap = new HashMap<String, List<RankArticle>>();
 
-    private int loadTimes = 0;
-
     private ListView lvArticleList;
 
     private final Handler handler = new Handler();
@@ -61,10 +49,6 @@ public class Top10ArticleListFragment extends Fragment {
     private ProgressBar progressBarRefresh;
     private LinearLayout lineLayoutRefresh;
     private TextView tvLastTimeRefresh;
-
-    private MenuItem refreshMenuItem;
-    private ImageView refreshActionView;
-    private Animation clockWiseRotationAnimation;
 
     private LinearLayout footbarRefresh;
 
@@ -102,10 +86,6 @@ public class Top10ArticleListFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        refreshActionView = (ImageView) inflater.inflate(R.layout.iv_refresh_action_view, null);
-        clockWiseRotationAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotation_clockwise_refresh);
-        clockWiseRotationAnimation.setRepeatCount(Animation.INFINITE);
-
         View rootView = inflater.inflate(R.layout.lv_article_list, container, false);
         lvArticleList = (ListView)rootView.findViewById(R.id.article_listview);
 		return rootView;
@@ -126,7 +106,8 @@ public class Top10ArticleListFragment extends Fragment {
 
         footbarRefresh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                reloadArticles();
+                top10Activity.reloadRanks();
+                lvArticleList.smoothScrollToPosition(0);
             }
         });
 
@@ -227,6 +208,7 @@ public class Top10ArticleListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+/*
         // 只有第一次打开第一个tab才自动重装载
         if(loadTimes == 0 && rankTypes[currentRankTypeIndex].equals(rankTypes[0])) {
             reloadArticles();
@@ -235,7 +217,18 @@ public class Top10ArticleListFragment extends Fragment {
             loadArticles();
         }
         loadTimes++;
+*/
+
+        top10Activity.loadRanks(this);
     }
+
+    public void updateData(Map<String, List<RankArticle>>  rankArticlesMap){
+        Top10ArticleListFragment.this.allRankArticlesMap.clear();
+        Top10ArticleListFragment.this.allRankArticlesMap.putAll(rankArticlesMap);
+        asyncImageAdapter.notifyDataSetChanged();
+        tvLastTimeRefresh.setText(top10Activity.getLastLoadTimeText());
+    }
+
 
     public void switchRankType(){
         if(rankTypes.length > 1) {
@@ -248,111 +241,17 @@ public class Top10ArticleListFragment extends Fragment {
             asyncImageAdapter.notifyDataSetChanged();
         }
     }
-    
-    private void reloadArticles(){
 
-        ((Top10Activity)getActivity()).reloadRanks(new RankLoadCallback() {
-            public void showProgressUI() {
-                // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
-                getActivity().setProgressBarIndeterminate(true);
-                getActivity().setProgressBarVisibility(true);
-                footbarRefresh.setClickable(false);
-                progressBarRefresh.setVisibility(View.VISIBLE);
-                lineLayoutRefresh.setVisibility(View.GONE);
-                // rotate refresh item
-                rotateRefreshActionView();
-            }
-
-            public void dismissProgressUI() {
-                getActivity().setProgressBarVisibility(false);
-                progressBarRefresh.setVisibility(View.GONE);
-                lineLayoutRefresh.setVisibility(View.VISIBLE);
-                //Stop refresh animation anyway
-                dismissRefreshActionView();
-                footbarRefresh.setClickable(true);
-            }
-
-            public void onRankLoadFinished(Map<String, List<RankArticle>> allRankArticlesMap) {
-                Top10ArticleListFragment.this.allRankArticlesMap.clear();
-                Top10ArticleListFragment.this.allRankArticlesMap.putAll(allRankArticlesMap);
-                asyncImageAdapter.notifyDataSetChanged();
-                tvLastTimeRefresh.setText(top10Activity.getLastLoadTimeText());
-                lvArticleList.smoothScrollToPosition(0);
-            }
-        });
-
+    public void showProgressUI() {
+        footbarRefresh.setClickable(false);
+        progressBarRefresh.setVisibility(View.VISIBLE);
+        lineLayoutRefresh.setVisibility(View.GONE);
     }
 
-    private void loadArticles(){
-        ((Top10Activity)getActivity()).loadRanks(new RankLoadCallback() {
-            public void showProgressUI() {
-                // do nothing
-            }
-
-            public void dismissProgressUI() {
-                // do nothing
-            }
-
-            public void onRankLoadFinished(Map<String, List<RankArticle>> allRankArticlesMap) {
-                Top10ArticleListFragment.this.allRankArticlesMap.clear();
-                Top10ArticleListFragment.this.allRankArticlesMap.putAll(allRankArticlesMap);
-                asyncImageAdapter.notifyDataSetChanged();
-                tvLastTimeRefresh.setText(top10Activity.getLastLoadTimeText());
-            }
-        });
+    public void dismissProgressUI() {
+        progressBarRefresh.setVisibility(View.GONE);
+        lineLayoutRefresh.setVisibility(View.VISIBLE);
+        footbarRefresh.setClickable(true);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        //refresh actionitem
-        inflater.inflate(R.menu.article_list_fragment_menu, menu);
-        refreshMenuItem = menu.findItem(R.id.refresh_item);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.isCheckable()) {
-            item.setChecked(true);
-        }
-        switch (item.getItemId()) {
-            case R.id.more_item:
-                break;
-            case R.id.refresh_item:
-                reloadArticles();
-            default:
-        }
-        return true;
-    }
-
-    private void rotateRefreshActionView() {
-        if(refreshMenuItem != null) {
-            /* Attach a rotating ImageView to the refresh item as an ActionView */
-            refreshActionView.startAnimation(clockWiseRotationAnimation);
-            refreshMenuItem.setActionView(refreshActionView);
-        }
-    }
-
-    private void dismissRefreshActionView() {
-        if(refreshMenuItem != null) {
-            View actionView = refreshMenuItem.getActionView();
-            if(actionView != null) {
-                actionView.clearAnimation();
-                refreshMenuItem.setActionView(null);
-            }
-        }
-    }
-
-
-
-    public static interface ArticleListListener {
-        void onArticleItemClick(long articleId);
-    }
-
-    public interface RankLoadCallback {
-        public void showProgressUI();
-
-        public void dismissProgressUI();
-        void onRankLoadFinished(Map<String, List<RankArticle>> allRankArticlesMap);        
-    }
 }

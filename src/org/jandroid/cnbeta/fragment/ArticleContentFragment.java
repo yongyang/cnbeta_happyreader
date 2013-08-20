@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -47,9 +48,17 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)	{
         View root = inflater.inflate(R.layout.content_article, container);
         TextView titleTextView = (TextView)root.findViewById(R.id.tv_articleTitle);
-        WebView contentWebView = (WebView)root.findViewById(R.id.wv_articleContent);
         RatingBar ratingBar = (RatingBar)root.findViewById(R.id.rating);
-		return root;
+        WebView contentWebView = (WebView)root.findViewById(R.id.wv_articleContent);
+        
+        contentWebView.getSettings().setJavaScriptEnabled(true);
+        contentWebView.getSettings().setAllowFileAccess(true);
+        contentWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
+        contentWebView.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY); // no scroll
+        contentWebView.getSettings().setBuiltInZoomControls(true);
+        contentWebView.getSettings().setAppCacheEnabled(true);
+        contentWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+        return root;
 	}
 
     @Override
@@ -64,6 +73,5 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         menu.add("MENU").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         super.onCreateOptionsMenu(menu, inflater);
     }
-    
-    
+
 }

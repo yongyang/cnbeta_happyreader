@@ -8,11 +8,16 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.Toast;
 import org.jandroid.cnbeta.async.AsyncResult;
 import org.jandroid.cnbeta.async.RankArticleListAsyncTask;
@@ -33,6 +38,8 @@ import java.util.Map;
 
 public class Top10Activity extends Activity {
 
+    private Handler handler = new Handler();
+
     private final Map<String, List<RankArticle>> allRankArticlesMap = new HashMap<String, List<RankArticle>>();
 
    //TODO: set lastLoadTime to refresh time in Fragment
@@ -51,7 +58,11 @@ public class Top10Activity extends Activity {
 
     // 当前是否正在加载数据，避免多次加载
     private volatile boolean isLoading = false;
-    private final List<Top10ArticleListFragment.RankLoadCallback> pendingCallbacks = new ArrayList<Top10ArticleListFragment.RankLoadCallback>();
+
+
+    private MenuItem refreshMenuItem;
+    private ImageView refreshActionView;
+    private Animation clockWiseRotationAnimation;
 
     public static enum RankType {
         HITS24("hits24"),
@@ -179,6 +190,9 @@ public class Top10Activity extends Activity {
 //            getActionBar().setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
         }
 
+        refreshActionView = (ImageView) getLayoutInflater().inflate(R.layout.iv_refresh_action_view, null);
+        clockWiseRotationAnimation = AnimationUtils.loadAnimation(this, R.anim.rotation_clockwise_refresh);
+        clockWiseRotationAnimation.setRepeatCount(Animation.INFINITE);
     }
 
     private void setupActionBar() {
@@ -201,6 +215,7 @@ public class Top10Activity extends Activity {
     protected void onStart() {
         super.onStart();
         //TODO: 立即加载数据，然后更新 Fragment
+        reloadRanks();
     }
 
     @Override
@@ -218,6 +233,10 @@ public class Top10Activity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+                //refresh actionitem
+        getMenuInflater().inflate(R.menu.article_list_fragment_menu, menu);
+        refreshMenuItem = menu.findItem(R.id.refresh_item);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -232,6 +251,9 @@ public class Top10Activity extends Activity {
                 startActivity(IntentUtils.newIntent(this, MainActivity.class));
                 this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 break;
+            case R.id.refresh_item: //处理 refresh action item
+                reloadRanks();
+                break;
             case R.id.dig_soft_industry_interact:
                 break;
             case R.id.more_item:
@@ -242,7 +264,8 @@ public class Top10Activity extends Activity {
                 this.startActivity(intent);
                 break;
         }
-        return false;
+
+        return true;
     }
 
     @Override
@@ -251,23 +274,11 @@ public class Top10Activity extends Activity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    public void reloadRanks(final Top10ArticleListFragment.RankLoadCallback callback){
-        // 如果最后一次 reload 时间小于2分钟，则直接返回
-        if(lastLoadTime != null && (System.currentTimeMillis() - lastLoadTime.getTime() < 2*60*1000) && !allRankArticlesMap.isEmpty()) {
-            callback.onRankLoadFinished(allRankArticlesMap);
-            return;
-        }
 
+    public void reloadRanks(){
         if(!isLoading){
             isLoading = true;
         }
-        else {
-            pendingCallbacks.add(callback);
-            return;
-        }
-
-        EnvironmentUtils.checkNetworkConnected(this);
-
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("加载排行信息中...");
 
@@ -279,18 +290,30 @@ public class Top10Activity extends Activity {
 
             @Override
             public void showProgressUI() {
-                //只有加载 hits24 时才显示 ProgressDialog, 否则选择第二tab的时候，因为预加载会导致显示 ProgressDialog
-                if(getActionBar().getSelectedNavigationIndex() == 0) {
-                    progressDialog.show();
+                        // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
+                setProgressBarIndeterminate(true);
+                setProgressBarVisibility(true);
+
+                progressDialog.show();
+                rotateRefreshActionView();
+                for(final Top10ArticleListFragment fragment : fragments) {
+                    if(fragment != null) {
+                        fragment.showProgressUI();
+                    }
                 }
-                callback.showProgressUI();
             }
 
             @Override
             public void dismissProgressUI() {
-                callback.dismissProgressUI();
+                setProgressBarVisibility(false);
                 if(progressDialog.isShowing()) {
                     progressDialog.dismiss();
+                }
+                dismissRefreshActionView();
+                for(final Top10ArticleListFragment fragment : fragments) {
+                    if(fragment != null) {
+                        fragment.dismissProgressUI();
+                    }
                 }
             }
 
@@ -299,17 +322,20 @@ public class Top10Activity extends Activity {
                 super.onPostExecute(asyncResult);
                 isLoading = false;
                 if(asyncResult.isSuccess()) {
-                    Map<String, List<RankArticle>>  articlesMap = (Map<String, List<RankArticle>> )asyncResult.getResult();
-                    if(articlesMap != null) {
+                    Map<String, List<RankArticle>>  rankArticlesMap = (Map<String, List<RankArticle>> )asyncResult.getResult();
+                    if(rankArticlesMap != null) {
                         lastLoadTime = new Date();
                         allRankArticlesMap.clear();
-                        allRankArticlesMap.putAll(articlesMap);
-                        callback.onRankLoadFinished(articlesMap);
-                        synchronized (pendingCallbacks) {
-                            for(Top10ArticleListFragment.RankLoadCallback rankLoadCallback : pendingCallbacks){
-                                rankLoadCallback.onRankLoadFinished(articlesMap);
+                        allRankArticlesMap.putAll(rankArticlesMap);
+
+                        for(final Top10ArticleListFragment fragment : fragments) {
+                            if(fragment != null) {
+                                handler.post(new Runnable() {
+                                    public void run() {
+                                        fragment.updateData(allRankArticlesMap);
+                                    }
+                                });
                             }
-                            pendingCallbacks.clear();
                         }
                     }
                 }
@@ -318,13 +344,35 @@ public class Top10Activity extends Activity {
                 }
             }
         }.executeMultiThread();
+
     }
 
-    public void loadRanks(final Top10ArticleListFragment.RankLoadCallback callback) {
-        callback.onRankLoadFinished(allRankArticlesMap);
+    public void loadRanks(final Top10ArticleListFragment fragment) {
+        if(!isLoading && !allRankArticlesMap.isEmpty()) {
+            fragment.updateData(allRankArticlesMap);
+        }
     }
 
     public String getLastLoadTimeText() {
         return dateFormat.format(lastLoadTime);
     }
+
+    private void rotateRefreshActionView() {
+        if(refreshMenuItem != null) {
+            /* Attach a rotating ImageView to the refresh item as an ActionView */
+            refreshActionView.startAnimation(clockWiseRotationAnimation);
+            refreshMenuItem.setActionView(refreshActionView);
+        }
+    }
+
+    private void dismissRefreshActionView() {
+        if(refreshMenuItem != null) {
+            View actionView = refreshMenuItem.getActionView();
+            if(actionView != null) {
+                actionView.clearAnimation();
+                refreshMenuItem.setActionView(null);
+            }
+        }
+    }
+
 }
