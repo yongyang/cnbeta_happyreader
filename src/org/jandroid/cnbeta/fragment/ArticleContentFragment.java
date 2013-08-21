@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
@@ -25,8 +26,10 @@ import org.jandroid.cnbeta.loader.ArticleListLoader;
  */
 public class ArticleContentFragment extends Fragment {
 
+    private TextView viewNumTextView;
+    private TextView commentNumTextView;
     private WebView contentWebView;
-
+    
     //TODO: sn 从 article.html 页面中取, sid和sn必须要匹配
     //TODO: 可能还需要拿到 TOKEN: 'ae14639495b0ae0c848e2adaefc0f31db276167a',
     // http://www.cnbeta.com/cmt?jsoncallback=okcb91797948&op=info&page=1&sid=247973&sn=88747
@@ -61,10 +64,15 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         contentWebView.getSettings().setBuiltInZoomControls(true);
         contentWebView.getSettings().setAppCacheEnabled(true);
         contentWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-
+        contentWebView.getSettings().setLoadsImagesAutomatically(false); //don't load images auto
+        contentWebView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+            }
+        });
 
         //TODO: 在WebView load 的之前, 重写topic img url, 并注入JS，使得img load完之后，通过JS更新内容
-
         return root;
 	}
 
@@ -77,7 +85,7 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.article_content_fragment_menu, menu);
-        menu.add("MENU").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+//        menu.add("MENU").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -85,16 +93,20 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         //TODO: 在WebView load 的之前, 重写topic img url, 并注入JS，使得img load完之后，通过JS更新内容
     }
 
-    public void updateImage() {
-        // 在android代码中也可以调用javaScript方法
-
-        contentWebView.loadUrl("javascript:updateImage('a.img')");
-        // WebView从APK中加载Assets目录中的内容
+    public void updateImage(String id, String imgSrc) {
+        // 在android代码中调用javaScript方法
+        contentWebView.loadUrl(
+                "javascript:(" +
+                        "function() { " +
+                        "document.getElementsById('" + id + "').src = 'file:///" + imgSrc + "'; " +
+                        "})()");
+        //TODO: WebView从APK中加载Assets目录中的内容，是否需要在 asset 中存放一张默认图片
         contentWebView.loadUrl("file:///android_asset/personaldata.html");
     }
 
-    public void updateInfo() {
-
+    public void updateInfo(Content content) {
+        viewNumTextView.setText(content.getViewNum());
+        commentNumTextView.setText(content.getCommentNum());
     }
 
 }
