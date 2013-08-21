@@ -88,7 +88,7 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
     @Override
     public List<Article> fromDisk(File baseDir) throws Exception {
             //read json file from SD Card
-            String articleListJSONString = FileUtils.readFileToString(getFile(baseDir));
+            String articleListJSONString = FileUtils.readFileToString(getCacheFile(baseDir));
             JSONArray articleListJSONArray = (JSONArray)JSONValue.parse(articleListJSONString);
             return parseArticleListJSON(articleListJSONArray);
     }
@@ -103,16 +103,17 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
                 articleListJSONArray.add(article.getJSONObject());
             }
 
-            FileUtils.writeStringToFile(getFile(baseDir), articleListJSONArray.toJSONString());
+            FileUtils.writeStringToFile(getCacheFile(baseDir), articleListJSONArray.toJSONString());
         }
         else {
-            FileUtils.writeStringToFile(getFile(baseDir), new String(getLoadedData()));
+            FileUtils.writeStringToFile(getCacheFile(baseDir), new String(getLoadedData()));
         }
 
     }
     
-    private File getFile(File dir){
-        return new File(dir , "" + getType().getTypeString() + "_" + getPage());
+    @Override
+    public File getCacheFile(File baseDir) {
+        return new File(baseDir , "" + getType().getTypeString() + "_" + getPage());
     }
 }
 /*

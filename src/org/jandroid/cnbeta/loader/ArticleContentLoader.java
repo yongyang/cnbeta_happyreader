@@ -3,6 +3,7 @@ package org.jandroid.cnbeta.loader;
 import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.Constants;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
+import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.entity.RankArticle;
 import org.json.simple.JSONObject;
@@ -22,14 +23,14 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
 
     private static String URL_TEMPLATE = Constants.BASE_URL + "/articles/{1}"+".htm";
     
-    private int sid;
+    private Article article;
 
-    public ArticleContentLoader(int sid) {
-        this.sid = sid;
+    public ArticleContentLoader(Article article) {
+        this.article = article;
     }
 
-    public int getSid() {
-        return sid;
+    public Article getArticle() {
+        return article;
     }
 
     @Override
@@ -49,8 +50,13 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
 
     }
 
+    @Override
+    public File getCacheFile(File baseDir) {
+        return new File(baseDir, "article_" + getArticle().getSid());
+    }
+
     private String getURL(){
-        return MessageFormat.format(URL_TEMPLATE, "" + getSid());
+        return MessageFormat.format(URL_TEMPLATE, "" + getArticle().getSid());
     }
 
     private Content parsePage(String responseHTML){
@@ -79,7 +85,7 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         String key = "TOKEN: ";
         int start = responseHTML.indexOf(key)+key.length()+1;
         int length = "3bdbf3c8595f67eab8aacbb9780c1d78955ce4ee".length();
-        return responseHTML.substring(start, start+length);
+        return responseHTML.substring(start, start + length);
     }
 
     private String getSN(String responseHTML) {

@@ -43,7 +43,7 @@ public class HistoryArticleListLoader extends AbstractLoader<List<HistoryArticle
     }
 
     private JSONArray loadFromDisk(File baseDir) throws Exception {
-        String articleListJSONString = FileUtils.readFileToString(getFile(baseDir));
+        String articleListJSONString = FileUtils.readFileToString(getCacheFile(baseDir));
         return (JSONArray)JSONValue.parse(articleListJSONString);
     }
 
@@ -55,7 +55,7 @@ public class HistoryArticleListLoader extends AbstractLoader<List<HistoryArticle
      */
     @SuppressWarnings("unchecked")
     public void toDisk(File baseDir, HistoryArticle historyArticle) throws Exception {
-        File file = getFile(baseDir);
+        File file = getCacheFile(baseDir);
         if(!file.exists()) {
             JSONArray jsonArray = new JSONArray();
             jsonArray.add(historyArticle.toJSONObject());
@@ -82,7 +82,7 @@ public class HistoryArticleListLoader extends AbstractLoader<List<HistoryArticle
         }
     }
     
-    private File getFile(File dir){
+    public File getCacheFile(File dir){
         String date = dateFormat.format(new Date());
         return new File(dir , "history_" + date);
     }

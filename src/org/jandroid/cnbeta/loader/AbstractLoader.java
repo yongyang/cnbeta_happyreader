@@ -29,7 +29,13 @@ public abstract class AbstractLoader<T> {
     public abstract T fromHttp() throws Exception;
 
     public abstract T fromDisk(File baseDir) throws Exception;
-
     
     public abstract void toDisk(File baseDir, T t) throws Exception;
+    
+    public abstract File getCacheFile(File baseDir);
+    
+    public final boolean isCached(File baseDir) {
+        return getCacheFile(baseDir).exists();
+    }
+    
 }

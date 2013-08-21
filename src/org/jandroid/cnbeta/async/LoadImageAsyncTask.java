@@ -30,15 +30,22 @@ public abstract class LoadImageAsyncTask extends BaseAsyncTask<String, Integer, 
     }
     
     protected Bitmap loadImage(String url) throws Exception {
+        boolean hasNetwork = getCnBetaApplicationContext().isNetworkConnected();
         ImageLoader imageLoader = new ImageLoader(url);
         //优先从Disk装载
-        if(imageLoader.isImageCached(getCnBetaApplicationContext().getBaseDir())) {
+        if(imageLoader.isCached(getCnBetaApplicationContext().getBaseDir())) {
             return imageLoader.fromDisk(getCnBetaApplicationContext().getBaseDir());
         }
         else {
-            Bitmap bitmap = imageLoader.fromHttp();
-            imageLoader.toDisk(getCnBetaApplicationContext().getBaseDir(), bitmap);
-            return bitmap;
+            if(hasNetwork) {
+                Bitmap bitmap = imageLoader.fromHttp();
+                imageLoader.toDisk(getCnBetaApplicationContext().getBaseDir(), bitmap);
+                return bitmap;
+            }
+            else {
+                //TODO: 返回一张默认图片，显示没有网络
+                return null;
+            }
         }
     }
 

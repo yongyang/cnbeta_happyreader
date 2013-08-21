@@ -1,9 +1,7 @@
 package org.jandroid.cnbeta.async;
 
-import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
-import org.jandroid.cnbeta.CnBetaApplication;
 
 import java.util.List;
 
@@ -30,17 +28,14 @@ public abstract class ArticleListAsyncTask extends ProgressDialogAsyncTask<Objec
     
     protected List<Article> loadArticleList() throws Exception {
         boolean hasNetwork = getCnBetaApplicationContext().isNetworkConnected();
-        boolean hasSdCard = getCnBetaApplicationContext().isSdCardMounted();
         ArticleListLoader articleListLoader = new ArticleListLoader(getCategory(), getPage());
         if(hasNetwork) {
             List<Article> articles = articleListLoader.fromHttp();
-            if(hasSdCard) {
-                articleListLoader.toDisk(getCnBetaApplicationContext().getBaseDir(), articles);
-            }
+            articleListLoader.toDisk(getCnBetaApplicationContext().getBaseDir(), articles);
             return articles;
         }
         else {
-            List<Article> articles = new ArticleListLoader(getCategory(), getPage()).fromDisk(getCnBetaApplicationContext().getBaseDir());
+            List<Article> articles = articleListLoader.fromDisk(getCnBetaApplicationContext().getBaseDir());
             return articles;
         }
 

@@ -33,14 +33,9 @@ public class ImageLoader extends AbstractLoader<Bitmap> {
         return bitmap;
     }
 
-    public boolean isImageCached(File baseDir) {
-        File file = getFile(baseDir);
-        return file.exists();
-    }
-
     @Override
     public Bitmap fromDisk(File baseDir) throws Exception {
-        File file = getFile(baseDir);
+        File file = getCacheFile(baseDir);
         if (file.exists()) {
             byte[] bytes = FileUtils.readFileToByteArray(file);
             return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
@@ -53,17 +48,17 @@ public class ImageLoader extends AbstractLoader<Bitmap> {
     @Override
     public void toDisk(File baseDir, Bitmap bitmap) throws Exception {
         if (bitmap == getLoadedObject()) {
-            FileUtils.writeByteArrayToFile(getFile(baseDir), getLoadedData());
+            FileUtils.writeByteArrayToFile(getCacheFile(baseDir), getLoadedData());
         }
         else {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             //TODO: 是否需要根据后缀名设置不同的Format
             bitmap.compress(Bitmap.CompressFormat.PNG, 80, baos);
-            FileUtils.writeByteArrayToFile(getFile(baseDir), baos.toByteArray());
+            FileUtils.writeByteArrayToFile(getCacheFile(baseDir), baos.toByteArray());
         }
     }
 
-    private File getFile(File baseDir) {
+    public File getCacheFile(File baseDir) {
         return new File(baseDir, getFilename());
     }
 

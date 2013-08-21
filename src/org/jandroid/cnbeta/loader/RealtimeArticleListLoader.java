@@ -48,7 +48,7 @@ public class RealtimeArticleListLoader extends AbstractLoader<List<RealtimeArtic
     @Override
     public List<RealtimeArticle> fromDisk(File baseDir) throws Exception {
             //read json file from SD Card
-            String articleListJSONString = FileUtils.readFileToString(getFile(baseDir));
+            String articleListJSONString = FileUtils.readFileToString(getCacheFile(baseDir));
             JSONArray articleListJSONArray = (JSONArray)JSONValue.parse(articleListJSONString);
             return parseArticleListJSON(articleListJSONArray);
     }
@@ -62,15 +62,15 @@ public class RealtimeArticleListLoader extends AbstractLoader<List<RealtimeArtic
             for(RealtimeArticle article : articles){
                 articleListJSONArray.add(article.getJSONObject());
             }
-            FileUtils.writeStringToFile(getFile(baseDir), articleListJSONArray.toJSONString());
+            FileUtils.writeStringToFile(getCacheFile(baseDir), articleListJSONArray.toJSONString());
         }
         else {
-            FileUtils.writeStringToFile(getFile(baseDir), new String(getLoadedData()));
+            FileUtils.writeStringToFile(getCacheFile(baseDir), new String(getLoadedData()));
         }
 
     }
     
-    private File getFile(File dir){
+    public File getCacheFile(File dir){
         return new File(dir , "realtime");
     }
 }

@@ -27,13 +27,10 @@ public abstract class RealtimeArticleListAsyncTask extends ProgressDialogAsyncTa
     
     protected  List<RealtimeArticle> loadRealtimeArticleList() throws Exception {
         boolean hasNetwork = getCnBetaApplicationContext().isNetworkConnected();
-        boolean hasSdCard = getCnBetaApplicationContext().isSdCardMounted();
         RealtimeArticleListLoader articleListLoader = new RealtimeArticleListLoader();
         if(hasNetwork) {
             List<RealtimeArticle> articles = articleListLoader.fromHttp();
-            if(hasSdCard) {
-                articleListLoader.toDisk(getCnBetaApplicationContext().getBaseDir(), articles);
-            }
+            articleListLoader.toDisk(getCnBetaApplicationContext().getBaseDir(), articles);
             return articles;
         }
         else {

@@ -41,4 +41,9 @@ public class ArticleCommentsLoader extends AbstractLoader<Content> {
     public void toDisk(File baseDir, Content comment) throws Exception {
 
     }
+
+    @Override
+    public File getCacheFile(File baseDir) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

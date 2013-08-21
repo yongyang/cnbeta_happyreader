@@ -183,8 +183,8 @@ public class ContentActivity extends Activity {
         new ArticleContentAsyncTask(){
 
             @Override
-            protected long getSid() {
-                return article.getSid();
+            protected Article getArticle() {
+                return article;
             }
 
             @Override

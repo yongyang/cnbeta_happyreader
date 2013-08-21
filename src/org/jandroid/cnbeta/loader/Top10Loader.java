@@ -113,6 +113,10 @@ public class Top10Loader extends AbstractLoader<Map<String, List<RankArticle>>>{
         return rankArticles;
     }
 
+    @Override
+    public File getCacheFile(File baseDir) {
+        return new File(baseDir, "ranks");
+    }
 }
 
 /*

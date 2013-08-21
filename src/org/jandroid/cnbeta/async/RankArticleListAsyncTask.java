@@ -28,13 +28,10 @@ public abstract class RankArticleListAsyncTask extends ProgressDialogAsyncTask<O
     
     protected  Map<String, List<RankArticle>>  loadRankArticleList() throws Exception {
         boolean hasNetwork = getCnBetaApplicationContext().isNetworkConnected();
-        boolean hasSdCard = getCnBetaApplicationContext().isSdCardMounted();
         Top10Loader articleListLoader = new Top10Loader();
         if(hasNetwork) {
             Map<String, List<RankArticle>> articlesMap = articleListLoader.fromHttp();
-            if(hasSdCard) {
-                articleListLoader.toDisk(getCnBetaApplicationContext().getBaseDir(), articlesMap);
-            }
+            articleListLoader.toDisk(getCnBetaApplicationContext().getBaseDir(), articlesMap);
             return articlesMap;
         }
         else {
