@@ -78,6 +78,9 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         contentJSONObject.put("token", getToken(responseHTML));
         contentJSONObject.put("sn", getSN(responseHTML));
         //NOTE: viewNum, commentNum will be set by ArticleCommentsLoader
+        
+        //TODO: parse images in content
+        
         return new Content(contentJSONObject);
     }
 
