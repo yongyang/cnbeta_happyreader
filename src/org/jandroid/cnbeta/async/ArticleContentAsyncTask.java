@@ -42,7 +42,7 @@ public abstract class ArticleContentAsyncTask extends ProgressDialogAsyncTask<Ob
             return articles;
         }
 */
-        return new Content();
+        return null;
 
     }
 
