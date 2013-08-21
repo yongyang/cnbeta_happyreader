@@ -10,6 +10,8 @@ import java.util.List;
  */
 public class Content {
     
+    private long sid;
+    
     //阅读次数
     private int viewNum;
     //评论次数
@@ -34,6 +36,14 @@ public class Content {
 
     public Content(JSONObject jsonObject) {
 
+    }
+
+    public long getSid() {
+        return sid;
+    }
+
+    public void setSid(long sid) {
+        this.sid = sid;
     }
 
     public int getCommentNum() {

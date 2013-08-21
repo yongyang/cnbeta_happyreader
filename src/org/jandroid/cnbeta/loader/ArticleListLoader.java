@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class ArticleListLoader extends AbstractLoader<List<Article>> {
 
-    public static String URL_FORMAT = "http://www.cnbeta.com/more.htm?jsoncallback=jQuery18008753548712314047_{0}s&type={1}&page={2}&_={3}";
+    public static String URL_TEMPLATE = "http://www.cnbeta.com/more.htm?jsoncallback=jQuery18008753548712314047_{0}s&type={1}&page={2}&_={3}";
     private Type type;
     private int page;
 
@@ -55,7 +55,7 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
     @Override
     public List<Article> fromHttp() throws Exception {
         //TODO: clear cache if page=1, reload
-        String url = MessageFormat.format(URL_FORMAT, ""+System.currentTimeMillis(), getType().getTypeString(), ""+getPage(), ""+(System.currentTimeMillis() + 1));
+        String url = MessageFormat.format(URL_TEMPLATE, ""+System.currentTimeMillis(), getType().getTypeString(), ""+getPage(), ""+(System.currentTimeMillis() + 1));
         //user json-simple to parse returned json string
         String response = CnBetaHttpClient.getInstance().httpGet(url);
         String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));

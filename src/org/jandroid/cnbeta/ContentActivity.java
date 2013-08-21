@@ -17,8 +17,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
+import org.jandroid.cnbeta.async.ArticleCommentsAsyncTask;
 import org.jandroid.cnbeta.async.ArticleContentAsyncTask;
 import org.jandroid.cnbeta.async.AsyncResult;
+import org.jandroid.cnbeta.async.ImageLoaderAsyncTask;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.fragment.ArticleCommentsFragment;
@@ -168,12 +170,12 @@ public class ContentActivity extends Activity {
     
     //TODO:
     public void updateContentFragment() {
-        
+        contentFragment.updateContent(content);
     }
 
     //TODO:
     public void updateCommentFragment() {
-        
+//        commentsFragment
     }
 
     private void loadContent(){
@@ -216,9 +218,11 @@ public class ContentActivity extends Activity {
                 if(asyncResult.isSuccess()) {
                     content = (Content)asyncResult.getResult();
                     //TODO: update content in ContentActivity
-                    //TODO: load info and comments by ArticleCommentsLoader Async
-                    contentFragment.updateContent(content);
-                    //loadComments();
+                    updateContentFragment();
+                    //load images
+                    loadImages();
+                    //load comments and view_num, comment_num etc
+                    loadComments();                    
                 }
                 else {
                     Toast.makeText(ContentActivity.this, asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
@@ -226,10 +230,71 @@ public class ContentActivity extends Activity {
             }
         }.executeMultiThread();
     }
+
+    private void loadImages(){
+        final String topicImage = content.getTopicImage();
+        loadImage(topicImage);
+        for(String image : content.getImages()){
+            loadImage(image);
+        }
+    }
     
+    private void loadImage(final String imgSrc){
+        new ImageLoaderAsyncTask(){
+            @Override
+            protected String getImageUrl() {
+                return imgSrc;
+            }
+
+            @Override
+            protected void onPostExecute(AsyncResult asyncResult) {
+                super.onPostExecute(asyncResult);
+                //TODO: update image in WebView by javascript
+                updateContentFragment();
+            }
+
+            @Override
+            public CnBetaApplicationContext getCnBetaApplicationContext() {
+                return (CnBetaApplicationContext)getApplicationContext();
+            }
+        }.executeMultiThread();
+        
+    }
     
     private void loadComments(){
         
+        new ArticleCommentsAsyncTask(){
+            @Override
+            protected Content getArticleContent() {
+                return content;
+            }
+
+            @Override
+            public void showProgressUI() {
+            }
+
+            @Override
+            public void dismissProgressUI() {
+            }
+
+            @Override
+            protected void onPostExecute(AsyncResult asyncResult) {
+                super.onPostExecute(asyncResult);
+                if(asyncResult.isSuccess()) {
+                    content = (Content)asyncResult.getResult();
+                    //TODO: update view_number, update comment fragment
+                    updateCommentFragment();
+                }
+                else {
+                    Toast.makeText(ContentActivity.this, asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public CnBetaApplicationContext getCnBetaApplicationContext() {
+                return (CnBetaApplicationContext)getApplicationContext();
+            }
+        }.executeMultiThread();
     }
 
 

@@ -1,9 +1,13 @@
 package org.jandroid.cnbeta.loader;
 
-import org.jandroid.cnbeta.entity.Comment;
+import android.util.Base64;
+import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.cnbeta.entity.Content;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import java.io.File;
+import java.text.MessageFormat;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -20,18 +24,43 @@ public class ArticleCommentsLoader extends AbstractLoader<Content> {
     // cnbeta{"cmntdict":[],"hotlist":[],"cmntlist":[{"tid":"7764550","pid":"0","sid":"249281","parent":"","thread":""}],"cmntstore":{"7764550":{"tid":"7764550","pid":"0","sid":"249281","date":"2013-08-20 15:14:01","name":"\u533f\u540d\u4eba\u58eb","host_name":"\u6d59\u6c5f\u7701\u7ecd\u5174\u5e02","comment":"\u8def\u8fc7...","score":"0","reason":1,"userid":"0","icon":""}},"comment_num":"2","join_num":"1","token":"38a5032136b4e3097c28670a7cdd0c7fad2d1c62","view_num":370,"page":1,"sid":249281,"u":[]}
 
 
-    private Content content;
+    private Content origContent;
 
-    public ArticleCommentsLoader(Content content) {
-        this.content = content;
+    public ArticleCommentsLoader(Content origContent) {
+        this.origContent = origContent;
+    }
+
+    public Content getContent() {
+        return origContent;
     }
 
     @Override
     public Content fromHttp() throws Exception {
-        //TODO: load 完成之后，update Content并返回
-        return null;
+        String url = MessageFormat.format(URL_TEMPLATE, "" + System.currentTimeMillis(), getContent().getSid(), getContent().getSn());
+        String response = CnBetaHttpClient.getInstance().httpGet(url);
+        
+        //TODO: if failed
+        String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
+        JSONObject responseJSON = (JSONObject) JSONValue.parse(responseJSONString);
+        Object result = responseJSON.get("result");
+        String resultJSONString = new String(Base64.decode(result.toString(), Base64.DEFAULT), "utf-8");
+        resultJSONString = resultJSONString.substring(response.indexOf('{'), response.lastIndexOf('}'));
+        JSONObject resultJSON = (JSONObject) JSONValue.parse(resultJSONString);
+        
+        parseResultJSON(resultJSON);
+        
+        //返回 updated Content        
+        return getContent();
     }
 
+    private void parseResultJSON(JSONObject resultJSON){
+        //阅读和评论次数
+        getContent().setViewNum(Integer.parseInt(resultJSON.get("view_num").toString()));
+        getContent().setViewNum(Integer.parseInt(resultJSON.get("comment_num").toString()));
+        //TODO: comments
+        
+    }
+    
     @Override
     public Content fromDisk(File baseDir) throws Exception {
         return null;
@@ -44,6 +73,6 @@ public class ArticleCommentsLoader extends AbstractLoader<Content> {
 
     @Override
     public File getCacheFile(File baseDir) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return new File(baseDir, "comment_" + getContent().getSid());
     }
 }
