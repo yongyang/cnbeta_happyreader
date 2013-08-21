@@ -29,7 +29,7 @@ import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.adapter.AsyncImageAdapter;
 import org.jandroid.cnbeta.async.ArticleListAsyncTask;
 import org.jandroid.cnbeta.async.AsyncResult;
-import org.jandroid.cnbeta.async.LoadImageAsyncTask;
+import org.jandroid.cnbeta.async.ImageLoaderAsyncTask;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.util.EnvironmentUtils;
@@ -139,7 +139,7 @@ public class ArticleListFragment extends Fragment {
 
             @Override
             protected void loadImageAsync(final String imageUrl, final OnAsyncImageLoadListener onAsyncImageLoadListener) {
-                new LoadImageAsyncTask() {
+                new ImageLoaderAsyncTask() {
 
                     @Override
                     public CnBetaApplicationContext getCnBetaApplicationContext() {

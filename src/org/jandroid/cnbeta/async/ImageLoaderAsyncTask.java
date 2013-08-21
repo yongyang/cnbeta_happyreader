@@ -9,7 +9,7 @@ import org.jandroid.cnbeta.loader.ImageLoader;
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  * @create 7/29/13 3:21 PM
  */
-public abstract class LoadImageAsyncTask extends BaseAsyncTask<String, Integer, AsyncResult> {
+public abstract class ImageLoaderAsyncTask extends BaseAsyncTask<String, Integer, AsyncResult> {
 
     protected abstract String getImageUrl();
     
