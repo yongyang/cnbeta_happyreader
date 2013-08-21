@@ -11,7 +11,7 @@ import java.util.List;
  */
 public abstract class ArticleContentAsyncTask extends ProgressDialogAsyncTask<Object, Integer, AsyncResult> {
 
-    protected abstract int getSid();
+    protected abstract long getSid();
 
     @Override
     protected AsyncResult doInBackground(Object... params) {

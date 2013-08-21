@@ -233,7 +233,7 @@ public class Top10Activity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-                //refresh actionitem
+        //refresh actionitem
         getMenuInflater().inflate(R.menu.article_list_fragment_menu, menu);
         refreshMenuItem = menu.findItem(R.id.refresh_item);
 
@@ -290,7 +290,7 @@ public class Top10Activity extends Activity {
 
             @Override
             public void showProgressUI() {
-                        // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
+                // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
                 setProgressBarIndeterminate(true);
                 setProgressBarVisibility(true);
 
