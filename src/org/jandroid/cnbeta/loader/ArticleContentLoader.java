@@ -5,8 +5,10 @@ import org.jandroid.cnbeta.Constants;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.entity.RankArticle;
+import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import java.io.File;
 import java.text.MessageFormat;
@@ -52,9 +54,40 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
     }
 
     private Content parsePage(String responseHTML){
-        
         Document document = Jsoup.parse(responseHTML, "utf-8");
-        return null;
+        Element introductionElement = document.select("div.introduction").first();
+        Element topicHrefElement = introductionElement.getElementsByTag("a").first();
+        Element topicImgElement = topicHrefElement.getElementsByTag("img").first();
+        Element contentElement = document.select("div.content").first();
+        Element whereElement = document.select("span.where").first();
+
+        JSONObject contentJSONObject = new JSONObject();
+        contentJSONObject.put("introduction", introductionElement.outerHtml());
+        contentJSONObject.put("content", contentElement.outerHtml());
+
+        String topicHref = topicHrefElement.attr("href");
+        contentJSONObject.put("topic", topicHref.substring(topicHref.indexOf("/topics/"),topicHref.indexOf(".htm")));
+        contentJSONObject.put("topicImage", topicImgElement.attr("src"));
+        contentJSONObject.put("where", whereElement.getElementsByTag("a").isEmpty() ? whereElement.text() : whereElement.getElementsByTag("a").first().text());
+        contentJSONObject.put("token", getToken(responseHTML));
+        contentJSONObject.put("sn", getSN(responseHTML));
+        //NOTE: viewNum, commentNum will be set by ArticleCommentsLoader
+        return new Content(contentJSONObject);
+    }
+
+    private String getToken(String responseHTML) {
+        String key = "TOKEN: ";
+        int start = responseHTML.indexOf(key)+key.length()+1;
+        int length = "3bdbf3c8595f67eab8aacbb9780c1d78955ce4ee".length();
+        return responseHTML.substring(start, start+length);
+    }
+
+    private String getSN(String responseHTML) {
+        String key = "SN:";
+        int start = responseHTML.indexOf(key) + key.length()+1;
+        int length= "88747".length();
+        return responseHTML.substring(start, start+length);
+
     }
 
 }
