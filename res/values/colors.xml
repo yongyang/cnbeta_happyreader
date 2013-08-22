@@ -134,5 +134,7 @@
     <color name="cnBeta_bg_light_blue">#528ac6</color>
     <color name="cnBeta_text_blue">#003366</color>
     <color name="cnBeta_text_light_blue">#319ace</color>
+    <color name="cnBeta_text_introduction_black">#434343</color>
+    <color name="cnBeta_bg_introduction">#ffeb620e</color>
 
 </resources>

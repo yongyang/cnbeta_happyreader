@@ -61,12 +61,19 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
 
     private Content parsePage(String responseHTML){
         Document document = Jsoup.parse(responseHTML, "utf-8");
+        Element contentElement = document.select("div.content").first();
+        for(Element scriptElement : contentElement.getElementsByTag("script") ){
+            scriptElement.remove();
+        }
         Element titleElement = document.getElementById("news_title");
         Element dateElement = document.select("span.date").first();
         Element introductionElement = document.select("div.introduction").first();
+        introductionElement.attr("style", "background-color: #fbfbfb; color: #43434; border: 1px solid #e5e5e5; border-left: 0px; border-right: 0px");
+//        introductionElement.attr("style", "color: #555555");
+
         Element topicHrefElement = introductionElement.getElementsByTag("a").first();
         Element topicImgElement = topicHrefElement.getElementsByTag("img").first();
-        Element contentElement = document.select("div.content").first();
+
         Element whereElement = document.select("span.where").first();
 
         JSONObject contentJSONObject = new JSONObject();

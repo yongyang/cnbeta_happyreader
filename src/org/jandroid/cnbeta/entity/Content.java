@@ -49,6 +49,7 @@ public class Content {
         setSn(jsonObject.get("sn").toString());
         setWhere(jsonObject.get("where").toString());
         setIntroduction(jsonObject.get("introduction").toString());
+        setContent(jsonObject.get("content").toString());
     }
 
     public long getSid() {

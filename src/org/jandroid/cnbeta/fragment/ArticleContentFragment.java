@@ -2,6 +2,7 @@ package org.jandroid.cnbeta.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -56,6 +57,7 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         View root = inflater.inflate(R.layout.content_article, null);
         titleTextView = (TextView)root.findViewById(R.id.tv_articleTitle);
         titleTextView.setText(((ContentActivity)getActivity()).getArticleTitle());
+        titleTextView.setSelected(true);
         timeTextView = (TextView)root.findViewById(R.id.tv_date);
         viewNumTextView = (TextView)root.findViewById(R.id.tv_viewNum);
         commentNumTextView = (TextView)root.findViewById(R.id.tv_commentNum);
@@ -63,8 +65,12 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
 
         ratingBar = (RatingBar)root.findViewById(R.id.rating);
         contentWebView = (WebView)root.findViewById(R.id.wv_articleContent);
-        
+        // work weird
+//        contentWebView.setBackgroundColor(R.color.cnBeta_bg_introduction);
         contentWebView.getSettings().setJavaScriptEnabled(true);
+        //设置嫩参数
+        contentWebView.getSettings().setDefaultFontSize(14);
+        contentWebView.getSettings().setDefaultFixedFontSize(14);
         contentWebView.getSettings().setAllowFileAccess(true);
         contentWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
         contentWebView.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY); // no scroll
@@ -101,11 +107,12 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
     public void updateContent(Content content) {
         //TODO: 在WebView load 的之前, 重写topic img url, 并注入JS，使得img load完之后，通过JS更新内容
         titleTextView.setText(content.getTitle());
+        titleTextView.setSelected(true);
         timeTextView.setText(content.getTime());
         viewNumTextView.setText(""+content.getViewNum());
         commentNumTextView.setText("" + content.getCommentNum());
         whereTextView.setText(content.getWhere());
-        contentWebView.loadDataWithBaseURL("", content.getIntroduction(), "text/html","UTF-8", "");
+        contentWebView.loadDataWithBaseURL("", content.getContent(), "text/html", "UTF-8", "");
     }
 
     public void updateImage(String id, String imgSrc) {
