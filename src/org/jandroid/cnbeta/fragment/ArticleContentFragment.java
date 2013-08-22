@@ -80,6 +80,9 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
 //        contentWebView.getSettings().setLoadsImagesAutomatically(false); //don't load images auto
 //        contentWebView.getSettings().setBlockNetworkImage(true);
         contentWebView.getSettings().setDefaultTextEncodingName("UTF-8");
+        // resize big image to fit screen width
+        contentWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+
         contentWebView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view, String url) {

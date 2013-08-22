@@ -69,7 +69,6 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         Element dateElement = document.select("span.date").first();
         Element introductionElement = document.select("div.introduction").first();
         introductionElement.attr("style", "background-color: #fbfbfb; color: #43434; border: 1px solid #e5e5e5; border-left: 0px; border-right: 0px; padding-left: 10px; padding-right: 10px; margin-bottom: 10px");
-//        introductionElement.attr("style", "color: #555555");
 
         Element topicHrefElement = introductionElement.getElementsByTag("a").first();
         Element topicImgElement = topicHrefElement.getElementsByTag("img").first();
