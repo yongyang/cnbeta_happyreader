@@ -81,12 +81,17 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
 //        contentWebView.getSettings().setBlockNetworkImage(true);
         contentWebView.getSettings().setDefaultTextEncodingName("UTF-8");
         // resize big image to fit screen width
+        contentWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
         contentWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
 
         contentWebView.setWebViewClient(new WebViewClient(){
             @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//                return super.shouldOverrideUrlLoading(view, url);
+                if(url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".gif")){
+                //TODO: load image async here???
+                }
+                return true;
             }
         });
 
