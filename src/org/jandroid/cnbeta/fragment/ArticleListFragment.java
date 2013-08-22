@@ -26,6 +26,7 @@ import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
+import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.adapter.AsyncImageAdapter;
 import org.jandroid.cnbeta.async.ArticleListAsyncTask;
 import org.jandroid.cnbeta.async.AsyncResult;
@@ -209,10 +210,7 @@ public class ArticleListFragment extends Fragment {
         lvArticleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Article article = loadedArticles.get(position);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("article", article);
-                Intent intent = IntentUtils.newIntent(getActivity(), ContentActivity.class, bundle);
-                getActivity().startActivity(intent);
+                Utils.openContentActivity(getActivity(),  article.getSid(), article.getTitleShow());
             }
         });
 

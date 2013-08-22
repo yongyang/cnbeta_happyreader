@@ -2,11 +2,9 @@ package org.jandroid.cnbeta.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
@@ -14,21 +12,24 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import org.jandroid.cnbeta.CnBetaApplicationContext;
+import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
-import org.jandroid.cnbeta.async.ArticleContentAsyncTask;
-import org.jandroid.cnbeta.async.AsyncResult;
 import org.jandroid.cnbeta.entity.Content;
-import org.jandroid.cnbeta.loader.ArticleListLoader;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 public class ArticleContentFragment extends Fragment {
 
+    private TextView titleTextView;
+    private TextView timeTextView;
+    private TextView whereTextView;
     private TextView viewNumTextView;
     private TextView commentNumTextView;
+    private RatingBar ratingBar;
     private WebView contentWebView;
+
+
     
     //TODO: sn 从 article.html 页面中取, sid和sn必须要匹配
     //TODO: 可能还需要拿到 TOKEN: 'ae14639495b0ae0c848e2adaefc0f31db276167a',
@@ -53,8 +54,14 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)	{
         View root = inflater.inflate(R.layout.content_article, null);
-        TextView titleTextView = (TextView)root.findViewById(R.id.tv_articleTitle);
-        RatingBar ratingBar = (RatingBar)root.findViewById(R.id.rating);
+        titleTextView = (TextView)root.findViewById(R.id.tv_articleTitle);
+        titleTextView.setText(((ContentActivity)getActivity()).getArticleTitle());
+        timeTextView = (TextView)root.findViewById(R.id.tv_date);
+        viewNumTextView = (TextView)root.findViewById(R.id.tv_viewNum);
+        commentNumTextView = (TextView)root.findViewById(R.id.tv_commentNum);
+        whereTextView = (TextView)root.findViewById(R.id.tv_where);
+
+        ratingBar = (RatingBar)root.findViewById(R.id.rating);
         contentWebView = (WebView)root.findViewById(R.id.wv_articleContent);
         
         contentWebView.getSettings().setJavaScriptEnabled(true);
@@ -64,7 +71,9 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         contentWebView.getSettings().setBuiltInZoomControls(true);
         contentWebView.getSettings().setAppCacheEnabled(true);
         contentWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-        contentWebView.getSettings().setLoadsImagesAutomatically(false); //don't load images auto
+//        contentWebView.getSettings().setLoadsImagesAutomatically(false); //don't load images auto
+//        contentWebView.getSettings().setBlockNetworkImage(true);
+        contentWebView.getSettings().setDefaultTextEncodingName("UTF-8");
         contentWebView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -91,6 +100,12 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
 
     public void updateContent(Content content) {
         //TODO: 在WebView load 的之前, 重写topic img url, 并注入JS，使得img load完之后，通过JS更新内容
+        titleTextView.setText(content.getTitle());
+        timeTextView.setText(content.getTime());
+        viewNumTextView.setText(""+content.getViewNum());
+        commentNumTextView.setText("" + content.getCommentNum());
+        whereTextView.setText(content.getWhere());
+        contentWebView.loadDataWithBaseURL("", content.getIntroduction(), "text/html","UTF-8", "");
     }
 
     public void updateImage(String id, String imgSrc) {

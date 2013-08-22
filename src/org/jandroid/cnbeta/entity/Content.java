@@ -11,6 +11,8 @@ import java.util.List;
 public class Content {
     
     private long sid;
+    private String title;
+    private String time;
     
     //阅读次数
     private int viewNum;
@@ -31,11 +33,22 @@ public class Content {
 
     // 重新 format 之后的 html 内容
     private String content;
+
+    private String introduction;
     
     private List<Comment> comments = new ArrayList<Comment>();
 
     public Content(JSONObject jsonObject) {
+        parseJSON(jsonObject);
+    }
 
+    private void parseJSON(JSONObject jsonObject) {
+        setSid(Long.parseLong(jsonObject.get("sid").toString()));
+        setTitle(jsonObject.get("title").toString());
+        setTime(jsonObject.get("time").toString());
+        setSn(jsonObject.get("sn").toString());
+        setWhere(jsonObject.get("where").toString());
+        setIntroduction(jsonObject.get("introduction").toString());
     }
 
     public long getSid() {
@@ -44,6 +57,22 @@ public class Content {
 
     public void setSid(long sid) {
         this.sid = sid;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public int getCommentNum() {
@@ -124,5 +153,13 @@ public class Content {
 
     public void setWhere(String where) {
         this.where = where;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 }

@@ -36,20 +36,23 @@ public class ArticleCommentsLoader extends AbstractLoader<Content> {
 
     @Override
     public Content fromHttp() throws Exception {
-        String url = MessageFormat.format(URL_TEMPLATE, "" + System.currentTimeMillis(), getContent().getSid(), getContent().getSn());
+        String url = MessageFormat.format(URL_TEMPLATE, "" + System.currentTimeMillis(), ""+getContent().getSid(), getContent().getSn());
         String response = CnBetaHttpClient.getInstance().httpGet(url);
         
         //TODO: if failed
+        if(response.indexOf("error") > 0){
+            //TODO: 解码 result 得到 错误信息
+            throw new Exception("error to read comments of article " + getContent().getSid());
+        }
         String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
         JSONObject responseJSON = (JSONObject) JSONValue.parse(responseJSONString);
         Object result = responseJSON.get("result");
         String resultJSONString = new String(Base64.decode(result.toString(), Base64.DEFAULT), "utf-8");
-        resultJSONString = resultJSONString.substring(response.indexOf('{'), response.lastIndexOf('}'));
+        resultJSONString = resultJSONString.substring(resultJSONString.indexOf('{'), resultJSONString.lastIndexOf('}')+1);
         JSONObject resultJSON = (JSONObject) JSONValue.parse(resultJSONString);
         
         parseResultJSON(resultJSON);
-        
-        //返回 updated Content        
+        //返回 updated Content
         return getContent();
     }
 

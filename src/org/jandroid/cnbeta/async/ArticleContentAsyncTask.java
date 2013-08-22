@@ -10,7 +10,7 @@ import org.jandroid.cnbeta.loader.ArticleContentLoader;
  */
 public abstract class ArticleContentAsyncTask extends ProgressDialogAsyncTask<Object, Integer, AsyncResult> {
 
-    protected abstract Article getArticle();
+    protected abstract long getSid();
 
     @Override
     protected AsyncResult doInBackground(Object... params) {
@@ -27,7 +27,7 @@ public abstract class ArticleContentAsyncTask extends ProgressDialogAsyncTask<Ob
     protected Content loadArticleContent() throws Exception {
         boolean hasNetwork = getCnBetaApplicationContext().isNetworkConnected();
         
-        ArticleContentLoader contentLoader = new ArticleContentLoader(getArticle());
+        ArticleContentLoader contentLoader = new ArticleContentLoader(getSid());
         
         // 优先从磁盘加载
         if(contentLoader.isCached(getCnBetaApplicationContext().getBaseDir())){

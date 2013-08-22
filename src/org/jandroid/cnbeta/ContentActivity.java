@@ -34,7 +34,8 @@ public class ContentActivity extends Activity {
     private ArticleContentFragment contentFragment;
     private ArticleCommentsFragment commentsFragment;
 
-    private Article article = null;
+    private long sid;
+    private String title;
     private Content content = null;
 
     private MenuItem refreshMenuItem;
@@ -89,7 +90,8 @@ public class ContentActivity extends Activity {
    	@Override
    	public void onCreate(Bundle savedInstanceState){
    		super.onCreate(savedInstanceState);
-        article = (Article)getIntent().getExtras().getSerializable("article");
+        sid = getIntent().getExtras().getLong("sid");
+        title = getIntent().getExtras().getString("title");
 
    		setContentView(R.layout.content);
         setupViewPager();
@@ -112,6 +114,14 @@ public class ContentActivity extends Activity {
         actionBar.addTab(actionBar.newTab().setText(R.string.tab_pinglun).setTabListener(pagerAdapter));
         commentsFragment = new ArticleCommentsFragment();
         pagerAdapter.notifyDataSetChanged();
+    }
+
+    public long getArticleSid() {
+        return sid;
+    }
+
+    public String getArticleTitle() {
+        return title;
     }
 
     private void setupViewPager() {
@@ -185,8 +195,8 @@ public class ContentActivity extends Activity {
         new ArticleContentAsyncTask(){
 
             @Override
-            protected Article getArticle() {
-                return article;
+            protected long getSid() {
+                return sid;
             }
 
             @Override
@@ -219,10 +229,10 @@ public class ContentActivity extends Activity {
                     content = (Content)asyncResult.getResult();
                     //TODO: update content in ContentActivity
                     updateContentFragment();
-                    //load images
-                    loadImages();
-                    //load comments and view_num, comment_num etc
-                    loadComments();                    
+                    //TODO: load images
+//                    loadImages();
+                    //TODO: load comments and view_num, comment_num etc
+//                    loadComments();
                 }
                 else {
                     Toast.makeText(ContentActivity.this, asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
@@ -283,6 +293,7 @@ public class ContentActivity extends Activity {
                 if(asyncResult.isSuccess()) {
                     content = (Content)asyncResult.getResult();
                     //TODO: update view_number, update comment fragment
+                    updateContentFragment();
                     updateCommentFragment();
                 }
                 else {

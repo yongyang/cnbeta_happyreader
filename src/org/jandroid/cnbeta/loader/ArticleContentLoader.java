@@ -21,16 +21,16 @@ import java.util.Map;
  */
 public class ArticleContentLoader extends AbstractLoader<Content> {
 
-    private static String URL_TEMPLATE = Constants.BASE_URL + "/articles/{1}"+".htm";
+    private static String URL_TEMPLATE = Constants.BASE_URL + "/articles/{0}"+".htm";
     
-    private Article article;
+    private long sid ;
 
-    public ArticleContentLoader(Article article) {
-        this.article = article;
+    public ArticleContentLoader(long sid) {
+        this.sid = sid;
     }
 
-    public Article getArticle() {
-        return article;
+    public long getArticleSid() {
+        return sid;
     }
 
     @Override
@@ -52,15 +52,17 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
 
     @Override
     public File getCacheFile(File baseDir) {
-        return new File(baseDir, "article_" + getArticle().getSid());
+        return new File(baseDir, "article_" + getArticleSid());
     }
 
     private String getURL(){
-        return MessageFormat.format(URL_TEMPLATE, "" + getArticle().getSid());
+        return MessageFormat.format(URL_TEMPLATE, "" + getArticleSid());
     }
 
     private Content parsePage(String responseHTML){
         Document document = Jsoup.parse(responseHTML, "utf-8");
+        Element titleElement = document.getElementById("news_title");
+        Element dateElement = document.select("span.date").first();
         Element introductionElement = document.select("div.introduction").first();
         Element topicHrefElement = introductionElement.getElementsByTag("a").first();
         Element topicImgElement = topicHrefElement.getElementsByTag("img").first();
@@ -72,11 +74,14 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         contentJSONObject.put("content", contentElement.outerHtml());
 
         String topicHref = topicHrefElement.attr("href");
-        contentJSONObject.put("topic", topicHref.substring(topicHref.indexOf("/topics/"),topicHref.indexOf(".htm")));
+        contentJSONObject.put("topic", topicHref.substring("/topics/".length(),topicHref.indexOf(".htm")));
         contentJSONObject.put("topicImage", topicImgElement.attr("src"));
         contentJSONObject.put("where", whereElement.getElementsByTag("a").isEmpty() ? whereElement.text() : whereElement.getElementsByTag("a").first().text());
         contentJSONObject.put("token", getToken(responseHTML));
         contentJSONObject.put("sn", getSN(responseHTML));
+        contentJSONObject.put("sid", getArticleSid());
+        contentJSONObject.put("title", titleElement.text());
+        contentJSONObject.put("time", dateElement.text());
         //NOTE: viewNum, commentNum will be set by ArticleCommentsLoader
         
         //TODO: parse images in content
