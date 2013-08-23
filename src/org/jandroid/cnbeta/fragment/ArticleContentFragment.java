@@ -67,7 +67,7 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         View root = inflater.inflate(R.layout.content_article, null);
         titleTextView = (TextView) root.findViewById(R.id.tv_articleTitle);
         titleTextView.setText(((ContentActivity) getActivity()).getArticleTitle());
-        titleTextView.setSelected(true);
+        titleTextView.setSelected(true); // select to enable marque
         timeTextView = (TextView) root.findViewById(R.id.tv_date);
         viewNumTextView = (TextView) root.findViewById(R.id.tv_viewNum);
         commentNumTextView = (TextView) root.findViewById(R.id.tv_commentNum);
@@ -78,6 +78,7 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         // work weird
 //        contentWebView.setBackgroundColor(R.color.cnBeta_bg_introduction);
         contentWebView.getSettings().setJavaScriptEnabled(true);
+        contentWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
         //设置嫩参数
         contentWebView.getSettings().setDefaultFontSize(14);
         contentWebView.getSettings().setDefaultFixedFontSize(14);
@@ -90,8 +91,8 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
 //        contentWebView.getSettings().setLoadsImagesAutomatically(false); //don't load images auto
 //        contentWebView.getSettings().setBlockNetworkImage(true);
         contentWebView.getSettings().setDefaultTextEncodingName("UTF-8");
+        
         // resize big image to fit screen width
-        contentWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
         contentWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
 
         contentWebView.addJavascriptInterface(new Object() {
