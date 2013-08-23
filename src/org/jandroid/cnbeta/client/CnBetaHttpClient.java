@@ -9,6 +9,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.params.ClientPNames;
+import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.conn.params.ConnManagerParams;
 import org.apache.http.conn.params.ConnPerRouteBean;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -44,7 +46,7 @@ public class CnBetaHttpClient {
 
     private HttpClient httpClient;
 
-    //TODO: sessionId 是什么时候得到的
+    //TODO: sessionId 是什么时候得到的？由 HttpClient自动存储到 CookieStore中，无需手动管理！
     private String sessionId;
 
     private CnBetaHttpClient() {
@@ -62,6 +64,22 @@ public class CnBetaHttpClient {
 
         ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager(httpParams, schemeRegistry);
         httpClient = new DefaultHttpClient(cm, httpParams);
+        // 设置 cookie 策略
+        httpClient.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BROWSER_COMPATIBILITY);
+        // 是否需要设置cookie store
+        // Create a local instance of cookie store
+/*
+        CookieStore cookieStore = new MyCookieStore();
+        // Populate cookies if needed
+        BasicClientCookie cookie = new BasicClientCookie("name", "value");
+        cookie.setVersion(0);
+        cookie.setDomain(".mycompany.com");
+        cookie.setPath("/");
+        cookieStore.addCookie(cookie);
+        // Set the store 
+        httpclient.setCookieStore(cookieStore);
+*/
+        
     }
 
     public static CnBetaHttpClient getInstance() {
