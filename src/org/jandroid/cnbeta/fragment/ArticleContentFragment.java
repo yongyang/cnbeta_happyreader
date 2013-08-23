@@ -119,7 +119,7 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
 
 //                return super.shouldOverrideUrlLoading(view, url);
                 if (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".gif")) {
-                    //TODO: load image async here???
+                    //TODO: 打开  topic Activity
                 }
                 // 禁止所有的 url 访问
                 return true;
@@ -146,7 +146,7 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
 
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                Toast.makeText(getActivity(), "JSAlert: \n" + message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "JSAlert: " + message, Toast.LENGTH_SHORT).show();
                 return true;
             }
 
@@ -158,6 +158,20 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         //picView.getSettings().setBuiltInZoomControls(true);
         //picView.getSettings().setUseWideViewPort(true);
         return root;
+    }
+    private void addImageClickListener() {
+        // 给所有img添加onclick函数，点击时打开大图
+        //TODO: 要排除掉 topic 图片
+        contentWebView.loadUrl("javascript:(function(){" +
+                "var objs = document.getElementsByTagName(\"img\"); " +
+                "for(var i=0;i<objs.length;i++)  " +
+                "{"
+                + "    objs[i].onclick=function()  " +
+                "    {  "
+                + "window.JS.openImage(this.src);  " +
+                "    }  " +
+                "}" +
+                "})()");
     }
 
     @Override
@@ -196,21 +210,4 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         //TODO: WebView从APK中加载Assets目录中的内容，是否需要在 asset 中存放一张默认图片
         contentWebView.loadUrl("file:///android_asset/personaldata.html");
     }
-
-    // 注入js函数监听
-    private void addImageClickListener() {
-        // 给所有img添加onclick函数，点击时打开大图
-        //TODO: 要排除掉 topic 图片
-        contentWebView.loadUrl("javascript:(function(){" +
-                "var objs = document.getElementsByTagName(\"img\"); " +
-                "for(var i=0;i<objs.length;i++)  " +
-                "{"
-                + "    objs[i].onclick=function()  " +
-                "    {  "
-                + "window.JS.openImage(this.src);  " +
-                "    }  " +
-                "}" +
-                "})()");
-    }
-
 }
