@@ -2,7 +2,6 @@ package org.jandroid.cnbeta.loader;
 
 import org.apache.commons.io.FileUtils;
 import org.jandroid.cnbeta.entity.HistoryArticle;
-import org.jandroid.cnbeta.entity.RealtimeArticle;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -22,7 +21,7 @@ public class HistoryArticleListLoader extends AbstractLoader<List<HistoryArticle
     private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
-    public List<HistoryArticle> fromHttp() throws Exception {
+    public List<HistoryArticle> fromHttp(File baseDir) throws Exception {
         throw new UnsupportedOperationException("load history article list from http.");
     }
 
@@ -54,7 +53,7 @@ public class HistoryArticleListLoader extends AbstractLoader<List<HistoryArticle
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public void toDisk(File baseDir, HistoryArticle historyArticle) throws Exception {
+    protected void toDisk(File baseDir, HistoryArticle historyArticle) throws Exception {
         File file = getCacheFile(baseDir);
         if(!file.exists()) {
             JSONArray jsonArray = new JSONArray();
@@ -73,13 +72,15 @@ public class HistoryArticleListLoader extends AbstractLoader<List<HistoryArticle
 
     @Override
     @SuppressWarnings("unchecked")
-    public void toDisk(File baseDir, List<HistoryArticle> articles) throws Exception {
+    protected void toDisk(File baseDir, Object obj) throws Exception {
+/*
         if(articles.size() == 1) {
             toDisk(baseDir, articles.get(0));
         }
         else {
             throw new UnsupportedOperationException("One article one time, use toDisk(File baseDir, HistoryArticle historyArticle) instead");
         }
+*/
     }
     
     public File getCacheFile(File dir){

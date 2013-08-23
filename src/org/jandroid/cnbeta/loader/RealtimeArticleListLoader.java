@@ -2,7 +2,6 @@ package org.jandroid.cnbeta.loader;
 
 import org.apache.commons.io.FileUtils;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
-import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.entity.RealtimeArticle;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -22,7 +21,7 @@ public class RealtimeArticleListLoader extends AbstractLoader<List<RealtimeArtic
 
 
     @Override
-    public List<RealtimeArticle> fromHttp() throws Exception {
+    public List<RealtimeArticle> fromHttp(File baseDir) throws Exception {
         String url = MessageFormat.format(URL_FORMAT, ""+System.currentTimeMillis(), ""+(System.currentTimeMillis() + 1));
         //user json-simple to parse returned json string
         String response = CnBetaHttpClient.getInstance().httpGet(url);

@@ -1,8 +1,6 @@
 package org.jandroid.cnbeta.async;
 
-import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.entity.RealtimeArticle;
-import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.cnbeta.loader.RealtimeArticleListLoader;
 
 import java.util.List;

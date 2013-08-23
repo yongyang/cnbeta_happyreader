@@ -1,11 +1,9 @@
 package org.jandroid.cnbeta.loader;
 
-import org.jandroid.cnbeta.CnBetaApplication;
+import android.util.Base64;
 import org.jandroid.cnbeta.Constants;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
-import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.entity.Content;
-import org.jandroid.cnbeta.entity.RankArticle;
 import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,8 +11,8 @@ import org.jsoup.nodes.Element;
 
 import java.io.File;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -34,7 +32,7 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
     }
 
     @Override
-    public Content fromHttp() throws Exception {
+    public Content fromHttp(File baseDir) throws Exception {
         String url = getURL();
         String responseHTML = CnBetaHttpClient.getInstance().httpGet(url);
         return parsePage(responseHTML);
@@ -89,9 +87,27 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         contentJSONObject.put("title", titleElement.text());
         contentJSONObject.put("time", dateElement.text());
         //NOTE: viewNum, commentNum will be set by ArticleCommentsLoader
-        //NOTE: ArticleContentFragment will parse images in content before load
-        
-        return new Content(contentJSONObject);
+
+
+        //TODO: Save To Disk now ???
+        Content content =  new Content(contentJSONObject);
+
+        //NOTE: parse images in content before load
+        List<String> images = new ArrayList<String>();
+        for(Element imgElement : contentElement.getElementsByTag("img")) {
+            // 取出原始的 img src, 交给 ImageLoader去异步加载
+            String imgSrc = imgElement.attr("src");
+            images.add(imgSrc);
+            //设置id， ImageLoader根据 id 来更新图片
+            imgElement.attr("id", Base64.encodeToString(imgSrc.getBytes(), Base64.DEFAULT));
+            // 设置一个默认图片
+            imgElement.attr("src", "file:///android_asset/default_image.png");
+            // 设置 onclick 事件
+            //TODO:  跳过 topic 图片
+            imgElement.attr("onclick", "javascript:window.JS.openImage(this.src)");
+        }
+        content.setImages(images);
+        return content;
     }
 
     private String getToken(String responseHTML) {

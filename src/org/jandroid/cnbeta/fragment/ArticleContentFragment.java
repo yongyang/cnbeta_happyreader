@@ -208,26 +208,9 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         whereTextView.setText(content.getWhere());
         //TODO: 在WebView load 的之前, 重写topic img url, 并设置 img Id，使得img load完之后，通过JS更新内容
         //TODO: 使用 JSoup Element 完成重写 img url？
-        contentWebView.loadDataWithBaseURL("", enhanceContentElement(content.getContentElement()), "text/html", "UTF-8", "");
+        contentWebView.loadDataWithBaseURL("", content.getContentElement(), "text/html", "UTF-8", "");
     }
     
-    private String enhanceContentElement(Element contentElement){
-        List<String> images = new ArrayList<String>();
-        for(Element imgElement : contentElement.getElementsByTag("img")) {
-            // 取出原始的 img src, 交给 ImageLoader去异步加载
-            String imgSrc = imgElement.attr("src");
-            images.add(imgSrc);
-            //设置id， ImageLoader根据 id 来更新图片
-            imgElement.attr("id", Base64.encodeToString(imgSrc.getBytes(), Base64.DEFAULT));
-            // 设置一个默认图片
-            imgElement.attr("src", "file:///android_asset/default_image.png");
-            // 设置 onclick 事件
-            //TODO:  跳过 topic 图片
-            imgElement.attr("onclick", "javascript:window.JS.openImage(this.src)");
-        }
-        ((ContentActivity)getActivity()).getContent().setImages(images);
-        return contentElement.outerHtml();
-    }
 
     public void updateImage(String id, String imgSrc) {
         // 在android代码中调用javaScript方法

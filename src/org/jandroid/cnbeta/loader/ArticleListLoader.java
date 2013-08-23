@@ -53,13 +53,12 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
     }
 
     @Override
-    public List<Article> fromHttp() throws Exception {
+    public List<Article> fromHttp(File baseDir) throws Exception {
         //TODO: clear cache if page=1, reload
         String url = MessageFormat.format(URL_TEMPLATE, ""+System.currentTimeMillis(), getType().getTypeString(), ""+getPage(), ""+(System.currentTimeMillis() + 1));
         //user json-simple to parse returned json string
         String response = CnBetaHttpClient.getInstance().httpGet(url);
         String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
-        setLoadedData(responseJSONString.getBytes());
         JSONObject responseJSON = (JSONObject)JSONValue.parse(responseJSONString);
         JSONArray articleListJSONArray;
 
@@ -71,7 +70,7 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
         else {
             articleListJSONArray = (JSONArray)((JSONObject)responseJSON.get("result")).get("list");
         }
-
+        toDisk(baseDir, articleListJSONArray.toJSONString());
         return parseArticleListJSON(articleListJSONArray);
     }
 
@@ -87,28 +86,16 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
 
     @Override
     public List<Article> fromDisk(File baseDir) throws Exception {
-            //read json file from SD Card
-            String articleListJSONString = FileUtils.readFileToString(getCacheFile(baseDir));
-            JSONArray articleListJSONArray = (JSONArray)JSONValue.parse(articleListJSONString);
-            return parseArticleListJSON(articleListJSONArray);
+        //read json file from SD Card
+        String articleListJSONString = FileUtils.readFileToString(getCacheFile(baseDir));
+        JSONArray articleListJSONArray = (JSONArray)JSONValue.parse(articleListJSONString);
+        return parseArticleListJSON(articleListJSONArray);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void toDisk(File baseDir, List<Article> articles) throws Exception {
-        //write articleListJSON json string, don't need to save article separately
-        if(articles != getLoadedObject()) {
-            JSONArray articleListJSONArray = new JSONArray();
-            for(Article article : articles){
-                articleListJSONArray.add(article.getJSONObject());
-            }
-
-            FileUtils.writeStringToFile(getCacheFile(baseDir), articleListJSONArray.toJSONString());
-        }
-        else {
-            FileUtils.writeStringToFile(getCacheFile(baseDir), new String(getLoadedData()));
-        }
-
+    public void toDisk(File baseDir, Object obj) throws Exception {
+        FileUtils.writeStringToFile(getCacheFile(baseDir), obj.toString());
     }
     
     @Override

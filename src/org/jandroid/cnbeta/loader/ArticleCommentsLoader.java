@@ -35,7 +35,7 @@ public class ArticleCommentsLoader extends AbstractLoader<Content> {
     }
 
     @Override
-    public Content fromHttp() throws Exception {
+    public Content fromHttp(File baseDir) throws Exception {
         String url = MessageFormat.format(URL_TEMPLATE, "" + System.currentTimeMillis(), ""+getContent().getSid(), getContent().getSn());
         String response = CnBetaHttpClient.getInstance().httpGet(url);
         

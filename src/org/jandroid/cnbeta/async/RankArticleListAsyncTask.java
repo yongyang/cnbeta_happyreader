@@ -1,8 +1,6 @@
 package org.jandroid.cnbeta.async;
 
 import org.jandroid.cnbeta.entity.RankArticle;
-import org.jandroid.cnbeta.entity.RealtimeArticle;
-import org.jandroid.cnbeta.loader.RealtimeArticleListLoader;
 import org.jandroid.cnbeta.loader.Top10Loader;
 
 import java.util.List;

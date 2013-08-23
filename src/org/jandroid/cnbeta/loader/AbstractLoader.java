@@ -7,30 +7,29 @@ import java.io.File;
  */
 public abstract class AbstractLoader<T> {
 
-    protected byte[] loadedData;
-    protected T loadedObject;
+    /**
+     * 
+     * @param baseDir the dir for store cache file
+     * @return
+     * @throws Exception
+     */
+    public abstract T fromHttp(File baseDir) throws Exception;
 
-    public byte[] getLoadedData() {
-        return loadedData;
-    }
-
-    public void setLoadedData(byte[] loadedData) {
-        this.loadedData = loadedData;
-    }
-
-    public T getLoadedObject() {
-        return loadedObject;
-    }
-
-    public void setLoadedObject(T loadedObject) {
-        this.loadedObject = loadedObject;
-    }
-
-    public abstract T fromHttp() throws Exception;
-
+    /**
+     * 
+     * @param baseDir the dir for store cache file
+     * @return
+     * @throws Exception
+     */
     public abstract T fromDisk(File baseDir) throws Exception;
-    
-    public abstract void toDisk(File baseDir, T t) throws Exception;
+
+    /**
+     * 
+     * @param baseDir
+     * @param obj the obj wants te be stored
+     * @throws Exception
+     */
+    protected abstract <Obj> void  toDisk(File baseDir, Obj obj) throws Exception;
     
     public abstract File getCacheFile(File baseDir);
     

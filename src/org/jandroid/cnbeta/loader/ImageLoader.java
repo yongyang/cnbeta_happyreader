@@ -23,12 +23,13 @@ public class ImageLoader extends AbstractLoader<Bitmap> {
     }
 
     @Override
-    public Bitmap fromHttp() throws Exception {
+    public Bitmap fromHttp(File baseDir) throws Exception {
         // some url has space char
         String url = imageUrl.replace(" ", "%20");
         byte[] bytes = CnBetaHttpClient.getInstance().httpGetImage(url);
         setLoadedData(bytes);
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        toDisk(baseDir, bytes);
         setLoadedObject(bitmap);
         return bitmap;
     }
@@ -46,7 +47,7 @@ public class ImageLoader extends AbstractLoader<Bitmap> {
     }
 
     @Override
-    public void toDisk(File baseDir, Bitmap bitmap) throws Exception {
+    protected  void toDisk(File baseDir, Object bitmap) throws Exception {
         if (bitmap == getLoadedObject()) {
             FileUtils.writeByteArrayToFile(getCacheFile(baseDir), getLoadedData());
         }

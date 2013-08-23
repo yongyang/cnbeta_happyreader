@@ -2,7 +2,6 @@ package org.jandroid.cnbeta.async;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.util.Log;
 import org.jandroid.cnbeta.loader.ImageLoader;
 
 /**

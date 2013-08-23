@@ -41,7 +41,7 @@ public class Top10Loader extends AbstractLoader<Map<String, List<RankArticle>>>{
     }
 
     @Override
-    public Map<String, List<RankArticle>> fromHttp() throws Exception {
+    public Map<String, List<RankArticle>> fromHttp(File baseDir) throws Exception {
         String url = getURL();
         String responseHTML = CnBetaHttpClient.getInstance().httpGet(url);
         return parsePage(responseHTML);
