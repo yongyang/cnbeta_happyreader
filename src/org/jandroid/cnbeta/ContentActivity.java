@@ -233,7 +233,7 @@ public class ContentActivity extends Activity {
                     //TODO: load images
 //                    loadImages();
                     //TODO: load comments and view_num, comment_num etc
-//                    loadComments();
+                    loadComments();
                 }
                 else {
                     Toast.makeText(ContentActivity.this, asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
@@ -242,7 +242,7 @@ public class ContentActivity extends Activity {
         }.executeMultiThread();
     }
 
-    private void loadImages(){
+    public void loadImages(){
         final String topicImage = content.getTopicImage();
         loadImage(topicImage);
         for(String image : content.getImages()){
@@ -328,4 +328,7 @@ public class ContentActivity extends Activity {
         }
     }
 
+    public Content getContent() {
+        return content;
+    }
 }

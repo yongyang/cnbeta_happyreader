@@ -76,7 +76,7 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         Element whereElement = document.select("span.where").first();
 
         JSONObject contentJSONObject = new JSONObject();
-        contentJSONObject.put("introduction", introductionElement.outerHtml());
+//        contentJSONObject.put("introduction", introductionElement.outerHtml());
         contentJSONObject.put("content", contentElement.outerHtml());
 
         String topicHref = topicHrefElement.attr("href");
@@ -89,8 +89,7 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         contentJSONObject.put("title", titleElement.text());
         contentJSONObject.put("time", dateElement.text());
         //NOTE: viewNum, commentNum will be set by ArticleCommentsLoader
-        
-        //TODO: parse images in content
+        //NOTE: ArticleContentFragment will parse images in content before load
         
         return new Content(contentJSONObject);
     }

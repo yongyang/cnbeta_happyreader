@@ -1,6 +1,7 @@
 package org.jandroid.cnbeta.entity;
 
 import org.json.simple.JSONObject;
+import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +34,9 @@ public class Content {
 
     // 重新 format 之后的 html 内容
     private String content;
-
-    private String introduction;
     
+    private Element contentElement; 
+
     private List<Comment> comments = new ArrayList<Comment>();
 
     public Content(JSONObject jsonObject) {
@@ -48,7 +49,6 @@ public class Content {
         setTime(jsonObject.get("time").toString());
         setSn(jsonObject.get("sn").toString());
         setWhere(jsonObject.get("where").toString());
-        setIntroduction(jsonObject.get("introduction").toString());
         setContent(jsonObject.get("content").toString());
     }
 
@@ -98,6 +98,14 @@ public class Content {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Element getContentElement() {
+        return contentElement;
+    }
+
+    public void setContentElement(Element contentElement) {
+        this.contentElement = contentElement;
     }
 
     public List<String> getImages() {
@@ -156,11 +164,4 @@ public class Content {
         this.where = where;
     }
 
-    public String getIntroduction() {
-        return introduction;
-    }
-
-    public void setIntroduction(String introduction) {
-        this.introduction = introduction;
-    }
 }
