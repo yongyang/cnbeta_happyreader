@@ -17,6 +17,10 @@ public class Logger {
         return new Logger(clz.getSimpleName());
     }
 
+    public static Logger newLogger(String tag){
+        return new Logger(tag);
+    }
+
    	public void v(String msg) {
    		if (isLogEnable)
    			android.util.Log.v(tag, msg);

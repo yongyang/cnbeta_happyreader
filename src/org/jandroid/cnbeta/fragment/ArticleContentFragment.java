@@ -1,26 +1,37 @@
 package org.jandroid.cnbeta.fragment;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.ConsoleMessage;
+import android.webkit.JavascriptInterface;
+import android.webkit.JsResult;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.entity.Content;
+import org.jandroid.util.Logger;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 public class ArticleContentFragment extends Fragment {
+
+    static Logger log = Logger.newLogger(ArticleContentFragment.class);
 
     private TextView titleTextView;
     private TextView timeTextView;
@@ -84,18 +95,68 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         contentWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
         contentWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
 
-        contentWebView.setWebViewClient(new WebViewClient(){
+        contentWebView.addJavascriptInterface(new Object(){
+            @JavascriptInterface
+    		public void openImage(String img) {
+    			Intent intent = new Intent();
+    			intent.putExtra("image", img);
+    //			intent.setClass(context, ShowWebImageActivity.class);
+    //			context.startActivity(intent);
+                Toast.makeText(getActivity(), "点击了图片: " + img, Toast.LENGTH_SHORT).show();
+                //TODO: 新开一个 Transparent Activity, 使用 WebView 打开大图
+            }
+        }, "JS");
+
+        contentWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                addImageClickListener();
+                //TODO: load images here, after Page Loaded
+            }
+
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+
 //                return super.shouldOverrideUrlLoading(view, url);
-                if(url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".gif")){
-                //TODO: load image async here???
+                if (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".gif")) {
+                    //TODO: load image async here???
                 }
+                // 禁止所有的 url 访问
                 return true;
+            }
+
+            @Override
+            public boolean shouldOverrideKeyEvent(WebView view, KeyEvent event) {
+                return super.shouldOverrideKeyEvent(view, event);
+            }
+
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                log.e("ERRROR: " + errorCode + ", " + description + ", " + failingUrl);
             }
         });
 
+        contentWebView.setWebChromeClient(new WebChromeClient(){
+            @Override
+             public boolean onConsoleMessage(ConsoleMessage cm) {
+                 log.d(cm.message() + " -- From line " + cm.lineNumber() + " of " + cm.sourceId() );
+                 return true;
+             }
+
+             @Override
+             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+                 Toast.makeText(getActivity(), "JSAlert: \n" + message, Toast.LENGTH_SHORT).show();
+                 return true;
+             }
+
+        });
+
         //TODO: 在WebView load 的之前, 重写topic img url, 并注入JS，使得img load完之后，通过JS更新内容
+
+        //TODO: use a WebView to enlarge image, http://mobile.tutsplus.com/tutorials/android/image-display-and-interaction-with-android-webviews/
+        //picView.getSettings().setBuiltInZoomControls(true);
+        //picView.getSettings().setUseWideViewPort(true);
         return root;
 	}
 
@@ -125,18 +186,31 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
 
     public void updateImage(String id, String imgSrc) {
         // 在android代码中调用javaScript方法
-        contentWebView.loadUrl(
-                "javascript:(" +
-                        "function() { " +
-                        "document.getElementsById('" + id + "').src = 'file:///" + imgSrc + "'; " +
-                        "})()");
+        contentWebView.loadUrl("javascript:(function(){" +
+      		"var objs = document.getElementsByTagName(\"img\"); " +
+      				"for(var i=0;i<objs.length;i++)  " +
+      		"{"
+      				+ "    objs[i].src='" + imgSrc + "';" +
+      		"}" +
+      		"})()");
         //TODO: WebView从APK中加载Assets目录中的内容，是否需要在 asset 中存放一张默认图片
         contentWebView.loadUrl("file:///android_asset/personaldata.html");
     }
 
-    public void updateInfo(Content content) {
-        viewNumTextView.setText(content.getViewNum());
-        commentNumTextView.setText(content.getCommentNum());
-    }
+    	// 注入js函数监听
+	private void addImageClickListener() {
+		// 给所有img添加onclick函数，点击时打开大图
+        //TODO: 要排除掉 topic 图片
+		contentWebView.loadUrl("javascript:(function(){" +
+		"var objs = document.getElementsByTagName(\"img\"); " +
+				"for(var i=0;i<objs.length;i++)  " +
+		"{"
+				+ "    objs[i].onclick=function()  " +
+		"    {  "
+				+ "window.JS.openImage(this.src);  " +
+		"    }  " +
+		"}" +
+		"})()");
+	}
 
 }
