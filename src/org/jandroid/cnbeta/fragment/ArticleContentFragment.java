@@ -190,13 +190,14 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
     }
 
     public void updateContent(Content content) {
-        //TODO: 在WebView load 的之前, 重写topic img url, 并注入JS，使得img load完之后，通过JS更新内容
         titleTextView.setText(content.getTitle());
         titleTextView.setSelected(true);
         timeTextView.setText(content.getTime());
         viewNumTextView.setText("" + content.getViewNum());
         commentNumTextView.setText("" + content.getCommentNum());
         whereTextView.setText(content.getWhere());
+        //TODO: 在WebView load 的之前, 重写topic img url, 并设置 img Id，使得img load完之后，通过JS更新内容
+        //TODO: 使用 JSoup Element 完成重写 img url？
         contentWebView.loadDataWithBaseURL("", content.getContent(), "text/html", "UTF-8", "");
     }
 
