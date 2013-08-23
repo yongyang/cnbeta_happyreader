@@ -91,7 +91,7 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
 //        contentWebView.getSettings().setLoadsImagesAutomatically(false); //don't load images auto
 //        contentWebView.getSettings().setBlockNetworkImage(true);
         contentWebView.getSettings().setDefaultTextEncodingName("UTF-8");
-        
+
         // resize big image to fit screen width
         contentWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
 
@@ -162,10 +162,11 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
     }
     private void addImageClickListener() {
         // 给所有img添加onclick函数，点击时打开大图
-        //TODO: 要排除掉 topic 图片
         contentWebView.loadUrl("javascript:(function(){" +
                 "var objs = document.getElementsByTagName(\"img\"); " +
-                "for(var i=0;i<objs.length;i++)  " +
+//                "for(var i=0;i<objs.length;i++)  " +
+                // 跳过 topic 图片
+                "for(var i=1;i<objs.length;i++)  " +
                 "{"
                 + "    objs[i].onclick=function()  " +
                 "    {  "
