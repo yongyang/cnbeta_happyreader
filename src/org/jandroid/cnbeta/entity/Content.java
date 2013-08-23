@@ -35,8 +35,6 @@ public class Content {
     // 重新 format 之后的 html 内容
     private String content;
     
-    private Element contentElement; 
-
     private List<Comment> comments = new ArrayList<Comment>();
 
     public Content(JSONObject jsonObject) {
@@ -98,14 +96,6 @@ public class Content {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Element getContentElement() {
-        return contentElement;
-    }
-
-    public void setContentElement(Element contentElement) {
-        this.contentElement = contentElement;
     }
 
     public List<String> getImages() {

@@ -35,8 +35,7 @@ public abstract class ArticleCommentsAsyncTask extends ProgressDialogAsyncTask<O
         }
         else {
             if(hasNetwork) {
-                Content content = commentsLoader.fromHttp();
-                commentsLoader.toDisk(getCnBetaApplicationContext().getBaseDir(), content);
+                Content content = commentsLoader.fromHttp(getCnBetaApplicationContext().getBaseDir());
                 return content;
             }
             throw new NetworkErrorException("no network");

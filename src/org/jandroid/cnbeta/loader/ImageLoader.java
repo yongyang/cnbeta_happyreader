@@ -27,43 +27,21 @@ public class ImageLoader extends AbstractLoader<Bitmap> {
         // some url has space char
         String url = imageUrl.replace(" ", "%20");
         byte[] bytes = CnBetaHttpClient.getInstance().httpGetImage(url);
-        setLoadedData(bytes);
+        writeDiskByteArray(baseDir, bytes);
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-        toDisk(baseDir, bytes);
-        setLoadedObject(bitmap);
         return bitmap;
     }
 
     @Override
     public Bitmap fromDisk(File baseDir) throws Exception {
-        File file = getCacheFile(baseDir);
-        if (file.exists()) {
-            byte[] bytes = FileUtils.readFileToByteArray(file);
+        if(isCached(baseDir)){
+            byte[] bytes = readDiskByteArray(baseDir);
             return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         }
-        else {
-            return null;
-        }
+        return null;
     }
 
-    @Override
-    protected  void toDisk(File baseDir, Object bitmap) throws Exception {
-        if (bitmap == getLoadedObject()) {
-            FileUtils.writeByteArrayToFile(getCacheFile(baseDir), getLoadedData());
-        }
-        else {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            //TODO: 是否需要根据后缀名设置不同的Format
-            bitmap.compress(Bitmap.CompressFormat.PNG, 80, baos);
-            FileUtils.writeByteArrayToFile(getCacheFile(baseDir), baos.toByteArray());
-        }
-    }
-
-    public File getCacheFile(File baseDir) {
-        return new File(baseDir, getFilename());
-    }
-
-    private String getFilename() {
+    public String getFileName() {
         try {
             return URLEncoder.encode(imageUrl, "utf-8");
         }

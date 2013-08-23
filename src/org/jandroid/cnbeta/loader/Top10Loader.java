@@ -37,6 +37,7 @@ public class Top10Loader extends AbstractLoader<Map<String, List<RankArticle>>>{
 
     @Override
     public Map<String, List<RankArticle>> fromDisk(File baseDir) throws Exception {
+        //TODO:
         return null;
     }
 
@@ -45,11 +46,6 @@ public class Top10Loader extends AbstractLoader<Map<String, List<RankArticle>>>{
         String url = getURL();
         String responseHTML = CnBetaHttpClient.getInstance().httpGet(url);
         return parsePage(responseHTML);
-    }
-
-    @Override
-    public void toDisk(File baseDir, Map<String, List<RankArticle>> stringListMap) throws Exception {
-
     }
 
     private String getURL(){
@@ -114,8 +110,8 @@ public class Top10Loader extends AbstractLoader<Map<String, List<RankArticle>>>{
     }
 
     @Override
-    public File getCacheFile(File baseDir) {
-        return new File(baseDir, "ranks");
+    public String getFileName() {
+        return "ranks";
     }
 }
 

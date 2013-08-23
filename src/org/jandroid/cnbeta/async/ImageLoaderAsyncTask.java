@@ -37,8 +37,7 @@ public abstract class ImageLoaderAsyncTask extends BaseAsyncTask<String, Integer
         }
         else {
             if(hasNetwork) {
-                Bitmap bitmap = imageLoader.fromHttp();
-                imageLoader.toDisk(getCnBetaApplicationContext().getBaseDir(), bitmap);
+                Bitmap bitmap = imageLoader.fromHttp(getCnBetaApplicationContext().getBaseDir());
                 return bitmap;
             }
             else {

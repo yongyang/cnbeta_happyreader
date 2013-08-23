@@ -30,8 +30,7 @@ public abstract class ArticleListAsyncTask extends ProgressDialogAsyncTask<Objec
         boolean hasNetwork = getCnBetaApplicationContext().isNetworkConnected();
         ArticleListLoader articleListLoader = new ArticleListLoader(getCategory(), getPage());
         if(hasNetwork) {
-            List<Article> articles = articleListLoader.fromHttp();
-            articleListLoader.toDisk(getCnBetaApplicationContext().getBaseDir(), articles);
+            List<Article> articles = articleListLoader.fromHttp(getCnBetaApplicationContext().getBaseDir());
             return articles;
         }
         else {

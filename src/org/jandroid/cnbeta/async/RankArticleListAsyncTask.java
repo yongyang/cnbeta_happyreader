@@ -28,8 +28,7 @@ public abstract class RankArticleListAsyncTask extends ProgressDialogAsyncTask<O
         boolean hasNetwork = getCnBetaApplicationContext().isNetworkConnected();
         Top10Loader articleListLoader = new Top10Loader();
         if(hasNetwork) {
-            Map<String, List<RankArticle>> articlesMap = articleListLoader.fromHttp();
-            articleListLoader.toDisk(getCnBetaApplicationContext().getBaseDir(), articlesMap);
+            Map<String, List<RankArticle>> articlesMap = articleListLoader.fromHttp(getCnBetaApplicationContext().getBaseDir());
             return articlesMap;
         }
         else {

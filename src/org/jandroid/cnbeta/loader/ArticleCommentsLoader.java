@@ -70,12 +70,7 @@ public class ArticleCommentsLoader extends AbstractLoader<Content> {
     }
 
     @Override
-    public void toDisk(File baseDir, Content comment) throws Exception {
-
-    }
-
-    @Override
-    public File getCacheFile(File baseDir) {
-        return new File(baseDir, "comment_" + getContent().getSid());
+    public String getFileName() {
+        return "comment_" + getContent().getSid();
     }
 }

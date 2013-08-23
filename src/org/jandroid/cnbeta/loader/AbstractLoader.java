@@ -1,5 +1,7 @@
 package org.jandroid.cnbeta.loader;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 
 /**
@@ -24,17 +26,32 @@ public abstract class AbstractLoader<T> {
     public abstract T fromDisk(File baseDir) throws Exception;
 
     /**
-     * 
-     * @param baseDir
-     * @param obj the obj wants te be stored
-     * @throws Exception
+     *
+     * @return filename to store data
      */
-    protected abstract <Obj> void  toDisk(File baseDir, Obj obj) throws Exception;
-    
-    public abstract File getCacheFile(File baseDir);
-    
-    public final boolean isCached(File baseDir) {
-        return getCacheFile(baseDir).exists();
+    public abstract String getFileName();
+
+    protected void writeDisk(File baseDir, String str) throws Exception {
+        FileUtils.writeStringToFile(getFile(baseDir), str);
     }
-    
+
+    protected void writeDiskByteArray(File baseDir, byte[] bytes) throws Exception {
+        FileUtils.writeByteArrayToFile(getFile(baseDir), bytes);
+    }
+
+    protected String readDisk(File baseDir) throws Exception {
+        return FileUtils.readFileToString(getFile(baseDir));
+    }
+
+    protected byte[] readDiskByteArray(File baseDir) throws Exception {
+        return FileUtils.readFileToByteArray(getFile(baseDir));
+    }
+
+    public final File getFile(File baseDir) {
+        return new File(baseDir, getFileName());
+    }
+
+    public final boolean isCached(File baseDir) {
+        return getFile(baseDir).exists();
+    }
 }

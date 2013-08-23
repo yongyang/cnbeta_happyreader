@@ -27,8 +27,7 @@ public abstract class HistoryArticleListAsyncTask extends ProgressDialogAsyncTas
         boolean hasNetwork = getCnBetaApplicationContext().isNetworkConnected();
         RealtimeArticleListLoader articleListLoader = new RealtimeArticleListLoader();
         if(hasNetwork) {
-            List<RealtimeArticle> articles = articleListLoader.fromHttp();
-            articleListLoader.toDisk(getCnBetaApplicationContext().getBaseDir(), articles);
+            List<RealtimeArticle> articles = articleListLoader.fromHttp(getCnBetaApplicationContext().getBaseDir());
             return articles;
         }
         else {

@@ -35,8 +35,7 @@ public abstract class ArticleContentAsyncTask extends ProgressDialogAsyncTask<Ob
         }
         else {
             if(hasNetwork) {
-                Content content = contentLoader.fromHttp();
-                contentLoader.toDisk(getCnBetaApplicationContext().getBaseDir(), content);
+                Content content = contentLoader.fromHttp(getCnBetaApplicationContext().getBaseDir());
                 return content;
             }
             throw new NetworkErrorException("no network");

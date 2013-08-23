@@ -26,11 +26,10 @@ public class RealtimeArticleListLoader extends AbstractLoader<List<RealtimeArtic
         //user json-simple to parse returned json string
         String response = CnBetaHttpClient.getInstance().httpGet(url);
         String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
-        setLoadedData(responseJSONString.getBytes());
         JSONObject responseJSON = (JSONObject)JSONValue.parse(responseJSONString);
         JSONArray articleListJSONArray;
         articleListJSONArray = (JSONArray)responseJSON.get("result");
-
+        writeDisk(baseDir, responseJSONString);
         return parseArticleListJSON(articleListJSONArray);
     }
 
@@ -46,31 +45,15 @@ public class RealtimeArticleListLoader extends AbstractLoader<List<RealtimeArtic
 
     @Override
     public List<RealtimeArticle> fromDisk(File baseDir) throws Exception {
-            //read json file from SD Card
-            String articleListJSONString = FileUtils.readFileToString(getCacheFile(baseDir));
-            JSONArray articleListJSONArray = (JSONArray)JSONValue.parse(articleListJSONString);
-            return parseArticleListJSON(articleListJSONArray);
+        //read json file from SD Card
+        String articleListJSONString = readDisk(getFile(baseDir));
+        JSONArray articleListJSONArray = (JSONArray)JSONValue.parse(articleListJSONString);
+        return parseArticleListJSON(articleListJSONArray);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void toDisk(File baseDir, List<RealtimeArticle> articles) throws Exception {
-        //write articleListJSON json string, don't need to save article separately
-        if(articles != getLoadedObject()) {
-            JSONArray articleListJSONArray = new JSONArray();
-            for(RealtimeArticle article : articles){
-                articleListJSONArray.add(article.getJSONObject());
-            }
-            FileUtils.writeStringToFile(getCacheFile(baseDir), articleListJSONArray.toJSONString());
-        }
-        else {
-            FileUtils.writeStringToFile(getCacheFile(baseDir), new String(getLoadedData()));
-        }
-
-    }
-    
-    public File getCacheFile(File dir){
-        return new File(dir , "realtime");
+    public String getFileName() {
+        return "realtime";
     }
 }
 

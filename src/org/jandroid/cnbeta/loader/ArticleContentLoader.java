@@ -44,13 +44,8 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
     }
 
     @Override
-    public void toDisk(File baseDir, Content content) throws Exception {
-
-    }
-
-    @Override
-    public File getCacheFile(File baseDir) {
-        return new File(baseDir, "article_" + getArticleSid());
+    public String getFileName() {
+        return "article_" + getArticleSid();
     }
 
     private String getURL(){

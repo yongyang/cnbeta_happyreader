@@ -208,7 +208,7 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         whereTextView.setText(content.getWhere());
         //TODO: 在WebView load 的之前, 重写topic img url, 并设置 img Id，使得img load完之后，通过JS更新内容
         //TODO: 使用 JSoup Element 完成重写 img url？
-        contentWebView.loadDataWithBaseURL("", content.getContentElement(), "text/html", "UTF-8", "");
+        contentWebView.loadDataWithBaseURL("", content.getContent(), "text/html", "UTF-8", "");
     }
     
 
