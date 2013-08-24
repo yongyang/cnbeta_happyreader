@@ -233,7 +233,7 @@ public class ContentActivity extends Activity {
                     //TODO: load images
 //                    loadImages();
                     //TODO: load comments and view_num, comment_num etc
-                    loadComments();
+//                    loadComments();
                 }
                 else {
                     Toast.makeText(ContentActivity.this, asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();

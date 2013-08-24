@@ -118,11 +118,13 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
                 super.onPageFinished(view, url);
                 addImageClickListener();
                 //TODO: load images here, after Page Loaded
+/*
                 List<String> images =((ContentActivity)getActivity()).getContent().getImages();
                 for(String imgSrc : images){
                     ((ContentActivity)getActivity()).loadImages();
                 }
-                
+*/
+
             }
 
             @Override

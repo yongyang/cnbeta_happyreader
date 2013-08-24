@@ -35,12 +35,55 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
     public Content fromHttp(File baseDir) throws Exception {
         String url = getURL();
         String responseHTML = CnBetaHttpClient.getInstance().httpGet(url);
-        return parsePage(responseHTML);
+
+        Document document = Jsoup.parse(responseHTML, "utf-8");
+        Element bodyElement = document.select("div.body").first();
+
+        cleanBodyElement(bodyElement);
+
+        // add token and sn
+        String token = getToken(responseHTML);
+        String sn = getSN(responseHTML);
+        bodyElement.attr(token, token);
+        bodyElement.attr(sn, sn);
+
+        writeDisk(baseDir, bodyElement.outerHtml());
+
+        return parseBodyElement(bodyElement);
     }
+
+    private void cleanBodyElement(Element bodyElement) {
+
+        Element element = bodyElement.getElementById("googleAd_afc");
+        if(element!=null) {
+            element.remove();
+        }
+
+        for(Element sectionElement : bodyElement.getElementsByTag("section")){
+            sectionElement.remove();
+        }
+
+        for(Element clearElement : bodyElement.select("div.clear")){
+            clearElement.remove();
+        }
+        for(Element clearfixElement : bodyElement.select("div.clearfix")){
+            clearfixElement.remove();
+        }
+        for(Element ratingboxElement : bodyElement.select("div.rating_box clearfix")){
+            ratingboxElement.remove();
+        }
+        for(Element naviElement : bodyElement.select("div.navi")){
+            naviElement.remove();
+        }
+
+    }
+
 
     @Override
     public Content fromDisk(File baseDir) throws Exception {
-        return null;
+        String html = readDisk(baseDir);
+        Document document = Jsoup.parse(html, "utf-8");
+        return parseBodyElement(document);
     }
 
     @Override
@@ -52,21 +95,18 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         return MessageFormat.format(URL_TEMPLATE, "" + getArticleSid());
     }
 
-    private Content parsePage(String responseHTML){
-        Document document = Jsoup.parse(responseHTML, "utf-8");
-        Element contentElement = document.select("div.content").first();
-        for(Element scriptElement : contentElement.getElementsByTag("script") ){
-            scriptElement.remove();
-        }
-        Element titleElement = document.getElementById("news_title");
-        Element dateElement = document.select("span.date").first();
-        Element introductionElement = document.select("div.introduction").first();
+    private Content parseBodyElement(Element bodyElement){
+        //TODO: 解析上一篇，下一篇
+        Element titleElement = bodyElement.getElementById("news_title");
+        Element contentElement = bodyElement.select("div.content").first();
+        Element dateElement = bodyElement.select("span.date").first();
+        Element introductionElement = bodyElement.select("div.introduction").first();
         introductionElement.attr("style", "background-color: #fbfbfb; color: #43434; border: 1px solid #e5e5e5; border-left: 0px; border-right: 0px; padding-left: 10px; padding-right: 10px; margin-bottom: 10px");
 
         Element topicHrefElement = introductionElement.getElementsByTag("a").first();
         Element topicImgElement = topicHrefElement.getElementsByTag("img").first();
 
-        Element whereElement = document.select("span.where").first();
+        Element whereElement = bodyElement.select("span.where").first();
 
         JSONObject contentJSONObject = new JSONObject();
 //        contentJSONObject.put("introduction", introductionElement.outerHtml());
@@ -76,29 +116,28 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         contentJSONObject.put("topic", topicHref.substring("/topics/".length(),topicHref.indexOf(".htm")));
         contentJSONObject.put("topicImage", topicImgElement.attr("src"));
         contentJSONObject.put("where", whereElement.getElementsByTag("a").isEmpty() ? whereElement.text() : whereElement.getElementsByTag("a").first().text());
-        contentJSONObject.put("token", getToken(responseHTML));
-        contentJSONObject.put("sn", getSN(responseHTML));
+        contentJSONObject.put("token", bodyElement.attr("token"));
+        contentJSONObject.put("sn", bodyElement.attr("sn"));
         contentJSONObject.put("sid", getArticleSid());
         contentJSONObject.put("title", titleElement.text());
         contentJSONObject.put("time", dateElement.text());
         //NOTE: viewNum, commentNum will be set by ArticleCommentsLoader
 
-
-        //TODO: Save To Disk now ???
         Content content =  new Content(contentJSONObject);
 
         //NOTE: parse images in content before load
         List<String> images = new ArrayList<String>();
-        for(Element imgElement : contentElement.getElementsByTag("img")) {
+
+        // 跳过 topic 图片, 第二个 div.content 仅包含文章正文
+        for(Element imgElement : bodyElement.select("div.content").first().getElementsByTag("img")) {
             // 取出原始的 img src, 交给 ImageLoader去异步加载
             String imgSrc = imgElement.attr("src");
             images.add(imgSrc);
             //设置id， ImageLoader根据 id 来更新图片
             imgElement.attr("id", Base64.encodeToString(imgSrc.getBytes(), Base64.DEFAULT));
-            // 设置一个默认图片
-            imgElement.attr("src", "file:///android_asset/default_image.png");
+            //TODO: 设置一个默认图片
+//            imgElement.attr("src", "file:///android_asset/default_image.png");
             // 设置 onclick 事件
-            //TODO:  跳过 topic 图片
             imgElement.attr("onclick", "javascript:window.JS.openImage(this.src)");
         }
         content.setImages(images);
