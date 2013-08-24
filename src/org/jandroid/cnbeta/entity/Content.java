@@ -25,10 +25,7 @@ public class Content {
     //用于发起请求的验证信息
     private String token;
     private String sn;
-    //所属分类主题
-    private int topic;
-    private String topicImage;
-    
+
     //文章中的图片地址列表
     private List<String> images = new ArrayList<String>();
 
@@ -120,22 +117,6 @@ public class Content {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    public int getTopic() {
-        return topic;
-    }
-
-    public void setTopic(int topic) {
-        this.topic = topic;
-    }
-
-    public String getTopicImage() {
-        return topicImage;
-    }
-
-    public void setTopicImage(String topicImage) {
-        this.topicImage = topicImage;
     }
 
     public int getViewNum() {

@@ -112,8 +112,8 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
 //        contentJSONObject.put("introduction", introductionElement.outerHtml());
 
         String topicHref = topicHrefElement.attr("href");
-        contentJSONObject.put("topic", topicHref.substring("/topics/".length(),topicHref.indexOf(".htm")));
-        contentJSONObject.put("topicImage", topicImgElement.attr("src"));
+        String topic = topicHref.substring("/topics/".length(),topicHref.indexOf(".htm"));
+
         contentJSONObject.put("where", whereElement.getElementsByTag("a").isEmpty() ? whereElement.text() : whereElement.getElementsByTag("a").first().text());
         contentJSONObject.put("token", bodyElement.attr("token"));
         contentJSONObject.put("sn", bodyElement.attr("sn"));
@@ -138,7 +138,10 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
             //设置 alt，作为对照记录
             imgElement.attr("osrc", imgSrc);
             //设置 onclick 事件， topics 图片除外
-            if(!(imgElement.parent().attr("href") != null && imgElement.parent().attr("href").contains("topics"))) {
+            if((imgElement.parent().attr("href") != null && imgElement.parent().attr("href").contains("topics"))) {
+                imgElement.attr("onclick", "javascript:window.JS.openTopic(" + topic + ")");
+            }
+            else {
                 imgElement.attr("onclick", "javascript:window.JS.openImage(this.src)");
             }
         }

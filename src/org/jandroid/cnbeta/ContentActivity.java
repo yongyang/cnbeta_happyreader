@@ -243,8 +243,6 @@ public class ContentActivity extends Activity {
     }
 
     public void loadImages(){
-        final String topicImage = content.getTopicImage();
-        loadImage(topicImage);
         for(String image : content.getImages()){
             loadImage(image);
         }
