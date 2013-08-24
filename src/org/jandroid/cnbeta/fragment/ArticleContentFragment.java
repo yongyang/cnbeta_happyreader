@@ -110,6 +110,16 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
                 Toast.makeText(getActivity(), "点击了图片: " + img, Toast.LENGTH_SHORT).show();
                 //TODO: 新开一个 Transparent Activity, 使用 WebView 打开大图
             }
+
+            @JavascriptInterface
+            public void openTopic(String topic) {
+                Intent intent = new Intent();
+                intent.putExtra("topic", topic);
+                //			intent.setClass(context, ShowWebImageActivity.class);
+                //			context.startActivity(intent);
+                Toast.makeText(getActivity(), "点击了Topic: " + topic, Toast.LENGTH_SHORT).show();
+            }
+
         }, "JS");
 
         contentWebView.setWebViewClient(new WebViewClient() {
@@ -129,11 +139,6 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
-//                return super.shouldOverrideUrlLoading(view, url);
-                if (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".gif")) {
-                    //TODO: 打开  topic Activity
-                }
                 // 禁止所有的 url 访问
                 return true;
             }

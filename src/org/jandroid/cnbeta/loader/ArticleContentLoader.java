@@ -103,16 +103,10 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         Element introductionElement = bodyElement.select("div.introduction").first();
         introductionElement.attr("style", "background-color: #fbfbfb; color: #43434; border: 1px solid #e5e5e5; border-left: 0px; border-right: 0px; padding-left: 10px; padding-right: 10px; margin-bottom: 10px");
 
-        Element topicHrefElement = introductionElement.getElementsByTag("a").first();
-        Element topicImgElement = topicHrefElement.getElementsByTag("img").first();
-
         Element whereElement = bodyElement.select("span.where").first();
 
         JSONObject contentJSONObject = new JSONObject();
 //        contentJSONObject.put("introduction", introductionElement.outerHtml());
-
-        String topicHref = topicHrefElement.attr("href");
-        String topic = topicHref.substring("/topics/".length(),topicHref.indexOf(".htm"));
 
         contentJSONObject.put("where", whereElement.getElementsByTag("a").isEmpty() ? whereElement.text() : whereElement.getElementsByTag("a").first().text());
         contentJSONObject.put("token", bodyElement.attr("token"));
@@ -139,6 +133,8 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
             imgElement.attr("osrc", imgSrc);
             //设置 onclick 事件， topics 图片除外
             if((imgElement.parent().attr("href") != null && imgElement.parent().attr("href").contains("topics"))) {
+                String topicHref = imgElement.parent().attr("href");
+                String topic = topicHref.substring("/topics/".length(),topicHref.indexOf(".htm"));
                 imgElement.attr("onclick", "javascript:window.JS.openTopic(" + topic + ")");
             }
             else {
