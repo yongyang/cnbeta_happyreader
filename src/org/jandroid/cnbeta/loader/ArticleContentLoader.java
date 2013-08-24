@@ -110,7 +110,6 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
 
         JSONObject contentJSONObject = new JSONObject();
 //        contentJSONObject.put("introduction", introductionElement.outerHtml());
-        contentJSONObject.put("content", contentElement.outerHtml());
 
         String topicHref = topicHrefElement.attr("href");
         contentJSONObject.put("topic", topicHref.substring("/topics/".length(),topicHref.indexOf(".htm")));
@@ -123,23 +122,29 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         contentJSONObject.put("time", dateElement.text());
         //NOTE: viewNum, commentNum will be set by ArticleCommentsLoader
 
-        Content content =  new Content(contentJSONObject);
-
         //NOTE: parse images in content before load
         List<String> images = new ArrayList<String>();
 
-        // 跳过 topic 图片, 第二个 div.content 仅包含文章正文
-        for(Element imgElement : bodyElement.select("div.content").first().getElementsByTag("img")) {
+        //content img 处理
+        for(Element imgElement : contentElement.select("div.content").first().getElementsByTag("img")) {
+
             // 取出原始的 img src, 交给 ImageLoader去异步加载
             String imgSrc = imgElement.attr("src");
             images.add(imgSrc);
             //设置id， ImageLoader根据 id 来更新图片
             imgElement.attr("id", Base64.encodeToString(imgSrc.getBytes(), Base64.DEFAULT));
-            //TODO: 设置一个默认图片
-//            imgElement.attr("src", "file:///android_asset/default_image.png");
-            // 设置 onclick 事件
-            imgElement.attr("onclick", "javascript:window.JS.openImage(this.src)");
+            //设置一个默认图片
+            imgElement.attr("src", "file:///android_asset/default_img.png");
+            //设置 alt，作为对照记录
+            imgElement.attr("osrc", imgSrc);
+            //设置 onclick 事件， topics 图片除外
+            if(!(imgElement.parent().attr("href") != null && imgElement.parent().attr("href").contains("topics"))) {
+                imgElement.attr("onclick", "javascript:window.JS.openImage(this.src)");
+            }
         }
+        //必须最后设置 content，以保证img src 已经修改
+        contentJSONObject.put("content", contentElement.outerHtml());
+        Content content =  new Content(contentJSONObject);
         content.setImages(images);
         return content;
     }
