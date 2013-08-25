@@ -18,7 +18,7 @@ public class ImageViewerActivity extends Activity {
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDisplayZoomControls(true);
 //        webView.getSettings().setUseWideViewPort(true);
-        webView.loadDataWithBaseURL("", "<center><img src='" + imgSrc + "'></center>", "text/html", "UTF-8", "");
+        webView.loadDataWithBaseURL("", "<img src='" + imgSrc + "'>", "text/html", "UTF-8", "");
     }
 
     public static void main(String[] args) {
