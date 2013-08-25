@@ -10,6 +10,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.File;
+import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,8 +96,8 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         return MessageFormat.format(URL_TEMPLATE, "" + getArticleSid());
     }
 
-    private Content parseBodyElement(Element bodyElement){
-        //TODO: 解析上一篇，下一篇
+    private Content parseBodyElement(Element bodyElement) throws Exception {
+        //TODO: 解析上一篇，下一篇 ???
         Element titleElement = bodyElement.getElementById("news_title");
         Element contentElement = bodyElement.select("div.content").first();
         Element dateElement = bodyElement.select("span.date").first();
@@ -126,7 +127,7 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
             String imgSrc = imgElement.attr("src");
             images.add(imgSrc);
             //设置id， ImageLoader根据 id 来更新图片
-            imgElement.attr("id", Base64.encodeToString(imgSrc.getBytes(), Base64.DEFAULT));
+            imgElement.attr("id", Base64.encodeToString(imgSrc.getBytes(), Base64.NO_WRAP));
             //设置一个默认图片
             imgElement.attr("src", "file:///android_asset/default_img.png");
             //设置 alt，作为对照记录

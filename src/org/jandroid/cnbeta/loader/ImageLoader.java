@@ -18,6 +18,8 @@ public class ImageLoader extends AbstractLoader<Bitmap> {
 
     private String imageUrl;
 
+    private byte[] imageData;
+
     public ImageLoader(String imageUrl) {
         this.imageUrl = imageUrl;
     }
@@ -27,6 +29,7 @@ public class ImageLoader extends AbstractLoader<Bitmap> {
         // some url has space char
         String url = imageUrl.replace(" ", "%20");
         byte[] bytes = CnBetaHttpClient.getInstance().httpGetImage(url);
+        imageData = bytes;
         writeDiskByteArray(baseDir, bytes);
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         return bitmap;
@@ -36,9 +39,14 @@ public class ImageLoader extends AbstractLoader<Bitmap> {
     public Bitmap fromDisk(File baseDir) throws Exception {
         if(isCached(baseDir)){
             byte[] bytes = readDiskByteArray(baseDir);
+            imageData = bytes;
             return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         }
         return null;
+    }
+
+    public byte[] getImageData() {
+        return imageData;
     }
 
     public String getFileName() {

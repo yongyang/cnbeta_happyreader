@@ -22,6 +22,7 @@ import android.webkit.WebViewClient;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.entity.Content;
@@ -93,8 +94,8 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         contentWebView.getSettings().setBuiltInZoomControls(true);
         contentWebView.getSettings().setAppCacheEnabled(true);
         contentWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-//        contentWebView.getSettings().setLoadsImagesAutomatically(false); //don't load images auto
-//        contentWebView.getSettings().setBlockNetworkImage(true);
+        contentWebView.getSettings().setLoadsImagesAutomatically(true);
+        contentWebView.getSettings().setBlockNetworkImage(true);
         contentWebView.getSettings().setDefaultTextEncodingName("UTF-8");
 
         // resize big image to fit screen width
@@ -126,8 +127,8 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                addImageClickListener();
                 //TODO: load images here, after Page Loaded
+                ((ContentActivity)getActivity()).loadImages();
 /*
                 List<String> images =((ContentActivity)getActivity()).getContent().getImages();
                 for(String imgSrc : images){
@@ -177,21 +178,6 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         //picView.getSettings().setUseWideViewPort(true);
         return root;
     }
-    private void addImageClickListener() {
-        // 给所有img添加onclick函数，点击时打开大图
-        contentWebView.loadUrl("javascript:(function(){" +
-                "var objs = document.getElementsByTagName(\"img\"); " +
-//                "for(var i=0;i<objs.length;i++)  " +
-                // 跳过 topic 图片
-                "for(var i=1;i<objs.length;i++)  " +
-                "{"
-                + "    objs[i].onclick=function()  " +
-                "    {  "
-                + "window.JS.openImage(this.src);  " +
-                "    }  " +
-                "}" +
-                "})()");
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -219,16 +205,13 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
     }
     
 
-    public void updateImage(String id, String imgSrc) {
+    public void updateImage(String id, byte[] imageData) {
         // 在android代码中调用javaScript方法
+        String image64 = Base64.encodeToString(imageData, Base64.NO_WRAP);
+//        imageData = "file://" + ((CnBetaApplication)getActivity().getApplicationContext()).getBaseDir().getAbsolutePath()+"/" + imageData;
         contentWebView.loadUrl("javascript:(function(){" +
-                "var objs = document.getElementsByTagName(\"img\"); " +
-                "for(var i=0;i<objs.length;i++)  " +
-                "{"
-                + "    objs[i].src='" + imgSrc + "';" +
-                "}" +
+                "var img = document.getElementById('" + id + "');"
+                + "img.src='data:image/*;base64,"+ image64 + "';" +
                 "})()");
-        //TODO: WebView从APK中加载Assets目录中的内容，是否需要在 asset 中存放一张默认图片
-        contentWebView.loadUrl("file:///android_asset/personaldata.html");
     }
 }

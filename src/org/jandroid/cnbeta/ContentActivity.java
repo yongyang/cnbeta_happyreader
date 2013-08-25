@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +28,8 @@ import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.fragment.ArticleCommentsFragment;
 import org.jandroid.cnbeta.fragment.ArticleContentFragment;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -258,8 +261,9 @@ public class ContentActivity extends Activity {
             @Override
             protected void onPostExecute(AsyncResult asyncResult) {
                 super.onPostExecute(asyncResult);
-                //TODO: update image in WebView by javascript
-                updateContentFragment();
+                String id = Base64.encodeToString(imgSrc.getBytes(), Base64.NO_WRAP);
+                //update image in WebView by javascript
+                contentFragment.updateImage(id, getImageData());
             }
 
             @Override

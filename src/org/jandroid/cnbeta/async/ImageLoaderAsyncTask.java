@@ -11,7 +11,11 @@ import org.jandroid.cnbeta.loader.ImageLoader;
 public abstract class ImageLoaderAsyncTask extends BaseAsyncTask<String, Integer, AsyncResult> {
 
     protected abstract String getImageUrl();
-    
+
+    private String localFileName;
+
+    private byte[] imageData;
+
     @Override
     protected AsyncResult doInBackground(String... params) {
         try {
@@ -23,21 +27,33 @@ public abstract class ImageLoaderAsyncTask extends BaseAsyncTask<String, Integer
         }
     }
 
+    public byte[] getImageData() {
+        return imageData;
+    }
+
     @SuppressWarnings("unchecked")
     public AsyncTask<String, Integer, AsyncResult> executeMultiThread() {
         return executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
-    
+
+    public String getLocalFileName() {
+        return localFileName;
+    }
+
     protected Bitmap loadImage(String url) throws Exception {
         boolean hasNetwork = getCnBetaApplicationContext().isNetworkConnected();
         ImageLoader imageLoader = new ImageLoader(url);
+        localFileName = imageLoader.getFileName();
         //优先从Disk装载
         if(imageLoader.isCached(getCnBetaApplicationContext().getBaseDir())) {
-            return imageLoader.fromDisk(getCnBetaApplicationContext().getBaseDir());
+            Bitmap bitmap = imageLoader.fromDisk(getCnBetaApplicationContext().getBaseDir());
+            imageData = imageLoader.getImageData();
+            return bitmap;
         }
         else {
             if(hasNetwork) {
                 Bitmap bitmap = imageLoader.fromHttp(getCnBetaApplicationContext().getBaseDir());
+                imageData = imageLoader.getImageData();
                 return bitmap;
             }
             else {
