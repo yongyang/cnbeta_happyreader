@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.jandroid.cnbeta.BaseActivity;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.async.AsyncResult;
@@ -146,8 +147,7 @@ public class HistoryArticleListFragment extends Fragment {
     
     private void reloadArticles(){
         EnvironmentUtils.checkNetworkConnected(getActivity());
-
-        new RealtimeArticleListAsyncTask(){
+        ((BaseActivity)getActivity()).executeAsyncTaskMultiThreading(new RealtimeArticleListAsyncTask(){
             @Override
             public CnBetaApplicationContext getCnBetaApplicationContext() {
                 return (CnBetaApplicationContext)getActivity().getApplication();
@@ -190,7 +190,8 @@ public class HistoryArticleListFragment extends Fragment {
                     Toast.makeText(getActivity(), listAsyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
                 }
             }
-        }.executeMultiThread();
+        }
+        );
     }
 
     @Override

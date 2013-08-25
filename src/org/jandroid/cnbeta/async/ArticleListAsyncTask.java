@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class ArticleListAsyncTask extends ProgressDialogAsyncTask<List<Article>> {
+    public abstract class ArticleListAsyncTask extends ProgressDialogAsyncTask<List<Article>> {
 
     protected abstract ArticleListLoader.Type getCategory();
 

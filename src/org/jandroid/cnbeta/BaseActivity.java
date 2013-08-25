@@ -8,6 +8,10 @@ import android.os.Bundle;
 import android.view.Window;
 import org.jandroid.util.Logger;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
@@ -15,15 +19,13 @@ public class BaseActivity extends Activity {
     
     protected Logger logger = Logger.newLogger(this.getClass());
     
-   	protected AlertDialog mAlertDialog;
-   	protected AsyncTask mRunningTask;
+    protected List<AsyncTask> runningTasks = new ArrayList<AsyncTask>();
 
    	/******************************** 【Activity LifeCycle For Debug】 *******************************************/
    	@Override
    	protected void onCreate(Bundle savedInstanceState) {
         logger.d("onCreate() invoked!!");
    		super.onCreate(savedInstanceState);
-   		requestWindowFeature(Window.FEATURE_NO_TITLE);
    	}
 
    	@Override
@@ -56,19 +58,29 @@ public class BaseActivity extends Activity {
    		super.onStop();
    	}
 
+    public synchronized void executeAsyncTaskMultiThreading(AsyncTask asyncTask){
+        for(Iterator<AsyncTask> it = runningTasks.iterator(); it.hasNext();){
+            AsyncTask runningTask = it.next();
+            if(runningTask.isCancelled() || runningTask.getStatus() == AsyncTask.Status.FINISHED) {
+                it.remove();
+            }
+        }
+        runningTasks.add(asyncTask);
+        asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
    	@Override
    	public void onDestroy() {
    		logger.d(" onDestroy() invoked!!");
    		super.onDestroy();
 
-   		if (mRunningTask != null && mRunningTask.isCancelled() == false) {
-   			mRunningTask.cancel(false);
-   			mRunningTask = null;
-   		}
-   		if (mAlertDialog != null) {
-   			mAlertDialog.dismiss();
-   			mAlertDialog = null;
-   		}
+        for(Iterator<AsyncTask> it = runningTasks.iterator(); it.hasNext();){
+            AsyncTask runningTask = it.next();
+            if(!runningTask.isCancelled() || runningTask.getStatus() != AsyncTask.Status.FINISHED) {
+                runningTask.cancel(true);
+            }
+            it.remove();
+        }
    	}
 
   	public void finishAnim() 	{

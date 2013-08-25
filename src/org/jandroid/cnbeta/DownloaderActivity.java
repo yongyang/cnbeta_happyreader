@@ -11,7 +11,7 @@ import org.jandroid.util.Logger;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class DownloaderActivity extends Activity {
+public class DownloaderActivity extends BaseActivity {
 
     protected Logger logger = Logger.newLogger(this.getClass());
 

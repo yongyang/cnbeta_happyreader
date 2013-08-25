@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -34,7 +35,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContentActivity extends Activity {
+public class ContentActivity extends BaseActivity {
     
     private ArticleContentFragment contentFragment;
     private ArticleCommentsFragment commentsFragment;
@@ -197,7 +198,7 @@ public class ContentActivity extends Activity {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("加载文章中...");
 
-        new ArticleContentAsyncTask(){
+        executeAsyncTaskMultiThreading(new ArticleContentAsyncTask(){
 
             @Override
             protected long getSid() {
@@ -210,6 +211,11 @@ public class ContentActivity extends Activity {
                 setProgressBarIndeterminate(true);
                 setProgressBarVisibility(true);
 
+                progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    public void onCancel(DialogInterface dialog) {
+                        cancel(true);
+                    }
+                });
                 progressDialog.show();
                 rotateRefreshActionView();
             }
@@ -243,7 +249,8 @@ public class ContentActivity extends Activity {
                     Toast.makeText(ContentActivity.this, asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
                 }
             }
-        }.executeMultiThread();
+        }
+        );
     }
 
     public void loadImages(){
@@ -253,7 +260,7 @@ public class ContentActivity extends Activity {
     }
     
     private void loadImage(final String imgSrc){
-        new ImageBytesLoaderAsyncTask(){
+        executeAsyncTaskMultiThreading(new ImageBytesLoaderAsyncTask(){
             @Override
             protected String getImageUrl() {
                 return imgSrc;
@@ -271,13 +278,13 @@ public class ContentActivity extends Activity {
             public CnBetaApplicationContext getCnBetaApplicationContext() {
                 return (CnBetaApplicationContext)getApplicationContext();
             }
-        }.executeMultiThread();
+        }
+        );
         
     }
     
     private void loadComments(){
-        
-        new ArticleCommentsAsyncTask(){
+        executeAsyncTaskMultiThreading(new ArticleCommentsAsyncTask(){
             @Override
             protected Content getArticleContent() {
                 return content;
@@ -309,7 +316,8 @@ public class ContentActivity extends Activity {
             public CnBetaApplicationContext getCnBetaApplicationContext() {
                 return (CnBetaApplicationContext)getApplicationContext();
             }
-        }.executeMultiThread();
+        }
+        );
     }
 
 

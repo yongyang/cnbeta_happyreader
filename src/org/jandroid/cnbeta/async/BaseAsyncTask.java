@@ -8,7 +8,7 @@ import org.jandroid.cnbeta.loader.AbstractLoader;
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  * @create 7/30/13 4:15 PM
  */
-public abstract class BaseAsyncTask<R>  extends AsyncTask<String, Integer, AsyncResult<R>> {
+public abstract class BaseAsyncTask<R>  extends AsyncTask<Object, Integer, AsyncResult<R>> {
 
     // if only load from local storage, when List init, need to load cache data first from local
     protected boolean isLocalLoadOnly() {
@@ -39,13 +39,8 @@ public abstract class BaseAsyncTask<R>  extends AsyncTask<String, Integer, Async
         return null;
     }
 
-    @SuppressWarnings("unchecked")
-    public AsyncTask<String, Integer, AsyncResult<R>> executeMultiThread() {
-        return executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
     @Override
-    protected AsyncResult doInBackground(String... params) {
+    protected AsyncResult doInBackground(Object... params) {
         try {
             R result = load();
             return AsyncResult.successResult(result);

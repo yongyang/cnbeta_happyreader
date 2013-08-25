@@ -10,7 +10,7 @@ import org.jandroid.util.IntentUtils;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class SplashActivity extends Activity {
+public class SplashActivity extends BaseActivity {
 
     private Handler mHandler = new Handler() {
    		public void handleMessage(android.os.Message msg) {

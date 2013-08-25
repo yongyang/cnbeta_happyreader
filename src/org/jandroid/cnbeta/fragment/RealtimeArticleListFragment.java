@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.jandroid.cnbeta.BaseActivity;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.async.AsyncResult;
@@ -148,52 +149,53 @@ public class RealtimeArticleListFragment extends Fragment {
     private void reloadArticles(){
         EnvironmentUtils.checkNetworkConnected(getActivity());
 
-        new RealtimeArticleListAsyncTask(){
-            @Override
-            public CnBetaApplicationContext getCnBetaApplicationContext() {
-                return (CnBetaApplicationContext)getActivity().getApplication();
-            }
+        ((BaseActivity)getActivity()).executeAsyncTaskMultiThreading(new RealtimeArticleListAsyncTask() {
+                    @Override
+                    public CnBetaApplicationContext getCnBetaApplicationContext() {
+                        return (CnBetaApplicationContext) getActivity().getApplication();
+                    }
 
-            @Override
-            public void showProgressUI() {
-                // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
-                getActivity().setProgressBarIndeterminate(true);
-                getActivity().setProgressBarVisibility(true);
-                footbarRefresh.setClickable(false);
-                progressBarRefresh.setVisibility(View.VISIBLE);
-                lineLayoutRefresh.setVisibility(View.GONE);
-                // rotate refresh item
-                rotateRefreshActionView();
-            }
+                    @Override
+                    public void showProgressUI() {
+                        // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
+                        getActivity().setProgressBarIndeterminate(true);
+                        getActivity().setProgressBarVisibility(true);
+                        footbarRefresh.setClickable(false);
+                        progressBarRefresh.setVisibility(View.VISIBLE);
+                        lineLayoutRefresh.setVisibility(View.GONE);
+                        // rotate refresh item
+                        rotateRefreshActionView();
+                    }
 
-            @Override
-            public void dismissProgressUI() {
-                getActivity().setProgressBarVisibility(false);
-                progressBarRefresh.setVisibility(View.GONE);
-                lineLayoutRefresh.setVisibility(View.VISIBLE);
-                //Stop refresh animation anyway
-                dismissRefreshActionView();
-                footbarRefresh.setClickable(true);
-            }
+                    @Override
+                    public void dismissProgressUI() {
+                        getActivity().setProgressBarVisibility(false);
+                        progressBarRefresh.setVisibility(View.GONE);
+                        lineLayoutRefresh.setVisibility(View.VISIBLE);
+                        //Stop refresh animation anyway
+                        dismissRefreshActionView();
+                        footbarRefresh.setClickable(true);
+                    }
 
-            @Override
-            protected void onPostExecute(AsyncResult<List<RealtimeArticle>> listAsyncResult) {
-                super.onPostExecute(listAsyncResult);
-                if(listAsyncResult.isSuccess()) {
-                    List<RealtimeArticle> articles = listAsyncResult.getResult();
-                    if(articles != null) {
-                        tvLastTimeRefresh.setText(dateFormat.format(new Date()));
-                        loadedArticles.clear();
-                        loadedArticles.addAll(articles);
-                        adapter.notifyDataSetChanged();
-                        lvArticleList.smoothScrollToPosition(0);
+                    @Override
+                    protected void onPostExecute(AsyncResult<List<RealtimeArticle>> listAsyncResult) {
+                        super.onPostExecute(listAsyncResult);
+                        if (listAsyncResult.isSuccess()) {
+                            List<RealtimeArticle> articles = listAsyncResult.getResult();
+                            if (articles != null) {
+                                tvLastTimeRefresh.setText(dateFormat.format(new Date()));
+                                loadedArticles.clear();
+                                loadedArticles.addAll(articles);
+                                adapter.notifyDataSetChanged();
+                                lvArticleList.smoothScrollToPosition(0);
+                            }
+                        }
+                        else {
+                            Toast.makeText(getActivity(), listAsyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
-                else {
-                    Toast.makeText(getActivity(), listAsyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
-                }
-            }
-        }.executeMultiThread();
+        );
     }
 
     @Override

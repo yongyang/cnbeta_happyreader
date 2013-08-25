@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.jandroid.cnbeta.BaseActivity;
 import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.ContentActivity;
@@ -140,40 +141,41 @@ public class ArticleListFragment extends Fragment {
 
             @Override
             protected void loadImageAsync(final String imageUrl, final OnAsyncImageLoadListener onAsyncImageLoadListener) {
-                new ImageLoaderAsyncTask() {
+                ((BaseActivity)getActivity()).executeAsyncTaskMultiThreading(new ImageLoaderAsyncTask() {
 
-                    @Override
-                    public CnBetaApplicationContext getCnBetaApplicationContext() {
-                        return (CnBetaApplication)getActivity().getApplication();
-                    }
+                            @Override
+                            public CnBetaApplicationContext getCnBetaApplicationContext() {
+                                return (CnBetaApplication) getActivity().getApplication();
+                            }
 
-                    @Override
-                    protected String getImageUrl() {
-                        return imageUrl;
-                    }
+                            @Override
+                            protected String getImageUrl() {
+                                return imageUrl;
+                            }
 
-                    @Override
-                    protected void onPostExecute(final AsyncResult bitmapAsyncResult) {
-                        super.onPostExecute(bitmapAsyncResult);
-                        if (bitmapAsyncResult.isSuccess()) {
-                            Bitmap bitmap = (Bitmap) bitmapAsyncResult.getResult();
-                            onAsyncImageLoadListener.onLoaded(bitmap);
+                            @Override
+                            protected void onPostExecute(final AsyncResult bitmapAsyncResult) {
+                                super.onPostExecute(bitmapAsyncResult);
+                                if (bitmapAsyncResult.isSuccess()) {
+                                    Bitmap bitmap = (Bitmap) bitmapAsyncResult.getResult();
+                                    onAsyncImageLoadListener.onLoaded(bitmap);
+                                }
+                                else {
+                                    onAsyncImageLoadListener.onLoadFailed(bitmapAsyncResult.getErrorMsg(), bitmapAsyncResult.getException());
+                                }
+                            }
+
+                            @Override
+                            protected void onCancelled() {
+                                onAsyncImageLoadListener.onLoadFailed("Cancelled", null);
+                            }
+
+                            @Override
+                            protected void onCancelled(AsyncResult bitmapAsyncResult) {
+                                onAsyncImageLoadListener.onLoadFailed("Cancelled", null);
+                            }
                         }
-                        else {
-                            onAsyncImageLoadListener.onLoadFailed(bitmapAsyncResult.getErrorMsg(), bitmapAsyncResult.getException());
-                        }
-                    }
-
-                    @Override
-                    protected void onCancelled() {
-                        onAsyncImageLoadListener.onLoadFailed("Cancelled", null);
-                    }
-
-                    @Override
-                    protected void onCancelled(AsyncResult bitmapAsyncResult) {
-                        onAsyncImageLoadListener.onLoadFailed("Cancelled", null);
-                    }
-                }.executeMultiThread();
+                );
             }
 
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -226,7 +228,7 @@ public class ArticleListFragment extends Fragment {
         EnvironmentUtils.checkNetworkConnected(getActivity());
         
         //loading data
-        new ArticleListAsyncTask() {
+        ((BaseActivity)getActivity()).executeAsyncTaskMultiThreading(new ArticleListAsyncTask() {
 
             @Override
             public CnBetaApplicationContext getCnBetaApplicationContext() {
@@ -282,7 +284,8 @@ public class ArticleListFragment extends Fragment {
                 }
                 tvPage.setText("" + (loadedPage+1));
             }
-        }.executeMultiThread();        
+        }
+        );
     }
 
     // refresh

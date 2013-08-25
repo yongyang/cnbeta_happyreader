@@ -144,7 +144,7 @@ public class Top10ArticleListFragment extends Fragment {
 
             @Override
             protected void loadImageAsync(final String imageUrl, final OnAsyncImageLoadListener onAsyncImageLoadListener) {
-                new ImageLoaderAsyncTask() {
+                top10Activity.executeAsyncTaskMultiThreading(new ImageLoaderAsyncTask() {
 
                     @Override
                     public CnBetaApplicationContext getCnBetaApplicationContext() {
@@ -177,7 +177,8 @@ public class Top10ArticleListFragment extends Fragment {
                     protected void onCancelled(AsyncResult bitmapAsyncResult) {
                         onAsyncImageLoadListener.onLoadFailed("Cancelled", null);
                     }
-                }.executeMultiThread();
+                }
+                );
             }
 
             public View getView(int position, View convertView, ViewGroup parent) {

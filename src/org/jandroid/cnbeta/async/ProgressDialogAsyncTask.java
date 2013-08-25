@@ -7,7 +7,7 @@ import org.jandroid.cnbeta.CnBetaApplicationContext;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class ProgressDialogAsyncTask<R> extends BaseAsyncTask<R> {
+    public abstract class ProgressDialogAsyncTask<R> extends BaseAsyncTask<R> {
 
     public abstract void showProgressUI();
     public abstract void dismissProgressUI();

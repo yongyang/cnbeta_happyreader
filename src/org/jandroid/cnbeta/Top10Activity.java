@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,7 +37,7 @@ import java.util.Map;
 
 //TODO: 由 Activity 加载数据，然后去更新 Fragment
 
-public class Top10Activity extends Activity {
+public class Top10Activity extends BaseActivity {
 
     private Handler handler = new Handler();
 
@@ -282,7 +283,7 @@ public class Top10Activity extends Activity {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("加载排行信息中...");
 
-        new RankArticleListAsyncTask(){
+        executeAsyncTaskMultiThreading(new RankArticleListAsyncTask(){
             @Override
             public CnBetaApplicationContext getCnBetaApplicationContext() {
                 return (CnBetaApplicationContext)getApplication();
@@ -294,6 +295,11 @@ public class Top10Activity extends Activity {
                 setProgressBarIndeterminate(true);
                 setProgressBarVisibility(true);
 
+                progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    public void onCancel(DialogInterface dialog) {
+                        cancel(true);
+                    }
+                });
                 progressDialog.show();
                 rotateRefreshActionView();
                 for(final Top10ArticleListFragment fragment : fragments) {
@@ -343,7 +349,8 @@ public class Top10Activity extends Activity {
                     Toast.makeText(Top10Activity.this, asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
                 }
             }
-        }.executeMultiThread();
+        }
+        );
 
     }
 

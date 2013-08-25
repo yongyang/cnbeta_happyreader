@@ -7,8 +7,8 @@ import android.webkit.WebView;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class ImageViewerActivity extends Activity {
-
+public class ImageViewerActivity extends BaseActivity {
+//TODO: 右上角显示关闭按钮
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
