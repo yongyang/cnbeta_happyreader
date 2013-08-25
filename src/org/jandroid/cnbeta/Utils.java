@@ -17,4 +17,12 @@ public class Utils {
         Intent intent = IntentUtils.newIntent(theActivity, ContentActivity.class, bundle);
         theActivity.startActivity(intent);
     }
+
+    public static void openImageViewerActivity(Activity theActivity, String imgSrc) {
+        Bundle bundle = new Bundle();
+        bundle.putString("src", imgSrc);
+        Intent intent = IntentUtils.newIntent(theActivity, ImageViewerActivity.class, bundle);
+        theActivity.startActivity(intent);
+    }
+
 }

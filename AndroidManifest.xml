@@ -41,6 +41,11 @@
         <activity
                 android:name=".ContentActivity"
                 android:label="@string/label_article_content"/>
+        <activity
+                android:name=".ImageViewerActivity"
+                android:theme="@style/Transparent"
+                />
+
     </application>
 
     <!--for test case-->

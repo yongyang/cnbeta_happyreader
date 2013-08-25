@@ -25,6 +25,7 @@ import android.widget.Toast;
 import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
+import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.util.Logger;
 import org.jsoup.nodes.Element;
@@ -104,12 +105,8 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         contentWebView.addJavascriptInterface(new Object() {
             @JavascriptInterface
             public void openImage(String img) {
-                Intent intent = new Intent();
-                intent.putExtra("image", img);
-                //			intent.setClass(context, ShowWebImageActivity.class);
-                //			context.startActivity(intent);
-                Toast.makeText(getActivity(), "点击了图片: " + img, Toast.LENGTH_SHORT).show();
-                //TODO: 新开一个 Transparent Activity, 使用 WebView 打开大图
+                //新开一个 Transparent Activity, 使用 WebView 打开大图
+                Utils.openImageViewerActivity(getActivity(), img);
             }
 
             @JavascriptInterface
