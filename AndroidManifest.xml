@@ -43,7 +43,7 @@
                 android:label="@string/label_article_content"/>
         <activity
                 android:name=".ImageViewerActivity"
-                android:theme="@style/Transparent"
+                android:theme="@style/Dialog.ImageViewer"
                 />
 
     </application>

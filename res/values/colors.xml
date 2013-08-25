@@ -138,5 +138,5 @@
     <color name="cnBeta_bg_introduction">#ffeb620e</color>
 
 
-    <color name="transparent_background">#80000000</color>
+    <!--<color name="transparent_background">#80000000</color>-->
 </resources>
