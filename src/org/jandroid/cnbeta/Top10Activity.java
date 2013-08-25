@@ -318,11 +318,11 @@ public class Top10Activity extends Activity {
             }
 
             @Override
-            protected void onPostExecute(AsyncResult asyncResult) {
+            protected void onPostExecute(AsyncResult<Map<String, List<RankArticle>>> asyncResult) {
                 super.onPostExecute(asyncResult);
                 isLoading = false;
                 if(asyncResult.isSuccess()) {
-                    Map<String, List<RankArticle>>  rankArticlesMap = (Map<String, List<RankArticle>> )asyncResult.getResult();
+                    Map<String, List<RankArticle>>  rankArticlesMap = asyncResult.getResult();
                     if(rankArticlesMap != null) {
                         lastLoadTime = new Date();
                         allRankArticlesMap.clear();

@@ -7,7 +7,7 @@ import org.jandroid.cnbeta.CnBetaApplicationContext;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class ProgressDialogAsyncTask<Params, Progress, Result> extends BaseAsyncTask<Params, Progress, Result> {
+public abstract class ProgressDialogAsyncTask<R> extends BaseAsyncTask<R> {
 
     public abstract void showProgressUI();
     public abstract void dismissProgressUI();
@@ -19,14 +19,8 @@ public abstract class ProgressDialogAsyncTask<Params, Progress, Result> extends 
     }
 
     @Override
-    protected void onPostExecute(Result r) {
+    protected void onPostExecute(AsyncResult<R> rAsyncResult) {
         dismissProgressUI();
-        super.onPostExecute(r);
+        super.onPostExecute(rAsyncResult);
     }
-
-    @SuppressWarnings("unchecked")
-    public AsyncTask<Params, Progress, Result> executeMultiThread() {
-        return executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
 }

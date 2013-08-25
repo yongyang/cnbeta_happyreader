@@ -270,11 +270,11 @@ public class ArticleListFragment extends Fragment {
             }
 
             @Override
-            protected void onPostExecute(AsyncResult listAsyncResult) {
+            protected void onPostExecute(AsyncResult<List<Article>> listAsyncResult) {
                 super.onPostExecute(listAsyncResult);
                 if(listAsyncResult.isSuccess()) {
                     loadedPage++;
-                    List<Article> articles = (List<Article>)listAsyncResult.getResult();
+                    List<Article> articles = listAsyncResult.getResult();
                     appendArticles(articles);
                 }
                 else {

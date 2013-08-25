@@ -9,6 +9,7 @@ import java.util.Map;
 public class AsyncResult<T> {
     private boolean success = false;
     private T result;
+    private String errorMsg;
     private Exception exception;
     private Map<String, Object> extras = new HashMap<String, Object>();
 
@@ -17,27 +18,44 @@ public class AsyncResult<T> {
         this.result = result;
     }
 
+    AsyncResult(boolean success, T result, String errorMsg) {
+        this.success = success;
+        this.result = result;
+        this.errorMsg = errorMsg;
+    }
+
+    AsyncResult(boolean success, T result, Exception e) {
+        this.success = success;
+        this.result = result;
+        this.errorMsg = errorMsg;
+    }
+
     public static <T> AsyncResult<T> successResult(T result){
         return new AsyncResult<T>(true, result);
     }
 
-    public static AsyncResult<String> errorResult(String errorMsg){
-        return new AsyncResult<String>(false, errorMsg);
+    public static <T> AsyncResult<T> errorResult(String errorMsg){
+        return new AsyncResult<T>(false, null);
     }
 
-    public static AsyncResult<String> errorResult(String errorMsg, Exception e){
-        AsyncResult<String> errorAsyncResult = new AsyncResult<String>(false, errorMsg);
+    public static <T> AsyncResult<T> errorResult(String errorMsg, T result, Exception e){
+        AsyncResult<T> errorAsyncResult = new AsyncResult<T>(false, result, e);
         errorAsyncResult.exception = e;
         return errorAsyncResult;
     }
 
     public String getErrorMsg(){
         if(success) {
-            return "success";
+            return null;
         }
         else {
             //TODO: result may be null
-            return result.toString();
+            if(exception != null) {
+                return exception.getMessage();
+            }
+            else {
+                return errorMsg;
+            }
         }
     }
 

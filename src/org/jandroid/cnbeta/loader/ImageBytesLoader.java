@@ -1,12 +1,8 @@
 package org.jandroid.cnbeta.loader;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
-import org.apache.commons.io.FileUtils;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URLEncoder;
 
@@ -14,27 +10,26 @@ import java.net.URLEncoder;
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  * @create 7/29/13 3:15 PM
  */
-public class ImageLoader extends AbstractLoader<Bitmap> {
+public class ImageBytesLoader extends AbstractLoader<byte[]> {
 
     private String imageUrl;
 
-    public ImageLoader(String imageUrl) {
+    public ImageBytesLoader(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
     @Override
-    public Bitmap fromHttp(File baseDir) throws Exception {
+    public byte[] fromHttp(File baseDir) throws Exception {
         // some url has space char
         String url = imageUrl.replace(" ", "%20");
         byte[] bytes = CnBetaHttpClient.getInstance().httpGetImage(url);
         writeDiskByteArray(baseDir, bytes);
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        return bytes;
     }
 
     @Override
-    public Bitmap fromDisk(File baseDir) throws Exception {
-        byte[] bytes =  readDiskByteArray(baseDir);
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    public byte[] fromDisk(File baseDir) throws Exception {
+        return readDiskByteArray(baseDir);
     }
 
     public String getFileName() {

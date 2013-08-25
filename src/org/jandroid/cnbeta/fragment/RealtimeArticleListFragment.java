@@ -177,10 +177,10 @@ public class RealtimeArticleListFragment extends Fragment {
             }
 
             @Override
-            protected void onPostExecute(AsyncResult listAsyncResult) {
+            protected void onPostExecute(AsyncResult<List<RealtimeArticle>> listAsyncResult) {
                 super.onPostExecute(listAsyncResult);
                 if(listAsyncResult.isSuccess()) {
-                    List<RealtimeArticle> articles = (List<RealtimeArticle>)listAsyncResult.getResult();
+                    List<RealtimeArticle> articles = listAsyncResult.getResult();
                     if(articles != null) {
                         tvLastTimeRefresh.setText(dateFormat.format(new Date()));
                         loadedArticles.clear();

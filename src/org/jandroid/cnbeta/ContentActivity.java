@@ -22,6 +22,7 @@ import android.widget.Toast;
 import org.jandroid.cnbeta.async.ArticleCommentsAsyncTask;
 import org.jandroid.cnbeta.async.ArticleContentAsyncTask;
 import org.jandroid.cnbeta.async.AsyncResult;
+import org.jandroid.cnbeta.async.ImageBytesLoaderAsyncTask;
 import org.jandroid.cnbeta.async.ImageLoaderAsyncTask;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.entity.Content;
@@ -227,10 +228,10 @@ public class ContentActivity extends Activity {
             }
 
             @Override
-            protected void onPostExecute(AsyncResult asyncResult) {
+            protected void onPostExecute(AsyncResult<Content> asyncResult) {
                 super.onPostExecute(asyncResult);
                 if(asyncResult.isSuccess()) {
-                    content = (Content)asyncResult.getResult();
+                    content = asyncResult.getResult();
                     //TODO: update content in ContentActivity
                     updateContentFragment();
                     //TODO: load images
@@ -252,18 +253,18 @@ public class ContentActivity extends Activity {
     }
     
     private void loadImage(final String imgSrc){
-        new ImageLoaderAsyncTask(){
+        new ImageBytesLoaderAsyncTask(){
             @Override
             protected String getImageUrl() {
                 return imgSrc;
             }
 
             @Override
-            protected void onPostExecute(AsyncResult asyncResult) {
+            protected void onPostExecute(AsyncResult<byte[]> asyncResult) {
                 super.onPostExecute(asyncResult);
                 String id = Base64.encodeToString(imgSrc.getBytes(), Base64.NO_WRAP);
                 //update image in WebView by javascript
-                contentFragment.updateImage(id, getImageData());
+                contentFragment.updateImage(id, asyncResult.getResult());
             }
 
             @Override
@@ -291,10 +292,10 @@ public class ContentActivity extends Activity {
             }
 
             @Override
-            protected void onPostExecute(AsyncResult asyncResult) {
+            protected void onPostExecute(AsyncResult<Content> asyncResult) {
                 super.onPostExecute(asyncResult);
                 if(asyncResult.isSuccess()) {
-                    content = (Content)asyncResult.getResult();
+                    content = asyncResult.getResult();
                     //TODO: update view_number, update comment fragment
                     updateContentFragment();
                     updateCommentFragment();
