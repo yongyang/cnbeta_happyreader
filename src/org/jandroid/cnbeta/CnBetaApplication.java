@@ -57,7 +57,8 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     }
 
     public void destroy() {
-        httpClient.shutdown();
+        // shutdown httpClient 会导致再次打开程序无法获取网络数据
+//        httpClient.shutdown();
 //        System.exit(0);
     }
 
