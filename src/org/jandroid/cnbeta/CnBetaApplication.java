@@ -3,6 +3,7 @@ package org.jandroid.cnbeta;
 import android.app.Application;
 import android.os.Environment;
 import org.apache.commons.io.FileUtils;
+import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.util.EnvironmentUtils;
 import org.jandroid.util.Logger;
 
@@ -15,6 +16,8 @@ import java.io.IOException;
 public class CnBetaApplication extends Application implements CnBetaApplicationContext{
 
     static Logger logger = Logger.newLogger(CnBetaApplication.class);
+
+    private CnBetaHttpClient httpClient = CnBetaHttpClient.getInstance();
 
     @Override
     public void onCreate() {
@@ -52,4 +55,10 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         //TODO: sessionId 是什么时候得到的
         return null;
     }
+
+    public void destroy() {
+        httpClient.shutdown();
+//        System.exit(0);
+    }
+
 }

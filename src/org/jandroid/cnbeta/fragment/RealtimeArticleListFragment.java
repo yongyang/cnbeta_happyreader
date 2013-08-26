@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,8 +23,10 @@ import android.widget.Toast;
 import org.jandroid.cnbeta.BaseActivity;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
+import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.AsyncResult;
 import org.jandroid.cnbeta.async.RealtimeArticleListAsyncTask;
+import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.entity.RealtimeArticle;
 import org.jandroid.util.EnvironmentUtils;
 
@@ -138,6 +141,14 @@ public class RealtimeArticleListFragment extends Fragment {
             }
         };
         lvArticleList.setAdapter(adapter);
+
+        lvArticleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                RealtimeArticle article = (RealtimeArticle)adapter.getItem(position);
+                Utils.openContentActivity(getActivity(), article.getSid(), article.getTitle());
+            }
+        });
+
     }
 
     @Override

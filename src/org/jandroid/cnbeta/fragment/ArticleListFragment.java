@@ -211,7 +211,7 @@ public class ArticleListFragment extends Fragment {
 
         lvArticleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Article article = loadedArticles.get(position);
+                Article article = (Article)asyncImageAdapter.getItem(position);
                 Utils.openContentActivity(getActivity(),  article.getSid(), article.getTitleShow());
             }
         });

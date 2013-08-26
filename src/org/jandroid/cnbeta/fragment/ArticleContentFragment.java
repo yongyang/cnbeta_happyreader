@@ -211,4 +211,28 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
                 + "img.src='data:image/*;base64,"+ image64 + "';" +
                 "})()");
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(contentWebView != null) {
+            contentWebView.onPause();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(contentWebView != null) {
+            contentWebView.onResume();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(contentWebView != null) {
+            contentWebView.destroy();
+        }
+    }
 }

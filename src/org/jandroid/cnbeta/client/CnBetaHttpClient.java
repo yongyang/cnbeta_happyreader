@@ -7,21 +7,26 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.CookiePolicy;
+import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.conn.params.ConnManagerParams;
 import org.apache.http.conn.params.ConnPerRouteBean;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.jandroid.util.UnicodeUtils;
 
@@ -102,6 +107,7 @@ public class CnBetaHttpClient {
     public String httpGet(String url, String encoding) throws Exception {
         String result = "";
         HttpGet httpGet = newHttpGet(url, encoding);
+
         HttpResponse response = httpClient.execute(httpGet);
         try {
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
@@ -136,11 +142,17 @@ public class CnBetaHttpClient {
     public static HttpGet newHttpGet(String url, String encoding) {
         HttpGet httpGet = new HttpGet(url);
 //        httpGet.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, encoding);
-       // Must add Referer, so site ruturn data
+//        httpGet.addHeader("Host", "www.cnbeta.com");
+        // Must add Referer, so site return data
         httpGet.addHeader("Referer", "http://www.cnbeta.com/");
         httpGet.addHeader("Accept-Encoding", "gzip, deflate");
         httpGet.addHeader("Accept", "*/*");
-        httpGet.addHeader("User-Agent", "Mozilla/5.0 AppleWebKit/533.1 (KHTML, like Gecko)");
+//        httpGet.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+
+//        httpGet.addHeader("User-Agent", "Mozilla/5.0 AppleWebKit/533.1 (KHTML, like Gecko)");
+//        httpGet.addHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+        httpGet.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36");
+
         httpGet.addHeader("Connection", "keep-alive");
         return httpGet;
     }

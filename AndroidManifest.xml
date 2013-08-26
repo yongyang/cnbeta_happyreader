@@ -37,12 +37,15 @@
         <activity
                 android:name=".Top10Activity"
                 android:label="@string/ranks"
-                android:launchMode="singleTask"/>
+                android:launchMode="singleTask"
+                />
         <activity
                 android:name=".ContentActivity"
-                android:label="@string/label_article_content"/>
+                android:label="@string/label_article_content"
+                android:launchMode="singleTask"/>
         <activity
                 android:name=".ImageViewerActivity"
+                android:launchMode="singleTask"
                 android:theme="@style/Dialog.ImageViewer"
                 />
 

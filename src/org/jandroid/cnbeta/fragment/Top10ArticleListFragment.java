@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -18,10 +19,12 @@ import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Top10Activity;
+import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.adapter.AsyncImageAdapter;
 import org.jandroid.cnbeta.async.AsyncResult;
 import org.jandroid.cnbeta.async.ImageLoaderAsyncTask;
 import org.jandroid.cnbeta.entity.RankArticle;
+import org.jandroid.cnbeta.entity.RealtimeArticle;
 
 import java.util.HashMap;
 import java.util.List;
@@ -204,6 +207,14 @@ public class Top10ArticleListFragment extends Fragment {
         };
         lvArticleList.setAdapter(asyncImageAdapter);
         lvArticleList.setOnScrollListener(asyncImageAdapter);
+
+        lvArticleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                RankArticle article = (RankArticle)asyncImageAdapter.getItem(position);
+                Utils.openContentActivity(getActivity(), article.getSid(), article.getTitle());
+            }
+        });
+
     }
 
     @Override
