@@ -46,7 +46,7 @@ public abstract class BaseAsyncTask<R>  extends AsyncTask<Object, Integer, Async
             return AsyncResult.successResult(result);
         }
         catch (Exception e) {
-            return AsyncResult.errorResult(e.getMessage());
+            return AsyncResult.errorResult(e.getMessage(), null, e);
         }
 
     }
