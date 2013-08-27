@@ -31,24 +31,6 @@ public class Article implements Serializable{
     private int score;
     private String time;
 
-    public boolean bFavored;
-    public boolean bReaded;
-    public int nCommentsTimes;
-    public int nEventScore;
-    public int nFavoredTime;
-    public int nQualityScore;
-    public int nReadTimes;
-    public int nReadedTime;
-    public int nRecommendTimes;
-    public int nScoreTime;
-    public String strBriefContent;
-    public String strCatalogID;
-    public String strCatalogImage;
-    public String strCatalogName;
-    public String strPublishDate;
-    public String strTitle;
-
-
     public Article(JSONObject jSONObject) {
         this.jSONObject = jSONObject;
         parse();

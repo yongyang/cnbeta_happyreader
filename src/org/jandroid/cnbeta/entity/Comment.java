@@ -4,15 +4,17 @@ package org.jandroid.cnbeta.entity;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 public class Comment {
-
-    public boolean bHot;
-    public int nAgainst;
-    public int nArticleId;
-    public int nIndex;
-    public int nSupport;
-    public String strContent;
-    public String strDate;
-    public String strId;
-    public String strTitle;
-    public String strUserName;
+    
+    private long tid;
+    private long pid;
+    private long sid;
+    private String date;
+    private String name;
+    private String hostName;
+    private int score;
+    private int reason;
+    
+    private String token;
+    
+    
 }
