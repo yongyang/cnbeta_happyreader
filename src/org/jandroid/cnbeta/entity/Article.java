@@ -19,8 +19,6 @@ public class Article implements Serializable{
 // "score":"-20",
 // "time":"2013-07-23 21:38:27"}
 
-    private JSONObject jSONObject;
-
     private long sid;
     private String titleShow;
     private String hometextShowShort;
@@ -31,12 +29,11 @@ public class Article implements Serializable{
     private int score;
     private String time;
 
-    public Article(JSONObject jSONObject) {
-        this.jSONObject = jSONObject;
-        parse();
+    public Article(Map<String, Object> jSONObject) {
+        parse(jSONObject);
     }
     
-    private void parse() {
+    private void parse(Map<String, Object> jSONObject) {
         this.setSid(Long.parseLong(jSONObject.get("sid").toString()));
         this.setTitleShow(jSONObject.get("title_show").toString());
         this.setUrlShow(jSONObject.get("url_show").toString());
@@ -45,18 +42,6 @@ public class Article implements Serializable{
         this.setComments(Integer.parseInt(jSONObject.get("comments").toString()));
         this.setCounter(Integer.parseInt(jSONObject.get("counter").toString()));
         this.setTime(jSONObject.get("time").toString());        
-    }
-
-    public JSONObject getJSONObject() {
-        return jSONObject;
-    }
-    
-    public Map<String, Object> toMap() {
-        return jSONObject;
-    }
-
-    public String toJSONString() {
-        return jSONObject.toJSONString();
     }
 
     public long getSid() {

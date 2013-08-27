@@ -9,8 +9,6 @@ import java.util.Map;
  */
 public class RealtimeArticle {
 
-    private JSONObject jSONObject;
-
     private long sid;
     private String title;
     private String hometext;
@@ -19,12 +17,11 @@ public class RealtimeArticle {
     private String time;
     private String timeShow;
 
-    public RealtimeArticle(JSONObject jSONObject) {
-        this.jSONObject = jSONObject;
-        parse();
+    public RealtimeArticle(Map<String, Object> jSONObject) {
+        parse(jSONObject);
     }
 
-    private void parse() {
+    private void parse(Map<String, Object> jSONObject) {
         this.setSid(Long.parseLong(jSONObject.get("sid").toString()));
         this.setTitle(jSONObject.get("title").toString());
         this.setUrlShow(jSONObject.get("url_show").toString());
@@ -32,18 +29,6 @@ public class RealtimeArticle {
         this.setHometextShowShort2(jSONObject.get("hometext_show_short2").toString());
         this.setTime(jSONObject.get("time").toString());
         this.setTimeShow(jSONObject.get("time_show").toString());
-    }
-
-    public JSONObject getJSONObject() {
-        return jSONObject;
-    }
-
-    public Map<String, Object> toMap() {
-        return jSONObject;
-    }
-
-    public String toJSONString() {
-        return jSONObject.toJSONString();
     }
 
     public long getSid() {

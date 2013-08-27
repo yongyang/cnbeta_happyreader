@@ -9,8 +9,6 @@ import java.util.Map;
  */
 public class HistoryArticle {
 
-    private JSONObject jSONObject;
-
     private long sid;
     private String title;
     private String hometext;
@@ -19,12 +17,11 @@ public class HistoryArticle {
     private String time;
     private String timeShow;
 
-    public HistoryArticle(JSONObject jSONObject) {
-        this.jSONObject = jSONObject;
-        parse();
+    public HistoryArticle(Map<String, Object> jSONObject) {
+        parse(jSONObject);
     }
 
-    private void parse() {
+    private void parse(Map<String, Object> jSONObject) {
         this.setSid(Long.parseLong(jSONObject.get("sid").toString()));
         this.setTitle(jSONObject.get("title").toString());
         this.setUrlShow(jSONObject.get("url_show").toString());
@@ -34,17 +31,6 @@ public class HistoryArticle {
         this.setTimeShow(jSONObject.get("time_show").toString());
     }
 
-    public JSONObject toJSONObject() {
-        return jSONObject;
-    }
-
-    public Map<String, Object> toMap() {
-        return jSONObject;
-    }
-
-    public String toJSONString() {
-        return jSONObject.toJSONString();
-    }
 
     public long getSid() {
         return sid;

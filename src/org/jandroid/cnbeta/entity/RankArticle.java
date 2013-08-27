@@ -9,8 +9,6 @@ import java.util.Map;
  */
 public class RankArticle {
 
-    private JSONObject jSONObject;
-
     //排行序号
     private int number;
     private long sid;
@@ -21,12 +19,11 @@ public class RankArticle {
     private String time;
     private int comment;
 
-    public RankArticle(JSONObject jSONObject) {
-        this.jSONObject = jSONObject;
-        parse();
+    public RankArticle(Map<String, Object> jSONObject) {
+        parse(jSONObject);
     }
 
-    private void parse() {
+    private void parse(Map<String, Object> jSONObject) {
         this.setSid(Long.parseLong(jSONObject.get("sid").toString()));
         this.setNumber(Integer.parseInt(jSONObject.get("number").toString()));
         this.setTitle(jSONObject.get("title").toString());
@@ -35,18 +32,6 @@ public class RankArticle {
         this.setHometext(jSONObject.get("hometext").toString());
         this.setTime(jSONObject.get("time").toString());
         this.setComment(Integer.parseInt(jSONObject.get("comment").toString()));
-    }
-
-    public JSONObject getJSONObject() {
-        return jSONObject;
-    }
-
-    public Map<String, Object> toMap() {
-        return jSONObject;
-    }
-
-    public String toJSONString() {
-        return jSONObject.toJSONString();
     }
 
     public long getSid() {

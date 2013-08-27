@@ -5,6 +5,7 @@ import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -34,11 +35,11 @@ public class Content {
     
     private List<Comment> comments = new ArrayList<Comment>();
 
-    public Content(JSONObject jsonObject) {
+    public Content(Map<String, Object> jsonObject) {
         parseJSON(jsonObject);
     }
 
-    private void parseJSON(JSONObject jsonObject) {
+    private void parseJSON(Map<String, Object> jsonObject) {
         setSid(Long.parseLong(jsonObject.get("sid").toString()));
         setTitle(jsonObject.get("title").toString());
         setTime(jsonObject.get("time").toString());
