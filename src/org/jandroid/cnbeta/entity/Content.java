@@ -33,8 +33,6 @@ public class Content {
     // 重新 format 之后的 html 内容
     private String content;
     
-    private List<Comment> comments = new ArrayList<Comment>();
-
     public Content(Map<String, Object> jsonObject) {
         parseJSON(jsonObject);
     }
@@ -78,14 +76,6 @@ public class Content {
 
     public void setCommentNum(int commentNum) {
         this.commentNum = commentNum;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
     }
 
     public String getContent() {

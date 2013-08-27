@@ -4,6 +4,7 @@ import android.util.Base64;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
+import org.jandroid.common.UnicodeUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -60,7 +61,7 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
         return comments;
     }
 
-    private void parseResultJSON(JSONObject resultJSON){
+    private void parseResultJSON(JSONObject resultJSON) throws Exception {
         //阅读和评论次数
         content.setViewNum(Integer.parseInt(resultJSON.get("view_num").toString()));
         content.setCommentNum(Integer.parseInt(resultJSON.get("comment_num").toString()));
@@ -72,6 +73,10 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
             JSONObject scommentJSONObject = (JSONObject)scommentObject;
             String tid = scommentJSONObject.get("tid").toString();
             JSONObject commentJSONObject = (JSONObject)commentStoreJSONObject.get(tid);
+            // unicode to Chinese
+            commentJSONObject.put("name", UnicodeUtils.unicode2Chinese(commentJSONObject.get("name").toString()));
+            commentJSONObject.put("host_name", UnicodeUtils.unicode2Chinese(commentJSONObject.get("host_name").toString()));
+            commentJSONObject.put("comment", UnicodeUtils.unicode2Chinese(commentJSONObject.get("comment").toString()));
             comments.add(new Comment(commentJSONObject));
         }
         

@@ -15,6 +15,7 @@ public class Comment {
     private String date;
     private String name;
     private String hostName;
+    private String comment;
     private int score;
     private int reason;
     
@@ -26,14 +27,16 @@ public class Comment {
     }
 
     private void parse(Map<String, Object> jSONObject) {
+        this.setTid(Long.parseLong(jSONObject.get("tid").toString()));
+        this.setPid(Long.parseLong(jSONObject.get("pid").toString()));
         this.setSid(Long.parseLong(jSONObject.get("sid").toString()));
-        this.setTitleShow(jSONObject.get("title_show").toString());
-        this.setUrlShow(jSONObject.get("url_show").toString());
-        this.setHometextShowShort(jSONObject.get("hometext_show_short").toString());
-        this.setLogo(jSONObject.get("logo").toString());
-        this.setComments(Integer.parseInt(jSONObject.get("comments").toString()));
-        this.setCounter(Integer.parseInt(jSONObject.get("counter").toString()));
-        this.setTime(jSONObject.get("time").toString());
+        this.setDate(jSONObject.get("date").toString());
+        this.setName(jSONObject.get("name").toString());
+        this.setHostName(jSONObject.get("host_name").toString());
+        this.setComment(jSONObject.get("comment").toString());
+        this.setScore(Integer.parseInt(jSONObject.get("score").toString()));
+        this.setReason(Integer.parseInt(jSONObject.get("reason").toString()));
+        this.setToken(jSONObject.get("token").toString());
     }
 
 
@@ -83,6 +86,14 @@ public class Comment {
 
     public void setHostName(String hostName) {
         this.hostName = hostName;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public int getScore() {
