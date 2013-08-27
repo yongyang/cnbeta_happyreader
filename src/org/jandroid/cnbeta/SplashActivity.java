@@ -1,11 +1,11 @@
 package org.jandroid.cnbeta;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
-import org.jandroid.util.EnvironmentUtils;
-import org.jandroid.util.IntentUtils;
+import org.jandroid.common.BaseActivity;
+import org.jandroid.common.EnvironmentUtils;
+import org.jandroid.common.IntentUtils;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>

@@ -1,11 +1,9 @@
 package org.jandroid.cnbeta.fragment;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,16 +20,11 @@ import android.webkit.WebViewClient;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.entity.Content;
-import org.jandroid.util.Logger;
-import org.jsoup.nodes.Element;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.jandroid.common.Logger;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>

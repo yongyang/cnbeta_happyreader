@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
+import org.jandroid.common.BaseActivity;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>

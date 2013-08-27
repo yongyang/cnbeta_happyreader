@@ -3,7 +3,7 @@ package org.jandroid.cnbeta;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import org.jandroid.util.IntentUtils;
+import org.jandroid.common.IntentUtils;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>

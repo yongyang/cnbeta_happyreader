@@ -1,7 +1,6 @@
 package org.jandroid.cnbeta;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -17,7 +16,8 @@ import android.view.Window;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
 import org.jandroid.cnbeta.fragment.RealtimeArticleListFragment;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
-import org.jandroid.util.IntentUtils;
+import org.jandroid.common.BaseActivity;
+import org.jandroid.common.IntentUtils;
 
 //TODO: 动态替换 tabs 来显示各分类文章，而不是新建 Activity
 public class MainActivity extends BaseActivity {

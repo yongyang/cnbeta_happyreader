@@ -1,7 +1,6 @@
 package org.jandroid.cnbeta;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -20,16 +19,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
-import org.jandroid.cnbeta.async.AsyncResult;
+import org.jandroid.common.async.AsyncResult;
 import org.jandroid.cnbeta.async.RankArticleListAsyncTask;
 import org.jandroid.cnbeta.entity.RankArticle;
 import org.jandroid.cnbeta.fragment.Top10ArticleListFragment;
-import org.jandroid.util.EnvironmentUtils;
-import org.jandroid.util.IntentUtils;
+import org.jandroid.common.BaseActivity;
+import org.jandroid.common.IntentUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -283,10 +281,10 @@ public class Top10Activity extends BaseActivity {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("加载排行信息中...");
 
-        executeAsyncTaskMultiThreading(new RankArticleListAsyncTask(){
+        executeAsyncTaskMultiThreading(new RankArticleListAsyncTask() {
             @Override
             public CnBetaApplicationContext getCnBetaApplicationContext() {
-                return (CnBetaApplicationContext)getApplication();
+                return (CnBetaApplicationContext) getApplication();
             }
 
             @Override
@@ -302,8 +300,8 @@ public class Top10Activity extends BaseActivity {
                 });
                 progressDialog.show();
                 rotateRefreshActionView();
-                for(final Top10ArticleListFragment fragment : fragments) {
-                    if(fragment != null) {
+                for (final Top10ArticleListFragment fragment : fragments) {
+                    if (fragment != null) {
                         fragment.showProgressUI();
                     }
                 }
@@ -312,12 +310,12 @@ public class Top10Activity extends BaseActivity {
             @Override
             public void dismissProgressUI() {
                 setProgressBarVisibility(false);
-                if(progressDialog.isShowing()) {
+                if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
                 dismissRefreshActionView();
-                for(final Top10ArticleListFragment fragment : fragments) {
-                    if(fragment != null) {
+                for (final Top10ArticleListFragment fragment : fragments) {
+                    if (fragment != null) {
                         fragment.dismissProgressUI();
                     }
                 }
@@ -327,15 +325,15 @@ public class Top10Activity extends BaseActivity {
             protected void onPostExecute(AsyncResult<Map<String, List<RankArticle>>> asyncResult) {
                 super.onPostExecute(asyncResult);
                 isLoading = false;
-                if(asyncResult.isSuccess()) {
-                    Map<String, List<RankArticle>>  rankArticlesMap = asyncResult.getResult();
-                    if(rankArticlesMap != null) {
+                if (asyncResult.isSuccess()) {
+                    Map<String, List<RankArticle>> rankArticlesMap = asyncResult.getResult();
+                    if (rankArticlesMap != null) {
                         lastLoadTime = new Date();
                         allRankArticlesMap.clear();
                         allRankArticlesMap.putAll(rankArticlesMap);
 
-                        for(final Top10ArticleListFragment fragment : fragments) {
-                            if(fragment != null) {
+                        for (final Top10ArticleListFragment fragment : fragments) {
+                            if (fragment != null) {
                                 handler.post(new Runnable() {
                                     public void run() {
                                         fragment.updateData(allRankArticlesMap);
@@ -346,6 +344,7 @@ public class Top10Activity extends BaseActivity {
                     }
                 }
                 else {
+                    logger.w(asyncResult.getErrorMsg(), asyncResult.getException());
                     Toast.makeText(Top10Activity.this, asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
                 }
             }

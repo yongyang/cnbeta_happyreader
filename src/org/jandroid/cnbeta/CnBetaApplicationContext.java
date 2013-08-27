@@ -1,7 +1,5 @@
 package org.jandroid.cnbeta;
 
-import org.jandroid.util.EnvironmentUtils;
-
 import java.io.File;
 
 /**

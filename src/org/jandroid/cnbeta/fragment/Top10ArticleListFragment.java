@@ -1,7 +1,6 @@
 package org.jandroid.cnbeta.fragment;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -20,11 +19,11 @@ import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Top10Activity;
 import org.jandroid.cnbeta.Utils;
-import org.jandroid.cnbeta.adapter.AsyncImageAdapter;
-import org.jandroid.cnbeta.async.AsyncResult;
-import org.jandroid.cnbeta.async.ImageLoaderAsyncTask;
+import org.jandroid.cnbeta.async.ImageLoadingAsyncTask;
+import org.jandroid.common.adapter.AsyncImageAdapter;
+import org.jandroid.common.async.AsyncResult;
 import org.jandroid.cnbeta.entity.RankArticle;
-import org.jandroid.cnbeta.entity.RealtimeArticle;
+import org.jandroid.common.BaseFragment;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +33,7 @@ import java.util.Map;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 
-public class Top10ArticleListFragment extends Fragment {
+public class Top10ArticleListFragment extends BaseFragment {
 
     // onReselect tab 的时候进行切换
     private Top10Activity.RankType[] rankTypes;
@@ -147,11 +146,11 @@ public class Top10ArticleListFragment extends Fragment {
 
             @Override
             protected void loadImageAsync(final String imageUrl, final OnAsyncImageLoadListener onAsyncImageLoadListener) {
-                top10Activity.executeAsyncTaskMultiThreading(new ImageLoaderAsyncTask() {
+                top10Activity.executeAsyncTaskMultiThreading(new ImageLoadingAsyncTask() {
 
                     @Override
                     public CnBetaApplicationContext getCnBetaApplicationContext() {
-                        return (CnBetaApplication)getActivity().getApplication();
+                        return (CnBetaApplication) getActivity().getApplication();
                     }
 
                     @Override
@@ -160,14 +159,15 @@ public class Top10ArticleListFragment extends Fragment {
                     }
 
                     @Override
-                    protected void onPostExecute(final AsyncResult bitmapAsyncResult) {
-                        super.onPostExecute(bitmapAsyncResult);
-                        if (bitmapAsyncResult.isSuccess()) {
-                            Bitmap bitmap = (Bitmap) bitmapAsyncResult.getResult();
+                    protected void onPostExecute(final AsyncResult asyncResult) {
+                        super.onPostExecute(asyncResult);
+                        if (asyncResult.isSuccess()) {
+                            Bitmap bitmap = (Bitmap) asyncResult.getResult();
                             onAsyncImageLoadListener.onLoaded(bitmap);
                         }
                         else {
-                            onAsyncImageLoadListener.onLoadFailed(bitmapAsyncResult.getErrorMsg(), bitmapAsyncResult.getException());
+                            logger.w(asyncResult.getErrorMsg(), asyncResult.getException());
+                            onAsyncImageLoadListener.onLoadFailed(asyncResult.getErrorMsg(), asyncResult.getException());
                         }
                     }
 

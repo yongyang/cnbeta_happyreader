@@ -1,7 +1,6 @@
 package org.jandroid.cnbeta;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -12,7 +11,6 @@ import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Base64;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,18 +20,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import org.jandroid.cnbeta.async.ArticleCommentsAsyncTask;
 import org.jandroid.cnbeta.async.ArticleContentAsyncTask;
-import org.jandroid.cnbeta.async.AsyncResult;
-import org.jandroid.cnbeta.async.ImageBytesLoaderAsyncTask;
-import org.jandroid.cnbeta.async.ImageLoaderAsyncTask;
-import org.jandroid.cnbeta.entity.Article;
+import org.jandroid.cnbeta.async.ImageBytesLoadingAsyncTask;
+import org.jandroid.common.async.AsyncResult;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.fragment.ArticleCommentsFragment;
 import org.jandroid.cnbeta.fragment.ArticleContentFragment;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
+import org.jandroid.common.BaseActivity;
 
 public class ContentActivity extends BaseActivity {
     
@@ -187,7 +179,7 @@ public class ContentActivity extends BaseActivity {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("加载文章中...");
 
-        executeAsyncTaskMultiThreading(new ArticleContentAsyncTask(){
+        executeAsyncTaskMultiThreading(new ArticleContentAsyncTask() {
 
             @Override
             protected long getSid() {
@@ -212,25 +204,26 @@ public class ContentActivity extends BaseActivity {
             @Override
             public void dismissProgressUI() {
                 setProgressBarVisibility(false);
-                if(progressDialog.isShowing()) {
+                if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
             }
 
             @Override
             public CnBetaApplicationContext getCnBetaApplicationContext() {
-                return (CnBetaApplicationContext)getApplicationContext();
+                return (CnBetaApplicationContext) getApplicationContext();
             }
 
             @Override
             protected void onPostExecute(AsyncResult<Content> asyncResult) {
                 super.onPostExecute(asyncResult);
-                if(asyncResult.isSuccess()) {
+                if (asyncResult.isSuccess()) {
                     content = asyncResult.getResult();
                     //update content in ContentActivity
                     contentFragment.updateArticleContent(content);
                 }
                 else {
+                    logger.w(asyncResult.getErrorMsg(), asyncResult.getException());
                     Toast.makeText(ContentActivity.this, asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
                 }
             }
@@ -245,7 +238,7 @@ public class ContentActivity extends BaseActivity {
     }
     
     private void loadImage(final String imgSrc){
-        executeAsyncTaskMultiThreading(new ImageBytesLoaderAsyncTask(){
+        executeAsyncTaskMultiThreading(new ImageBytesLoadingAsyncTask() {
             @Override
             protected String getImageUrl() {
                 return imgSrc;
@@ -261,7 +254,7 @@ public class ContentActivity extends BaseActivity {
 
             @Override
             public CnBetaApplicationContext getCnBetaApplicationContext() {
-                return (CnBetaApplicationContext)getApplicationContext();
+                return (CnBetaApplicationContext) getApplicationContext();
             }
         }
         );
@@ -269,7 +262,7 @@ public class ContentActivity extends BaseActivity {
     }
     
     public void loadComments(){
-        executeAsyncTaskMultiThreading(new ArticleCommentsAsyncTask(){
+        executeAsyncTaskMultiThreading(new ArticleCommentsAsyncTask() {
             @Override
             protected Content getArticleContent() {
                 return content;
@@ -286,20 +279,21 @@ public class ContentActivity extends BaseActivity {
             @Override
             protected void onPostExecute(AsyncResult<Content> asyncResult) {
                 super.onPostExecute(asyncResult);
-                if(asyncResult.isSuccess()) {
+                if (asyncResult.isSuccess()) {
                     content = asyncResult.getResult();
                     //TODO: update view_number, update comment fragment
                     contentFragment.updateCommentNumbers(content);
 //                    updateCommentFragment();
                 }
                 else {
+                    logger.w(asyncResult.getErrorMsg(), asyncResult.getException());
                     Toast.makeText(ContentActivity.this, asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public CnBetaApplicationContext getCnBetaApplicationContext() {
-                return (CnBetaApplicationContext)getApplicationContext();
+                return (CnBetaApplicationContext) getApplicationContext();
             }
         }
         );

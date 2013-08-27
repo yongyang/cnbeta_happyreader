@@ -4,8 +4,8 @@ import android.app.Application;
 import android.os.Environment;
 import org.apache.commons.io.FileUtils;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
-import org.jandroid.util.EnvironmentUtils;
-import org.jandroid.util.Logger;
+import org.jandroid.common.EnvironmentUtils;
+import org.jandroid.common.Logger;
 
 import java.io.File;
 import java.io.IOException;

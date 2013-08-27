@@ -1,8 +1,6 @@
 package org.jandroid.cnbeta.fragment;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -22,20 +20,19 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.jandroid.cnbeta.BaseActivity;
+import org.jandroid.cnbeta.async.ImageLoadingAsyncTask;
+import org.jandroid.common.BaseActivity;
 import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
-import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
-import org.jandroid.cnbeta.adapter.AsyncImageAdapter;
+import org.jandroid.common.adapter.AsyncImageAdapter;
 import org.jandroid.cnbeta.async.ArticleListAsyncTask;
-import org.jandroid.cnbeta.async.AsyncResult;
-import org.jandroid.cnbeta.async.ImageLoaderAsyncTask;
+import org.jandroid.common.async.AsyncResult;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
-import org.jandroid.util.EnvironmentUtils;
-import org.jandroid.util.IntentUtils;
+import org.jandroid.common.BaseFragment;
+import org.jandroid.common.EnvironmentUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +41,7 @@ import java.util.List;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 
-public class ArticleListFragment extends Fragment {
+public class ArticleListFragment extends BaseFragment {
 
     private ListView lvArticleList;
     
@@ -141,40 +138,41 @@ public class ArticleListFragment extends Fragment {
 
             @Override
             protected void loadImageAsync(final String imageUrl, final OnAsyncImageLoadListener onAsyncImageLoadListener) {
-                ((BaseActivity)getActivity()).executeAsyncTaskMultiThreading(new ImageLoaderAsyncTask() {
+                ((BaseActivity)getActivity()).executeAsyncTaskMultiThreading(new ImageLoadingAsyncTask() {
 
-                            @Override
-                            public CnBetaApplicationContext getCnBetaApplicationContext() {
-                                return (CnBetaApplication) getActivity().getApplication();
-                            }
+                    @Override
+                    public CnBetaApplicationContext getCnBetaApplicationContext() {
+                        return (CnBetaApplication) getActivity().getApplication();
+                    }
 
-                            @Override
-                            protected String getImageUrl() {
-                                return imageUrl;
-                            }
+                    @Override
+                    protected String getImageUrl() {
+                        return imageUrl;
+                    }
 
-                            @Override
-                            protected void onPostExecute(final AsyncResult bitmapAsyncResult) {
-                                super.onPostExecute(bitmapAsyncResult);
-                                if (bitmapAsyncResult.isSuccess()) {
-                                    Bitmap bitmap = (Bitmap) bitmapAsyncResult.getResult();
-                                    onAsyncImageLoadListener.onLoaded(bitmap);
-                                }
-                                else {
-                                    onAsyncImageLoadListener.onLoadFailed(bitmapAsyncResult.getErrorMsg(), bitmapAsyncResult.getException());
-                                }
-                            }
-
-                            @Override
-                            protected void onCancelled() {
-                                onAsyncImageLoadListener.onLoadFailed("Cancelled", null);
-                            }
-
-                            @Override
-                            protected void onCancelled(AsyncResult bitmapAsyncResult) {
-                                onAsyncImageLoadListener.onLoadFailed("Cancelled", null);
-                            }
+                    @Override
+                    protected void onPostExecute(final AsyncResult asyncResult) {
+                        super.onPostExecute(asyncResult);
+                        if (asyncResult.isSuccess()) {
+                            Bitmap bitmap = (Bitmap) asyncResult.getResult();
+                            onAsyncImageLoadListener.onLoaded(bitmap);
                         }
+                        else {
+                            logger.w(asyncResult.getErrorMsg(), asyncResult.getException());
+                            onAsyncImageLoadListener.onLoadFailed(asyncResult.getErrorMsg(), asyncResult.getException());
+                        }
+                    }
+
+                    @Override
+                    protected void onCancelled() {
+                        onAsyncImageLoadListener.onLoadFailed("Cancelled", null);
+                    }
+
+                    @Override
+                    protected void onCancelled(AsyncResult bitmapAsyncResult) {
+                        onAsyncImageLoadListener.onLoadFailed("Cancelled", null);
+                    }
+                }
                 );
             }
 
@@ -212,7 +210,7 @@ public class ArticleListFragment extends Fragment {
         lvArticleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Article article = (Article)asyncImageAdapter.getItem(position);
-                Utils.openContentActivity(getActivity(),  article.getSid(), article.getTitleShow());
+                Utils.openContentActivity(getActivity(), article.getSid(), article.getTitleShow());
             }
         });
 
@@ -232,7 +230,7 @@ public class ArticleListFragment extends Fragment {
 
             @Override
             public CnBetaApplicationContext getCnBetaApplicationContext() {
-                return (CnBetaApplication)getActivity().getApplication();
+                return (CnBetaApplication) getActivity().getApplication();
             }
 
             @Override
@@ -254,7 +252,7 @@ public class ArticleListFragment extends Fragment {
                 footbarNextPage.setClickable(false);
                 progressBarNextPage.setVisibility(View.VISIBLE);
                 lineLayoutNextPage.setVisibility(View.GONE);
-                if(getPage() ==1) { //page 1 is reload
+                if (getPage() == 1) { //page 1 is reload
                     rotateRefreshActionView();
                 }
             }
@@ -265,24 +263,25 @@ public class ArticleListFragment extends Fragment {
                 progressBarNextPage.setVisibility(View.GONE);
                 lineLayoutNextPage.setVisibility(View.VISIBLE);
                 // stop refresh rotation anyway
-                if(getPage() ==1) { //page 1 is reload
+                if (getPage() == 1) { //page 1 is reload
                     dismissRefreshActionView();
                 }
                 footbarNextPage.setClickable(true);
             }
 
             @Override
-            protected void onPostExecute(AsyncResult<List<Article>> listAsyncResult) {
-                super.onPostExecute(listAsyncResult);
-                if(listAsyncResult.isSuccess()) {
+            protected void onPostExecute(AsyncResult<List<Article>> asyncResult) {
+                super.onPostExecute(asyncResult);
+                if (asyncResult.isSuccess()) {
                     loadedPage++;
-                    List<Article> articles = listAsyncResult.getResult();
+                    List<Article> articles = asyncResult.getResult();
                     appendArticles(articles);
                 }
                 else {
-                    Toast.makeText(getActivity(), listAsyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
+                    logger.w(asyncResult.getErrorMsg(), asyncResult.getException());
+                    Toast.makeText(getActivity(), asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
                 }
-                tvPage.setText("" + (loadedPage+1));
+                tvPage.setText("" + (loadedPage + 1));
             }
         }
         );
