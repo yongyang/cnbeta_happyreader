@@ -1,4 +1,4 @@
-package org.jandroid.cnbeta;
+package org.jandroid.util;
 
 import android.R;
 import android.app.Activity;
