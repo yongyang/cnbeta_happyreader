@@ -49,6 +49,9 @@ public class ArticleCommentsLoader extends AbstractLoader<Content> {
         Object result = responseJSON.get("result");
         String resultJSONString = new String(Base64.decode(result.toString(), Base64.DEFAULT), "utf-8");
         resultJSONString = resultJSONString.substring(resultJSONString.indexOf('{'), resultJSONString.lastIndexOf('}')+1);
+
+        writeDisk(baseDir, resultJSONString);
+
         JSONObject resultJSON = (JSONObject) JSONValue.parse(resultJSONString);
         
         parseResultJSON(resultJSON);
@@ -59,14 +62,17 @@ public class ArticleCommentsLoader extends AbstractLoader<Content> {
     private void parseResultJSON(JSONObject resultJSON){
         //阅读和评论次数
         getContent().setViewNum(Integer.parseInt(resultJSON.get("view_num").toString()));
-        getContent().setViewNum(Integer.parseInt(resultJSON.get("comment_num").toString()));
+        getContent().setCommentNum(Integer.parseInt(resultJSON.get("comment_num").toString()));
         //TODO: comments
         
     }
     
     @Override
     public Content fromDisk(File baseDir) throws Exception {
-        return null;
+        String resultJSONString = readDisk(baseDir);
+        JSONObject resultJSON = (JSONObject) JSONValue.parse(resultJSONString);
+        parseResultJSON(resultJSON);
+        return getContent();
     }
 
     @Override

@@ -45,8 +45,8 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         // add token and sn
         String token = getToken(responseHTML);
         String sn = getSN(responseHTML);
-        bodyElement.attr(token, token);
-        bodyElement.attr(sn, sn);
+        bodyElement.attr("token", token);
+        bodyElement.attr("sn", sn);
 
         writeDisk(baseDir, bodyElement.outerHtml());
 

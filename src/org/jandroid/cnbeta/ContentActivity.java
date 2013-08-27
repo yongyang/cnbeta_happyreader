@@ -183,17 +183,6 @@ public class ContentActivity extends BaseActivity {
         }
     }
 
-    
-    //TODO:
-    public void updateContentFragment() {
-        contentFragment.updateContent(content);
-    }
-
-    //TODO:
-    public void updateCommentFragment() {
-//        commentsFragment
-    }
-
     private void loadContent(){
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("加载文章中...");
@@ -238,12 +227,8 @@ public class ContentActivity extends BaseActivity {
                 super.onPostExecute(asyncResult);
                 if(asyncResult.isSuccess()) {
                     content = asyncResult.getResult();
-                    //TODO: update content in ContentActivity
-                    updateContentFragment();
-                    //TODO: load images
-//                    loadImages();
-                    //TODO: load comments and view_num, comment_num etc
-//                    loadComments();
+                    //update content in ContentActivity
+                    contentFragment.updateArticleContent(content);
                 }
                 else {
                     Toast.makeText(ContentActivity.this, asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
@@ -283,7 +268,7 @@ public class ContentActivity extends BaseActivity {
         
     }
     
-    private void loadComments(){
+    public void loadComments(){
         executeAsyncTaskMultiThreading(new ArticleCommentsAsyncTask(){
             @Override
             protected Content getArticleContent() {
@@ -304,8 +289,8 @@ public class ContentActivity extends BaseActivity {
                 if(asyncResult.isSuccess()) {
                     content = asyncResult.getResult();
                     //TODO: update view_number, update comment fragment
-                    updateContentFragment();
-                    updateCommentFragment();
+                    contentFragment.updateCommentNumbers(content);
+//                    updateCommentFragment();
                 }
                 else {
                     Toast.makeText(ContentActivity.this, asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();

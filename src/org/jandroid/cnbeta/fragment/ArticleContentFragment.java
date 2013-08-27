@@ -90,6 +90,8 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         contentWebView.getSettings().setDefaultFontSize(14);
         contentWebView.getSettings().setDefaultFixedFontSize(14);
         contentWebView.getSettings().setAllowFileAccess(true);
+        contentWebView.getSettings().setAllowFileAccessFromFileURLs(true);
+        contentWebView.getSettings().setAllowUniversalAccessFromFileURLs(true);
         contentWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
         contentWebView.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY); // no scroll
         contentWebView.getSettings().setBuiltInZoomControls(true);
@@ -124,8 +126,11 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                //TODO: load images here, after Page Loaded
+                //load images here, after Page Loaded
                 ((ContentActivity)getActivity()).loadImages();
+                //load comments and view_num, comment_num etc
+                ((ContentActivity)getActivity()).loadComments();
+
 /*
                 List<String> images =((ContentActivity)getActivity()).getContent().getImages();
                 for(String imgSrc : images){
@@ -189,16 +194,18 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    public void updateContent(Content content) {
+    public void updateArticleContent(Content content) {
         titleTextView.setText(content.getTitle());
+        // enable marquee
         titleTextView.setSelected(true);
         timeTextView.setText(content.getTime());
+        whereTextView.setText(content.getWhere());
+        contentWebView.loadDataWithBaseURL("", content.getContent(), "text/html", "UTF-8", "");
+    }
+
+    public void updateCommentNumbers(Content content) {
         viewNumTextView.setText("" + content.getViewNum());
         commentNumTextView.setText("" + content.getCommentNum());
-        whereTextView.setText(content.getWhere());
-        //TODO: 在WebView load 的之前, 重写topic img url, 并设置 img Id，使得img load完之后，通过JS更新内容
-        //TODO: 使用 JSoup Element 完成重写 img url？
-        contentWebView.loadDataWithBaseURL("", content.getContent(), "text/html", "UTF-8", "");
     }
     
 
@@ -230,9 +237,10 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         if(contentWebView != null) {
             contentWebView.destroy();
+            contentWebView = null;
         }
+        super.onDestroy();
     }
 }
