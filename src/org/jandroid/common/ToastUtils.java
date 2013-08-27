@@ -1,4 +1,4 @@
-package org.jandroid.util;
+package org.jandroid.common;
 
 import android.content.Context;
 import android.widget.Toast;

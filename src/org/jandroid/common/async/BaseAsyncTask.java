@@ -1,4 +1,4 @@
-package org.jandroid.cnbeta.async;
+package org.jandroid.common.async;
 
 import android.os.AsyncTask;
 import org.jandroid.cnbeta.CnBetaApplicationContext;

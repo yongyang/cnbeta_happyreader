@@ -1,4 +1,4 @@
-package org.jandroid.util;
+package org.jandroid.common;
 
 import java.io.IOException;
 import java.io.PushbackReader;

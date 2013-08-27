@@ -1,4 +1,4 @@
-package org.jandroid.util;
+package org.jandroid.common;
 
 import android.app.Activity;
 import android.content.Intent;

@@ -7,7 +7,7 @@ import org.jandroid.cnbeta.loader.ImageBytesLoader;
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  * @create 7/29/13 3:21 PM
  */
-public abstract class ImageBytesLoaderAsyncTask extends BaseAsyncTask<byte[]> {
+public abstract class ImageBytesLoadingAsyncTask extends LoadingAsyncTask<byte[]> {
 
     protected abstract String getImageUrl();
 

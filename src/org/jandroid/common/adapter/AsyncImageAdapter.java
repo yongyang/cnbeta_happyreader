@@ -1,4 +1,4 @@
-package org.jandroid.cnbeta.adapter;
+package org.jandroid.common.adapter;
 
 import android.graphics.Bitmap;
 import android.os.Handler;

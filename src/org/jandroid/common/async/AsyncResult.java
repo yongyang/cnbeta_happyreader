@@ -1,4 +1,4 @@
-package org.jandroid.cnbeta.async;
+package org.jandroid.common.async;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,12 +50,13 @@ public class AsyncResult<T> {
         }
         else {
             //TODO: result may be null
-            if(exception != null) {
-                return exception.getMessage();
-            }
-            else {
+            if(errorMsg != null) {
                 return errorMsg;
             }
+            else if(exception != null) {
+                return exception.toString();
+            }
+            return "error";
         }
     }
 

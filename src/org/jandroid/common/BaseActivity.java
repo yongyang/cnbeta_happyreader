@@ -1,12 +1,9 @@
-package org.jandroid.util;
+package org.jandroid.common;
 
 import android.R;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Window;
-import org.jandroid.util.Logger;
 
 import java.util.ArrayList;
 import java.util.Iterator;

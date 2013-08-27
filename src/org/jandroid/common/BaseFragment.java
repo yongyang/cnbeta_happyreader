@@ -1,7 +1,6 @@
-package org.jandroid.util;
+package org.jandroid.common;
 
 import android.app.Fragment;
-import org.jandroid.util.Logger;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
