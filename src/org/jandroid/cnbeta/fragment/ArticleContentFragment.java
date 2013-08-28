@@ -3,6 +3,7 @@ package org.jandroid.cnbeta.fragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -40,6 +41,8 @@ public class ArticleContentFragment extends Fragment {
     private TextView commentNumTextView;
     private RatingBar ratingBar;
     private WebView contentWebView;
+
+    private Handler handler = new Handler();
 
 
     //TODO: sn 从 article.html 页面中取, sid和sn必须要匹配
@@ -187,7 +190,7 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    public void updateArticleContent(Content content) {
+    public void updateArticleContent(final Content content) {
         titleTextView.setText(content.getTitle());
         // enable marquee
         titleTextView.setSelected(true);
@@ -202,9 +205,9 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
     }
     
 
-    public void updateImage(String id, byte[] imageData) {
+    public void updateImage(final String id, final byte[] imageData) {
         // 在android代码中调用javaScript方法
-        String image64 = Base64.encodeToString(imageData, Base64.NO_WRAP);
+        final String image64 = Base64.encodeToString(imageData, Base64.NO_WRAP);
 //        imageData = "file://" + ((CnBetaApplication)getActivity().getApplicationContext()).getBaseDir().getAbsolutePath()+"/" + imageData;
         contentWebView.loadUrl("javascript:(function(){" +
                 "var img = document.getElementById('" + id + "');"

@@ -64,7 +64,7 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
         
         //if failed
         if(response.indexOf("error") > 0){
-            throw new Exception("error to read comments of article " + content.getSid());
+            throw new Exception("Failed to read comments of article: " + content.getSid() + ", " + response );
         }
         String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
         JSONObject responseJSON = (JSONObject) JSONValue.parse(responseJSONString);

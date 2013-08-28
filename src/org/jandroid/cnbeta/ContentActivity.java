@@ -210,6 +210,7 @@ public class ContentActivity extends BaseActivity {
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
+                dismissRefreshActionView();
             }
 
             @Override
@@ -250,9 +251,14 @@ public class ContentActivity extends BaseActivity {
             @Override
             protected void onPostExecute(AsyncResult<byte[]> asyncResult) {
                 super.onPostExecute(asyncResult);
-                String id = Base64.encodeToString(imgSrc.getBytes(), Base64.NO_WRAP);
-                //update image in WebView by javascript
-                contentFragment.updateImage(id, asyncResult.getResult());
+                if(asyncResult.isSuccess()) {
+                    String id = Base64.encodeToString(imgSrc.getBytes(), Base64.NO_WRAP);
+                    //update image in WebView by javascript
+                    contentFragment.updateImage(id, asyncResult.getResult());
+                }
+                else {
+                    logger.w(asyncResult.getErrorMsg());
+                }
             }
 
             @Override
@@ -286,7 +292,7 @@ public class ContentActivity extends BaseActivity {
                     List<Comment> comments = asyncResult.getResult();
                     //TODO: update view_number, update comment fragment
                     contentFragment.updateCommentNumbers(content);
-//                    updateCommentFragment();
+                    commentsFragment.updateComments(comments);
                 }
                 else {
                     logger.w(asyncResult.getErrorMsg(), asyncResult.getException());
