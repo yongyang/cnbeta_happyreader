@@ -21,7 +21,7 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
 
     private static String digits = "0123456789";
     
-    //TODO: jsoncallback算法
+    //jsoncallback算法
     public static String URL_TEMPLATE = "http://www.cnbeta.com/more.htm?jsoncallback=jQuery1800{0}_{1}&type={2}&page={3}&_={4}";
     private Type type;
     private int page;
@@ -110,7 +110,7 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
     private String generateSeed() {       
         String seed="";
         for(int i=0; i< "8753548712314047".length(); i++){
-            seed += digits.charAt(digits.charAt((int)(Math.random() * digits.length())));
+            seed += digits.charAt((int)(Math.random() * digits.length()));
         }
         return seed;
     }

@@ -60,7 +60,7 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
 
         // see article.min.js#initData
         String url = MessageFormat.format(URL_TEMPLATE, "" + Math.round((System.currentTimeMillis() / 15e3)), generateOP());
-        String response = CnBetaHttpClient.getInstance().httpGet(url + "op=MSwyNTAxNzIsYWFkMmE%253D7iuvSPBh", headers);
+        String response = CnBetaHttpClient.getInstance().httpGet(url, headers);
         
         //if failed
         if(response.indexOf("error") > 0){
@@ -96,6 +96,7 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
             commentJSONObject.put("name", UnicodeUtils.unicode2Chinese(commentJSONObject.get("name").toString()));
             commentJSONObject.put("host_name", UnicodeUtils.unicode2Chinese(commentJSONObject.get("host_name").toString()));
             commentJSONObject.put("comment", UnicodeUtils.unicode2Chinese(commentJSONObject.get("comment").toString()));
+            commentJSONObject.put("token", resultJSON.get("token").toString());
             comments.add(new Comment(commentJSONObject));
         }
         
