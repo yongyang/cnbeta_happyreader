@@ -30,6 +30,8 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
     //编码方式如下： 1,{SID},{SN}, Base64编码，然后加上8位随机字符数字，参考 generateOp
     private static String URL_TEMPLATE = "http://www.cnbeta.com/cmt?jsoncallback=okcb{0}&op={1}";
 
+    private static String b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
     // http://www.cnbeta.com/cmt?jsoncallback=okcb91797948&op=info&page=1&sid=247973&sn=88747
     // okcb91797948({"status":"success","result":"Y25iZXRheyJjbW50ZGljdCI6W10sImhvdGxpc3QiOltdLCJjbW50bGlzdCI6W10sImNvbW1lbnRfbnVtIjoiMjEiLCJqb2luX251bSI6MCwidG9rZW4iOiIyYzM3MzBmY2I3OTE4N2IxNDU2NmQwMzFiOTc2MGQ1YzIxMGRlMWVhIiwidmlld19udW0iOjQzOTAsInBhZ2UiOjEsInNpZCI6MjQ3OTczLCJ1IjpbXX0="})
     // base64 decode 之后
@@ -113,7 +115,7 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
     }
 
     private String generateOP() throws Exception {
-        String b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+        
         String encoded = Base64.encodeToString(("1," + content.getSid() + "," + content.getSn()).getBytes("UTF-8"), Base64.NO_WRAP);
         for(int i=0; i<8; i++){
             encoded += b64.charAt((int)(Math.random() * b64.length()));
