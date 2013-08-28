@@ -17,6 +17,7 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
@@ -25,6 +26,8 @@ import org.jandroid.common.UnicodeUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -93,13 +96,18 @@ public class CnBetaHttpClient {
         return httpGet(url, "utf-8");
     }
 
-    private static void addDefaultHeaders(HttpGet httpGet){
 
+    public String httpGet(String url, Map<String, String> headers) throws Exception {
+        return httpGet(url, "utf-8", headers);
     }
 
     public String httpGet(String url, String encoding) throws Exception {
+        return httpGet(url, "utf-8", Collections.EMPTY_MAP);
+    }
+
+    public String httpGet(String url, String encoding, Map<String, String> headers) throws Exception {
         String result = "";
-        HttpGet httpGet = newHttpGet(url, encoding);
+        HttpGet httpGet = newHttpGet(url, encoding, headers);
 
         HttpResponse response = httpClient.execute(httpGet);
         try {
@@ -129,24 +137,30 @@ public class CnBetaHttpClient {
         }
     }
     public static HttpGet newHttpGet(String url) {
-        return newHttpGet(url, "ISO-8859-1");
+        return newHttpGet(url, "ISO-8859-1", Collections.EMPTY_MAP);
     }
 
-    public static HttpGet newHttpGet(String url, String encoding) {
+    public static HttpGet newHttpGet(String url, String encoding, Map<String, String> headers) {
         HttpGet httpGet = new HttpGet(url);
-//        httpGet.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, encoding);
+        httpGet.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, encoding);
+
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            httpGet.addHeader(entry.getKey(), entry.getValue());
+        }
+
 //        httpGet.addHeader("Host", "www.cnbeta.com");
-        // Must add Referer, so site return data
-        httpGet.addHeader("Referer", "http://www.cnbeta.com/");
+
         httpGet.addHeader("Accept-Encoding", "gzip, deflate");
         httpGet.addHeader("Accept", "*/*");
-//        httpGet.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-
-//        httpGet.addHeader("User-Agent", "Mozilla/5.0 AppleWebKit/533.1 (KHTML, like Gecko)");
-//        httpGet.addHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
         httpGet.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36");
 
         httpGet.addHeader("Connection", "keep-alive");
+
+        // Must add Referer, so site return data, default Referer
+        if(!headers.containsKey("Referer")) {
+            httpGet.addHeader("Referer", "http://www.cnbeta.com/");
+        }
+
         return httpGet;
     }
 

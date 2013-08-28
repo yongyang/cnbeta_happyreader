@@ -10,18 +10,26 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.io.File;
+import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
-    //TODO: 返回 Content，而不是Comment
+    //NOTE!!!! 过时的 cmt URL
+//    private static String URL_TEMPLATE = "http://www.cnbeta.com/cmt?jsoncallback=okcb{0}&op=info&page=1&sid={1}&sn={2}&op={3}";
 
-    private static String URL_TEMPLATE = "http://www.cnbeta.com/cmt?jsoncallback=okcb{0}&op=info&page=1&sid={1}&sn={2}";
-    
+
+    // 当前的 cmt URL
+    //op 需要编码
+    //编码方式如下： 1,{SID},{SN}, Base64编码，然后加上8位随机字符数字，参考 generateOp
+    private static String URL_TEMPLATE = "http://www.cnbeta.com/cmt?jsoncallback=okcb{0}&op={1}";
+
     // http://www.cnbeta.com/cmt?jsoncallback=okcb91797948&op=info&page=1&sid=247973&sn=88747
     // okcb91797948({"status":"success","result":"Y25iZXRheyJjbW50ZGljdCI6W10sImhvdGxpc3QiOltdLCJjbW50bGlzdCI6W10sImNvbW1lbnRfbnVtIjoiMjEiLCJqb2luX251bSI6MCwidG9rZW4iOiIyYzM3MzBmY2I3OTE4N2IxNDU2NmQwMzFiOTc2MGQ1YzIxMGRlMWVhIiwidmlld19udW0iOjQzOTAsInBhZ2UiOjEsInNpZCI6MjQ3OTczLCJ1IjpbXX0="})
     // base64 decode 之后
@@ -40,8 +48,17 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
 
     @Override
     public List<Comment> fromHttp(File baseDir) throws Exception {
-        String url = MessageFormat.format(URL_TEMPLATE, "" + System.currentTimeMillis(), ""+content.getSid(), content.getSn());
-        String response = CnBetaHttpClient.getInstance().httpGet(url);
+        Map<String, String> headers = new HashMap<String, String>();
+        //should add this "X-Requested-With" header, so remote return result
+        //httpget.addHeader("X-Requested-With", "XMLHttpRequest");
+        headers.put("X-Requested-With", "XMLHttpRequest");
+        //this header is optional, better to add
+        //httpget.addHeader("Referer", "http://www.cnbeta.com/articles/250243.htm");
+        headers.put("Referer", "http://www.cnbeta.com/articles/" + content.getSid() + ".htm");
+
+        // see article.min.js#initData
+        String url = MessageFormat.format(URL_TEMPLATE, "" + Math.round((System.currentTimeMillis() / 15e3)), generateOP());
+        String response = CnBetaHttpClient.getInstance().httpGet(url + "op=MSwyNTAxNzIsYWFkMmE%253D7iuvSPBh", headers);
         
         //if failed
         if(response.indexOf("error") > 0){
@@ -93,6 +110,17 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
     @Override
     public String getFileName() {
         return "comment_" + content.getSid();
+    }
+
+    private String generateOP() throws Exception {
+        String b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+        String encoded = Base64.encodeToString(("1," + content.getSid() + "," + content.getSn()).getBytes("UTF-8"), Base64.NO_WRAP);
+        for(int i=0; i<8; i++){
+            encoded += b64.charAt((int)(Math.random() * b64.length()));
+        }
+        // 两次 url encode，主要为转换 "="
+        encoded = URLEncoder.encode(URLEncoder.encode(encoded, "UTF-8"), "UTF-8");
+        return encoded;
     }
 }
 
@@ -153,5 +181,105 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
 "7784810":{"tid":"7784810","pid":"0","sid":"250207","date":"2013-08-27 15:16:45","name":"更与何人说","host_name":"河南省郑州市登封市","comment":"微软最大的问题首先是牌技不行，拿一手炸弹打得臭烂。","score":"3","reason":"0","userid":"4017","icon":"http:\/\/qzapp.qlogo.cn\/qzapp\/100370481\/AAA7B5FB3FF76B2D323856D92285B59F\/100"},
 "7784591":{"tid":"7784591","pid":"0","sid":"250207","date":"2013-08-27 14:09:37","name":"匿名人士","host_name":"西藏","comment":"微软需要一堆c13喷子","score":8,"reason":"0","userid":"0","icon":""}
 },"comment_num":"4","join_num":"4","token":"1555e16583e8fd4f30b360f78f9d79cf0b5288f4","view_num":320,"page":"1","sid":"250207","u":[]}
+
+*/
+
+/*
+http://static.cnbetacdn.com/assets/js/utils/jquery.cbcode.js
+
+(function ($) {
+    var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
+            a256 = '',
+            r64 = [256],
+            r256 = [256],
+            i = 0;
+    var UTF8 = {
+        encode: function (strUni) {
+            var strUtf = strUni.replace(/[\u0080-\u07ff]/g,
+                    function (c) {
+                        var cc = c.charCodeAt(0);
+                        return String.fromCharCode(0xc0 | cc >> 6, 0x80 | cc & 0x3f)
+                    }).replace(/[\u0800-\uffff]/g,
+                    function (c) {
+                        var cc = c.charCodeAt(0);
+                        return String.fromCharCode(0xe0 | cc >> 12, 0x80 | cc >> 6 & 0x3F, 0x80 | cc & 0x3f)
+                    });
+            return strUtf
+        },
+        decode: function (strUtf) {
+            var strUni = strUtf.replace(/[\u00e0-\u00ef][\u0080-\u00bf][\u0080-\u00bf]/g,
+                    function (c) {
+                        var cc = ((c.charCodeAt(0) & 0x0f) << 12) | ((c.charCodeAt(1) & 0x3f) << 6) | (c.charCodeAt(2) & 0x3f);
+                        return String.fromCharCode(cc)
+                    }).replace(/[\u00c0-\u00df][\u0080-\u00bf]/g,
+                    function (c) {
+                        var cc = (c.charCodeAt(0) & 0x1f) << 6 | c.charCodeAt(1) & 0x3f;
+                        return String.fromCharCode(cc)
+                    });
+            return strUni
+        }
+    };
+    while (i < 256) {
+        var c = String.fromCharCode(i);
+        a256 += c;
+        r256[i] = i;
+        r64[i] = b64.indexOf(c);
+        ++i
+    }
+    ;
+    function code(s, discard, alpha, beta, w1, w2) {
+        s = String(s);
+        var buffer = 0,
+                i = 0,
+                length = s.length,
+                result = '',
+                bitsInBuffer = 0;
+        while (i < length) {
+            var c = s.charCodeAt(i);
+            c = c < 256 ? alpha[c] : -1;
+            buffer = (buffer << w1) + c;
+            bitsInBuffer += w1;
+            while (bitsInBuffer >= w2) {
+                bitsInBuffer -= w2;
+                var tmp = buffer >> bitsInBuffer;
+                result += beta.charAt(tmp);
+                buffer ^= tmp << bitsInBuffer
+            }
+            ++i
+        }
+        ;
+        if (!discard && bitsInBuffer > 0) result += beta.charAt(buffer << (w2 - bitsInBuffer));
+        return result
+    };
+    var Plugin = $.cbcode = function (dir, input, encode) {
+        return input ? Plugin[dir](input, encode) : dir ? null : this
+    };
+    Plugin.en64 = Plugin.encode = function (plain, utf8encode, sublen) {
+        sublen = sublen === false ? 0 : sublen;
+        plain = Plugin.raw === false || Plugin.utf8encode || utf8encode ? UTF8.encode(plain) : plain;
+        plain = code(plain, false, r256, b64, 8, 6);
+        plain += '===='.slice((plain.length % 4) || 4);
+        if (sublen) {
+            for (i = 0; i < sublen; i++) {
+                plain += b64.charAt(Math.floor(Math.random() * b64.length));
+            }
+        }
+        return plain;
+    };
+    Plugin.de64 = Plugin.decode = function (coded, utf8decode, sublen) {
+        sublen = sublen === false ? 0 : sublen;
+        coded = coded.substr(sublen) + '';
+        coded = String(coded).split('=');
+        var i = coded.length;
+        do {
+            --i;
+            coded[i] = code(coded[i], true, r64, a256, 6, 8)
+        }
+        while (i > 0);
+        coded = coded.join('');
+        return Plugin.raw === false || Plugin.utf8decode || utf8decode ? UTF8.decode(coded) : coded
+    }
+}(jQuery));
+$.cbcode.utf8encode = true;
 
 */

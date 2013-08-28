@@ -21,11 +21,14 @@ import android.widget.Toast;
 import org.jandroid.cnbeta.async.ArticleCommentsAsyncTask;
 import org.jandroid.cnbeta.async.ArticleContentAsyncTask;
 import org.jandroid.cnbeta.async.ImageBytesLoadingAsyncTask;
+import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.common.async.AsyncResult;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.fragment.ArticleCommentsFragment;
 import org.jandroid.cnbeta.fragment.ArticleContentFragment;
 import org.jandroid.common.BaseActivity;
+
+import java.util.List;
 
 public class ContentActivity extends BaseActivity {
     
@@ -277,10 +280,10 @@ public class ContentActivity extends BaseActivity {
             }
 
             @Override
-            protected void onPostExecute(AsyncResult<Content> asyncResult) {
+            protected void onPostExecute(AsyncResult<List<Comment>> asyncResult) {
                 super.onPostExecute(asyncResult);
                 if (asyncResult.isSuccess()) {
-                    content = asyncResult.getResult();
+                    List<Comment> comments = asyncResult.getResult();
                     //TODO: update view_number, update comment fragment
                     contentFragment.updateCommentNumbers(content);
 //                    updateCommentFragment();

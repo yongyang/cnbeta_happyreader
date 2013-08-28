@@ -10,13 +10,16 @@ import org.json.simple.JSONValue;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 public class ArticleListLoader extends AbstractLoader<List<Article>> {
 
+    //TODO: jsoncallback算法
     public static String URL_TEMPLATE = "http://www.cnbeta.com/more.htm?jsoncallback=jQuery18008753548712314047_{0}s&type={1}&page={2}&_={3}";
     private Type type;
     private int page;
@@ -54,10 +57,13 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
 
     @Override
     public List<Article> fromHttp(File baseDir) throws Exception {
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("X-Requested-With", "XMLHttpRequest");
+
         //TODO: clear cache if page=1, reload
-        String url = MessageFormat.format(URL_TEMPLATE, ""+System.currentTimeMillis(), getType().getTypeString(), ""+getPage(), ""+(System.currentTimeMillis() + 1));
+        String url = MessageFormat.format(URL_TEMPLATE, ""+ Math.round((System.currentTimeMillis() / 15e3)), getType().getTypeString(), ""+getPage(), ""+(System.currentTimeMillis() + 1));
         //user json-simple to parse returned json string
-        String response = CnBetaHttpClient.getInstance().httpGet(url);
+        String response = CnBetaHttpClient.getInstance().httpGet(url, headers);
         String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
         JSONObject responseJSON = (JSONObject)JSONValue.parse(responseJSONString);
         JSONArray articleListJSONArray;

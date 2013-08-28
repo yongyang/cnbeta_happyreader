@@ -1,6 +1,7 @@
 package test.org.jandroid.cnbeta;
 
 import android.graphics.Bitmap;
+import android.util.Base64;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.apache.http.HttpEntity;
@@ -20,8 +21,12 @@ import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 
+import java.net.URLEncoder;
+import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -110,4 +115,38 @@ public class CnBetaTest extends TestCase {
         // immediate deallocation of all system resources
         httpclient.getConnectionManager().shutdown();
     }
+
+    public void testComment() throws Exception {
+        String URL_TEMPLATE = "http://www.cnbeta.com/cmt?jsoncallback=okcb{0}&op={1}";
+        Map<String, String> headers = new HashMap<String, String>();
+        //should add this "X-Requested-With" header, so remote return result
+        //httpget.addHeader("X-Requested-With", "XMLHttpRequest");
+        headers.put("X-Requested-With", "XMLHttpRequest");
+        //this header is optional, better to add
+        //httpget.addHeader("Referer", "http://www.cnbeta.com/articles/250243.htm");
+        headers.put("Referer", "http://www.cnbeta.com/articles/" + 250243 + ".htm");
+
+        String url = MessageFormat.format(URL_TEMPLATE, "" + System.currentTimeMillis(), generateOP());
+        String response = CnBetaHttpClient.getInstance().httpGet(url, headers);
+
+        //if failed
+        if(response.indexOf("error") > 0){
+            throw new Exception("error to read comments of article ");
+        }
+        Assert.fail(response);
+    }
+
+    private static String generateOP() throws Exception {
+        String b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+        String encoded = Base64.encodeToString("1,250243,63701".getBytes("UTF-8"), Base64.NO_WRAP);
+//        encoded = encoded.substring(0, encoded.length()-2);
+        for(int i=0; i<8; i++){
+            encoded += b64.charAt((int)(Math.random() * b64.length()));
+        }
+
+        // 两次 url encode
+        encoded = URLEncoder.encode(URLEncoder.encode(encoded, "UTF-8"), "UTF-8");
+        return encoded;
+    }
+
 }

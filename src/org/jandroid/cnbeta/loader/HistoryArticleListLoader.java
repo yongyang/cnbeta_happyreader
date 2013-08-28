@@ -46,43 +46,6 @@ public class HistoryArticleListLoader extends AbstractLoader<List<HistoryArticle
         return (JSONArray)JSONValue.parse(articleListJSONString);
     }
 
-    /**
-     * write a new historyArticle to disk
-     * @param baseDir
-     * @param historyArticle
-     * @throws Exception
-     */
-    @SuppressWarnings("unchecked")
-    protected void toDisk(File baseDir, HistoryArticle historyArticle) throws Exception {
-        File file = getFile(baseDir);
-        if(!file.exists()) {
-            JSONArray jsonArray = new JSONArray();
-            jsonArray.add(historyArticle.toJSONObject());
-            FileUtils.write(file, jsonArray.toJSONString());
-        }
-        else {
-            JSONArray jsonArray = loadFromDisk(baseDir);
-            if(jsonArray.contains(historyArticle)) {
-                // add to top
-                jsonArray.add(0, historyArticle.toJSONObject());
-                FileUtils.write(file, jsonArray.toJSONString());
-            }
-        }
-    }
-
-/*
-    @Override
-    @SuppressWarnings("unchecked")
-    protected void toDisk(File baseDir, Object obj) throws Exception {
-        if(articles.size() == 1) {
-            toDisk(baseDir, articles.get(0));
-        }
-        else {
-            throw new UnsupportedOperationException("One article one time, use toDisk(File baseDir, HistoryArticle historyArticle) instead");
-        }
-    }
-*/
-
     @Override
     public String getFileName() {
         String date = dateFormat.format(new Date());

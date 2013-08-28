@@ -8,15 +8,23 @@ import java.util.Map;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 public class Comment {
-    
+
+    //thread-id, comment id
     private long tid;
+    // parent-id
     private long pid;
+    // article id
     private long sid;
     private String date;
+    // user-name
     private String name;
+    // host-name
     private String hostName;
+    // comment content
     private String comment;
+    // support
     private int score;
+    //against
     private int reason;
     
     private String token;
