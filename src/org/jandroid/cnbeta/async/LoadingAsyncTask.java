@@ -12,6 +12,10 @@ import org.jandroid.common.async.BaseAsyncTask;
  */
 public abstract class LoadingAsyncTask<R>  extends BaseAsyncTask<R> {
 
+    protected boolean isRemoteLoadOnly() {
+        return false;
+    }
+    
     // 是否只能本地加载
     protected boolean isLocalLoadOnly() {
         return false;
@@ -28,6 +32,11 @@ public abstract class LoadingAsyncTask<R>  extends BaseAsyncTask<R> {
 
     protected R run() throws Exception {
         boolean hasNetwork = getCnBetaApplicationContext().isNetworkConnected();
+        
+        if(!hasNetwork && isRemoteLoadOnly()) {
+            throw new Exception("No network!");
+        }
+        
         AbstractLoader imageLoader = getLoader();
         //优先从Disk装载
         if(isLocalLoadFirst() || isLocalLoadOnly()) {

@@ -22,7 +22,7 @@ public class ImageBytesLoader extends AbstractLoader<byte[]> {
     public byte[] fromHttp(File baseDir) throws Exception {
         // some url has space char
         String url = imageUrl.replace(" ", "%20");
-        byte[] bytes = CnBetaHttpClient.getInstance().httpGetImage(url);
+        byte[] bytes = CnBetaHttpClient.getInstance().httpGetBytes(url);
         writeDiskByteArray(baseDir, bytes);
         return bytes;
     }

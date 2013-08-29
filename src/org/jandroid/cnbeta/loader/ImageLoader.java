@@ -3,10 +3,8 @@ package org.jandroid.cnbeta.loader;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
-import org.apache.commons.io.FileUtils;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URLEncoder;
 
@@ -26,7 +24,7 @@ public class ImageLoader extends AbstractLoader<Bitmap> {
     public Bitmap fromHttp(File baseDir) throws Exception {
         // some url has space char
         String url = imageUrl.replace(" ", "%20");
-        byte[] bytes = CnBetaHttpClient.getInstance().httpGetImage(url);
+        byte[] bytes = CnBetaHttpClient.getInstance().httpGetBytes(url);
         writeDiskByteArray(baseDir, bytes);
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }

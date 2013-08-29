@@ -3,10 +3,15 @@ package org.jandroid.cnbeta.client;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpMessage;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.conn.params.ConnManagerParams;
@@ -14,8 +19,10 @@ import org.apache.http.conn.params.ConnPerRouteBean;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
@@ -26,7 +33,10 @@ import org.jandroid.common.UnicodeUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
@@ -35,18 +45,29 @@ import java.util.zip.GZIPInputStream;
  */
 public class CnBetaHttpClient {
 
-    public static final String DEFAULT_ENCODING = "utf-8";
-
     public static final int MAX_TOTAL_CONNECTIONS = 20;
     public static final int MAX_CONNECTIONS_PER_ROUTE = 20;
     public static final int TIMEOUT_CONNECT = 6000;
     public static final int TIMEOUT_READ = 30000;
 
-
+    
     private final static CnBetaHttpClient client = new CnBetaHttpClient();
 
     private HttpClient httpClient;
-
+    
+    public static String DEFAULT_ENCODING = "UTF-8";
+    private static final Map<String, String> DEFAULT_HEADERS = new HashMap<String, String>();
+    
+    static {
+        DEFAULT_HEADERS.put("Accept-Encoding", "gzip, deflate");
+        DEFAULT_HEADERS.put("Accept", "*/*");
+        DEFAULT_HEADERS.put("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36");
+        DEFAULT_HEADERS.put("Connection", "keep-alive");
+        // Must add Referer, so site return data, default Referer
+        DEFAULT_HEADERS.put("Referer", "http://www.cnbeta.com/");
+    }
+    
+    
     //TODO: sessionId 是什么时候得到的？由 HttpClient自动存储到 CookieStore中，无需手动管理！
     private String sessionId;
 
@@ -93,23 +114,49 @@ public class CnBetaHttpClient {
 
 
     public String httpGet(String url) throws Exception {
-        return httpGet(url, "utf-8");
+        return httpGet(url, DEFAULT_ENCODING);
     }
 
 
     public String httpGet(String url, Map<String, String> headers) throws Exception {
-        return httpGet(url, "utf-8", headers);
+        return httpGet(url, DEFAULT_ENCODING, headers);
     }
 
+    @SuppressWarnings("unchecked")
     public String httpGet(String url, String encoding) throws Exception {
-        return httpGet(url, "utf-8", Collections.EMPTY_MAP);
+        return httpGet(url, DEFAULT_ENCODING, Collections.EMPTY_MAP);
     }
 
     public String httpGet(String url, String encoding, Map<String, String> headers) throws Exception {
-        String result = "";
         HttpGet httpGet = newHttpGet(url, encoding, headers);
-
         HttpResponse response = httpClient.execute(httpGet);
+        return handleRequest(httpGet, response);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public String httpPost(String url, Map<String, String> datas) throws Exception {
+        return httpPost(url, DEFAULT_ENCODING, Collections.EMPTY_MAP, datas);
+    }
+    
+    public String httpPost(String url, Map<String, String> headers, Map<String, String> datas) throws Exception {
+        return httpPost(url, DEFAULT_ENCODING, headers, datas);
+    }
+
+        
+    public String httpPost(String url, String encoding, Map<String, String> headers, Map<String, String> datas) throws Exception {
+        HttpPost httpPost = newHttpPost(url, encoding, headers, datas);        
+        HttpResponse response = httpClient.execute(httpPost);
+        return handleRequest(httpPost, response);
+    }
+    
+    private String handleRequest(HttpRequestBase request, HttpResponse response) throws Exception {
+        String encoding = (String)request.getParams().getParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET);
+        if(encoding == null) {
+            encoding = DEFAULT_ENCODING;
+        }
+        
+        String result;
         try {
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
                 throw new Exception("Server Error: " + response.getStatusLine().toString());
@@ -132,40 +179,53 @@ public class CnBetaHttpClient {
             }
         }
         catch (IOException e) {
-            httpGet.abort();
+            request.abort();
             throw e;
         }
     }
-    public static HttpGet newHttpGet(String url) {
-        return newHttpGet(url, "ISO-8859-1", Collections.EMPTY_MAP);
+
+    private static void setDefaultHeaders(HttpMessage httpMessage){
+        for(Map.Entry<String, String> entry : DEFAULT_HEADERS.entrySet()){
+            httpMessage.setHeader(entry.getKey(), entry.getValue());
+        }
     }
 
     public static HttpGet newHttpGet(String url, String encoding, Map<String, String> headers) {
         HttpGet httpGet = new HttpGet(url);
         httpGet.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, encoding);
+        
+        setDefaultHeaders(httpGet);
 
         for (Map.Entry<String, String> entry : headers.entrySet()) {
-            httpGet.addHeader(entry.getKey(), entry.getValue());
-        }
-
-//        httpGet.addHeader("Host", "www.cnbeta.com");
-
-        httpGet.addHeader("Accept-Encoding", "gzip, deflate");
-        httpGet.addHeader("Accept", "*/*");
-        httpGet.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36");
-
-        httpGet.addHeader("Connection", "keep-alive");
-
-        // Must add Referer, so site return data, default Referer
-        if(!headers.containsKey("Referer")) {
-            httpGet.addHeader("Referer", "http://www.cnbeta.com/");
+            httpGet.setHeader(entry.getKey(), entry.getValue());
         }
 
         return httpGet;
     }
 
-    public byte[] httpGetImage(String url) throws Exception {
-        final HttpGet request = newHttpGet(url);
+    
+    public static HttpPost newHttpPost(String url, String encoding, Map<String, String> headers, Map<String, String> datas) throws Exception {
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, encoding);
+        
+        setDefaultHeaders(httpPost);
+        
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            httpPost.setHeader(entry.getKey(), entry.getValue());
+        }
+
+        List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+       
+        for(Map.Entry<String, String> entry : datas.entrySet()){
+            nvps.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+        }
+        httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+        return httpPost;
+    }
+
+
+    public byte[] httpGetBytes(String url) throws Exception {
+        final HttpGet request = newHttpGet(url, DEFAULT_ENCODING, Collections.EMPTY_MAP);
         try {
             HttpResponse response = httpClient.execute(request);
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
@@ -184,6 +244,15 @@ public class CnBetaHttpClient {
             request.abort();
             throw e;
         }
+    }
+    
+    public String getCookie(String key) {
+        for(Cookie cookie : ((DefaultHttpClient)httpClient).getCookieStore().getCookies() ) {
+            if(cookie.getName().equals(key)) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 }
 
