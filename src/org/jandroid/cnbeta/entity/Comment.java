@@ -1,7 +1,5 @@
 package org.jandroid.cnbeta.entity;
 
-import org.json.JSONObject;
-
 import java.util.Map;
 
 /**

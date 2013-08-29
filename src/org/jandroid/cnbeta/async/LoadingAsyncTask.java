@@ -1,9 +1,7 @@
 package org.jandroid.cnbeta.async;
 
-import android.os.AsyncTask;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.loader.AbstractLoader;
-import org.jandroid.common.async.AsyncResult;
 import org.jandroid.common.async.BaseAsyncTask;
 
 /**

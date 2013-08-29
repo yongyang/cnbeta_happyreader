@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.CaptchaLoader;
-import org.jandroid.cnbeta.loader.ImageLoader;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>

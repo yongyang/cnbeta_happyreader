@@ -19,19 +19,13 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
-import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.entity.Comment;
-import org.jandroid.common.BaseActivity;
 import org.jandroid.common.BaseFragment;
-import org.jandroid.common.EnvironmentUtils;
-import org.jandroid.common.async.AsyncResult;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

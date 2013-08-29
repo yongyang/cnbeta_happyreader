@@ -20,10 +20,10 @@ import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Top10Activity;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.ImageAsyncTask;
-import org.jandroid.common.adapter.AsyncImageAdapter;
-import org.jandroid.common.async.AsyncResult;
 import org.jandroid.cnbeta.entity.RankArticle;
 import org.jandroid.common.BaseFragment;
+import org.jandroid.common.adapter.AsyncImageAdapter;
+import org.jandroid.common.async.AsyncResult;
 
 import java.util.HashMap;
 import java.util.List;

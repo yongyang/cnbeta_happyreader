@@ -1,8 +1,5 @@
 package org.jandroid.cnbeta.entity;
 
-import org.json.simple.JSONObject;
-import org.jsoup.nodes.Element;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

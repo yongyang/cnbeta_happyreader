@@ -2,7 +2,6 @@ package org.jandroid.cnbeta.loader;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import org.jandroid.cnbeta.Constants;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.cnbeta.entity.Content;
 import org.json.simple.JSONObject;

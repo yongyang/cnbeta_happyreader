@@ -1,10 +1,8 @@
 package org.jandroid.cnbeta.async;
 
-import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.RateArticlePoster;
-import org.jandroid.cnbeta.loader.SupportCommentPoster;
 import org.json.simple.JSONObject;
 
 /**

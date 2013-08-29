@@ -22,11 +22,11 @@ import org.jandroid.cnbeta.async.ArticleCommentsAsyncTask;
 import org.jandroid.cnbeta.async.ArticleContentAsyncTask;
 import org.jandroid.cnbeta.async.ImageBytesLoadingAsyncTask;
 import org.jandroid.cnbeta.entity.Comment;
-import org.jandroid.common.async.AsyncResult;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.fragment.ArticleCommentsFragment;
 import org.jandroid.cnbeta.fragment.ArticleContentFragment;
 import org.jandroid.common.BaseActivity;
+import org.jandroid.common.async.AsyncResult;
 
 import java.util.List;
 

@@ -19,12 +19,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
-import org.jandroid.common.async.AsyncResult;
 import org.jandroid.cnbeta.async.RankArticleListAsyncTask;
 import org.jandroid.cnbeta.entity.RankArticle;
 import org.jandroid.cnbeta.fragment.Top10ArticleListFragment;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.IntentUtils;
+import org.jandroid.common.async.AsyncResult;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

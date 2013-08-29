@@ -1,20 +1,12 @@
 package org.jandroid.cnbeta.loader;
 
-import android.util.Base64;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.cnbeta.entity.Comment;
-import org.jandroid.cnbeta.entity.Content;
-import org.jandroid.common.UnicodeUtils;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.io.File;
-import java.net.URLEncoder;
-import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

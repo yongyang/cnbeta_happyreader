@@ -1,6 +1,5 @@
 package org.jandroid.cnbeta.loader;
 
-import org.apache.commons.io.FileUtils;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.cnbeta.entity.RealtimeArticle;
 import org.json.simple.JSONArray;
