@@ -224,10 +224,17 @@ public class CnBetaHttpClient {
     }
 
 
+    @SuppressWarnings("unchecked")
     public byte[] httpGetBytes(String url) throws Exception {
-        final HttpGet request = newHttpGet(url, DEFAULT_ENCODING, Collections.EMPTY_MAP);
+        return httpGetBytes(url, Collections.EMPTY_MAP);
+    }
+
+    public byte[] httpGetBytes(String url, Map<String, String> headers) throws Exception {
+        
+        final HttpGet httpGet = newHttpGet(url, DEFAULT_ENCODING, headers);
+
         try {
-            HttpResponse response = httpClient.execute(request);
+            HttpResponse response = httpClient.execute(httpGet);
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
                 throw new Exception("Server Error: " + response.getStatusLine().toString());
             }
@@ -241,11 +248,11 @@ public class CnBetaHttpClient {
             }
         }
         catch (Exception e) {
-            request.abort();
+            httpGet.abort();
             throw e;
         }
     }
-    
+
     public String getCookie(String key) {
         for(Cookie cookie : ((DefaultHttpClient)httpClient).getCookieStore().getCookies() ) {
             if(cookie.getName().equals(key)) {

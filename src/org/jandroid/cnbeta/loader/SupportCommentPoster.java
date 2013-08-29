@@ -100,7 +100,7 @@ public class SupportCommentPoster extends AbstractLoader<JSONObject> {
 
     @Override
     public String getFileName() {
-        return "";
+        throw new UnsupportedOperationException("getFileName");
     }
 
     @Override

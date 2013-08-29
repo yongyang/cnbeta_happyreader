@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ArticleContentLoader extends AbstractLoader<Content> {
 
-    private static String URL_TEMPLATE = Constants.BASE_URL + "/articles/{0}"+".htm";
+    private static String URL_TEMPLATE = "http://www.cnbeta.com/articles/{0}"+".htm";
     
     private long sid ;
 

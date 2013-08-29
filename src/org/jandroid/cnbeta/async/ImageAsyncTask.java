@@ -8,7 +8,7 @@ import org.jandroid.cnbeta.loader.ImageLoader;
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  * @create 7/29/13 3:21 PM
  */
-public abstract class ImageLoadingAsyncTask extends LoadingAsyncTask<Bitmap> {
+public abstract class ImageAsyncTask extends LoadingAsyncTask<Bitmap> {
 
     protected abstract String getImageUrl();
 

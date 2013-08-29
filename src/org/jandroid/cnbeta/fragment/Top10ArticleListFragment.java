@@ -19,7 +19,7 @@ import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Top10Activity;
 import org.jandroid.cnbeta.Utils;
-import org.jandroid.cnbeta.async.ImageLoadingAsyncTask;
+import org.jandroid.cnbeta.async.ImageAsyncTask;
 import org.jandroid.common.adapter.AsyncImageAdapter;
 import org.jandroid.common.async.AsyncResult;
 import org.jandroid.cnbeta.entity.RankArticle;
@@ -145,7 +145,7 @@ public class Top10ArticleListFragment extends BaseFragment {
 
             @Override
             protected void loadImageAsync(final String imageUrl, final OnAsyncImageLoadListener onAsyncImageLoadListener) {
-                top10Activity.executeAsyncTaskMultiThreading(new ImageLoadingAsyncTask() {
+                top10Activity.executeAsyncTaskMultiThreading(new ImageAsyncTask() {
 
                     @Override
                     public CnBetaApplicationContext getCnBetaApplicationContext() {

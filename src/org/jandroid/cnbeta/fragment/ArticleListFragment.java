@@ -20,7 +20,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.jandroid.cnbeta.async.ImageLoadingAsyncTask;
+import org.jandroid.cnbeta.async.ImageAsyncTask;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
@@ -138,7 +138,7 @@ public class ArticleListFragment extends BaseFragment {
 
             @Override
             protected void loadImageAsync(final String imageUrl, final OnAsyncImageLoadListener onAsyncImageLoadListener) {
-                ((BaseActivity)getActivity()).executeAsyncTaskMultiThreading(new ImageLoadingAsyncTask() {
+                ((BaseActivity)getActivity()).executeAsyncTaskMultiThreading(new ImageAsyncTask() {
 
                     @Override
                     public CnBetaApplicationContext getCnBetaApplicationContext() {

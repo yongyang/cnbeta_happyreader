@@ -9,7 +9,6 @@ import java.io.File;
  * @create 7/30/13 4:35 PM
  */
 public class Constants {
-    public static final String BASE_URL = "http://www.cnbeta.com";
     public static final String BASE_DIR = "cnBeta_jAndroid";
 
 }

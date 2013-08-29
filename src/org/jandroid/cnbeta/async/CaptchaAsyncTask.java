@@ -1,0 +1,26 @@
+package org.jandroid.cnbeta.async;
+
+import android.graphics.Bitmap;
+import org.jandroid.cnbeta.entity.Content;
+import org.jandroid.cnbeta.loader.AbstractLoader;
+import org.jandroid.cnbeta.loader.CaptchaLoader;
+import org.jandroid.cnbeta.loader.ImageLoader;
+
+/**
+ * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
+ * @create 7/29/13 3:21 PM
+ */
+public abstract class CaptchaAsyncTask extends LoadingAsyncTask<Bitmap> {
+
+    protected abstract Content getContent();
+
+    @Override
+    protected boolean isRemoteLoadOnly() {
+        return true;
+    }
+
+    @Override
+    public AbstractLoader<Bitmap> getLoader() {
+        return new CaptchaLoader(getContent());
+    }
+}
