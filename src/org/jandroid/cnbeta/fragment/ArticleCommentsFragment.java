@@ -80,6 +80,7 @@ public class ArticleCommentsFragment extends BaseFragment {
 
         View rootView = inflater.inflate(R.layout.comments_listview, container, false);
         commentsListView = (ListView)rootView.findViewById(R.id.comments_listview);
+        commentsListView.setItemsCanFocus(true);
 		return rootView;
 	}
 
@@ -122,6 +123,7 @@ public class ArticleCommentsFragment extends BaseFragment {
                 positionTextView.setText("" + (adapter.getCount() - position));
                 TextView nameTextView = (TextView)convertView.findViewById(R.id.name);
                 nameTextView.setText(comment.getName());
+
                 TextView hostNameTextView = (TextView)convertView.findViewById(R.id.host_name);
                 hostNameTextView.setText("[" + comment.getHostName() + "]");
                 TextView dateTextView = (TextView)convertView.findViewById(R.id.date);
@@ -135,10 +137,30 @@ public class ArticleCommentsFragment extends BaseFragment {
                 TextView reasonTextView = (TextView)convertView.findViewById(R.id.reason);
                 reasonTextView.setText("" + comment.getReason());
 
+
+                LinearLayout supportLinearLayout = (LinearLayout)convertView.findViewById(R.id.supportLinearLayout);
+                LinearLayout againstLinearLayout = (LinearLayout)convertView.findViewById(R.id.againstLinearLayout);
+                supportLinearLayout.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Toast.makeText(getActivity(), "support", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                againstLinearLayout.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Toast.makeText(getActivity(), "against", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 return convertView;
             }
         };
+
         commentsListView.setAdapter(adapter);
+
+        commentsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(), "setOnItemClickListener", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

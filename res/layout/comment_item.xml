@@ -3,8 +3,7 @@
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
-        android:id="@+id/llContent"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
     <LinearLayout
@@ -20,6 +19,7 @@
                 android:id="@+id/position"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+
         <TextView
                 android:textSize="12.0sp"
                 android:textColor="@color/cnBeta_text_description_gray"
@@ -88,44 +88,76 @@
                 android:layout_gravity="right"
                 android:gravity="right">
 
-            <TextView
-                    android:textSize="12.0sp"
-                    android:textColor="@color/cnBeta_text_description_gray"
-                    android:text="支持"
-                    android:paddingLeft="4.0dip"
-                    android:paddingTop="4.0dip"
-                    android:paddingRight="6.0dip"
+            <LinearLayout
+                    android:id="@+id/supportLinearLayout"
+                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            <TextView
-                    android:textSize="12.0sp"
-                    android:textColor="@color/red"
-                    android:id="@+id/score"
-                    android:paddingLeft="4.0dip"
-                    android:paddingTop="4.0dip"
-                    android:paddingRight="6.0dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content">
 
-            <TextView
-                    android:textSize="12.0sp"
-                    android:textColor="@color/cnBeta_text_description_gray"
-                    android:text="反对"
-                    android:paddingLeft="4.0dip"
-                    android:paddingTop="4.0dip"
-                    android:paddingRight="6.0dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            <TextView
-                    android:textSize="12.0sp"
-                    android:textColor="@color/red"
-                    android:id="@+id/reason"
-                    android:paddingLeft="4.0dip"
-                    android:paddingTop="4.0dip"
-                    android:paddingRight="6.0dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                <TextView
+                        android:textSize="12.0sp"
+                        android:textColor="@color/cnBeta_text_description_gray"
+                        android:text="支持"
+                        android:paddingLeft="4.0dip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <TextView
+                        android:textSize="12.0sp"
+                        android:text="("
+                        android:paddingLeft="4.0dip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
+                <TextView
+                        android:textSize="12.0sp"
+                        android:id="@+id/score"
+                        android:text="0"
+                        android:textColor="@color/red"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <TextView
+                        android:textSize="12.0sp"
+                        android:text=")"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:id="@+id/againstLinearLayout"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="4.0dip">
+
+                <TextView
+                        android:textSize="12.0sp"
+                        android:textColor="@color/cnBeta_text_description_gray"
+                        android:text="反对"
+                        android:paddingLeft="10dip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        android:textSize="12.0sp"
+                        android:text="("
+                        android:paddingLeft="4.0dip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                <TextView
+                        android:textSize="12.0sp"
+                        android:id="@+id/reason"
+                        android:text="0"
+                        android:textColor="@color/red"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <TextView
+                        android:textSize="12.0sp"
+                        android:text=")"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
