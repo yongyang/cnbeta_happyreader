@@ -91,7 +91,7 @@
             <LinearLayout
                     android:id="@+id/supportLinearLayout"
                     android:orientation="horizontal"
-                    android:background="@drawable/btn_load_more_bg_selector"
+                    android:background="@drawable/btn_bg_selector"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="4.0dip"
@@ -128,7 +128,7 @@
             <LinearLayout
                     android:id="@+id/againstLinearLayout"
                     android:orientation="horizontal"
-                    android:background="@drawable/btn_load_more_bg_selector"
+                    android:background="@drawable/btn_bg_selector"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4.0dip"
