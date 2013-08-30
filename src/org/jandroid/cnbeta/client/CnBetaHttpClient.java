@@ -29,6 +29,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.EntityUtils;
+import org.jandroid.common.Logger;
 import org.jandroid.common.UnicodeUtils;
 
 import java.io.ByteArrayInputStream;
@@ -44,6 +45,8 @@ import java.util.zip.GZIPInputStream;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 public class CnBetaHttpClient {
+
+    private static Logger logger = Logger.newLogger(CnBetaHttpClient.class);
 
     public static final int MAX_TOTAL_CONNECTIONS = 20;
     public static final int MAX_CONNECTIONS_PER_ROUTE = 20;
@@ -67,10 +70,6 @@ public class CnBetaHttpClient {
         DEFAULT_HEADERS.put("Referer", "http://www.cnbeta.com/");
     }
     
-    
-    //TODO: sessionId 是什么时候得到的？由 HttpClient自动存储到 CookieStore中，无需手动管理！
-    private String sessionId;
-
     private CnBetaHttpClient() {
         HttpParams httpParams = new BasicHttpParams();
         ConnManagerParams.setMaxTotalConnections(httpParams, MAX_TOTAL_CONNECTIONS);
@@ -128,6 +127,7 @@ public class CnBetaHttpClient {
     }
 
     public String httpGet(String url, String encoding, Map<String, String> headers) throws Exception {
+        logger.d("GET: " + url);
         HttpGet httpGet = newHttpGet(url, encoding, headers);
         HttpResponse response = httpClient.execute(httpGet);
         return handleRequest(httpGet, response);
@@ -145,6 +145,7 @@ public class CnBetaHttpClient {
 
         
     public String httpPost(String url, String encoding, Map<String, String> headers, Map<String, String> datas) throws Exception {
+        logger.d("POST: " + url);
         HttpPost httpPost = newHttpPost(url, encoding, headers, datas);        
         HttpResponse response = httpClient.execute(httpPost);
         return handleRequest(httpPost, response);
@@ -230,7 +231,7 @@ public class CnBetaHttpClient {
     }
 
     public byte[] httpGetBytes(String url, Map<String, String> headers) throws Exception {
-        
+        logger.d("GET: " + url);
         final HttpGet httpGet = newHttpGet(url, DEFAULT_ENCODING, headers);
 
         try {

@@ -19,9 +19,17 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.jandroid.cnbeta.CnBetaApplicationContext;
+import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
+import org.jandroid.cnbeta.async.SupportCommentAsyncTask;
 import org.jandroid.cnbeta.entity.Comment;
+import org.jandroid.cnbeta.loader.SupportCommentPoster;
+import org.jandroid.common.BaseActivity;
 import org.jandroid.common.BaseFragment;
+import org.jandroid.common.ToastUtils;
+import org.jandroid.common.async.AsyncResult;
+import org.json.simple.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -45,6 +53,9 @@ public class ArticleCommentsFragment extends BaseFragment {
     private ProgressBar progressBarRefresh;
     private LinearLayout lineLayoutRefresh;
     private TextView tvLastTimeRefresh;
+
+    private TextView scoreTextView;
+    private TextView reasonTextView;
 
     private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -112,7 +123,7 @@ public class ArticleCommentsFragment extends BaseFragment {
                 if(convertView == null) {
                     convertView = getActivity().getLayoutInflater().inflate(R.layout.comment_item, null);
                 }
-                Comment comment = comments.get(position);
+                final Comment comment = comments.get(position);
                 TextView positionTextView = (TextView)convertView.findViewById(R.id.position);
                 positionTextView.setText("" + (adapter.getCount() - position));
                 TextView nameTextView = (TextView)convertView.findViewById(R.id.name);
@@ -126,9 +137,9 @@ public class ArticleCommentsFragment extends BaseFragment {
                 TextView commentTextView = (TextView)convertView.findViewById(R.id.comment);
                 commentTextView.setText(comment.getComment());
 
-                TextView scoreTextView = (TextView)convertView.findViewById(R.id.score);
+                scoreTextView = (TextView)convertView.findViewById(R.id.score);
                 scoreTextView.setText("" + comment.getScore());
-                TextView reasonTextView = (TextView)convertView.findViewById(R.id.reason);
+                reasonTextView = (TextView)convertView.findViewById(R.id.reason);
                 reasonTextView.setText("" + comment.getReason());
 
 
@@ -136,12 +147,12 @@ public class ArticleCommentsFragment extends BaseFragment {
                 LinearLayout againstLinearLayout = (LinearLayout)convertView.findViewById(R.id.againstLinearLayout);
                 supportLinearLayout.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        Toast.makeText(getActivity(), "support", Toast.LENGTH_SHORT).show();
+                        supportComment(comment, true);
                     }
                 });
                 againstLinearLayout.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        Toast.makeText(getActivity(), "against", Toast.LENGTH_SHORT).show();
+                        supportComment(comment, false);
                     }
                 });
                 return convertView;
@@ -149,17 +160,52 @@ public class ArticleCommentsFragment extends BaseFragment {
         };
 
         commentsListView.setAdapter(adapter);
-
-        commentsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(), "setOnItemClickListener", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    private void supportComment(final Comment comment, final boolean isSupport) {
+        ((BaseActivity)getActivity()).executeAsyncTaskMultiThreading(new SupportCommentAsyncTask() {
+            @Override
+            protected Comment getComment() {
+                return comment;
+            }
+
+            @Override
+            protected SupportCommentPoster.Op getOp() {
+                return isSupport ? SupportCommentPoster.Op.SUPPORT : SupportCommentPoster.Op.AGAINST;
+            }
+
+            @Override
+            public void showProgressUI() {
+
+            }
+
+            @Override
+            public void dismissProgressUI() {
+
+            }
+
+            @Override
+            public CnBetaApplicationContext getCnBetaApplicationContext() {
+                return ((CnBetaApplicationContext)getActivity().getApplicationContext());
+            }
+
+            @Override
+            protected void onPostExecute(AsyncResult<JSONObject> jsonObjectAsyncResult) {
+                super.onPostExecute(jsonObjectAsyncResult);
+                if(jsonObjectAsyncResult.isSuccess()) {
+                    //TODO: +1
+                    ToastUtils.showShortToast(getActivity(), "supported");
+                }
+                else {
+                    ToastUtils.showLongToast(getActivity(), "supported failed");
+                }
+            }
+        });
     }
 
 /*

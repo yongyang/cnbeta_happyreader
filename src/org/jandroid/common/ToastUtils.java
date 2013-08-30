@@ -16,4 +16,13 @@ public class ToastUtils {
     public static Toast noSdCard(Context theContext){
         return Toast.makeText(theContext, "没有SD卡，将使用手机内置存储器", Toast.LENGTH_SHORT);
     }
+
+    public static void showShortToast(Context theContext, String info){
+        Toast.makeText(theContext, info, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showLongToast(Context theContext, String info){
+        Toast.makeText(theContext, info, Toast.LENGTH_LONG).show();
+    }
+
 }
