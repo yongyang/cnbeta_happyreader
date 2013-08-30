@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-   <item>
-   	  <shape android:shape="rectangle">
-         <solid android:color="#F7F7F7" />
-         <corners
-			android:topLeftRadius="1dip"
-	        android:topRightRadius="1dip"
-	        android:bottomLeftRadius="1dip"
-	        android:bottomRightRadius="1dip" />
-      </shape>
-   </item>
-   <item android:top="1px" android:bottom="1px" android:left="1px" android:right="1px">
-     <shape>
-        <gradient
-        	android:startColor="#F7F7F7" android:endColor="#FFFBFF"
-        	android:type="linear" android:angle="90"
-			android:centerX="0.5" android:centerY="0.5" />
-		<corners
-			android:topLeftRadius="1dip"
-	        android:topRightRadius="1dip"
-	        android:bottomLeftRadius="1dip"
-	        android:bottomRightRadius="1dip " />
-      </shape>
-   </item>
-</layer-list>
+<shape
+        android:shape="rectangle"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    <stroke
+            android:color="#EEEEEE"
+            android:width="1px"/>
+    <corners
+            android:topLeftRadius="1dip"
+            android:topRightRadius="1dip"
+            android:bottomLeftRadius="1dip"
+            android:bottomRightRadius="1dip"/>
+    <gradient
+            android:startColor="#EEEEEE"
+            android:endColor="#FFFBFF"
+            android:type="linear"
+            android:angle="90"
+            android:centerX="0.5"
+            android:centerY="0.5"/>
+    <padding
+            android:left="1dip"
+            android:right="1dip"
+            android:top="1dip"
+            android:bottom="1dip"
+            />
+</shape>
