@@ -22,6 +22,7 @@ import android.widget.Toast;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
+import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.SupportCommentAsyncTask;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.loader.SupportCommentPoster;
@@ -142,9 +143,9 @@ public class ArticleCommentsFragment extends BaseFragment {
                 reasonTextView = (TextView)convertView.findViewById(R.id.reason);
                 reasonTextView.setText("" + comment.getReason());
 
-
                 LinearLayout supportLinearLayout = (LinearLayout)convertView.findViewById(R.id.supportLinearLayout);
                 LinearLayout againstLinearLayout = (LinearLayout)convertView.findViewById(R.id.againstLinearLayout);
+                TextView replyButton = (TextView)convertView.findViewById(R.id.reply);
                 supportLinearLayout.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         supportComment(comment, true);
@@ -153,6 +154,11 @@ public class ArticleCommentsFragment extends BaseFragment {
                 againstLinearLayout.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         supportComment(comment, false);
+                    }
+                });
+                replyButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Utils.openCommentActivity(getActivity(), null);
                     }
                 });
                 return convertView;
@@ -263,6 +269,7 @@ public class ArticleCommentsFragment extends BaseFragment {
     }
 */
 
+/*
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -285,6 +292,7 @@ public class ArticleCommentsFragment extends BaseFragment {
         }
         return true;
     }
+*/
 
     private void rotateRefreshActionView() {
         if(refreshMenuItem != null) {

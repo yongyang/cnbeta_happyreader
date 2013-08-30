@@ -26,6 +26,7 @@ import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.fragment.ArticleCommentsFragment;
 import org.jandroid.cnbeta.fragment.ArticleContentFragment;
 import org.jandroid.common.BaseActivity;
+import org.jandroid.common.IntentUtils;
 import org.jandroid.common.async.AsyncResult;
 
 import java.util.List;
@@ -142,6 +143,7 @@ public class ContentActivity extends BaseActivity {
    		getMenuInflater().inflate(R.menu.main_menu, menu);
         //refresh actionitem
         getMenuInflater().inflate(R.menu.article_list_fragment_menu, menu);
+        getMenuInflater().inflate(R.menu.content_menu, menu);
         refreshMenuItem = menu.findItem(R.id.refresh_item);
 
         return super.onCreateOptionsMenu(menu);
@@ -162,6 +164,9 @@ public class ContentActivity extends BaseActivity {
                 case android.R.id.home:
                     Intent intent = new Intent(this, MainActivity.class);
                     this.startActivity(intent);
+                    break;
+                case R.id.comment_item:
+                    Utils.openCommentActivity(this, getContent());
                     break;
                 case R.id.more_item:
                 default:

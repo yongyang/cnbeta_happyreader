@@ -46,7 +46,12 @@
         <activity
                 android:name=".ImageViewerActivity"
                 android:launchMode="singleTask"
-                android:theme="@style/Dialog.ImageViewer"
+                android:theme="@style/Dialog.NoTitle"
+                />
+        <activity
+                android:name=".PublishCommentActivity"
+                android:launchMode="singleTask"
+                android:theme="@style/Dialog.NoTitle"
                 />
 
     </application>

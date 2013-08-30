@@ -183,12 +183,14 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         setHasOptionsMenu(true);
     }
 
+/*
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.article_content_fragment_menu, menu);
+        inflater.inflate(R.menu.content_menu, menu);
 //        menu.add("MENU").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         super.onCreateOptionsMenu(menu, inflater);
     }
+*/
 
     public void updateArticleContent(final Content content) {
         titleTextView.setText(content.getTitle());

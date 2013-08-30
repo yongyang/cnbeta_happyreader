@@ -3,6 +3,8 @@ package org.jandroid.cnbeta;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import org.jandroid.cnbeta.entity.Comment;
+import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.common.IntentUtils;
 
 /**
@@ -15,6 +17,14 @@ public class Utils {
         bundle.putLong("sid", sid);
         bundle.putString("title", title);
         Intent intent = IntentUtils.newIntent(theActivity, ContentActivity.class, bundle);
+        theActivity.startActivity(intent);
+    }
+
+    public static void openCommentActivity(Activity theActivity, Content content) {
+        Bundle bundle = new Bundle();
+//        bundle.putLong("sid", sid);
+//        bundle.putString("title", title);
+        Intent intent = IntentUtils.newIntent(theActivity, PublishCommentActivity.class, bundle);
         theActivity.startActivity(intent);
     }
 

@@ -35,7 +35,7 @@
 
 
     <!-- -->
-    <style name="Dialog.ImageViewer" parent="@android:style/Theme.Dialog">
+    <style name="Dialog.NoTitle" parent="@android:style/Theme.Dialog">
         <!--<item name="android:windowBackground">@color/transparent_background</item>-->
         <item name="android:windowNoTitle">true</item>
         <!--<item name="android:windowIsTranslucent">true</item>-->
