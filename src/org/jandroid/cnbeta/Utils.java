@@ -20,11 +20,18 @@ public class Utils {
         theActivity.startActivity(intent);
     }
 
-    public static void openCommentActivity(Activity theActivity, Content content) {
+    public static void openPublishCommentActivity(Activity theActivity, Content content) {
         Bundle bundle = new Bundle();
-//        bundle.putLong("sid", sid);
-//        bundle.putString("title", title);
+        bundle.putSerializable("content", content);
         Intent intent = IntentUtils.newIntent(theActivity, PublishCommentActivity.class, bundle);
+        theActivity.startActivity(intent);
+    }
+
+    public static void openReplyCommentActivity(Activity theActivity, Content content, Comment comment) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("content", content);
+        bundle.putSerializable("comment", comment);
+        Intent intent = IntentUtils.newIntent(theActivity, ReplyCommentActivity.class, bundle);
         theActivity.startActivity(intent);
     }
 

@@ -7,6 +7,19 @@
         android:layout_height="fill_parent"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <TextView
+            android:textColor="@color/cnBeta_text_blue"
+            android:gravity="top"
+            android:id="@+id/comment"
+            android:scrollbars="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginTop="10.0dip"
+            android:layout_marginRight="10.0dip"
+            android:hint="回复："
+            android:singleLine="true"
+            android:ellipsize="end"/>
     <EditText
             android:textColor="@color/cnBeta_text_blue"
             android:gravity="top"
@@ -37,7 +50,6 @@
                 android:layout_marginRight="10.0dip"
                 android:hint="验证码"
                 android:maxLength="4"
-                android:numeric="integer"
                 android:layout_alignParentLeft="true"/>
 
         <ImageView
@@ -54,8 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/seccode_image"
-                android:layout_centerVertical="true"
-                style="@android:style/Widget.ProgressBar.Small"/>
+                android:layout_centerVertical="true"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -78,7 +89,7 @@
                 android:layout_marginTop="10.0px"
                 android:layout_marginRight="10.0dip"
                 android:layout_toLeftOf="@id/cancel"
-                android:text="评论"/>
+                android:text="回复"/>
 
     </RelativeLayout>
 </LinearLayout>

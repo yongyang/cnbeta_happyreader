@@ -1,11 +1,12 @@
 package org.jandroid.cnbeta.entity;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class Comment {
+public class Comment implements Serializable{
 
     //thread-id, comment id
     private long tid;

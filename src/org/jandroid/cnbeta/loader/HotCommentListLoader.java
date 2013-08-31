@@ -2,6 +2,7 @@ package org.jandroid.cnbeta.loader;
 
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.cnbeta.entity.Article;
+import org.jandroid.cnbeta.entity.HotComment;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -16,42 +17,12 @@ import java.util.Map;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class ArticleListLoader extends AbstractLoader<List<Article>> {
+public class HotCommentListLoader extends AbstractLoader<List<HotComment>> {
 
-    private static String digits = "0123456789";
-
-    //jsoncallback算法
-    public static String URL_TEMPLATE = "http://www.cnbeta.com/more.htm?jsoncallback=jQuery1800{0}_{1}&type={2}&page={3}&_={4}";
-
-    private Type type;
     private int page;
 
-    public static enum Type {
-        ALL("all"),
-        REALTIME("realtime"),
-        DIG("dig"),
-        SOFT("soft"),
-        INDUSTRY("industry"),
-        INTERACT("interact"),
-        EDITOR_COMMEND("editorcommend");
-        private String type;
-
-        private Type(String type) {
-            this.type = type;
-        }
-
-        public String getTypeString() {
-            return type;
-        }
-    }
-
-    public ArticleListLoader(Type type, int page) {
-        this.type = type;
+    public HotCommentListLoader(int page) {
         this.page = page;
-    }
-
-    public Type getType() {
-        return type;
     }
 
     public int getPage() {
@@ -59,12 +30,12 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
     }
 
     @Override
-    public List<Article> fromHttp(File baseDir) throws Exception {
+    public List<HotComment> fromHttp(File baseDir) throws Exception {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("X-Requested-With", "XMLHttpRequest");
 
         //TODO: clear cache if page=1, reload
-        String url = MessageFormat.format(URL_TEMPLATE, generateSeed(), ""+ Math.round((System.currentTimeMillis() / 15e3)), getType().getTypeString(), ""+getPage(), ""+(System.currentTimeMillis() + 1));
+        String url = MessageFormat.format(ArticleListLoader.URL_TEMPLATE, ArticleListLoader.generateSeed(), "jhcomment", ""+ Math.round((System.currentTimeMillis() / 15e3)), ""+getPage(), ""+(System.currentTimeMillis() + 1));
         //user json-simple to parse returned json string
         String response = CnBetaHttpClient.getInstance().httpGet(url, headers);
         String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
@@ -79,25 +50,22 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
         else {
             articleListJSONArray = (JSONArray)((JSONObject)responseJSON.get("result")).get("list");
         }
-
-        List<Article> articles = parseArticleListJSON(articleListJSONArray);
-        //parse成功才存盘
         writeDisk(baseDir, articleListJSONArray.toJSONString());
-        return articles;
+        return parseArticleListJSON(articleListJSONArray);
     }
 
-    private List<Article> parseArticleListJSON(JSONArray articleListJSONArray){
-        List<Article> articleList = new ArrayList<Article>(articleListJSONArray.size());
+    private List<HotComment> parseArticleListJSON(JSONArray articleListJSONArray){
+        List<HotComment> articleList = new ArrayList<HotComment>(articleListJSONArray.size());
         for(int i=0; i<articleListJSONArray.size(); i++){
             JSONObject jsonObject = (JSONObject)articleListJSONArray.get(i);
-            Article article = new Article(jsonObject);
+            HotComment article = new HotComment(jsonObject);
             articleList.add(article);
         }
         return articleList;
     }
 
     @Override
-    public List<Article> fromDisk(File baseDir) throws Exception {
+    public List<HotComment> fromDisk(File baseDir) throws Exception {
         //read json file from SD Card
         String articleListJSONString = readDisk(baseDir);
         JSONArray articleListJSONArray = (JSONArray)JSONValue.parse(articleListJSONString);
@@ -106,18 +74,9 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
 
     @Override
     public String getFileName() {
-        return "" + getType().getTypeString() + "_" + getPage();
+        return "hotcomments_" + getPage();
     }
-    
-    
-    // generate random callback seed as JQuery
-    public static String generateSeed() {
-        String seed="";
-        for(int i=0; i< "8753548712314047".length(); i++){
-            seed += digits.charAt((int)(Math.random() * digits.length()));
-        }
-        return seed;
-    }
+
 }
 /*
 http://www.cnbeta.com/more.htm?jsoncallback=jQuery18007005875239260606_1373612093876&type=realtime&sid=244461&_=1373612267852

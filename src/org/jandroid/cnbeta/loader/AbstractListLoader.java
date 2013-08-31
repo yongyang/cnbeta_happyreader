@@ -14,9 +14,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 使用more.htm来获取文章列表的基类
+ *
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class ArticleListLoader extends AbstractLoader<List<Article>> {
+public abstract class AbstractListLoader<T> extends AbstractLoader<List<T>> {
 
     private static String digits = "0123456789";
 
@@ -33,7 +35,8 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
         SOFT("soft"),
         INDUSTRY("industry"),
         INTERACT("interact"),
-        EDITOR_COMMEND("editorcommend");
+        EDITOR_COMMEND("editorcommend"),
+        HOT_COMMENT("jhcomment");
         private String type;
 
         private Type(String type) {
@@ -45,7 +48,7 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
         }
     }
 
-    public ArticleListLoader(Type type, int page) {
+    public AbstractListLoader(Type type, int page) {
         this.type = type;
         this.page = page;
     }
@@ -58,13 +61,17 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
         return page;
     }
 
+    protected String getURL(){
+        return MessageFormat.format(URL_TEMPLATE, generateSeed(), ""+ Math.round((System.currentTimeMillis() / 15e3)), getType().getTypeString(), ""+getPage(), ""+(System.currentTimeMillis() + 1));
+    }
+
     @Override
-    public List<Article> fromHttp(File baseDir) throws Exception {
+    public List<T> fromHttp(File baseDir) throws Exception {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("X-Requested-With", "XMLHttpRequest");
 
         //TODO: clear cache if page=1, reload
-        String url = MessageFormat.format(URL_TEMPLATE, generateSeed(), ""+ Math.round((System.currentTimeMillis() / 15e3)), getType().getTypeString(), ""+getPage(), ""+(System.currentTimeMillis() + 1));
+        String url = getURL();
         //user json-simple to parse returned json string
         String response = CnBetaHttpClient.getInstance().httpGet(url, headers);
         String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
@@ -80,24 +87,16 @@ public class ArticleListLoader extends AbstractLoader<List<Article>> {
             articleListJSONArray = (JSONArray)((JSONObject)responseJSON.get("result")).get("list");
         }
 
-        List<Article> articles = parseArticleListJSON(articleListJSONArray);
+        List<T> articles = parseArticleListJSON(articleListJSONArray);
         //parse成功才存盘
         writeDisk(baseDir, articleListJSONArray.toJSONString());
         return articles;
     }
 
-    private List<Article> parseArticleListJSON(JSONArray articleListJSONArray){
-        List<Article> articleList = new ArrayList<Article>(articleListJSONArray.size());
-        for(int i=0; i<articleListJSONArray.size(); i++){
-            JSONObject jsonObject = (JSONObject)articleListJSONArray.get(i);
-            Article article = new Article(jsonObject);
-            articleList.add(article);
-        }
-        return articleList;
-    }
+    protected abstract List<T> parseArticleListJSON(JSONArray articleListJSONArray);
 
     @Override
-    public List<Article> fromDisk(File baseDir) throws Exception {
+    public List<T> fromDisk(File baseDir) throws Exception {
         //read json file from SD Card
         String articleListJSONString = readDisk(baseDir);
         JSONArray articleListJSONArray = (JSONArray)JSONValue.parse(articleListJSONString);

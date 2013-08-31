@@ -1,5 +1,6 @@
 package org.jandroid.cnbeta.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +8,7 @@ import java.util.Map;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class Content {
+public class Content implements Serializable {
     
     private long sid;
     private String title;

@@ -18,6 +18,8 @@
     
     <string name="tab_quanbuzixun">全部新闻</string>
     <string name="tab_shishigengxin">实时新闻</string>
+    <string name="tab_jingcaipinglun">精彩评论</string>
+    <string name="tab_bianjituijian">编辑推荐</string>
     <string name="tab_yuedulishi">阅读历史</string>
     <string name="tab_dig">DIG</string>
     <string name="tab_software">软件</string>

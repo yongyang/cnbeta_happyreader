@@ -26,7 +26,6 @@ import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.fragment.ArticleCommentsFragment;
 import org.jandroid.cnbeta.fragment.ArticleContentFragment;
 import org.jandroid.common.BaseActivity;
-import org.jandroid.common.IntentUtils;
 import org.jandroid.common.async.AsyncResult;
 
 import java.util.List;
@@ -166,7 +165,7 @@ public class ContentActivity extends BaseActivity {
                     this.startActivity(intent);
                     break;
                 case R.id.comment_item:
-                    Utils.openCommentActivity(this, getContent());
+                    Utils.openPublishCommentActivity(this, getContent());
                     break;
                 case R.id.more_item:
                 default:

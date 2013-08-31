@@ -53,6 +53,11 @@
                 android:launchMode="singleTask"
                 android:theme="@style/Dialog.NoTitle"
                 />
+        <activity
+                android:name=".ReplyCommentActivity"
+                android:launchMode="singleTask"
+                android:theme="@style/Dialog.NoTitle"
+                />
 
     </application>
 

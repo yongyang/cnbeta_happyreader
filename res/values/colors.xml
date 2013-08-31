@@ -139,5 +139,7 @@
 
 
     <!--<color name="transparent_background">#80000000</color>-->
-    <color name="color_dialogbg">#ffdde4ef</color>
+    <color name="color_dialogbg">#FFFFEF</color>
+    <color name="color_dialogbg2">#FFFFCE</color>
 </resources>
+

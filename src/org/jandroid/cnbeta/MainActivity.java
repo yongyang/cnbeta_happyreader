@@ -30,7 +30,7 @@ public class MainActivity extends BaseActivity {
 
     private static final String SELECTED_ITEM = "selected_item";
 
-    public final static int[] tabs = new int[]{R.string.tab_quanbuzixun, R.string.tab_shishigengxin, R.string.tab_yuedulishi};
+    public final static int[] tabs = new int[]{R.string.tab_quanbuzixun, R.string.tab_shishigengxin, R.string.tab_bianjituijian, R.string.tab_jingcaipinglun};
     private final Fragment[] fragments = new Fragment[tabs.length];
 
     private ViewPager mViewPager;
@@ -56,14 +56,20 @@ public class MainActivity extends BaseActivity {
                         }
                         return fragments[1];
                     case 2:
-                        //TODO: 阅读历史 tab
+                        //TODO: 便捷推荐 tab
                         if(fragments[2] == null) {
-                            fragments[2] = new ArticleListFragment(ArticleListLoader.Type.DIG);
+                            fragments[2] = new ArticleListFragment(ArticleListLoader.Type.EDITOR_COMMEND);
                         }
                         return fragments[2];
+                    case 3:
+                        //TODO: 精彩评论 tab
+                        if(fragments[3] == null) {
+                            fragments[3] = new ArticleListFragment(ArticleListLoader.Type.DIG);
+                        }
+                        return fragments[3];
 
                     default:
-                        // only 3 tabs
+                        // only 4 tabs
                         return null;
                 }
         }

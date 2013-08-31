@@ -24,13 +24,16 @@
     </style>
 
     <style name="TabText.CnBeta" parent="@android:style/Widget.ActionBar.TabText">
-        <!--<item name="android:textSize">25sp</item>  -->
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+        <item name="android:textSize">15dp</item>
         <item name="android:textColor">@color/tab_text_color_selector_cnbeta</item>
         <!--<item name="android:textStyle">italic|bold</item>  -->
     </style>
 
     <style name="ActionBarTabStyle.CnBeta" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator_ab_cnbeta</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingRight">4dp</item>
     </style>
 
 

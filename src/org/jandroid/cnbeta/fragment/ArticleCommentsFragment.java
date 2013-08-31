@@ -4,21 +4,17 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
@@ -158,7 +154,7 @@ public class ArticleCommentsFragment extends BaseFragment {
                 });
                 replyButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        Utils.openCommentActivity(getActivity(), null);
+                        Utils.openReplyCommentActivity(getActivity(), ((ContentActivity)getActivity()).getContent(), comment);
                     }
                 });
                 return convertView;
