@@ -8,6 +8,6 @@ import android.app.Fragment;
  */
 public abstract class BaseFragment extends Fragment {
     
-    protected Logger logger = Logger.newLogger(this.getClass());
+    protected Logger logger = Logger.getLogger(this.getClass());
 
 }

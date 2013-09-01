@@ -1,7 +1,9 @@
 package org.jandroid.cnbeta;
 
+import android.app.Activity;
 import android.app.Application;
 import android.os.Environment;
+import android.view.MenuItem;
 import org.apache.commons.io.FileUtils;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.common.EnvironmentUtils;
@@ -15,7 +17,7 @@ import java.io.IOException;
  */
 public class CnBetaApplication extends Application implements CnBetaApplicationContext{
 
-    static Logger logger = Logger.newLogger(CnBetaApplication.class);
+    static Logger logger = Logger.getLogger(CnBetaApplication.class);
 
     private CnBetaHttpClient httpClient = CnBetaHttpClient.getInstance();
 
@@ -51,9 +53,17 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         return baseDir;
     }
 
-    public String getSessionId() {
-        //TODO: sessionId 是什么时候得到的
-        return null;
+    // 在这里统一处理标准菜单项目
+    public boolean onOptionsItemSelected(Activity theActivity, MenuItem item) {
+        if (item.isCheckable()) {
+            item.setChecked(true);
+        }
+        switch (item.getItemId()) {
+            case R.id.more_item:
+                break;
+            default:
+        }
+        return true;
     }
 
     public void destroy() {

@@ -13,11 +13,11 @@ public class Logger {
         this.tag = tag;
     }
 
-    public static Logger newLogger(Class clz){
+    public static Logger getLogger(Class clz){
         return new Logger(clz.getSimpleName());
     }
 
-    public static Logger newLogger(String tag){
+    public static Logger getLogger(String tag){
         return new Logger(tag);
     }
 

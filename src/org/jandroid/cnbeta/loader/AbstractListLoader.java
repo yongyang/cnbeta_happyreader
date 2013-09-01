@@ -1,7 +1,6 @@
 package org.jandroid.cnbeta.loader;
 
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
-import org.jandroid.cnbeta.entity.Article;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -20,10 +19,11 @@ import java.util.Map;
  */
 public abstract class AbstractListLoader<T> extends AbstractLoader<List<T>> {
 
-    private static String digits = "0123456789";
+    private static final String digits = "0123456789";
 
+    //http://www.cnbeta.com/more.htm?jsoncallback=jQuery18007005875239260606_1373612093876&type=realtime&sid=244461&_=1373612267852
     //jsoncallback算法
-    public static String URL_TEMPLATE = "http://www.cnbeta.com/more.htm?jsoncallback=jQuery1800{0}_{1}&type={2}&page={3}&_={4}";
+    public static final String URL_TEMPLATE = "http://www.cnbeta.com/more.htm?jsoncallback={0}&type={1}&page={2}&_={3}";
 
     private Type type;
     private int page;
@@ -62,7 +62,7 @@ public abstract class AbstractListLoader<T> extends AbstractLoader<List<T>> {
     }
 
     protected String getURL(){
-        return MessageFormat.format(URL_TEMPLATE, generateSeed(), ""+ Math.round((System.currentTimeMillis() / 15e3)), getType().getTypeString(), ""+getPage(), ""+(System.currentTimeMillis() + 1));
+        return MessageFormat.format(URL_TEMPLATE, randomJQueryCallback(), getType().getTypeString(), ""+getPage(), ""+(System.currentTimeMillis() + 1));
     }
 
     @Override
@@ -87,35 +87,48 @@ public abstract class AbstractListLoader<T> extends AbstractLoader<List<T>> {
             articleListJSONArray = (JSONArray)((JSONObject)responseJSON.get("result")).get("list");
         }
 
-        List<T> articles = parseArticleListJSON(articleListJSONArray);
+        List<T> articles = parseJSONArray(articleListJSONArray);
         //parse成功才存盘
         writeDisk(baseDir, articleListJSONArray.toJSONString());
         return articles;
     }
 
-    protected abstract List<T> parseArticleListJSON(JSONArray articleListJSONArray);
+    protected List<T> parseJSONArray(JSONArray articleListJSONArray){
+        List<T> articleList = new ArrayList<T>(articleListJSONArray.size());
+        for(int i=0; i<articleListJSONArray.size(); i++){
+            JSONObject jsonObject = (JSONObject)articleListJSONArray.get(i);
+            T article = newEntity(jsonObject);
+            articleList.add(article);
+        }
+        return articleList;
+    }
+
+    protected abstract T newEntity(JSONObject jSONObject);
 
     @Override
     public List<T> fromDisk(File baseDir) throws Exception {
         //read json file from SD Card
         String articleListJSONString = readDisk(baseDir);
         JSONArray articleListJSONArray = (JSONArray)JSONValue.parse(articleListJSONString);
-        return parseArticleListJSON(articleListJSONArray);
+        return parseJSONArray(articleListJSONArray);
     }
 
     @Override
     public String getFileName() {
         return "" + getType().getTypeString() + "_" + getPage();
     }
-    
-    
+
     // generate random callback seed as JQuery
-    public static String generateSeed() {
-        String seed="";
+    protected  String randomJQueryCallback() {
+        StringBuilder sb = new StringBuilder("jQuery1800");
+
         for(int i=0; i< "8753548712314047".length(); i++){
-            seed += digits.charAt((int)(Math.random() * digits.length()));
+            sb.append(digits.charAt((int)(Math.random() * digits.length())));
         }
-        return seed;
+
+        sb.append("_");
+        sb.append(Math.round((System.currentTimeMillis() / 15e3)));
+        return sb.toString();
     }
 }
 /*

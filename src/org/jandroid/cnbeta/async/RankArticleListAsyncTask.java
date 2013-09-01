@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class RankArticleListAsyncTask extends ProgressDialogAsyncTask<Map<String, List<RankArticle>>> {
+public abstract class RankArticleListAsyncTask extends LoadingAsyncTask<Map<String, List<RankArticle>>> {
 
     @Override
     public AbstractLoader<Map<String, List<RankArticle>>> getLoader() {

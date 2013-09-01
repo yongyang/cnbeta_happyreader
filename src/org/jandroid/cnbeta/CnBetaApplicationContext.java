@@ -1,5 +1,8 @@
 package org.jandroid.cnbeta;
 
+import android.app.Activity;
+import android.view.MenuItem;
+
 import java.io.File;
 
 /**
@@ -13,5 +16,5 @@ public interface CnBetaApplicationContext {
 
     File getBaseDir();
 
-    String getSessionId();
+    boolean onOptionsItemSelected(Activity theActivity, MenuItem item);
 }

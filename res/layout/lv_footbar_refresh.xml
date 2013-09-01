@@ -6,7 +6,6 @@
 
     <RelativeLayout
             android:layout_gravity="center"
-            android:id="@+id/discuss_more"
             android:background="@drawable/btn_bg_selector"
             android:paddingTop="10.0dip"
             android:paddingBottom="0dip"

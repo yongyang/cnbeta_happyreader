@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -25,7 +26,9 @@ import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.ArticleListAsyncTask;
+import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.ImageAsyncTask;
+import org.jandroid.cnbeta.async.LoadingAsyncTask;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.common.BaseActivity;
@@ -41,28 +44,11 @@ import java.util.List;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 
-public class ArticleListFragment extends BaseFragment {
+public class ArticleListFragment extends AbstractPagingListFragment<Article> {
 
-    private ListView lvArticleList;
-    
-    private AsyncImageAdapter asyncImageAdapter;
-    
-    private List<Article> loadedArticles = new ArrayList<Article>();
-
-    private Handler handler = new Handler();
     // 新闻分类
     private ArticleListLoader.Type category;
-    private int loadedPage = 0;
 
-    private ProgressBar progressBarNextPage;
-    private LinearLayout lineLayoutNextPage;
-    private TextView tvPage;
-
-    private MenuItem refreshMenuItem;
-    private ImageView refreshActionView;
-    private Animation clockWiseRotationAnimation;
-
-    private LinearLayout footbarNextPage;
 
     public ArticleListFragment(ArticleListLoader.Type category) {
         this.category = category;
@@ -78,161 +64,107 @@ public class ArticleListFragment extends BaseFragment {
         setHasOptionsMenu(true);
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        if(!(activity instanceof ArticleListListener)) {
-
-        }
-        super.onAttach(activity);
-    }
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        refreshActionView = (ImageView) inflater.inflate(R.layout.iv_refresh_action_view, null);
-        clockWiseRotationAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotation_clockwise_refresh);
-        clockWiseRotationAnimation.setRepeatCount(Animation.INFINITE);
-
-
-        View rootView = inflater.inflate(R.layout.lv_article_list, container, false);
-        lvArticleList = (ListView)rootView.findViewById(R.id.article_listview);
-		return rootView;
-	}
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        
-        footbarNextPage = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.footbar_next_page, lvArticleList,false);
-        lineLayoutNextPage = (LinearLayout)footbarNextPage.findViewById(R.id.lineLayout_next_page);
-        progressBarNextPage = (ProgressBar)footbarNextPage.findViewById(R.id.progressBar_next_page);
-        tvPage = (TextView)footbarNextPage.findViewById(R.id.tv_page);
-        lvArticleList.addFooterView(footbarNextPage);
-
-        footbarNextPage.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                loadNextPageArticles();
-
-            }
-        });
-
-        asyncImageAdapter = new AsyncImageAdapter() {
-            @Override
-            public int getCount() {
-                return loadedArticles.size();
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return loadedArticles.get(position);
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return position;
-            }
-
-            @Override
-            public Bitmap getDefaultBitmap() {
-                return BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.default_img);
-            }
-
-            @Override
-            protected void loadImageAsync(final String imageUrl, final OnAsyncImageLoadListener onAsyncImageLoadListener) {
-                ((BaseActivity)getActivity()).executeAsyncTaskMultiThreading(new ImageAsyncTask() {
-
+    protected BaseAdapter newAdapter() {
+        return new AsyncImageAdapter() {
                     @Override
-                    public CnBetaApplicationContext getCnBetaApplicationContext() {
-                        return (CnBetaApplication) getActivity().getApplication();
+                    public int getCount() {
+                        return loadedDatas.size();
                     }
 
                     @Override
-                    protected String getImageUrl() {
-                        return imageUrl;
+                    public Object getItem(int position) {
+                        return loadedDatas.get(position);
                     }
 
                     @Override
-                    protected void onPostExecute(final AsyncResult asyncResult) {
-                        super.onPostExecute(asyncResult);
-                        if (asyncResult.isSuccess()) {
-                            Bitmap bitmap = (Bitmap) asyncResult.getResult();
-                            onAsyncImageLoadListener.onLoaded(bitmap);
+                    public long getItemId(int position) {
+                        return position;
+                    }
+
+                    @Override
+                    public Bitmap getDefaultBitmap() {
+                        return BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.default_img);
+                    }
+
+                    @Override
+                    protected void loadImageAsync(final String imageUrl, final OnAsyncImageLoadListener onAsyncImageLoadListener) {
+                        ((BaseActivity)getActivity()).executeAsyncTaskMultiThreading(new ImageAsyncTask() {
+
+                            @Override
+                            public HasAsync<Bitmap> getAsyncContext() {
+                                return new HasAsync<Bitmap>() {
+                                    public CnBetaApplicationContext getCnBetaApplicationContext() {
+                                        return ArticleListFragment.this.getCnBetaApplicationContext();
+                                    }
+
+                                    public void onProgressShow() {
+                                    }
+
+                                    public void onProgressDismiss() {
+                                    }
+
+                                    public void onFailure(AsyncResult<Bitmap> bitmapAsyncResult) {
+                                        onAsyncImageLoadListener.onLoadFailed(bitmapAsyncResult.getErrorMsg(), bitmapAsyncResult.getException());
+                                    }
+
+                                    public void onSuccess(AsyncResult<Bitmap> bitmapAsyncResult) {
+                                        onAsyncImageLoadListener.onLoaded(bitmapAsyncResult.getResult());
+                                    }
+                                };
+                            }
+
+                            @Override
+                            protected String getImageUrl() {
+                                return imageUrl;
+                            }
+
+                            @Override
+                            protected void onCancelled() {
+                                onAsyncImageLoadListener.onLoadFailed("Cancelled", null);
+                            }
+
+                            @Override
+                            protected void onCancelled(AsyncResult bitmapAsyncResult) {
+                                onAsyncImageLoadListener.onLoadFailed("Cancelled", null);
+                            }
                         }
-                        else {
-                            logger.w(asyncResult.getErrorMsg(), asyncResult.getException());
-                            onAsyncImageLoadListener.onLoadFailed(asyncResult.getErrorMsg(), asyncResult.getException());
+                        );
+                    }
+
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        if(convertView == null) {
+                            convertView = getActivity().getLayoutInflater().inflate(R.layout.lv_article_item, null);
                         }
+                        Article article = loadedDatas.get(position);
+                        TextView tvTitleShow = (TextView)convertView.findViewById(R.id.tile_show);
+                        tvTitleShow.setText(article.getTitleShow());
+                        TextView tvHometextShowShort = (TextView)convertView.findViewById(R.id.hometext_show_short);
+                        tvHometextShowShort.setText(article.getHometextShowShort());
+                        TextView tvComments = (TextView)convertView.findViewById(R.id.comments);
+                        tvComments.setText(""+article.getComments());
+                        TextView tvCounter = (TextView)convertView.findViewById(R.id.counter);
+                        tvCounter.setText(""+article.getCounter());
+                        TextView tvTime = (TextView)convertView.findViewById(R.id.time);
+                        tvTime.setText(""+article.getTime());
+        /*
+                        TextView tvScore = (TextView)convertView.findViewById(R.id.score);
+                        tvScore.setText(""+article.getScore());
+        */
+
+
+                        ImageView ivLogo = (ImageView) convertView.findViewById(R.id.item_logo);
+                        // queue to image load list or set a cached bitmap if has been cached
+                        ivLogo.setImageBitmap(queueImageView(position, ivLogo, article.getLogo()));
+                        return convertView;
                     }
-
-                    @Override
-                    protected void onCancelled() {
-                        onAsyncImageLoadListener.onLoadFailed("Cancelled", null);
-                    }
-
-                    @Override
-                    protected void onCancelled(AsyncResult bitmapAsyncResult) {
-                        onAsyncImageLoadListener.onLoadFailed("Cancelled", null);
-                    }
-                }
-                );
-            }
-
-            public View getView(int position, View convertView, ViewGroup parent) {
-                if(convertView == null) {
-                    convertView = getActivity().getLayoutInflater().inflate(R.layout.lv_article_item, null);
-                }
-                Article article = loadedArticles.get(position);
-                TextView tvTitleShow = (TextView)convertView.findViewById(R.id.tile_show);
-                tvTitleShow.setText(article.getTitleShow());
-                TextView tvHometextShowShort = (TextView)convertView.findViewById(R.id.hometext_show_short);
-                tvHometextShowShort.setText(article.getHometextShowShort());
-                TextView tvComments = (TextView)convertView.findViewById(R.id.comments);
-                tvComments.setText(""+article.getComments());
-                TextView tvCounter = (TextView)convertView.findViewById(R.id.counter);
-                tvCounter.setText(""+article.getCounter());
-                TextView tvTime = (TextView)convertView.findViewById(R.id.time);
-                tvTime.setText(""+article.getTime());
-/*
-                TextView tvScore = (TextView)convertView.findViewById(R.id.score);
-                tvScore.setText(""+article.getScore());
-*/
-
-
-                ImageView ivLogo = (ImageView) convertView.findViewById(R.id.item_logo);
-                // queue to image load list or set a cached bitmap if has been cached
-                ivLogo.setImageBitmap(queueImageView(position, ivLogo, article.getLogo()));
-                return convertView;
-            }
-        };
-        lvArticleList.setAdapter(asyncImageAdapter);
-        lvArticleList.setOnScrollListener(asyncImageAdapter);
-
-
-        lvArticleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Article article = (Article)asyncImageAdapter.getItem(position);
-                Utils.openContentActivity(getActivity(), article.getSid(), article.getTitleShow());
-            }
-        });
-
-        reloadArticles();
+                };
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-    
-    private void loadNextPageArticles(){
-        EnvironmentUtils.checkNetworkConnected(getActivity());
-        
-        //loading data
-        ((BaseActivity)getActivity()).executeAsyncTaskMultiThreading(new ArticleListAsyncTask() {
-
-            @Override
-            public CnBetaApplicationContext getCnBetaApplicationContext() {
-                return (CnBetaApplication) getActivity().getApplication();
-            }
-
+    public LoadingAsyncTask<List<Article>> newAsyncTask() {
+        return new ArticleListAsyncTask() {
             @Override
             protected ArticleListLoader.Type getCategory() {
                 return ArticleListFragment.this.getCategory();
@@ -240,64 +172,20 @@ public class ArticleListFragment extends BaseFragment {
 
             @Override
             protected int getPage() {
-                // nextPage
-                return loadedPage + 1;
+                return ArticleListFragment.this.getPage() + 1;
             }
 
             @Override
-            public void showProgressUI() {
-                // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
-                getActivity().setProgressBarIndeterminate(true);
-                getActivity().setProgressBarVisibility(true);
-                footbarNextPage.setClickable(false);
-                progressBarNextPage.setVisibility(View.VISIBLE);
-                lineLayoutNextPage.setVisibility(View.GONE);
-                if (getPage() == 1) { //page 1 is reload
-                    rotateRefreshActionView();
-                }
+            public HasAsync<List<Article>> getAsyncContext() {
+                return ArticleListFragment.this;
             }
-
-            @Override
-            public void dismissProgressUI() {
-                getActivity().setProgressBarVisibility(false);
-                progressBarNextPage.setVisibility(View.GONE);
-                lineLayoutNextPage.setVisibility(View.VISIBLE);
-                // stop refresh rotation anyway
-                if (getPage() == 1) { //page 1 is reload
-                    dismissRefreshActionView();
-                }
-                footbarNextPage.setClickable(true);
-            }
-
-            @Override
-            protected void onPostExecute(AsyncResult<List<Article>> asyncResult) {
-                super.onPostExecute(asyncResult);
-                if (asyncResult.isSuccess()) {
-                    loadedPage++;
-                    List<Article> articles = asyncResult.getResult();
-                    appendArticles(articles);
-                }
-                else {
-                    logger.w(asyncResult.getErrorMsg(), asyncResult.getException());
-                    Toast.makeText(getActivity(), asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
-                }
-                tvPage.setText("" + (loadedPage + 1));
-            }
-        }
-        );
+        };
     }
 
-    // refresh
-    private void reloadArticles() {
-        loadedArticles.clear();
-        loadedPage = 0;
-        loadNextPageArticles();
-    }
-
-    // load more
-    private void appendArticles(List<Article> articles){
-        loadedArticles.addAll(articles);
-        asyncImageAdapter.notifyDataSetChanged();
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Article article = (Article)getAdapter().getItem(position);
+        Utils.openContentActivity(getActivity(), article.getSid(), article.getTitleShow());
     }
 
     @Override
@@ -313,34 +201,11 @@ public class ArticleListFragment extends BaseFragment {
         if (item.isCheckable()) {
             item.setChecked(true);
         }
-        switch (item.getItemId()) {
-            case R.id.more_item:
-                break;
-            case R.id.refresh_item:
-                reloadArticles();
-                Toast.makeText(getActivity(), "您点击了" + item.toString(), Toast.LENGTH_SHORT).show();
-            default:
-        }
+
+        getCnBetaApplicationContext().onOptionsItemSelected(getActivity(),item);
         return true;
     }
 
-    private void rotateRefreshActionView() {
-        if(refreshMenuItem != null) {
-            /* Attach a rotating ImageView to the refresh item as an ActionView */
-            refreshActionView.startAnimation(clockWiseRotationAnimation);
-            refreshMenuItem.setActionView(refreshActionView);
-        }
-    }
-
-    private void dismissRefreshActionView() {
-        if(refreshMenuItem != null) {
-            View actionView = refreshMenuItem.getActionView();
-            if(actionView != null) {
-                actionView.clearAnimation();
-                refreshMenuItem.setActionView(null);
-            }
-        }
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -354,7 +219,4 @@ public class ArticleListFragment extends BaseFragment {
         super.onViewStateRestored(savedInstanceState);
     }
 
-    public static interface ArticleListListener {
-        void onArticleClick(Article article);
-    }
 }

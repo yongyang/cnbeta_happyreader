@@ -1,7 +1,10 @@
 package org.jandroid.cnbeta.async;
 
-import org.jandroid.cnbeta.CnBetaApplicationContext;
+import android.app.Application;
 import org.jandroid.cnbeta.loader.AbstractLoader;
+import org.jandroid.common.Logger;
+import org.jandroid.common.ToastUtils;
+import org.jandroid.common.async.AsyncResult;
 import org.jandroid.common.async.BaseAsyncTask;
 
 /**
@@ -9,6 +12,8 @@ import org.jandroid.common.async.BaseAsyncTask;
  * @create 7/30/13 4:15 PM
  */
 public abstract class LoadingAsyncTask<R>  extends BaseAsyncTask<R> {
+
+    protected Logger logger = Logger.getLogger(this.getClass());
 
     protected boolean isRemoteLoadOnly() {
         return false;
@@ -26,10 +31,12 @@ public abstract class LoadingAsyncTask<R>  extends BaseAsyncTask<R> {
 
     public abstract AbstractLoader<R> getLoader();
 
-    public abstract CnBetaApplicationContext getCnBetaApplicationContext();
+    public abstract HasAsync<R> getAsyncContext();
+
+//    public abstract CnBetaApplicationContext getCnBetaApplicationContext();
 
     protected R run() throws Exception {
-        boolean hasNetwork = getCnBetaApplicationContext().isNetworkConnected();
+        boolean hasNetwork = getAsyncContext().getCnBetaApplicationContext().isNetworkConnected();
         
         if(!hasNetwork && isRemoteLoadOnly()) {
             throw new Exception("No network!");
@@ -38,14 +45,38 @@ public abstract class LoadingAsyncTask<R>  extends BaseAsyncTask<R> {
         AbstractLoader imageLoader = getLoader();
         //优先从Disk装载
         if(isLocalLoadFirst() || isLocalLoadOnly()) {
-            if(imageLoader.isCached(getCnBetaApplicationContext().getBaseDir())) {
-                return (R)imageLoader.fromDisk(getCnBetaApplicationContext().getBaseDir());
+            if(imageLoader.isCached(getAsyncContext().getCnBetaApplicationContext().getBaseDir())) {
+                return (R)imageLoader.fromDisk(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
             }
         }
         if(!isLocalLoadOnly()) {
-            return (R)imageLoader.fromHttp(getCnBetaApplicationContext().getBaseDir());
+            return (R)imageLoader.fromHttp(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
         }
         return null;
+    }
+
+    @Override
+    protected void onFailure(AsyncResult<R> asyncResult) {
+        logger.w(asyncResult.getErrorMsg(), asyncResult.getException());
+        ToastUtils.showShortToast((Application) getAsyncContext().getCnBetaApplicationContext(), asyncResult.getErrorMsg());
+        getAsyncContext().onFailure(asyncResult);
+    }
+
+    @Override
+    protected void onSuccess(AsyncResult<R> rAsyncResult) {
+        getAsyncContext().onSuccess(rAsyncResult);
+    }
+
+    @Override
+    protected void onPreExecute() {
+        getAsyncContext().onProgressShow();
+        super.onPreExecute();
+    }
+
+    @Override
+    protected void onPostExecute(AsyncResult<R> rAsyncResult) {
+        getAsyncContext().onProgressDismiss();
+        super.onPostExecute(rAsyncResult);
     }
 
 }

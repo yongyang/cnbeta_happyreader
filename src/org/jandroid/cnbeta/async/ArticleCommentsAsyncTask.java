@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class ArticleCommentsAsyncTask extends ProgressDialogAsyncTask<List<Comment>> {
+public abstract class ArticleCommentsAsyncTask extends LoadingAsyncTask<List<Comment>> {
 
     protected abstract Content getArticleContent();
 

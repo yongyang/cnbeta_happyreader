@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import org.jandroid.cnbeta.async.ArticleCommentsAsyncTask;
 import org.jandroid.cnbeta.async.ArticleContentAsyncTask;
+import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.ImageBytesLoadingAsyncTask;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
@@ -30,8 +31,8 @@ import org.jandroid.common.async.AsyncResult;
 
 import java.util.List;
 
-public class ContentActivity extends BaseActivity {
-    
+public class ContentActivity extends BaseActivity implements HasAsync<Content> {
+
     private ArticleContentFragment contentFragment;
     private ArticleCommentsFragment commentsFragment;
 
@@ -64,7 +65,7 @@ public class ContentActivity extends BaseActivity {
         public void onPageSelected(int position) {
             final ActionBar actionBar = getActionBar();
             //未选中时才调用setSelectedNavigationItem,
-            if(position != actionBar.getSelectedNavigationIndex()){
+            if (position != actionBar.getSelectedNavigationIndex()) {
                 actionBar.setSelectedNavigationItem(position);
             }
 
@@ -79,7 +80,7 @@ public class ContentActivity extends BaseActivity {
         }
 
         public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-            
+
         }
 
         public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
@@ -88,13 +89,13 @@ public class ContentActivity extends BaseActivity {
     };
 
 
-   	@Override
-   	public void onCreate(Bundle savedInstanceState){
-   		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         sid = getIntent().getExtras().getLong("sid");
         title = getIntent().getExtras().getString("title");
 
-   		setContentView(R.layout.content);
+        setContentView(R.layout.content);
         setupViewPager();
         setupActionBar();
 
@@ -138,15 +139,15 @@ public class ContentActivity extends BaseActivity {
     }
 
     @Override
-   	public boolean onCreateOptionsMenu(Menu menu) {
-   		getMenuInflater().inflate(R.menu.main_menu, menu);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         //refresh actionitem
         getMenuInflater().inflate(R.menu.article_list_fragment_menu, menu);
         getMenuInflater().inflate(R.menu.content_menu, menu);
         refreshMenuItem = menu.findItem(R.id.refresh_item);
 
         return super.onCreateOptionsMenu(menu);
-   	}
+    }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -154,27 +155,26 @@ public class ContentActivity extends BaseActivity {
     }
 
     @Override
-   	public boolean onOptionsItemSelected(MenuItem mi) {
-        if(mi.isCheckable())
-      		{
-      			mi.setChecked(true);
-      		}
-      		switch (mi.getItemId()) {
-                case android.R.id.home:
-                    Intent intent = new Intent(this, MainActivity.class);
-                    this.startActivity(intent);
-                    break;
-                case R.id.comment_item:
-                    Utils.openPublishCommentActivity(this, getContent());
-                    break;
-                case R.id.more_item:
-                default:
-                    Toast.makeText(this, "点击了" + mi.toString(),Toast.LENGTH_SHORT).show();
+    public boolean onOptionsItemSelected(MenuItem mi) {
+        if (mi.isCheckable()) {
+            mi.setChecked(true);
+        }
+        switch (mi.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(this, MainActivity.class);
+                this.startActivity(intent);
+                break;
+            case R.id.comment_item:
+                Utils.openPublishCommentActivity(this, getContent());
+                break;
+            case R.id.more_item:
+            default:
+                Toast.makeText(this, "点击了" + mi.toString(), Toast.LENGTH_SHORT).show();
 
-            }
+        }
 
-   		return true;
-   	}
+        return true;
+    }
 
     public static abstract class ActionTabFragmentPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
         protected ActionTabFragmentPagerAdapter(FragmentManager fm) {
@@ -182,7 +182,7 @@ public class ContentActivity extends BaseActivity {
         }
     }
 
-    private void loadContent(){
+    private void loadContent() {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("加载文章中...");
 
@@ -194,58 +194,20 @@ public class ContentActivity extends BaseActivity {
             }
 
             @Override
-            public void showProgressUI() {
-                // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
-                setProgressBarIndeterminate(true);
-                setProgressBarVisibility(true);
-
-                progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    public void onCancel(DialogInterface dialog) {
-                        cancel(true);
-                    }
-                });
-                progressDialog.show();
-                rotateRefreshActionView();
-            }
-
-            @Override
-            public void dismissProgressUI() {
-                setProgressBarVisibility(false);
-                if (progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }
-                dismissRefreshActionView();
-            }
-
-            @Override
-            public CnBetaApplicationContext getCnBetaApplicationContext() {
-                return (CnBetaApplicationContext) getApplicationContext();
-            }
-
-            @Override
-            protected void onPostExecute(AsyncResult<Content> asyncResult) {
-                super.onPostExecute(asyncResult);
-                if (asyncResult.isSuccess()) {
-                    content = asyncResult.getResult();
-                    //update content in ContentActivity
-                    contentFragment.updateArticleContent(content);
-                }
-                else {
-                    logger.w(asyncResult.getErrorMsg(), asyncResult.getException());
-                    Toast.makeText(ContentActivity.this, asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
-                }
+            public HasAsync<Content> getAsyncContext() {
+                return ContentActivity.this;
             }
         }
         );
     }
 
-    public void loadImages(){
-        for(String image : content.getImages()){
+    public void loadImages() {
+        for (String image : content.getImages()) {
             loadImage(image);
         }
     }
-    
-    private void loadImage(final String imgSrc){
+
+    private void loadImage(final String imgSrc) {
         executeAsyncTaskMultiThreading(new ImageBytesLoadingAsyncTask() {
             @Override
             protected String getImageUrl() {
@@ -253,28 +215,37 @@ public class ContentActivity extends BaseActivity {
             }
 
             @Override
-            protected void onPostExecute(AsyncResult<byte[]> asyncResult) {
-                super.onPostExecute(asyncResult);
-                if(asyncResult.isSuccess()) {
-                    String id = Base64.encodeToString(imgSrc.getBytes(), Base64.NO_WRAP);
-                    //update image in WebView by javascript
-                    contentFragment.updateImage(id, asyncResult.getResult());
-                }
-                else {
-                    logger.w(asyncResult.getErrorMsg());
-                }
-            }
+            public HasAsync<byte[]> getAsyncContext() {
+                return new HasAsync<byte[]>() {
+                    public CnBetaApplicationContext getCnBetaApplicationContext() {
+                        return (CnBetaApplicationContext) getApplicationContext();
+                    }
 
-            @Override
-            public CnBetaApplicationContext getCnBetaApplicationContext() {
-                return (CnBetaApplicationContext) getApplicationContext();
+                    public void onProgressShow() {
+
+                    }
+
+                    public void onProgressDismiss() {
+
+                    }
+
+                    public void onSuccess(AsyncResult<byte[]> asyncResult) {
+                        String id = Base64.encodeToString(imgSrc.getBytes(), Base64.NO_WRAP);
+                        //update image in WebView by javascript
+                        contentFragment.updateImage(id, asyncResult.getResult());
+                    }
+
+                    public void onFailure(AsyncResult<byte[]> asyncResult) {
+
+                    }
+                };
             }
         }
         );
-        
+
     }
-    
-    public void loadComments(){
+
+    public void loadComments() {
         executeAsyncTaskMultiThreading(new ArticleCommentsAsyncTask() {
             @Override
             protected Content getArticleContent() {
@@ -282,31 +253,31 @@ public class ContentActivity extends BaseActivity {
             }
 
             @Override
-            public void showProgressUI() {
-            }
+            public HasAsync<List<Comment>> getAsyncContext() {
+                return new HasAsync<List<Comment>>() {
+                    public CnBetaApplicationContext getCnBetaApplicationContext() {
+                        return (CnBetaApplicationContext) getApplicationContext();
+                    }
 
-            @Override
-            public void dismissProgressUI() {
-            }
+                    public void onProgressShow() {
 
-            @Override
-            protected void onPostExecute(AsyncResult<List<Comment>> asyncResult) {
-                super.onPostExecute(asyncResult);
-                if (asyncResult.isSuccess()) {
-                    List<Comment> comments = asyncResult.getResult();
-                    //TODO: update view_number, update comment fragment
-                    contentFragment.updateCommentNumbers(content);
-                    commentsFragment.updateComments(comments);
-                }
-                else {
-                    logger.w(asyncResult.getErrorMsg(), asyncResult.getException());
-                    Toast.makeText(ContentActivity.this, asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
-                }
-            }
+                    }
 
-            @Override
-            public CnBetaApplicationContext getCnBetaApplicationContext() {
-                return (CnBetaApplicationContext) getApplicationContext();
+                    public void onProgressDismiss() {
+
+                    }
+
+                    public void onSuccess(AsyncResult<List<Comment>> listAsyncResult) {
+                        List<Comment> comments = listAsyncResult.getResult();
+                        //TODO: update view_number, update comment fragment
+                        contentFragment.updateCommentNumbers(content);
+                        commentsFragment.updateComments(comments);
+                    }
+
+                    public void onFailure(AsyncResult<List<Comment>> listAsyncResult) {
+
+                    }
+                };
             }
         }
         );
@@ -314,7 +285,7 @@ public class ContentActivity extends BaseActivity {
 
 
     private void rotateRefreshActionView() {
-        if(refreshMenuItem != null) {
+        if (refreshMenuItem != null) {
             /* Attach a rotating ImageView to the refresh item as an ActionView */
             refreshActionView.startAnimation(clockWiseRotationAnimation);
             refreshMenuItem.setActionView(refreshActionView);
@@ -322,9 +293,9 @@ public class ContentActivity extends BaseActivity {
     }
 
     private void dismissRefreshActionView() {
-        if(refreshMenuItem != null) {
+        if (refreshMenuItem != null) {
             View actionView = refreshMenuItem.getActionView();
-            if(actionView != null) {
+            if (actionView != null) {
                 actionView.clearAnimation();
                 refreshMenuItem.setActionView(null);
             }
@@ -333,5 +304,30 @@ public class ContentActivity extends BaseActivity {
 
     public Content getContent() {
         return content;
+    }
+
+    public CnBetaApplicationContext getCnBetaApplicationContext() {
+        return (CnBetaApplicationContext) getApplicationContext();
+    }
+
+    public void onProgressShow() {
+        setProgressBarIndeterminate(true);
+        setProgressBarVisibility(true);
+        rotateRefreshActionView();
+    }
+
+    public void onProgressDismiss() {
+        setProgressBarVisibility(false);
+        dismissRefreshActionView();
+    }
+
+    public void onSuccess(AsyncResult<Content> contentAsyncResult) {
+        content = contentAsyncResult.getResult();
+        //update content in ContentActivity
+        contentFragment.updateArticleContent(content);
+    }
+
+    public void onFailure(AsyncResult<Content> contentAsyncResult) {
+
     }
 }

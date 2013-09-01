@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class BaseActivity extends Activity {
     
-    protected Logger logger = Logger.newLogger(this.getClass());
+    protected Logger logger = Logger.getLogger(this.getClass());
     
     protected List<AsyncTask> runningTasks = new ArrayList<AsyncTask>();
 

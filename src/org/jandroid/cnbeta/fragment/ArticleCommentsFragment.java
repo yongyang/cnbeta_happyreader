@@ -19,6 +19,7 @@ import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
+import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.SupportCommentAsyncTask;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.loader.SupportCommentPoster;
@@ -43,24 +44,11 @@ public class ArticleCommentsFragment extends BaseFragment {
 
     private final List<Comment> comments = new ArrayList<Comment>();
 
-    private final Handler handler = new Handler();
-
     private BaseAdapter adapter;
-
-    private ProgressBar progressBarRefresh;
-    private LinearLayout lineLayoutRefresh;
-    private TextView tvLastTimeRefresh;
 
     private TextView scoreTextView;
     private TextView reasonTextView;
 
-    private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    private MenuItem refreshMenuItem;
-    private ImageView refreshActionView;
-    private Animation clockWiseRotationAnimation;
-
-    private LinearLayout footbarRefresh;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,10 +64,6 @@ public class ArticleCommentsFragment extends BaseFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        refreshActionView = (ImageView) inflater.inflate(R.layout.iv_refresh_action_view, null);
-        clockWiseRotationAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotation_clockwise_refresh);
-        clockWiseRotationAnimation.setRepeatCount(Animation.INFINITE);
-
         View rootView = inflater.inflate(R.layout.comments_listview, container, false);
         commentsListView = (ListView)rootView.findViewById(R.id.comments_listview);
         commentsListView.setItemsCanFocus(true);
@@ -89,19 +73,6 @@ public class ArticleCommentsFragment extends BaseFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        footbarRefresh = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.lv_footbar_refresh, commentsListView,false);
-        progressBarRefresh = (ProgressBar) footbarRefresh.findViewById(R.id.progressBar_refresh);
-        lineLayoutRefresh = (LinearLayout)footbarRefresh.findViewById(R.id.linelayout_refresh);
-        tvLastTimeRefresh = (TextView)footbarRefresh.findViewById(R.id.refresh_last_time);
-
-        commentsListView.addFooterView(footbarRefresh);
-
-        footbarRefresh.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-//                reloadArticles();
-            }
-        });
 
         adapter = new BaseAdapter() {
             public int getCount() {
@@ -182,130 +153,32 @@ public class ArticleCommentsFragment extends BaseFragment {
             }
 
             @Override
-            public void showProgressUI() {
+            public HasAsync<JSONObject> getAsyncContext() {
+                return new HasAsync<JSONObject>() {
+                    public CnBetaApplicationContext getCnBetaApplicationContext() {
+                        return ((CnBetaApplicationContext)getActivity().getApplicationContext());
+                    }
 
-            }
+                    public void onProgressShow() {
 
-            @Override
-            public void dismissProgressUI() {
+                    }
 
-            }
+                    public void onProgressDismiss() {
 
-            @Override
-            public CnBetaApplicationContext getCnBetaApplicationContext() {
-                return ((CnBetaApplicationContext)getActivity().getApplicationContext());
-            }
+                    }
 
-            @Override
-            protected void onPostExecute(AsyncResult<JSONObject> jsonObjectAsyncResult) {
-                super.onPostExecute(jsonObjectAsyncResult);
-                if(jsonObjectAsyncResult.isSuccess()) {
-                    //TODO: +1
-                    ToastUtils.showShortToast(getActivity(), "supported");
-                }
-                else {
-                    ToastUtils.showLongToast(getActivity(), "supported failed");
-                }
+                    public void onFailure(AsyncResult<JSONObject> jsonObjectAsyncResult) {
+
+                    }
+
+                    public void onSuccess(AsyncResult<JSONObject> jsonObjectAsyncResult) {
+                        //TODO: +1
+                        ToastUtils.showShortToast(getActivity(), "supported");
+
+                    }
+                };
             }
         });
-    }
-
-/*
-    private void reloadArticles(){
-        EnvironmentUtils.checkNetworkConnected(getActivity());
-
-        ((BaseActivity)getActivity()).executeAsyncTaskMultiThreading(new RealtimeArticleListAsyncTask() {
-            @Override
-            public CnBetaApplicationContext getCnBetaApplicationContext() {
-                return (CnBetaApplicationContext) getActivity().getApplication();
-            }
-
-            @Override
-            public void showProgressUI() {
-                // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
-                getActivity().setProgressBarIndeterminate(true);
-                getActivity().setProgressBarVisibility(true);
-                footbarRefresh.setClickable(false);
-                progressBarRefresh.setVisibility(View.VISIBLE);
-                lineLayoutRefresh.setVisibility(View.GONE);
-                // rotate refresh item
-                rotateRefreshActionView();
-            }
-
-            @Override
-            public void dismissProgressUI() {
-                getActivity().setProgressBarVisibility(false);
-                progressBarRefresh.setVisibility(View.GONE);
-                lineLayoutRefresh.setVisibility(View.VISIBLE);
-                //Stop refresh animation anyway
-                dismissRefreshActionView();
-                footbarRefresh.setClickable(true);
-            }
-
-            @Override
-            protected void onPostExecute(AsyncResult<List<RealtimeArticle>> asyncResult) {
-                super.onPostExecute(asyncResult);
-                if (asyncResult.isSuccess()) {
-                    List<RealtimeArticle> articles = asyncResult.getResult();
-                    if (articles != null) {
-                        tvLastTimeRefresh.setText(dateFormat.format(new Date()));
-                        comments.clear();
-                        comments.addAll(articles);
-                        adapter.notifyDataSetChanged();
-                        commentsListView.smoothScrollToPosition(0);
-                    }
-                }
-                else {
-                    logger.w(asyncResult.getErrorMsg(), asyncResult.getException());
-                    Toast.makeText(getActivity(), asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-        );
-    }
-*/
-
-/*
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        //refresh actionitem
-        inflater.inflate(R.menu.article_list_fragment_menu, menu);
-        refreshMenuItem = menu.findItem(R.id.refresh_item);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.isCheckable()) {
-            item.setChecked(true);
-        }
-        switch (item.getItemId()) {
-            case R.id.more_item:
-                break;
-            case R.id.refresh_item:
-//                reloadArticles();
-            default:
-        }
-        return true;
-    }
-*/
-
-    private void rotateRefreshActionView() {
-        if(refreshMenuItem != null) {
-            /* Attach a rotating ImageView to the refresh item as an ActionView */
-            refreshActionView.startAnimation(clockWiseRotationAnimation);
-            refreshMenuItem.setActionView(refreshActionView);
-        }
-    }
-
-    private void dismissRefreshActionView() {
-        if(refreshMenuItem != null) {
-            View actionView = refreshMenuItem.getActionView();
-            if(actionView != null) {
-                actionView.clearAnimation();
-                refreshMenuItem.setActionView(null);
-            }
-        }
     }
 
     public void updateComments(List<Comment> comments){

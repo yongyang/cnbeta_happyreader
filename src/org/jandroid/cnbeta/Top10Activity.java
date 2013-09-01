@@ -19,6 +19,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
+import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.RankArticleListAsyncTask;
 import org.jandroid.cnbeta.entity.RankArticle;
 import org.jandroid.cnbeta.fragment.Top10ArticleListFragment;
@@ -35,13 +36,13 @@ import java.util.Map;
 
 //TODO: 由 Activity 加载数据，然后去更新 Fragment
 
-public class Top10Activity extends BaseActivity {
+public class Top10Activity extends BaseActivity implements HasAsync<Map<String, List<RankArticle>>> {
 
     private Handler handler = new Handler();
 
     private final Map<String, List<RankArticle>> allRankArticlesMap = new HashMap<String, List<RankArticle>>();
 
-   //TODO: set lastLoadTime to refresh time in Fragment
+    //TODO: set lastLoadTime to refresh time in Fragment
     private Date lastLoadTime = null;
     private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -107,26 +108,26 @@ public class Top10Activity extends BaseActivity {
 
         @Override
         public Fragment getItem(int position) {
-                switch (position) {
-                    case 0:
-                        if(fragments[0] == null) {
-                            fragments[0] = new Top10ArticleListFragment(RankType.HITS24, RankType.HITS_WEEK, RankType.HITS_MONTH);
-                        }
-                        return fragments[0];
-                    case 1:
-                        if(fragments[1] == null) {
-                            fragments[1] = new Top10ArticleListFragment(RankType.COMMENTS24, RankType.COMMENTS_WEEK, RankType.COMMENTS_MONTH);
-                        }
-                        return fragments[1];
-                    case 2:
-                        if(fragments[2] == null) {
-                            fragments[2] = new Top10ArticleListFragment(RankType.RECOMMEND);
-                        }
-                        return fragments[2];
-                    default:
-                        // 3 tabs
-                        return null;
-                }
+            switch (position) {
+                case 0:
+                    if (fragments[0] == null) {
+                        fragments[0] = new Top10ArticleListFragment(RankType.HITS24, RankType.HITS_WEEK, RankType.HITS_MONTH);
+                    }
+                    return fragments[0];
+                case 1:
+                    if (fragments[1] == null) {
+                        fragments[1] = new Top10ArticleListFragment(RankType.COMMENTS24, RankType.COMMENTS_WEEK, RankType.COMMENTS_MONTH);
+                    }
+                    return fragments[1];
+                case 2:
+                    if (fragments[2] == null) {
+                        fragments[2] = new Top10ArticleListFragment(RankType.RECOMMEND);
+                    }
+                    return fragments[2];
+                default:
+                    // 3 tabs
+                    return null;
+            }
         }
 
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -136,7 +137,7 @@ public class Top10Activity extends BaseActivity {
         public void onPageSelected(int position) {
             final ActionBar actionBar = getActionBar();
             //未选中时才调用setSelectedNavigationItem,
-            if(position != actionBar.getSelectedNavigationIndex()){
+            if (position != actionBar.getSelectedNavigationIndex()) {
                 actionBar.setSelectedNavigationItem(position);
             }
         }
@@ -156,14 +157,14 @@ public class Top10Activity extends BaseActivity {
         public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
             //切换排行类型，如：人气-天/周/月
             int index = Top10Activity.this.getActionBar().getSelectedNavigationIndex();
-            Top10ArticleListFragment fragment = (Top10ArticleListFragment)getItem(index);
-            fragment.switchRankType();
+            Top10ArticleListFragment fragment = (Top10ArticleListFragment) getItem(index);
+            fragment.switchRankType(allRankArticlesMap);
             RankType rankType = fragment.getCurrentRankType();
             int rankTypeIndex = fragment.getCurrentRankTypeIndex();
-            if(rankType.getType().contains("hits")){
+            if (rankType.getType().contains("hits")) {
                 tab.setText(tabGroup_hits[rankTypeIndex]);
             }
-            else if(rankType.getType().contains("comments")){
+            else if (rankType.getType().contains("comments")) {
                 tab.setText(tabGroup_comments[rankTypeIndex]);
             }
 
@@ -196,7 +197,7 @@ public class Top10Activity extends BaseActivity {
 
     private void setupActionBar() {
         final ActionBar actionBar = getActionBar();
-        for(int resourceId : tabs){
+        for (int resourceId : tabs) {
             //全部资讯, 实时更新, 阅读历史
             actionBar.addTab(actionBar.newTab().setText(resourceId).setTabListener(pagerAdapter));
         }
@@ -274,8 +275,8 @@ public class Top10Activity extends BaseActivity {
     }
 
 
-    public void reloadRanks(){
-        if(!isLoading){
+    public void reloadRanks() {
+        if (!isLoading) {
             isLoading = true;
         }
         final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -283,70 +284,8 @@ public class Top10Activity extends BaseActivity {
 
         executeAsyncTaskMultiThreading(new RankArticleListAsyncTask() {
             @Override
-            public CnBetaApplicationContext getCnBetaApplicationContext() {
-                return (CnBetaApplicationContext) getApplication();
-            }
-
-            @Override
-            public void showProgressUI() {
-                // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
-                setProgressBarIndeterminate(true);
-                setProgressBarVisibility(true);
-
-                progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    public void onCancel(DialogInterface dialog) {
-                        cancel(true);
-                    }
-                });
-                progressDialog.show();
-                rotateRefreshActionView();
-                for (final Top10ArticleListFragment fragment : fragments) {
-                    if (fragment != null) {
-                        fragment.showProgressUI();
-                    }
-                }
-            }
-
-            @Override
-            public void dismissProgressUI() {
-                setProgressBarVisibility(false);
-                if (progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }
-                dismissRefreshActionView();
-                for (final Top10ArticleListFragment fragment : fragments) {
-                    if (fragment != null) {
-                        fragment.dismissProgressUI();
-                    }
-                }
-            }
-
-            @Override
-            protected void onPostExecute(AsyncResult<Map<String, List<RankArticle>>> asyncResult) {
-                super.onPostExecute(asyncResult);
-                isLoading = false;
-                if (asyncResult.isSuccess()) {
-                    Map<String, List<RankArticle>> rankArticlesMap = asyncResult.getResult();
-                    if (rankArticlesMap != null) {
-                        lastLoadTime = new Date();
-                        allRankArticlesMap.clear();
-                        allRankArticlesMap.putAll(rankArticlesMap);
-
-                        for (final Top10ArticleListFragment fragment : fragments) {
-                            if (fragment != null) {
-                                handler.post(new Runnable() {
-                                    public void run() {
-                                        fragment.updateData(allRankArticlesMap);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                }
-                else {
-                    logger.w(asyncResult.getErrorMsg(), asyncResult.getException());
-                    Toast.makeText(Top10Activity.this, asyncResult.getErrorMsg(), Toast.LENGTH_LONG).show();
-                }
+            public HasAsync<Map<String, List<RankArticle>>> getAsyncContext() {
+                return Top10Activity.this;
             }
         }
         );
@@ -354,7 +293,7 @@ public class Top10Activity extends BaseActivity {
     }
 
     public void loadRanks(final Top10ArticleListFragment fragment) {
-        if(!isLoading && !allRankArticlesMap.isEmpty()) {
+        if (!isLoading && !allRankArticlesMap.isEmpty()) {
             fragment.updateData(allRankArticlesMap);
         }
     }
@@ -364,7 +303,7 @@ public class Top10Activity extends BaseActivity {
     }
 
     private void rotateRefreshActionView() {
-        if(refreshMenuItem != null) {
+        if (refreshMenuItem != null) {
             /* Attach a rotating ImageView to the refresh item as an ActionView */
             refreshActionView.startAnimation(clockWiseRotationAnimation);
             refreshMenuItem.setActionView(refreshActionView);
@@ -372,13 +311,64 @@ public class Top10Activity extends BaseActivity {
     }
 
     private void dismissRefreshActionView() {
-        if(refreshMenuItem != null) {
+        if (refreshMenuItem != null) {
             View actionView = refreshMenuItem.getActionView();
-            if(actionView != null) {
+            if (actionView != null) {
                 actionView.clearAnimation();
                 refreshMenuItem.setActionView(null);
             }
         }
     }
 
+    public CnBetaApplicationContext getCnBetaApplicationContext() {
+        return (CnBetaApplicationContext) getApplication();
+    }
+
+    public void onProgressShow() {
+        // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
+        setProgressBarIndeterminate(true);
+        setProgressBarVisibility(true);
+        rotateRefreshActionView();
+        for (final Top10ArticleListFragment fragment : fragments) {
+            if (fragment != null) {
+//                        fragment.showProgressUI();
+            }
+        }
+
+    }
+
+    public void onProgressDismiss() {
+        setProgressBarVisibility(false);
+        dismissRefreshActionView();
+        for (final Top10ArticleListFragment fragment : fragments) {
+            if (fragment != null) {
+//                fragment.dismissProgressUI();
+            }
+        }
+
+    }
+
+    public void onSuccess(AsyncResult<Map<String, List<RankArticle>>> mapAsyncResult) {
+        Map<String, List<RankArticle>> rankArticlesMap = mapAsyncResult.getResult();
+        if (rankArticlesMap != null) {
+            lastLoadTime = new Date();
+            allRankArticlesMap.clear();
+            allRankArticlesMap.putAll(rankArticlesMap);
+
+            for (final Top10ArticleListFragment fragment : fragments) {
+                if (fragment != null) {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            fragment.updateData(allRankArticlesMap);
+                        }
+                    });
+                }
+            }
+        }
+
+    }
+
+    public void onFailure(AsyncResult<Map<String, List<RankArticle>>> mapAsyncResult) {
+
+    }
 }

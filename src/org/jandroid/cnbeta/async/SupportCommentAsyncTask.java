@@ -8,7 +8,7 @@ import org.json.simple.JSONObject;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class SupportCommentAsyncTask extends ProgressDialogAsyncTask<JSONObject> {
+public abstract class SupportCommentAsyncTask extends LoadingAsyncTask<JSONObject> {
 
     protected abstract Comment getComment();
     

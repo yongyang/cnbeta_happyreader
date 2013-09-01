@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class RealtimeArticleListAsyncTask extends ProgressDialogAsyncTask<List<RealtimeArticle>> {
+public abstract class RealtimeArticleListAsyncTask extends LoadingAsyncTask<List<RealtimeArticle>> {
 
     @Override
     public AbstractLoader<List<RealtimeArticle>> getLoader() {

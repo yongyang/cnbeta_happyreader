@@ -19,6 +19,20 @@ public abstract class BaseAsyncTask<R>  extends AsyncTask<Object, Integer, Async
         catch (Exception e) {
             return AsyncResult.errorResult(e.getMessage(), null, e);
         }
-
     }
+
+    @Override
+    protected void onPostExecute(AsyncResult<R> rAsyncResult) {
+        super.onPostExecute(rAsyncResult);
+        if(rAsyncResult.isSuccess()) {
+            onSuccess(rAsyncResult);
+        }
+        else {
+            onFailure(rAsyncResult);
+        }
+    }
+
+    protected  abstract void onSuccess(AsyncResult<R> rAsyncResult);
+
+    protected  abstract void onFailure(AsyncResult<R> rAsyncResult);
 }

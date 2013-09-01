@@ -46,7 +46,7 @@ import java.util.zip.GZIPInputStream;
  */
 public class CnBetaHttpClient {
 
-    private static Logger logger = Logger.newLogger(CnBetaHttpClient.class);
+    private static Logger logger = Logger.getLogger(CnBetaHttpClient.class);
 
     public static final int MAX_TOTAL_CONNECTIONS = 20;
     public static final int MAX_CONNECTIONS_PER_ROUTE = 20;

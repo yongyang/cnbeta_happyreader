@@ -7,8 +7,6 @@ import android.os.Handler;
 import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
@@ -32,7 +30,7 @@ import org.jandroid.common.Logger;
  */
 public class ArticleContentFragment extends Fragment {
 
-    static Logger log = Logger.newLogger(ArticleContentFragment.class);
+    static Logger log = Logger.getLogger(ArticleContentFragment.class);
 
     private TextView titleTextView;
     private TextView timeTextView;

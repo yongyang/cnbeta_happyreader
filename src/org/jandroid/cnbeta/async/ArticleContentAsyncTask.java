@@ -7,7 +7,7 @@ import org.jandroid.cnbeta.loader.ArticleContentLoader;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class ArticleContentAsyncTask extends ProgressDialogAsyncTask<Content> {
+public abstract class ArticleContentAsyncTask extends LoadingAsyncTask<Content> {
 
     protected abstract long getSid();
 
