@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="lookmore_bar_txt_size">20.0sp</dimen>
+    <dimen name="lookmore_bar_txt_size">24.0dip</dimen>
     <dimen name="lookmore_bar_height">50.0dip</dimen>
-    <dimen name="foo_bar_refresh_time_size">10.0sp</dimen>
+    <dimen name="foo_bar_refresh_time_size">10.0dip</dimen>
 </resources>

@@ -2,40 +2,54 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:gravity="center"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              android:layout_gravity="center">
+
 
     <RelativeLayout
-            android:layout_gravity="center"
-            android:id="@+id/discuss_more"
             android:background="@drawable/btn_bg_selector"
-            android:paddingTop="10.0dip"
-            android:paddingBottom="10.0dip"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8.0dip"
-            android:layout_marginTop="10.0dip"
-            android:layout_marginRight="8.0dip"
-            android:layout_marginBottom="20.0dip">
+            android:layout_height="@dimen/lookmore_bar_height"
+            android:layout_gravity="center"
+            android:layout_margin="10dip">
 
         <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
+                android:id="@+id/linelayout_progressbar"
+                android:gravity="center"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp">
+                android:visibility="gone">
 
             <ProgressBar
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="center"
                     android:id="@+id/progressBar_next_page"
-                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="5.0dip"
                     android:indeterminate="true"
                     android:indeterminateDrawable="@drawable/progressbar"
-                    style="?android:attr/progressBarStyleInverse"
-                    />
+                    style="?android:attr/progressBarStyleInverse"/>
+
+            <TextView
+                    android:textSize="@dimen/foo_bar_refresh_time_size"
+                    android:textColor="@color/foot_bar_text"
+                    android:layout_gravity="center"
+                    android:id="@+id/waiting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="加载中..."
+                    android:singleLine="true"
+                    android:paddingLeft="4.0dip"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/lineLayout_next_page"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
 
             <LinearLayout
                     android:orientation="horizontal"
@@ -76,6 +90,17 @@
                         android:text="页"
                         android:singleLine="true"/>
             </LinearLayout>
+
+            <TextView
+                    android:textSize="@dimen/foo_bar_refresh_time_size"
+                    android:textColor="@color/foot_bar_text"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:id="@+id/refresh_last_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2013-01-01 00:00:00"
+                    android:singleLine="true"/>
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

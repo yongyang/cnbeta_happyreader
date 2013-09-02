@@ -7,15 +7,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import org.jandroid.cnbeta.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 public class PagingView {
+    public final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private LinearLayout footerbar;
     private LinearLayout pageBar;
-    private ProgressBar progressBar;
+    private LinearLayout progressBarLineLinearLayout;
     private TextView tvPage;
+    private TextView tvLastTimeRefresh;
 
     private int page = 0;
 
@@ -25,9 +31,11 @@ public class PagingView {
 
     private PagingView(LinearLayout rootView) {
         footerbar = rootView;
+        progressBarLineLinearLayout = (LinearLayout) footerbar.findViewById(R.id.linelayout_progressbar);
         pageBar = (LinearLayout) footerbar.findViewById(R.id.lineLayout_next_page);
-        progressBar = (ProgressBar) footerbar.findViewById(R.id.progressBar_next_page);
         tvPage = (TextView) footerbar.findViewById(R.id.tv_page);
+
+        tvLastTimeRefresh = (TextView) footerbar.findViewById(R.id.refresh_last_time);
     }
 
     public LinearLayout getRootView() {
@@ -45,14 +53,15 @@ public class PagingView {
 
     public void onProgressShow() {
         footerbar.setClickable(false);
-        progressBar.setVisibility(View.VISIBLE);
+        progressBarLineLinearLayout.setVisibility(View.VISIBLE);
         pageBar.setVisibility(View.GONE);
     }
 
     public void onProgressDismiss() {
-        progressBar.setVisibility(View.GONE);
+        progressBarLineLinearLayout.setVisibility(View.GONE);
         pageBar.setVisibility(View.VISIBLE);
         footerbar.setClickable(true);
+        tvLastTimeRefresh.setText(dateFormat.format(new Date()));
     }
 
     public void setOnClickListener(View.OnClickListener onClickListener) {
