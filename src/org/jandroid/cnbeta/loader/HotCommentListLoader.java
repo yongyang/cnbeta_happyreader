@@ -17,64 +17,16 @@ import java.util.Map;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class HotCommentListLoader extends AbstractLoader<List<HotComment>> {
+public class HotCommentListLoader extends AbstractListLoader<HotComment> {
 
-    private int page;
 
     public HotCommentListLoader(int page) {
-        this.page = page;
-    }
-
-    public int getPage() {
-        return page;
+        super(Type.HOT_COMMENT, page);
     }
 
     @Override
-    public List<HotComment> fromHttp(File baseDir) throws Exception {
-        Map<String, String> headers = new HashMap<String, String>();
-        headers.put("X-Requested-With", "XMLHttpRequest");
-
-        //TODO: clear cache if page=1, reload
-        String url = MessageFormat.format(ArticleListLoader.URL_TEMPLATE, ArticleListLoader.generateSeed(), "jhcomment", ""+ Math.round((System.currentTimeMillis() / 15e3)), ""+getPage(), ""+(System.currentTimeMillis() + 1));
-        //user json-simple to parse returned json string
-        String response = CnBetaHttpClient.getInstance().httpGet(url, headers);
-        String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
-        JSONObject responseJSON = (JSONObject)JSONValue.parse(responseJSONString);
-        JSONArray articleListJSONArray;
-
-        // 返回的JSON结构偶尔会不一样
-        Object result = responseJSON.get("result");
-        if(result instanceof JSONArray){
-            articleListJSONArray = (JSONArray)result;
-        }
-        else {
-            articleListJSONArray = (JSONArray)((JSONObject)responseJSON.get("result")).get("list");
-        }
-        writeDisk(baseDir, articleListJSONArray.toJSONString());
-        return parseArticleListJSON(articleListJSONArray);
-    }
-
-    private List<HotComment> parseArticleListJSON(JSONArray articleListJSONArray){
-        List<HotComment> articleList = new ArrayList<HotComment>(articleListJSONArray.size());
-        for(int i=0; i<articleListJSONArray.size(); i++){
-            JSONObject jsonObject = (JSONObject)articleListJSONArray.get(i);
-            HotComment article = new HotComment(jsonObject);
-            articleList.add(article);
-        }
-        return articleList;
-    }
-
-    @Override
-    public List<HotComment> fromDisk(File baseDir) throws Exception {
-        //read json file from SD Card
-        String articleListJSONString = readDisk(baseDir);
-        JSONArray articleListJSONArray = (JSONArray)JSONValue.parse(articleListJSONString);
-        return parseArticleListJSON(articleListJSONArray);
-    }
-
-    @Override
-    public String getFileName() {
-        return "hotcomments_" + getPage();
+    protected HotComment newEntity(JSONObject jSONObject) {
+        return new HotComment(jSONObject);
     }
 
 }

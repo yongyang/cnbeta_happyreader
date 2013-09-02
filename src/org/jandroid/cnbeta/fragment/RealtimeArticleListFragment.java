@@ -15,6 +15,8 @@ import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.LoadingAsyncTask;
 import org.jandroid.cnbeta.async.RealtimeArticleListAsyncTask;
 import org.jandroid.cnbeta.entity.RealtimeArticle;
+import org.jandroid.cnbeta.view.PagingView;
+import org.jandroid.cnbeta.view.RefreshView;
 
 import java.util.List;
 
@@ -24,6 +26,8 @@ import java.util.List;
 
 public class RealtimeArticleListFragment extends AbstractAsyncListFragment<RealtimeArticle> {
 
+    private RefreshView refreshView;
+
     public RealtimeArticleListFragment() {
 
     }
@@ -31,23 +35,22 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-   @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        //refresh actionitem
-        inflater.inflate(R.menu.search_refresh_menu, menu);
+        setHasOptionsMenu(false);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.isCheckable()) {
-            item.setChecked(true);
-        }
-        getCnBetaApplicationContext().onOptionsItemSelected(getActivity(), item);
-        return true;
+    public void onActivityCreated(Bundle savedInstanceState) {
+        refreshView = RefreshView.load(getActivity().getLayoutInflater(), R.layout.lv_footbar_refresh);
+
+        mListView.addFooterView(refreshView.getRootView());
+
+        refreshView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                reloadData();
+            }
+        });
+
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -60,11 +63,11 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
     protected BaseAdapter newAdapter() {
         return new BaseAdapter() {
             public int getCount() {
-                return loadedDatas.size();
+                return getDataSize();
             }
 
             public Object getItem(int position) {
-                return loadedDatas.get(position);
+                return getData(position);
             }
 
             public long getItemId(int position) {
@@ -75,7 +78,7 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
                 if (convertView == null) {
                     convertView = getActivity().getLayoutInflater().inflate(R.layout.lv_realtime_article_item, null);
                 }
-                RealtimeArticle article = loadedDatas.get(position);
+                RealtimeArticle article = getData(position);
                 TextView tvTitle = (TextView) convertView.findViewById(R.id.tile);
                 tvTitle.setText(article.getTitle());
                 TextView tvHometextShowShort2 = (TextView) convertView.findViewById(R.id.hometext_show_short2);
@@ -93,13 +96,30 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
     }
 
     @Override
-    public LoadingAsyncTask<List<RealtimeArticle>> newAsyncTask() {
-        return new RealtimeArticleListAsyncTask() {
+    protected void loadData() {
+        executeAsyncTaskMultiThreading(new RealtimeArticleListAsyncTask() {
 
             @Override
             public HasAsync<List<RealtimeArticle>> getAsyncContext() {
                 return RealtimeArticleListFragment.this;
             }
-        };
+        });
+    }
+
+    @Override
+    protected void reloadData() {
+        loadData();
+    }
+
+    @Override
+    public void onProgressShow() {
+        super.onProgressShow();
+        refreshView.onProgressShow();
+    }
+
+    @Override
+    public void onProgressDismiss() {
+        super.onProgressDismiss();
+        refreshView.onProgressDismiss();
     }
 }

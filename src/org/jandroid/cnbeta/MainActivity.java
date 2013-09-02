@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
+import org.jandroid.cnbeta.fragment.EditorRecommendListFragment;
 import org.jandroid.cnbeta.fragment.RealtimeArticleListFragment;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.common.AnimateUtils;
@@ -60,9 +61,9 @@ public class MainActivity extends BaseActivity {
                         }
                         return fragments[1];
                     case 2:
-                        //TODO: 便捷推荐 tab
+                        //TODO: 编辑推荐 tab
                         if(fragments[2] == null) {
-                            fragments[2] = new ArticleListFragment(ArticleListLoader.Type.EDITOR_COMMEND);
+                            fragments[2] = new EditorRecommendListFragment();
                         }
                         return fragments[2];
                     case 3:

@@ -32,29 +32,12 @@ public class HistoryArticleListFragment extends AbstractAsyncListFragment<Histor
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-   @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        //refresh actionitem
-        inflater.inflate(R.menu.search_refresh_menu, menu);
-//        refreshMenuItem = menu.findItem(R.id.refresh_item);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.isCheckable()) {
-            item.setChecked(true);
-        }
-        getCnBetaApplicationContext().onOptionsItemSelected(getActivity(), item);
-        return true;
+        setHasOptionsMenu(false);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        RealtimeArticle article = (RealtimeArticle) getAdapter().getItem(position);
+        HistoryArticle article = (HistoryArticle) getAdapter().getItem(position);
         Utils.openContentActivity(getActivity(), article.getSid(), article.getTitle());
     }
 
@@ -62,11 +45,11 @@ public class HistoryArticleListFragment extends AbstractAsyncListFragment<Histor
     protected BaseAdapter newAdapter() {
         return new BaseAdapter() {
             public int getCount() {
-                return loadedDatas.size();
+                return getDataSize();
             }
 
             public Object getItem(int position) {
-                return loadedDatas.get(position);
+                return getData(position);
             }
 
             public long getItemId(int position) {
@@ -77,7 +60,7 @@ public class HistoryArticleListFragment extends AbstractAsyncListFragment<Histor
                 if (convertView == null) {
                     convertView = getActivity().getLayoutInflater().inflate(R.layout.lv_realtime_article_item, null);
                 }
-                HistoryArticle article = loadedDatas.get(position);
+                HistoryArticle article = getData(position);
                 TextView tvTitle = (TextView) convertView.findViewById(R.id.tile);
                 tvTitle.setText(article.getTitle());
                 TextView tvHometextShowShort2 = (TextView) convertView.findViewById(R.id.hometext_show_short2);
@@ -95,13 +78,18 @@ public class HistoryArticleListFragment extends AbstractAsyncListFragment<Histor
     }
 
     @Override
-    public LoadingAsyncTask<List<HistoryArticle>> newAsyncTask() {
-        return new HistoryArticleListAsyncTask() {
+    protected void loadData() {
+        executeAsyncTaskMultiThreading(new HistoryArticleListAsyncTask() {
 
-            @Override
-            public HasAsync<List<HistoryArticle>> getAsyncContext() {
-                return HistoryArticleListFragment.this;
-            }
-        };
+                    @Override
+                    public HasAsync<List<HistoryArticle>> getAsyncContext() {
+                        return HistoryArticleListFragment.this;
+                    }
+                });
+    }
+
+    @Override
+    protected void reloadData() {
+        loadData();
     }
 }

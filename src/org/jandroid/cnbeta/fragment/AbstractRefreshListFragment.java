@@ -40,7 +40,7 @@ public abstract class AbstractRefreshListFragment<T> extends AbstractAsyncListFr
 
         footbarRefresh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                reloadDatas();
+                reloadData();
             }
         });
     }

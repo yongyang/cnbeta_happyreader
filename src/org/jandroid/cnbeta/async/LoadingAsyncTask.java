@@ -42,15 +42,15 @@ public abstract class LoadingAsyncTask<R>  extends BaseAsyncTask<R> {
             throw new Exception("No network!");
         }
         
-        AbstractLoader imageLoader = getLoader();
+        AbstractLoader loader = getLoader();
         //优先从Disk装载
         if(isLocalLoadFirst() || isLocalLoadOnly()) {
-            if(imageLoader.isCached(getAsyncContext().getCnBetaApplicationContext().getBaseDir())) {
-                return (R)imageLoader.fromDisk(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
+            if(loader.isCached(getAsyncContext().getCnBetaApplicationContext().getBaseDir())) {
+                return (R)loader.fromDisk(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
             }
         }
         if(!isLocalLoadOnly()) {
-            return (R)imageLoader.fromHttp(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
+            return (R)loader.fromHttp(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
         }
         return null;
     }

@@ -2,24 +2,17 @@ package org.jandroid.cnbeta.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.LoadingAsyncTask;
-import org.jandroid.common.AnimateUtils;
-import org.jandroid.common.BaseActivity;
 import org.jandroid.common.BaseFragment;
-import org.jandroid.common.EnvironmentUtils;
 import org.jandroid.common.async.AsyncResult;
 
 import java.text.DateFormat;
@@ -37,7 +30,7 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
 
     protected ListView mListView;
 
-    protected final List<T> loadedDatas = new ArrayList<T>();
+    private final List<T> loadedDatas = new ArrayList<T>();
 
     protected BaseAdapter adapter;
 
@@ -48,7 +41,7 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
     }
 
     @Override
@@ -79,44 +72,8 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
     @Override
     public void onStart() {
         super.onStart();
-        reloadDatas();
+        reloadData();
     }
-
-    protected void loadDatas() {
-        EnvironmentUtils.checkNetworkConnected(getActivity());
-        ((BaseActivity) getActivity()).executeAsyncTaskMultiThreading(newAsyncTask());
-    }
-
-    protected void reloadDatas() {
-        loadedDatas.clear();
-        loadDatas();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        //refresh actionitem
-        inflater.inflate(R.menu.search_refresh_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.isCheckable()) {
-            item.setChecked(true);
-        }
-
-        getCnBetaApplicationContext().onOptionsItemSelected(getActivity(), item);
-
-        switch (item.getItemId()) {
-            case R.id.more_item:
-                break;
-            case R.id.refresh_item:
-                loadDatas();
-            default:
-        }
-        return true;
-    }
-
 
     public CnBetaApplicationContext getCnBetaApplicationContext() {
         return (CnBetaApplicationContext) (getActivity().getApplicationContext());
@@ -135,7 +92,8 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
     }
 
     public void onFailure(AsyncResult<List<T>> listAsyncResult) {
-
+        getAdapter().notifyDataSetChanged();
+        logger.e("Failure: ", listAsyncResult.getException());
     }
 
     public void onSuccess(AsyncResult<List<T>> listAsyncResult) {
@@ -143,9 +101,28 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
         getAdapter().notifyDataSetChanged();
     }
 
-    protected abstract BaseAdapter newAdapter();
+    public void onSuccess(AsyncResult<List<T>> listAsyncResult , boolean refresh) {
+        loadedDatas.addAll(listAsyncResult.getResult());
+        getAdapter().notifyDataSetChanged();
+    }
 
-    public abstract LoadingAsyncTask<List<T>> newAsyncTask();
+    public void clearData(){
+        loadedDatas.clear();
+    }
+
+    public T getData(int index){
+        return loadedDatas.get(index);
+    }
+
+    public int getDataSize() {
+        return loadedDatas.size();
+    }
+
+    protected abstract void loadData();
+
+    protected abstract void reloadData();
+
+    protected abstract BaseAdapter newAdapter();
 
     public abstract void onItemClick(AdapterView<?> parent, View view, int position, long id);
 }

@@ -1,6 +1,7 @@
 package org.jandroid.common;
 
 import android.app.Fragment;
+import android.os.AsyncTask;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
@@ -10,4 +11,7 @@ public abstract class BaseFragment extends Fragment {
     
     protected Logger logger = Logger.getLogger(this.getClass());
 
+    public synchronized void executeAsyncTaskMultiThreading(AsyncTask asyncTask){
+        ((BaseActivity) getActivity()).executeAsyncTaskMultiThreading(asyncTask);
+    }
 }
