@@ -10,11 +10,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.Toast;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
 import org.jandroid.cnbeta.fragment.EditorRecommendListFragment;
 import org.jandroid.cnbeta.fragment.HotCommentListFragment;
@@ -50,34 +52,34 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public Fragment getItem(int position) {
-                switch (position) {
-                    case 0:
-                        if(fragments[0] == null) {
-                            fragments[0] = new ArticleListFragment(ArticleListLoader.Type.ALL);
-                        }
-                        return fragments[0];
-                    case 1:
-                        if(fragments[1] == null) {
-                            fragments[1] = new RealtimeArticleListFragment();
-                        }
-                        return fragments[1];
-                    case 2:
-                        //编辑推荐 tab
-                        if(fragments[2] == null) {
-                            fragments[2] = new EditorRecommendListFragment();
-                        }
-                        return fragments[2];
-                    case 3:
-                        //精彩评论 tab
-                        if(fragments[3] == null) {
-                            fragments[3] = new HotCommentListFragment();
-                        }
-                        return fragments[3];
+            switch (position) {
+                case 0:
+                    if (fragments[0] == null) {
+                        fragments[0] = new ArticleListFragment(ArticleListLoader.Type.ALL);
+                    }
+                    return fragments[0];
+                case 1:
+                    if (fragments[1] == null) {
+                        fragments[1] = new RealtimeArticleListFragment();
+                    }
+                    return fragments[1];
+                case 2:
+                    //编辑推荐 tab
+                    if (fragments[2] == null) {
+                        fragments[2] = new EditorRecommendListFragment();
+                    }
+                    return fragments[2];
+                case 3:
+                    //精彩评论 tab
+                    if (fragments[3] == null) {
+                        fragments[3] = new HotCommentListFragment();
+                    }
+                    return fragments[3];
 
-                    default:
-                        // only 4 tabs
-                        return null;
-                }
+                default:
+                    // only 4 tabs
+                    return null;
+            }
         }
 
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -137,7 +139,7 @@ public class MainActivity extends BaseActivity {
 
     private void initActionBar() {
         final ActionBar actionBar = getActionBar();
-        for(int resourceId : tabs){
+        for (int resourceId : tabs) {
             //全部资讯, 实时更新, 阅读历史
             actionBar.addTab(actionBar.newTab().setText(resourceId).setTabListener(pagerAdapter));
         }
@@ -164,7 +166,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-            //add  refresh actionitem
+        //add  refresh actionitem
         getMenuInflater().inflate(R.menu.search_refresh_menu, menu);
         refreshMenuItem = menu.findItem(R.id.refresh_item);
         return super.onCreateOptionsMenu(menu);
@@ -205,29 +207,10 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this).setTitle("确认退出吗？")
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int which) {
-                        // 默认将 finish activity
-                        MainActivity.super.onBackPressed();
-
-                    }
-                })
-                .setNegativeButton("返回", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // 点击“返回”后的操作,这里不设置没有任何操作
-                    }
-                }).show();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         // destroy application
-        ((CnBetaApplication)getApplicationContext()).destroy();
+        ((CnBetaApplication) getApplicationContext()).destroy();
     }
 
     protected void startRotateRefreshActionView() {
@@ -249,4 +232,26 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    private long exitTime = 0;
+    @Override
+    public void onBackPressed() {
+        if ((System.currentTimeMillis() - exitTime) > 2000) {
+            Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        }
+        else {
+            finish();
+            new Thread(){
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(500);
+                    }
+                    catch (Exception e){}
+                    ((CnBetaApplication)getApplicationContext()).destroy();
+                }
+            }.start();
+
+        }
+    }
 }

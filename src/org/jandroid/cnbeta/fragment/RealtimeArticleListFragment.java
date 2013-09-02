@@ -12,11 +12,13 @@ import android.widget.TextView;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
+import org.jandroid.cnbeta.async.HasAsyncDelegate;
 import org.jandroid.cnbeta.async.LoadingAsyncTask;
 import org.jandroid.cnbeta.async.RealtimeArticleListAsyncTask;
 import org.jandroid.cnbeta.entity.RealtimeArticle;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.cnbeta.view.RefreshView;
+import org.jandroid.common.async.AsyncResult;
 
 import java.util.List;
 
@@ -97,18 +99,26 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
 
     @Override
     protected void loadData() {
-        executeAsyncTaskMultiThreading(new RealtimeArticleListAsyncTask() {
-
-            @Override
-            public HasAsync<List<RealtimeArticle>> getAsyncContext() {
-                return RealtimeArticleListFragment.this;
-            }
-        });
+        reloadData();
     }
 
     @Override
     protected void reloadData() {
-        loadData();
+        executeAsyncTaskMultiThreading(new RealtimeArticleListAsyncTask() {
+
+            @Override
+            public HasAsync<List<RealtimeArticle>> getAsyncContext() {
+                return new HasAsyncDelegate<java.util.List<org.jandroid.cnbeta.entity.RealtimeArticle>>(RealtimeArticleListFragment.this){
+                    @Override
+                    public void onSuccess(AsyncResult<List<RealtimeArticle>> listAsyncResult) {
+                        clearData();
+                        super.onSuccess(listAsyncResult);
+                        mListView.smoothScrollToPosition(0);
+                    }
+                };
+            }
+        });
+
     }
 
     @Override
