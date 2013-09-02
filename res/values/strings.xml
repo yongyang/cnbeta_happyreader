@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">cnBeta乐读器</string>
+    <string name="app_name">cnBeta乐读</string>
     <string name="ranks">排行榜</string>
 
     <string name="label_article_content">阅读新闻</string>
