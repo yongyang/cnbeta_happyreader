@@ -10,7 +10,7 @@
             android:background="@drawable/btn_bg_selector"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/lookmore_bar_height"
+            android:layout_height="@dimen/footer_bar_height"
             android:layout_gravity="center"
             android:layout_margin="10dip">
 
@@ -32,7 +32,7 @@
                     style="?android:attr/progressBarStyleInverse"/>
 
             <TextView
-                    android:textSize="@dimen/foo_bar_refresh_time_size"
+                    android:textSize="@dimen/footer_bar_time_text_size"
                     android:textColor="@color/foot_bar_text"
                     android:layout_gravity="center"
                     android:id="@+id/waiting"
@@ -58,7 +58,7 @@
                     android:id="@+id/lineLayout_next_page">
 
                 <TextView
-                        android:textSize="@dimen/lookmore_bar_txt_size"
+                        android:textSize="@dimen/footer_bar_text_size"
                         android:textColor="@color/foot_bar_text"
                         android:gravity="center"
                         android:layout_gravity="center_vertical"
@@ -68,7 +68,7 @@
                         android:singleLine="true"/>
 
                 <TextView
-                        android:textSize="@dimen/lookmore_bar_txt_size"
+                        android:textSize="@dimen/footer_bar_text_size"
                         android:textColor="@color/foot_bar_text"
                         android:gravity="center"
                         android:layout_gravity="center_vertical"
@@ -81,7 +81,7 @@
                         android:singleLine="true"/>
 
                 <TextView
-                        android:textSize="@dimen/lookmore_bar_txt_size"
+                        android:textSize="@dimen/footer_bar_text_size"
                         android:textColor="@color/foot_bar_text"
                         android:gravity="center"
                         android:layout_gravity="center_vertical"
@@ -92,7 +92,7 @@
             </LinearLayout>
 
             <TextView
-                    android:textSize="@dimen/foo_bar_refresh_time_size"
+                    android:textSize="@dimen/footer_bar_time_text_size"
                     android:textColor="@color/foot_bar_text"
                     android:gravity="center"
                     android:layout_gravity="center"
