@@ -17,6 +17,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
 import org.jandroid.cnbeta.fragment.EditorRecommendListFragment;
+import org.jandroid.cnbeta.fragment.HotCommentListFragment;
 import org.jandroid.cnbeta.fragment.RealtimeArticleListFragment;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.common.AnimateUtils;
@@ -61,15 +62,15 @@ public class MainActivity extends BaseActivity {
                         }
                         return fragments[1];
                     case 2:
-                        //TODO: 编辑推荐 tab
+                        //编辑推荐 tab
                         if(fragments[2] == null) {
                             fragments[2] = new EditorRecommendListFragment();
                         }
                         return fragments[2];
                     case 3:
-                        //TODO: 精彩评论 tab
+                        //精彩评论 tab
                         if(fragments[3] == null) {
-                            fragments[3] = new ArticleListFragment(ArticleListLoader.Type.DIG);
+                            fragments[3] = new HotCommentListFragment();
                         }
                         return fragments[3];
 

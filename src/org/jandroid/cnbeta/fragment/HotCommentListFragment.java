@@ -32,8 +32,20 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
         return page;
     }
 
-    public int getNextPage() {
-        return page+1;
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+
+        footerPagingView = PagingView.load(getActivity().getLayoutInflater(), R.layout.listvew_footbar_paging);
+        mListView.addFooterView(footerPagingView.getRootView());
+
+        footerPagingView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                loadData();
+            }
+        });
+
+        super.onActivityCreated(savedInstanceState);
+
     }
 
     @Override
@@ -41,7 +53,7 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
         executeAsyncTaskMultiThreading(new HotCommentListAsyncTask() {
                     @Override
                     protected int getPage() {
-                        return HotCommentListFragment.this.getNextPage();
+                        return HotCommentListFragment.this.getPage() + 1;
                     }
 
                     @Override
@@ -56,7 +68,7 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
         executeAsyncTaskMultiThreading(new HotCommentListAsyncTask() {
                             @Override
                             protected int getPage() {
-                                return HotCommentListFragment.this.getNextPage();
+                                return HotCommentListFragment.this.getPage()+1;
                             }
 
                             @Override
@@ -90,13 +102,16 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
 
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
-                    convertView = getActivity().getLayoutInflater().inflate(R.layout.lv_editor_recommend_article_item, null);
+                    convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_hot_commend_item, null);
                 }
-                HotComment article = getData(position);
-                TextView tvTitle = (TextView) convertView.findViewById(R.id.tile);
+                HotComment hotComment = getData(position);
+                TextView tvTitle = (TextView) convertView.findViewById(R.id.comment);
+                tvTitle.setText("" + hotComment.getTid());
+/*
                 tvTitle.setText(article.getTitle());
                 TextView tvHometextShowShort = (TextView) convertView.findViewById(R.id.hometext_show_short);
                 tvHometextShowShort.setText(article.getHometextShowShort());
+*/
                 return convertView;
             }
         };
@@ -108,35 +123,12 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
         Utils.openContentActivity(getActivity(), article.getSid(), article.getTitle());
     }
 
-            ////////////////////////////////
-
 
     @Override
     public void onSuccess(AsyncResult<List<HotComment>> listAsyncResult) {
         super.onSuccess(listAsyncResult);
         page++;
         footerPagingView.setPage(page);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-
-        footerPagingView = PagingView.load(getActivity().getLayoutInflater(), R.layout.listvew_footbar_paging);
-        mListView.addFooterView(footerPagingView.getRootView());
-
-        footerPagingView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                loadData();
-            }
-        });
-
-        super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override
