@@ -1,7 +1,9 @@
 package org.jandroid.cnbeta.fragment;
 
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -12,7 +14,6 @@ import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HasAsyncDelegate;
 import org.jandroid.cnbeta.async.HotCommentListAsyncTask;
-import org.jandroid.cnbeta.async.LoadingAsyncTask;
 import org.jandroid.cnbeta.entity.HotComment;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.async.AsyncResult;
@@ -105,8 +106,22 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
                     convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_hot_commend_item, null);
                 }
                 HotComment hotComment = getData(position);
-                TextView tvTitle = (TextView) convertView.findViewById(R.id.comment);
-                tvTitle.setText("" + hotComment.getTid());
+                TextView commentTextView = (TextView) convertView.findViewById(R.id.comment);
+                commentTextView.setText("" + hotComment.getComment());
+                TextView titleShowTextView = (TextView) convertView.findViewById(R.id.titleShow);
+                titleShowTextView.setText("" + hotComment.getTitleShow());
+
+                TextView hostNameShowTextView = (TextView) convertView.findViewById(R.id.hostNameShow);
+                hostNameShowTextView.setText(hotComment.getHostNameShow());
+                hostNameShowTextView.getPaint().setTextSkewX(-0.25f);
+
+                TextView nameTextView = (TextView) convertView.findViewById(R.id.name);
+                nameTextView.setText(hotComment.getName());
+                nameTextView.getPaint().setTextSkewX(-0.25f);
+
+                TextView fromTextView = (TextView) convertView.findViewById(R.id.from);
+                fromTextView.getPaint().setTextSkewX(-0.25f);
+
 /*
                 tvTitle.setText(article.getTitle());
                 TextView tvHometextShowShort = (TextView) convertView.findViewById(R.id.hometext_show_short);
@@ -119,8 +134,8 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        HotComment article = getData(position);
-        Utils.openContentActivity(getActivity(), article.getSid(), article.getTitle());
+        HotComment hotComment = getData(position);
+        Utils.openContentActivity(getActivity(), hotComment.getSid(), hotComment.getTitleShow());
     }
 
 
