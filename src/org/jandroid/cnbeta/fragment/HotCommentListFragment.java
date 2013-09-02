@@ -122,6 +122,9 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
                 TextView fromTextView = (TextView) convertView.findViewById(R.id.from);
                 fromTextView.getPaint().setTextSkewX(-0.25f);
 
+                TextView toTextView = (TextView) convertView.findViewById(R.id.to);
+                toTextView.getPaint().setFakeBoldText(true);
+
 /*
                 tvTitle.setText(article.getTitle());
                 TextView tvHometextShowShort = (TextView) convertView.findViewById(R.id.hometext_show_short);
