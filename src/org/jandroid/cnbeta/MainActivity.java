@@ -1,16 +1,13 @@
 package org.jandroid.cnbeta;
 
 import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -210,7 +207,7 @@ public class MainActivity extends BaseActivity {
     public void onDestroy() {
         super.onDestroy();
         // destroy application
-        ((CnBetaApplication) getApplicationContext()).destroy();
+        ((CnBetaApplication) getApplicationContext()).exit();
     }
 
     protected void startRotateRefreshActionView() {
@@ -248,7 +245,7 @@ public class MainActivity extends BaseActivity {
                         Thread.sleep(500);
                     }
                     catch (Exception e){}
-                    ((CnBetaApplication)getApplicationContext()).destroy();
+                    ((CnBetaApplication)getApplicationContext()).exit();
                 }
             }.start();
 
