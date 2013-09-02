@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -142,7 +141,7 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         //refresh actionitem
-        getMenuInflater().inflate(R.menu.article_list_fragment_menu, menu);
+        getMenuInflater().inflate(R.menu.search_refresh_menu, menu);
         getMenuInflater().inflate(R.menu.content_menu, menu);
         refreshMenuItem = menu.findItem(R.id.refresh_item);
 

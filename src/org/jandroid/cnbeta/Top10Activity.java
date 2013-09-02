@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,7 +17,6 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.Toast;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.RankArticleListAsyncTask;
 import org.jandroid.cnbeta.entity.RankArticle;
@@ -234,7 +232,7 @@ public class Top10Activity extends BaseActivity implements HasAsync<Map<String, 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         //refresh actionitem
-        getMenuInflater().inflate(R.menu.article_list_fragment_menu, menu);
+        getMenuInflater().inflate(R.menu.search_refresh_menu, menu);
         refreshMenuItem = menu.findItem(R.id.refresh_item);
 
         return super.onCreateOptionsMenu(menu);
@@ -345,7 +343,6 @@ public class Top10Activity extends BaseActivity implements HasAsync<Map<String, 
 //                fragment.dismissProgressUI();
             }
         }
-
     }
 
     public void onSuccess(AsyncResult<Map<String, List<RankArticle>>> mapAsyncResult) {

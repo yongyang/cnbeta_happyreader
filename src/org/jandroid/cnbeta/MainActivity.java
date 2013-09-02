@@ -12,14 +12,19 @@ import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
 import org.jandroid.cnbeta.fragment.RealtimeArticleListFragment;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
+import org.jandroid.common.AnimateUtils;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.IntentUtils;
 
 public class MainActivity extends BaseActivity {
+    protected MenuItem refreshMenuItem;
+    protected ImageView refreshActionView;
 
     public static abstract class ActionTabFragmentPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
         protected ActionTabFragmentPagerAdapter(FragmentManager fm) {
@@ -119,6 +124,7 @@ public class MainActivity extends BaseActivity {
 //            getActionBar().setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
         }
 
+        refreshActionView = (ImageView) getLayoutInflater().inflate(R.layout.iv_refresh_action_view, null);
     }
 
     private void initViewPager() {
@@ -156,6 +162,9 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+            //add  refresh actionitem
+        getMenuInflater().inflate(R.menu.search_refresh_menu, menu);
+        refreshMenuItem = menu.findItem(R.id.refresh_item);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -218,4 +227,24 @@ public class MainActivity extends BaseActivity {
         // destroy application
         ((CnBetaApplication)getApplicationContext()).destroy();
     }
+
+    protected void startRotateRefreshActionView() {
+        if (refreshMenuItem != null) {
+            /* Attach a rotating ImageView to the refresh item as an ActionView */
+            AnimateUtils.rotate(refreshActionView);
+            refreshMenuItem.setActionView(refreshActionView);
+        }
+    }
+
+    protected void stopRotateRefreshActionView() {
+        if (refreshMenuItem != null) {
+            View actionView = refreshMenuItem.getActionView();
+            if (actionView != null) {
+                actionView.clearAnimation();
+                refreshMenuItem.setActionView(null);
+            }
+        }
+    }
+
+
 }

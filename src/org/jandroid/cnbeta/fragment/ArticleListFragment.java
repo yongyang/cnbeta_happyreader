@@ -1,27 +1,16 @@
 package org.jandroid.cnbeta.fragment;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
@@ -32,12 +21,9 @@ import org.jandroid.cnbeta.async.LoadingAsyncTask;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.common.BaseActivity;
-import org.jandroid.common.BaseFragment;
-import org.jandroid.common.EnvironmentUtils;
 import org.jandroid.common.adapter.AsyncImageAdapter;
 import org.jandroid.common.async.AsyncResult;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,7 +47,6 @@ public class ArticleListFragment extends AbstractPagingListFragment<Article> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
 
@@ -187,25 +172,6 @@ public class ArticleListFragment extends AbstractPagingListFragment<Article> {
         Article article = (Article)getAdapter().getItem(position);
         Utils.openContentActivity(getActivity(), article.getSid(), article.getTitleShow());
     }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        //add  refresh actionitem
-        inflater.inflate(R.menu.article_list_fragment_menu, menu);
-        refreshMenuItem = menu.findItem(R.id.refresh_item);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.isCheckable()) {
-            item.setChecked(true);
-        }
-
-        getCnBetaApplicationContext().onOptionsItemSelected(getActivity(),item);
-        return true;
-    }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

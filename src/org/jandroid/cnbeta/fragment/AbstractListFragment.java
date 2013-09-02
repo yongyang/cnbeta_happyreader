@@ -14,12 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
-import org.jandroid.cnbeta.async.HasAsync;
-import org.jandroid.cnbeta.async.LoadingAsyncTask;
-import org.jandroid.common.AnimateUtils;
-import org.jandroid.common.BaseActivity;
 import org.jandroid.common.BaseFragment;
-import org.jandroid.common.EnvironmentUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,8 +35,6 @@ public abstract class AbstractListFragment<T> extends BaseFragment implements Ad
 
     protected BaseAdapter adapter;
 
-    protected MenuItem refreshMenuItem;
-    protected ImageView refreshActionView;
 
     public AbstractListFragment() {
 
@@ -77,26 +70,6 @@ public abstract class AbstractListFragment<T> extends BaseFragment implements Ad
             mListView.setOnScrollListener((AbsListView.OnScrollListener) adapter);
         }
     }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        //refresh actionitem
-        inflater.inflate(R.menu.article_list_fragment_menu, menu);
-        refreshMenuItem = menu.findItem(R.id.refresh_item);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.isCheckable()) {
-            item.setChecked(true);
-        }
-
-        getCnBetaApplicationContext().onOptionsItemSelected(getActivity(), item);
-
-        return true;
-    }
-
 
     public CnBetaApplicationContext getCnBetaApplicationContext() {
         return (CnBetaApplicationContext) (getActivity().getApplicationContext());

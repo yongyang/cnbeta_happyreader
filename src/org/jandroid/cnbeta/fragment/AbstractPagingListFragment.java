@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -48,7 +47,6 @@ public abstract class AbstractPagingListFragment<T> extends AbstractAsyncListFra
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        refreshActionView = (ImageView) inflater.inflate(R.layout.iv_refresh_action_view, null);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -56,10 +54,13 @@ public abstract class AbstractPagingListFragment<T> extends AbstractAsyncListFra
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        footbarNextPage = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.footbar_next_page, mListView,false);
+        footbarNextPage = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.listvew_footbar_paging, mListView,false);
         lineLayoutNextPage = (LinearLayout)footbarNextPage.findViewById(R.id.lineLayout_next_page);
         progressBarNextPage = (ProgressBar)footbarNextPage.findViewById(R.id.progressBar_next_page);
         tvPage = (TextView)footbarNextPage.findViewById(R.id.tv_page);
+
+        mListView.addFooterView(footbarNextPage);
+
         footbarNextPage.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 loadDatas();
@@ -75,7 +76,7 @@ public abstract class AbstractPagingListFragment<T> extends AbstractAsyncListFra
         progressBarNextPage.setVisibility(View.VISIBLE);
         lineLayoutNextPage.setVisibility(View.GONE);
         if (getPage() == 1) { //page 1 is reload
-            startRotateRefreshActionView();
+//            startRotateRefreshActionView();
         }
 
     }
@@ -88,7 +89,7 @@ public abstract class AbstractPagingListFragment<T> extends AbstractAsyncListFra
         lineLayoutNextPage.setVisibility(View.VISIBLE);
         // stop refresh rotation anyway
         if (getPage() == 1) { //page 1 is reload
-            stopRotateRefreshActionView();
+//            stopRotateRefreshActionView();
         }
         footbarNextPage.setClickable(true);
     }

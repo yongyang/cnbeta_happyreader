@@ -41,9 +41,6 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
 
     protected BaseAdapter adapter;
 
-    protected MenuItem refreshMenuItem;
-    protected ImageView refreshActionView;
-
     public AbstractAsyncListFragment() {
 
     }
@@ -56,8 +53,6 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        refreshActionView = (ImageView) inflater.inflate(R.layout.iv_refresh_action_view, null);
-
         View rootView = inflater.inflate(R.layout.lv_article_list, container, false);
         mListView = (ListView) rootView.findViewById(R.id.article_listview);
         return rootView;
@@ -101,8 +96,7 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         //refresh actionitem
-        inflater.inflate(R.menu.article_list_fragment_menu, menu);
-        refreshMenuItem = menu.findItem(R.id.refresh_item);
+        inflater.inflate(R.menu.search_refresh_menu, menu);
     }
 
     @Override
@@ -123,23 +117,6 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
         return true;
     }
 
-    protected void startRotateRefreshActionView() {
-        if (refreshMenuItem != null) {
-            /* Attach a rotating ImageView to the refresh item as an ActionView */
-            AnimateUtils.rotate(refreshActionView);
-            refreshMenuItem.setActionView(refreshActionView);
-        }
-    }
-
-    protected void stopRotateRefreshActionView() {
-        if (refreshMenuItem != null) {
-            View actionView = refreshMenuItem.getActionView();
-            if (actionView != null) {
-                actionView.clearAnimation();
-                refreshMenuItem.setActionView(null);
-            }
-        }
-    }
 
     public CnBetaApplicationContext getCnBetaApplicationContext() {
         return (CnBetaApplicationContext) (getActivity().getApplicationContext());
@@ -150,14 +127,11 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
         // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
         getActivity().setProgressBarIndeterminate(true);
         getActivity().setProgressBarVisibility(true);
-        // rotate refresh item
-        startRotateRefreshActionView();
     }
 
     public void onProgressDismiss() {
         getActivity().setProgressBarVisibility(false);
         //Stop refresh animation anyway
-        stopRotateRefreshActionView();
     }
 
     public void onFailure(AsyncResult<List<T>> listAsyncResult) {
@@ -167,7 +141,6 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
     public void onSuccess(AsyncResult<List<T>> listAsyncResult) {
         loadedDatas.addAll(listAsyncResult.getResult());
         getAdapter().notifyDataSetChanged();
-
     }
 
     protected abstract BaseAdapter newAdapter();

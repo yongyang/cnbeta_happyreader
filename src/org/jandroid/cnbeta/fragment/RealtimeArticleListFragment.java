@@ -1,40 +1,21 @@
 package org.jandroid.cnbeta.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.LoadingAsyncTask;
 import org.jandroid.cnbeta.async.RealtimeArticleListAsyncTask;
 import org.jandroid.cnbeta.entity.RealtimeArticle;
-import org.jandroid.common.BaseActivity;
-import org.jandroid.common.BaseFragment;
-import org.jandroid.common.EnvironmentUtils;
-import org.jandroid.common.async.AsyncResult;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,8 +38,7 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         //refresh actionitem
-        inflater.inflate(R.menu.article_list_fragment_menu, menu);
-        refreshMenuItem = menu.findItem(R.id.refresh_item);
+        inflater.inflate(R.menu.search_refresh_menu, menu);
     }
 
     @Override

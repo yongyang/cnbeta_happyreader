@@ -14,7 +14,6 @@ import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HistoryArticleListAsyncTask;
 import org.jandroid.cnbeta.async.LoadingAsyncTask;
-import org.jandroid.cnbeta.async.RealtimeArticleListAsyncTask;
 import org.jandroid.cnbeta.entity.HistoryArticle;
 import org.jandroid.cnbeta.entity.RealtimeArticle;
 
@@ -40,8 +39,8 @@ public class HistoryArticleListFragment extends AbstractAsyncListFragment<Histor
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         //refresh actionitem
-        inflater.inflate(R.menu.article_list_fragment_menu, menu);
-        refreshMenuItem = menu.findItem(R.id.refresh_item);
+        inflater.inflate(R.menu.search_refresh_menu, menu);
+//        refreshMenuItem = menu.findItem(R.id.refresh_item);
     }
 
     @Override
