@@ -46,7 +46,6 @@ public class Top10ArticleListFragment extends AbstractListFragment<RankArticle> 
 
     public Top10ArticleListFragment(Top10Activity.RankType... rankTypes) {
         this.rankTypes = rankTypes;
-        this.currentRankTypeIndex = 0;
     }
 
     public Top10Activity.RankType getCurrentRankType() {
@@ -95,7 +94,7 @@ public class Top10ArticleListFragment extends AbstractListFragment<RankArticle> 
 
                     @Override
                     protected void loadImageAsync(final String imageUrl, final OnAsyncImageLoadListener onAsyncImageLoadListener) {
-                        top10Activity.executeAsyncTaskMultiThreading(new ImageAsyncTask() {
+                        executeAsyncTaskMultiThreading(new ImageAsyncTask() {
 
                             @Override
                             protected String getImageUrl() {
@@ -117,11 +116,12 @@ public class Top10ArticleListFragment extends AbstractListFragment<RankArticle> 
 
                                     }
 
-                                    public void onFailure(AsyncResult<Bitmap> bitmapAsyncResult) {
+                                    public void onSuccess(AsyncResult<Bitmap> bitmapAsyncResult) {
                                         onAsyncImageLoadListener.onLoaded(bitmapAsyncResult.getResult());
+
                                     }
 
-                                    public void onSuccess(AsyncResult<Bitmap> bitmapAsyncResult) {
+                                    public void onFailure(AsyncResult<Bitmap> bitmapAsyncResult) {
                                         onAsyncImageLoadListener.onLoadFailed(bitmapAsyncResult.getErrorMsg(), bitmapAsyncResult.getException());
                                     }
 
@@ -171,6 +171,11 @@ public class Top10ArticleListFragment extends AbstractListFragment<RankArticle> 
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         top10Activity.loadRanks(this);
@@ -179,6 +184,7 @@ public class Top10ArticleListFragment extends AbstractListFragment<RankArticle> 
     public void updateData(Map<String, List<RankArticle>>  rankArticlesMap){
         loadedDatas.clear();
         appendDatas(rankArticlesMap.get(rankTypes[currentRankTypeIndex].getType()));
+//        getAdapter().notifyDataSetChanged();
 //        tvLastTimeRefresh.setText(top10Activity.getLastLoadTimeText());
     }
 

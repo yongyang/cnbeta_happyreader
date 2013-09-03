@@ -192,6 +192,8 @@ public class Top10Activity extends BaseActivity implements HasAsync<Map<String, 
         refreshActionView = (ImageView) getLayoutInflater().inflate(R.layout.iv_refresh_action_view, null);
         clockWiseRotationAnimation = AnimationUtils.loadAnimation(this, R.anim.rotation_clockwise_refresh);
         clockWiseRotationAnimation.setRepeatCount(Animation.INFINITE);
+
+        reloadRanks();
     }
 
     private void setupActionBar() {
@@ -214,7 +216,6 @@ public class Top10Activity extends BaseActivity implements HasAsync<Map<String, 
     protected void onStart() {
         super.onStart();
         //TODO: 立即加载数据，然后更新 Fragment
-        reloadRanks();
     }
 
     @Override
@@ -332,14 +333,19 @@ public class Top10Activity extends BaseActivity implements HasAsync<Map<String, 
 
             for (final Top10ArticleListFragment fragment : fragments) {
                 if (fragment != null) {
+/*
                     handler.post(new Runnable() {
                         public void run() {
+*/
                             fragment.updateData(allRankArticlesMap);
+/*
                         }
                     });
+*/
                 }
             }
         }
+        isLoading = false;
 
     }
 

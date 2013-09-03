@@ -20,9 +20,9 @@ import java.util.List;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 
-public class HistoryArticleListFragment extends AbstractAsyncListFragment<HistoryArticle> {
+public class HistoryListFragment extends AbstractAsyncListFragment<HistoryArticle> {
 
-    public HistoryArticleListFragment() {
+    public HistoryListFragment() {
 
     }
 
@@ -73,7 +73,7 @@ public class HistoryArticleListFragment extends AbstractAsyncListFragment<Histor
 
             @Override
             public HasAsync<List<HistoryArticle>> getAsyncContext() {
-                return HistoryArticleListFragment.this;
+                return HistoryListFragment.this;
             }
         });
     }

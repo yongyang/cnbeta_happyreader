@@ -67,12 +67,14 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
         if (adapter instanceof AbsListView.OnScrollListener) {
             mListView.setOnScrollListener((AbsListView.OnScrollListener) adapter);
         }
+
+        //init reload data
+        reloadData();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        reloadData();
     }
 
     public CnBetaApplicationContext getCnBetaApplicationContext() {
