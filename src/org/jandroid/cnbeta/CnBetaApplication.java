@@ -71,6 +71,9 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
             case R.id.main:
                 Utils.openMainActivity(theActivity);
                 break;
+            case R.id.topics:
+                Utils.openTopicActivity(theActivity);
+                break;
             case R.id.dig_soft_industry_interact:
                 Utils.openTypesActivity(theActivity);
                 break;

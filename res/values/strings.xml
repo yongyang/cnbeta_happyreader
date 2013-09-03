@@ -31,5 +31,6 @@
     <string name="tab_hot">人气榜</string>
     <string name="tab_argue">争议榜</string>
     <string name="tab_recommend">推荐榜</string>
-
+    <string name="tab_topics">选择主题</string>
+    <string name="tab_topic_articles">新闻列表</string>
 </resources>

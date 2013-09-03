@@ -1,39 +1,54 @@
 package org.jandroid.cnbeta.loader;
 
 import org.jandroid.cnbeta.entity.Article;
+import org.jandroid.cnbeta.entity.TopicArticle;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import java.text.MessageFormat;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class TopicArticleListLoader extends AbstractListLoader<Article> {
+public class TopicArticleListLoader extends AbstractListLoader<TopicArticle> {
     // http://www.cnbeta.com/topics/more.htm?jsoncallback=jQuery18009162571956403553_1378203134764&split_page=4&page=1&id=469&_
     public static final String URL_TEMPLATE = "http://www.cnbeta.com/topics/more.htm?jsoncallback={0}&split_page={1}&page=1&id={2}&_={3}";
-
-    //TODO: 从第二页开始没有 split_page 参数，是不是第一页也可以不要 split_page 参数？？？
+    public static final String URL_TEMPLATE2 = "http://www.cnbeta.com/topics/more.htm?jsoncallback={0}&page={1}&id={2}&_={3}";
+    // 从第二页开始没有 split_page 参数，是不是第一页也可以不要 split_page 参数？？？
 
     // topic id
     private long id;
 
-    public TopicArticleListLoader(long id, int page) {
+    private int splitPage;
+
+    public TopicArticleListLoader(long id, int page, int splitPage) {
         super(Type.ALL, page);
         this.id = id;
+        this.splitPage = splitPage;
     }
 
     public long getId() {
         return id;
     }
 
-    @Override
-    protected String getURL() {
-        return MessageFormat.format(URL_TEMPLATE, randomJQueryCallback(), "" + getPage(),  ""+ getId(), "" + (System.currentTimeMillis() + 1));
+    public int getSplitPage() {
+        return splitPage;
     }
 
     @Override
-    protected Article newEntity(JSONObject jSONObject) {
-        return  new Article(jSONObject);
+    protected String getURL() {
+        if(getPage() == 1) {
+            return MessageFormat.format(URL_TEMPLATE, randomJQueryCallback(), "" + getSplitPage(),  ""+ getId(), "" + (System.currentTimeMillis() + 1));
+        }
+        else {
+            return MessageFormat.format(URL_TEMPLATE, randomJQueryCallback(), "" + getPage(),  ""+ getId(), "" + (System.currentTimeMillis() + 1));
+        }
+    }
+
+    @Override
+    protected TopicArticle newEntity(JSONObject jSONObject) {
+        return  new TopicArticle(jSONObject);
     }
 }
 /*

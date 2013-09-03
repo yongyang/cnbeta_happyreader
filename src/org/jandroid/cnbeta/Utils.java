@@ -61,6 +61,11 @@ public class Utils {
         theActivity.startActivity(intent);
     }
 
+    public static void openTopicActivity(Activity theActivity) {
+        Intent intent = IntentUtils.newIntent(theActivity, TopicActivity.class);
+        theActivity.startActivity(intent);
+    }
+
     public static void openTypesActivity(Activity theActivity) {
         Intent intent = IntentUtils.newIntent(theActivity, TypesActivity.class);
         theActivity.startActivity(intent);

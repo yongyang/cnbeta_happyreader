@@ -11,7 +11,7 @@
             <group>
                 <item
                         android:id="@+id/main"
-                        android:title="全部 | 实时 | 热评"/>
+                        android:title="全部 | 实时 | 推荐 | 热评"/>
                 <!-- 定义3个菜单项 -->
                 <item
                         android:id="@+id/dig_soft_industry_interact"

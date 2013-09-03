@@ -74,6 +74,15 @@ public abstract class AbstractListLoader<T> extends AbstractLoader<List<T>> {
         String url = getURL();
         //user json-simple to parse returned json string
         String response = CnBetaHttpClient.getInstance().httpGet(url, headers);
+
+        JSONArray articleListJSONArray = getJSONArray(response);
+        List<T> articles = parseJSONArray(articleListJSONArray);
+        //parse成功才存盘
+        writeDisk(baseDir, articleListJSONArray.toJSONString());
+        return articles;
+    }
+
+    protected JSONArray getJSONArray(String response){
         String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
         JSONObject responseJSON = (JSONObject)JSONValue.parse(responseJSONString);
         JSONArray articleListJSONArray;
@@ -86,11 +95,7 @@ public abstract class AbstractListLoader<T> extends AbstractLoader<List<T>> {
         else {
             articleListJSONArray = (JSONArray)((JSONObject)responseJSON.get("result")).get("list");
         }
-
-        List<T> articles = parseJSONArray(articleListJSONArray);
-        //parse成功才存盘
-        writeDisk(baseDir, articleListJSONArray.toJSONString());
-        return articles;
+        return articleListJSONArray;
     }
 
     protected List<T> parseJSONArray(JSONArray articleListJSONArray){

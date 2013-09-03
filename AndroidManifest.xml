@@ -40,6 +40,11 @@
                 android:launchMode="singleTask"
                 />
         <activity
+                android:name=".TopicActivity"
+                android:label="@string/ranks"
+                android:launchMode="singleTask"
+                />
+        <activity
                 android:name=".ContentActivity"
                 android:label="@string/label_article_content"
                 android:launchMode="singleTask"/>
