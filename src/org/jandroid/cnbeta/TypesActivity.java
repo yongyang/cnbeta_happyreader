@@ -104,6 +104,7 @@ public class TypesActivity extends BaseActivity {
 
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         setupViewPager();

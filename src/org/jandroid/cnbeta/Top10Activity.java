@@ -179,6 +179,7 @@ public class Top10Activity extends BaseActivity implements HasAsync<Map<String, 
 
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         setupViewPager();
