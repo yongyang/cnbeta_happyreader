@@ -56,6 +56,29 @@ public class Utils {
         theActivity.startActivity(intent);
     }
 
+    public static void openMainActivity(Activity theActivity) {
+        Intent intent = IntentUtils.newIntent(theActivity, MainActivity.class);
+        theActivity.startActivity(intent);
+    }
+
+    public static void openTypesActivity(Activity theActivity) {
+        Intent intent = IntentUtils.newIntent(theActivity, TypesActivity.class);
+        theActivity.startActivity(intent);
+        theActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    public static void openTop10Activity(Activity theActivity) {
+        Intent intent = IntentUtils.newIntent(theActivity, Top10Activity.class);
+        theActivity.startActivity(intent);
+        theActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    public static void openHistoryActivity(Activity theActivity) {
+        Intent intent = IntentUtils.newIntent(theActivity, HistoryActivity.class);
+        theActivity.startActivity(intent);
+        theActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
     public static void openReplyCommentActivity(Activity theActivity, Content content, Comment comment) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("content", content);

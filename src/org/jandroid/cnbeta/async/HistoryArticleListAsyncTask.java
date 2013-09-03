@@ -13,7 +13,10 @@ import java.util.List;
  */
 public abstract class HistoryArticleListAsyncTask extends LoadingAsyncTask<List<HistoryArticle>> {
 
-    //TODO: use history
+    @Override
+    protected boolean isLocalLoadOnly() {
+        return true;
+    }
 
     @Override
     public AbstractLoader<List<HistoryArticle>> getLoader() {

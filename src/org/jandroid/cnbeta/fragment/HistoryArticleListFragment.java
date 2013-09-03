@@ -11,7 +11,9 @@ import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HistoryArticleListAsyncTask;
 import org.jandroid.cnbeta.entity.HistoryArticle;
+import org.jandroid.common.async.AsyncResult;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -53,7 +55,7 @@ public class HistoryArticleListFragment extends AbstractAsyncListFragment<Histor
 
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
-                    convertView = getActivity().getLayoutInflater().inflate(R.layout.lv_realtime_article_item, null);
+                    convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_history_item, null);
                 }
                 HistoryArticle article = getData(position);
                 TextView tvTitle = (TextView) convertView.findViewById(R.id.tile);
@@ -69,11 +71,19 @@ public class HistoryArticleListFragment extends AbstractAsyncListFragment<Histor
     protected void loadData() {
         executeAsyncTaskMultiThreading(new HistoryArticleListAsyncTask() {
 
-                    @Override
-                    public HasAsync<List<HistoryArticle>> getAsyncContext() {
-                        return HistoryArticleListFragment.this;
-                    }
-                });
+            @Override
+            public HasAsync<List<HistoryArticle>> getAsyncContext() {
+                return HistoryArticleListFragment.this;
+            }
+        });
+    }
+
+    @Override
+    public void onSuccess(AsyncResult<List<HistoryArticle>> listAsyncResult) {
+        clearData();
+        // reverse!!!
+        Collections.reverse(listAsyncResult.getResult());
+        super.onSuccess(listAsyncResult);
     }
 
     @Override

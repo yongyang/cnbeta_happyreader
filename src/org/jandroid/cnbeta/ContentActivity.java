@@ -155,24 +155,7 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
-        if (mi.isCheckable()) {
-            mi.setChecked(true);
-        }
-        switch (mi.getItemId()) {
-            case android.R.id.home:
-                Intent intent = new Intent(this, MainActivity.class);
-                this.startActivity(intent);
-                break;
-            case R.id.comment_item:
-                Utils.openPublishCommentActivity(this, getContent());
-                break;
-            case R.id.more_item:
-            default:
-                Toast.makeText(this, "点击了" + mi.toString(), Toast.LENGTH_SHORT).show();
-
-        }
-
-        return true;
+        return ((CnBetaApplication)getApplicationContext()).onOptionsItemSelected(this, mi);
     }
 
     public static abstract class ActionTabFragmentPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {

@@ -155,26 +155,7 @@ public class TypesActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
-        if (mi.isCheckable()) {
-            mi.setChecked(true);
-        }
-        switch (mi.getItemId()) {
-            case android.R.id.home:
-            case R.id.main:
-                startActivity(IntentUtils.newIntent(this, MainActivity.class));
-                this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                break;
-            case R.id.dig_soft_industry_interact:
-                break;
-            case R.id.more_item:
-                break;
-            case R.id.aboutus_item:
-                //TODO:  for test
-                Intent intent = new Intent(this, ContentActivity.class);
-                this.startActivity(intent);
-                break;
-        }
-        return false;
+        return ((CnBetaApplication)getApplicationContext()).onOptionsItemSelected(this, mi);
     }
 
     @Override

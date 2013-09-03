@@ -4,6 +4,7 @@
     <string name="ranks">排行榜</string>
 
     <string name="label_article_content">阅读新闻</string>
+    <string name="label_history">历史记录</string>
 
     <string name="search_item">Settings</string>
 
@@ -20,7 +21,7 @@
     <string name="tab_shishigengxin">实时新闻</string>
     <string name="tab_jingcaipinglun">精彩评论</string>
     <string name="tab_bianjituijian">编辑推荐</string>
-    <string name="tab_yuedulishi">阅读历史</string>
+    <string name="tab_yuedulishi">历史记录</string>
     <string name="tab_dig">DIG</string>
     <string name="tab_software">软件</string>
     <string name="tab_industry">业界</string>

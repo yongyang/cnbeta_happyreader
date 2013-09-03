@@ -2,11 +2,13 @@ package org.jandroid.cnbeta;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.os.Environment;
 import android.view.MenuItem;
 import org.apache.commons.io.FileUtils;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.common.EnvironmentUtils;
+import org.jandroid.common.IntentUtils;
 import org.jandroid.common.Logger;
 
 import java.io.File;
@@ -63,6 +65,29 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
                 break;
             default:
         }
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Utils.openMainActivity(theActivity);
+                break;
+            case R.id.main:
+                Utils.openMainActivity(theActivity);
+                break;
+            case R.id.dig_soft_industry_interact:
+                Utils.openTypesActivity(theActivity);
+                break;
+            case R.id.rank:
+                Utils.openTop10Activity(theActivity);
+                break;
+            case R.id.more_item:
+                break;
+            case R.id.history:
+                Utils.openHistoryActivity(theActivity);
+                break;
+            case R.id.aboutus_item:
+                break;
+        }
+
         return true;
     }
 
