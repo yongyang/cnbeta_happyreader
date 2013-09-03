@@ -35,7 +35,7 @@
                 android:label="@string/app_name"
                 android:launchMode="singleTask"/>
         <activity
-                android:name=".Top10Activity"
+                android:name=".MRankActivity"
                 android:label="@string/ranks"
                 android:launchMode="singleTask"
                 />

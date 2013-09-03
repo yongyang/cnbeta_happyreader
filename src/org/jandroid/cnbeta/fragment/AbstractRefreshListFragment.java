@@ -31,7 +31,7 @@ public abstract class AbstractRefreshListFragment<T> extends AbstractAsyncListFr
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        footbarRefresh = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.lv_footbar_refresh, mListView, false);
+        footbarRefresh = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.listview_footbar_refresh, mListView, false);
         progressBarRefresh = (ProgressBar) footbarRefresh.findViewById(R.id.progressBar_refresh);
         lineLayoutRefresh = (LinearLayout) footbarRefresh.findViewById(R.id.linelayout_refresh);
         tvLastTimeRefresh = (TextView) footbarRefresh.findViewById(R.id.refresh_last_time);

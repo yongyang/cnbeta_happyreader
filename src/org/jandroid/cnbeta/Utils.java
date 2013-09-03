@@ -67,8 +67,8 @@ public class Utils {
         theActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
-    public static void openTop10Activity(Activity theActivity) {
-        Intent intent = IntentUtils.newIntent(theActivity, Top10Activity.class);
+    public static void openMRankActivity(Activity theActivity) {
+        Intent intent = IntentUtils.newIntent(theActivity, MRankActivity.class);
         theActivity.startActivity(intent);
         theActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }

@@ -9,9 +9,9 @@ import android.widget.TextView;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
-import org.jandroid.cnbeta.async.HasAsyncDelegate;
-import org.jandroid.cnbeta.async.RealtimeArticleListAsyncTask;
-import org.jandroid.cnbeta.entity.RealtimeArticle;
+import org.jandroid.cnbeta.async.MRankArticleListAsyncTask;
+import org.jandroid.cnbeta.entity.MRankArticle;
+import org.jandroid.cnbeta.loader.MRankListLoader;
 import org.jandroid.cnbeta.view.RefreshView;
 import org.jandroid.common.async.AsyncResult;
 
@@ -21,12 +21,18 @@ import java.util.List;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 
-public class RealtimeArticleListFragment extends AbstractAsyncListFragment<RealtimeArticle> {
+public class MRankListFragment extends AbstractAsyncListFragment<MRankArticle> {
 
     private RefreshView footerRefreshView;
 
-    public RealtimeArticleListFragment() {
+    private MRankListLoader.Type type;
 
+    public MRankListFragment(MRankListLoader.Type type) {
+        this.type = type;
+    }
+
+    public MRankListLoader.Type getType() {
+        return type;
     }
 
     @Override
@@ -38,9 +44,7 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         footerRefreshView = RefreshView.load(getActivity().getLayoutInflater(), R.layout.listview_footbar_refresh);
-
         mListView.addFooterView(footerRefreshView.getRootView());
-
         footerRefreshView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 reloadData();
@@ -52,7 +56,7 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        RealtimeArticle article = (RealtimeArticle) getAdapter().getItem(position);
+        MRankArticle article = (MRankArticle) getAdapter().getItem(position);
         Utils.openContentActivity(getActivity(), article.getSid(), article.getTitle());
     }
 
@@ -73,47 +77,47 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
 
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
-                    convertView = getActivity().getLayoutInflater().inflate(R.layout.lv_realtime_article_item, null);
+                    convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_mrank_item, null);
                 }
-                RealtimeArticle article = getData(position);
+                MRankArticle article = getData(position);
+                TextView tvRank = (TextView) convertView.findViewById(R.id.rank);
+                String rank = "" + (position + 1);
+                if(rank.length() == 1) {
+                    rank = " " + rank;
+                }
+                tvRank.setText(rank + ". ");
                 TextView tvTitle = (TextView) convertView.findViewById(R.id.tile);
                 tvTitle.setText(article.getTitle());
-                TextView tvHometextShowShort2 = (TextView) convertView.findViewById(R.id.hometext_show_short2);
-                tvHometextShowShort2.setText(article.getHometextShowShort2());
-                TextView tvTime = (TextView) convertView.findViewById(R.id.time);
-                tvTime.setText("" + article.getTime());
-
-                TextView tvTimeShow = (TextView) convertView.findViewById(R.id.time_show);
-                tvTimeShow.setText("" + article.getTimeShow());
-
                 return convertView;
-
             }
         };
     }
 
     @Override
     protected void loadData() {
-        reloadData();
+        executeAsyncTaskMultiThreading(new MRankArticleListAsyncTask() {
+
+            @Override
+            protected MRankListLoader.Type getType() {
+                return MRankListFragment.this.getType();
+            }
+
+            @Override
+            public HasAsync<List<MRankArticle>> getAsyncContext() {
+                return MRankListFragment.this;
+            }
+        });
+    }
+
+    @Override
+    public void onSuccess(AsyncResult<List<MRankArticle>> listAsyncResult) {
+        clearData();
+        super.onSuccess(listAsyncResult);
     }
 
     @Override
     protected void reloadData() {
-        executeAsyncTaskMultiThreading(new RealtimeArticleListAsyncTask() {
-
-            @Override
-            public HasAsync<List<RealtimeArticle>> getAsyncContext() {
-                return new HasAsyncDelegate<java.util.List<org.jandroid.cnbeta.entity.RealtimeArticle>>(RealtimeArticleListFragment.this){
-                    @Override
-                    public void onSuccess(AsyncResult<List<RealtimeArticle>> listAsyncResult) {
-                        clearData();
-                        super.onSuccess(listAsyncResult);
-                        mListView.smoothScrollToPosition(0);
-                    }
-                };
-            }
-        });
-
+        loadData();
     }
 
     @Override
@@ -127,4 +131,5 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
         super.onProgressDismiss();
         footerRefreshView.onProgressDismiss();
     }
+
 }

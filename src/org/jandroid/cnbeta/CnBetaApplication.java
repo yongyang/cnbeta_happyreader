@@ -2,13 +2,11 @@ package org.jandroid.cnbeta;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Intent;
 import android.os.Environment;
 import android.view.MenuItem;
 import org.apache.commons.io.FileUtils;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.common.EnvironmentUtils;
-import org.jandroid.common.IntentUtils;
 import org.jandroid.common.Logger;
 
 import java.io.File;
@@ -77,7 +75,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
                 Utils.openTypesActivity(theActivity);
                 break;
             case R.id.rank:
-                Utils.openTop10Activity(theActivity);
+                Utils.openMRankActivity(theActivity);
                 break;
             case R.id.more_item:
                 break;

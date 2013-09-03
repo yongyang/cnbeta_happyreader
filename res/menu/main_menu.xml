@@ -11,17 +11,17 @@
             <group>
                 <item
                         android:id="@+id/main"
-                        android:title="全部 | 实时 | 历史"/>
+                        android:title="全部 | 实时 | 热评"/>
                 <!-- 定义3个菜单项 -->
                 <item
                         android:id="@+id/dig_soft_industry_interact"
-                        android:title="DIG | 软件 | 业界 | 互动"/>
+                        android:title="DIG  | 软件 | 业界 | 互动"/>
                 <item
                         android:id="@+id/rank"
                         android:title="人气 | 争议 | 推荐"/>
                 <item
                         android:id="@+id/topics"
-                        android:title="主题分类阅读"/>
+                        android:title="按主题阅读"/>
                 <item
                         android:id="@+id/history"
                         android:title="@string/label_history"/>

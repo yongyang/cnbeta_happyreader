@@ -28,13 +28,8 @@
     <string name="tab_interact">互动</string>
     <string name="tab_zhengwen">正文</string>
     <string name="tab_pinglun">评论</string>
-    <string name="tab_hits24">人气·天</string>
-    <string name="tab_hits_week">人气·周</string>
-    <string name="tab_hits_month">人气·月</string>
-    <string name="tab_comments24">争议·天</string>
-    <string name="tab_comments_week">争议·周</string>
-    <string name="tab_comments_month">争议·月</string>
-    <string name="tab_recommend">推荐</string>
-
+    <string name="tab_hot">人气榜</string>
+    <string name="tab_argue">争议榜</string>
+    <string name="tab_recommend">推荐榜</string>
 
 </resources>
