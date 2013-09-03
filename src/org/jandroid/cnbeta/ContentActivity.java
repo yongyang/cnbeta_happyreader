@@ -323,6 +323,9 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
     public void onSuccess(AsyncResult<Content> contentAsyncResult) {
         content = contentAsyncResult.getResult();
         //update content in ContentActivity
+        if(content == null) { //TODO: 偶尔 content == null
+            logger.w("Content is null???", new NullPointerException());
+        }
         contentFragment.updateArticleContent(content);
     }
 

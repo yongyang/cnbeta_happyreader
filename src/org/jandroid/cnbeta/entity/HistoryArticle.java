@@ -10,11 +10,7 @@ public class HistoryArticle implements Serializable {
 
     private long sid;
     private String title;
-    private String hometext;
-    private String hometextShowShort2;
-    private String urlShow;
-    private String time;
-    private String timeShow;
+    private String date;
 
     public HistoryArticle(Map<String, Object> jSONObject) {
         parse(jSONObject);
@@ -23,11 +19,7 @@ public class HistoryArticle implements Serializable {
     private void parse(Map<String, Object> jSONObject) {
         this.setSid(Long.parseLong(jSONObject.get("sid").toString()));
         this.setTitle(jSONObject.get("title").toString());
-        this.setUrlShow(jSONObject.get("url_show").toString());
-        this.setHometext(jSONObject.get("hometext").toString());
-        this.setHometextShowShort2(jSONObject.get("hometext_show_short2").toString());
-        this.setTime(jSONObject.get("time").toString());
-        this.setTimeShow(jSONObject.get("time_show").toString());
+        this.setDate(jSONObject.get("date").toString());
     }
 
 
@@ -39,39 +31,6 @@ public class HistoryArticle implements Serializable {
         this.sid = sid;
     }
 
-
-    public String getUrlShow() {
-        return urlShow;
-    }
-
-    public void setUrlShow(String urlShow) {
-        this.urlShow = urlShow;
-    }
-
-    public String getHometext() {
-        return hometext;
-    }
-
-    public void setHometext(String hometext) {
-        this.hometext = hometext;
-    }
-
-    public String getHometextShowShort2() {
-        return hometextShowShort2;
-    }
-
-    public void setHometextShowShort2(String hometextShowShort2) {
-        this.hometextShowShort2 = hometextShowShort2;
-    }
-
-    public String getTimeShow() {
-        return timeShow;
-    }
-
-    public void setTimeShow(String timeShow) {
-        this.timeShow = timeShow;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -80,12 +39,12 @@ public class HistoryArticle implements Serializable {
         this.title = title;
     }
 
-    public String getTime() {
-        return time;
+    public String getDate() {
+        return date;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     @Override

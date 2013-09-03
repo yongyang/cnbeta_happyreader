@@ -191,6 +191,7 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
 */
 
     public void updateArticleContent(final Content content) {
+        //TODO: 偶尔抛出 NPE
         titleTextView.setText(content.getTitle());
         // enable marquee
         titleTextView.setSelected(true);

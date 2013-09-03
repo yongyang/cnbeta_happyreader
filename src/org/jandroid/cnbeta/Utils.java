@@ -5,19 +5,48 @@ import android.content.Intent;
 import android.os.Bundle;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
+import org.jandroid.cnbeta.entity.HistoryArticle;
+import org.jandroid.cnbeta.loader.HistoryArticleListLoader;
+import org.jandroid.common.DateFormatUtils;
 import org.jandroid.common.IntentUtils;
+import org.jandroid.common.ToastUtils;
+import org.json.simple.JSONObject;
+
+import java.util.Date;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 public class Utils {
 
-    public static void openContentActivity(Activity theActivity, long sid, String title) {
+    public static void openContentActivity(final Activity theActivity, final long sid, final String title) {
         Bundle bundle = new Bundle();
         bundle.putLong("sid", sid);
         bundle.putString("title", title);
         Intent intent = IntentUtils.newIntent(theActivity, ContentActivity.class, bundle);
         theActivity.startActivity(intent);
+
+        // write history
+        new Thread(){
+            @Override
+            public void run() {
+                JSONObject jSONObject = new JSONObject();
+                jSONObject.put("sid", sid);
+                jSONObject.put("title", title);
+                jSONObject.put("date", DateFormatUtils.getDefault().format(new Date()));
+                HistoryArticle historyArticle = new HistoryArticle(jSONObject);
+                try {
+                    new HistoryArticleListLoader().writeHistory(((CnBetaApplicationContext)theActivity.getApplicationContext()).getBaseDir(), historyArticle);
+                }
+                catch (final Exception e) {
+                    theActivity.runOnUiThread(new Runnable() {
+                        public void run() {
+                            ToastUtils.showShortToast(theActivity.getApplicationContext(), e.toString());
+                        }
+                    });
+                }
+            }
+        }.start();
     }
 
     public static void openPublishCommentActivity(Activity theActivity, Content content) {

@@ -1,9 +1,6 @@
 package org.jandroid.cnbeta.fragment;
 
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -13,9 +10,7 @@ import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HistoryArticleListAsyncTask;
-import org.jandroid.cnbeta.async.LoadingAsyncTask;
 import org.jandroid.cnbeta.entity.HistoryArticle;
-import org.jandroid.cnbeta.entity.RealtimeArticle;
 
 import java.util.List;
 
@@ -63,16 +58,9 @@ public class HistoryArticleListFragment extends AbstractAsyncListFragment<Histor
                 HistoryArticle article = getData(position);
                 TextView tvTitle = (TextView) convertView.findViewById(R.id.tile);
                 tvTitle.setText(article.getTitle());
-                TextView tvHometextShowShort2 = (TextView) convertView.findViewById(R.id.hometext_show_short2);
-                tvHometextShowShort2.setText(article.getHometextShowShort2());
-                TextView tvTime = (TextView) convertView.findViewById(R.id.time);
-                tvTime.setText("" + article.getTime());
-
-                TextView tvTimeShow = (TextView) convertView.findViewById(R.id.time_show);
-                tvTimeShow.setText("" + article.getTimeShow());
-
+                TextView dateTextView = (TextView) convertView.findViewById(R.id.date);
+                dateTextView.setText(article.getDate());
                 return convertView;
-
             }
         };
     }

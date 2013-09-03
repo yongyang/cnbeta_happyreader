@@ -81,7 +81,7 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
     @Override
     public Content fromDisk(File baseDir) throws Exception {
         String html = readDisk(baseDir);
-        Document document = Jsoup.parse(html, "utf-8");
+        Document document = Jsoup.parse(html, "UTF-8");
         //JSoup会自动补上 <html><body>标签，所以需要取得 div.body
         Element bodyElement = document.select("div.body").first();
         return parseBodyElement(bodyElement);
