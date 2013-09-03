@@ -12,11 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.Toast;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
-import org.jandroid.cnbeta.fragment.EditorRecommendListFragment;
-import org.jandroid.cnbeta.fragment.HotCommentListFragment;
-import org.jandroid.cnbeta.fragment.RealtimeArticleListFragment;
 import org.jandroid.cnbeta.fragment.TopicArticleListFragment;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.common.AnimateUtils;
@@ -166,13 +162,6 @@ public class TopicActivity extends BaseActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // 每次都会调用该方法, 可以动态改变 menu
         return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // destroy application
-        ((CnBetaApplication) getApplicationContext()).exit();
     }
 
     protected void startRotateRefreshActionView() {

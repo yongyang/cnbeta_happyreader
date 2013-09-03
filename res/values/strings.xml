@@ -5,6 +5,7 @@
 
     <string name="label_article_content">阅读新闻</string>
     <string name="label_history">历史记录</string>
+    <string name="label_topic">主题</string>
 
     <string name="search_item">Settings</string>
 
@@ -32,5 +33,5 @@
     <string name="tab_argue">争议榜</string>
     <string name="tab_recommend">推荐榜</string>
     <string name="tab_topics">选择主题</string>
-    <string name="tab_topic_articles">新闻列表</string>
+    <string name="tab_topic_articles">资讯列表</string>
 </resources>

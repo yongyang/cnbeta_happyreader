@@ -180,13 +180,6 @@ public class MainActivity extends BaseActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // destroy application
-        ((CnBetaApplication) getApplicationContext()).exit();
-    }
-
     protected void startRotateRefreshActionView() {
         if (refreshMenuItem != null) {
             /* Attach a rotating ImageView to the refresh item as an ActionView */

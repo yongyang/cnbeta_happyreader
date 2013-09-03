@@ -41,7 +41,7 @@
                 />
         <activity
                 android:name=".TopicActivity"
-                android:label="@string/ranks"
+                android:label="@string/label_topic"
                 android:launchMode="singleTask"
                 />
         <activity
