@@ -142,9 +142,9 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         //refresh actionitem
         getMenuInflater().inflate(R.menu.search_refresh_menu, menu);
-        getMenuInflater().inflate(R.menu.content_menu, menu);
         refreshMenuItem = menu.findItem(R.id.refresh_item);
 
+        getMenuInflater().inflate(R.menu.content_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -155,7 +155,13 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
-        return ((CnBetaApplication)getApplicationContext()).onOptionsItemSelected(this, mi);
+        ((CnBetaApplication)getApplicationContext()).onOptionsItemSelected(this, mi);
+        switch (mi.getItemId()) {
+            case R.id.comment_item:
+                Utils.openPublishCommentActivity(this, getContent());
+                break;
+        }
+        return true;
     }
 
     public static abstract class ActionTabFragmentPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
