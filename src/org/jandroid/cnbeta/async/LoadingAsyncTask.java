@@ -52,6 +52,10 @@ public abstract class LoadingAsyncTask<R>  extends BaseAsyncTask<R> {
         if(!isLocalLoadOnly()) {
             return (R)loader.fromHttp(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
         }
+        return defaultResult();
+    }
+
+    protected R defaultResult() {
         return null;
     }
 

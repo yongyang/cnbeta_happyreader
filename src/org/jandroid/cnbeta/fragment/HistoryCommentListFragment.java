@@ -10,7 +10,9 @@ import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HistoryArticleListAsyncTask;
+import org.jandroid.cnbeta.async.HistoryCommentListAsyncTask;
 import org.jandroid.cnbeta.entity.HistoryArticle;
+import org.jandroid.cnbeta.entity.HistoryComment;
 import org.jandroid.common.async.AsyncResult;
 
 import java.util.Collections;
@@ -20,9 +22,9 @@ import java.util.List;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 
-public class HistoryListFragment extends AbstractAsyncListFragment<HistoryArticle> {
+public class HistoryCommentListFragment extends AbstractAsyncListFragment<HistoryComment> {
 
-    public HistoryListFragment() {
+    public HistoryCommentListFragment() {
 
     }
 
@@ -55,13 +57,16 @@ public class HistoryListFragment extends AbstractAsyncListFragment<HistoryArticl
 
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
-                    convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_history_item, null);
+                    convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_history_comment_item, null);
                 }
-                HistoryArticle article = getData(position);
+                HistoryComment comment = getData(position);
                 TextView tvTitle = (TextView) convertView.findViewById(R.id.tile);
-                tvTitle.setText(article.getTitle());
+                tvTitle.setText(comment.getTitle());
+                TextView tvComment = (TextView) convertView.findViewById(R.id.comment);
+                tvComment.setText(comment.getComment());
+
                 TextView dateTextView = (TextView) convertView.findViewById(R.id.date);
-                dateTextView.setText(article.getDate());
+                dateTextView.setText(comment.getDate());
                 return convertView;
             }
         };
@@ -69,17 +74,17 @@ public class HistoryListFragment extends AbstractAsyncListFragment<HistoryArticl
 
     @Override
     protected void loadData() {
-        executeAsyncTaskMultiThreading(new HistoryArticleListAsyncTask() {
+        executeAsyncTaskMultiThreading(new HistoryCommentListAsyncTask() {
 
             @Override
-            public HasAsync<List<HistoryArticle>> getAsyncContext() {
-                return HistoryListFragment.this;
+            public HasAsync<List<HistoryComment>> getAsyncContext() {
+                return HistoryCommentListFragment.this;
             }
         });
     }
 
     @Override
-    public void onSuccess(AsyncResult<List<HistoryArticle>> listAsyncResult) {
+    public void onSuccess(AsyncResult<List<HistoryComment>> listAsyncResult) {
         clearData();
         // reverse!!!
         Collections.reverse(listAsyncResult.getResult());

@@ -1,43 +1,39 @@
 package org.jandroid.cnbeta.loader;
 
-import org.apache.commons.io.FileUtils;
-import org.jandroid.cnbeta.entity.HistoryArticle;
+import org.jandroid.cnbeta.entity.HistoryComment;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class HistoryArticleListLoader extends AbstractLoader<List<HistoryArticle>> {
+public class HistoryCommentListLoader extends AbstractLoader<List<HistoryComment>> {
 
     private final static Object LOCK = new Object();
 
     @Override
-    public List<HistoryArticle> fromHttp(File baseDir) throws Exception {
+    public List<HistoryComment> fromHttp(File baseDir) throws Exception {
         throw new UnsupportedOperationException("load history article list from http.");
     }
 
-    private List<HistoryArticle> parseHistoryArticleListJSON(JSONArray articleListJSONArray){
-        List<HistoryArticle> articleList = new ArrayList<HistoryArticle>(articleListJSONArray.size());
+    private List<HistoryComment> parseHistoryArticleListJSON(JSONArray articleListJSONArray){
+        List<HistoryComment> commentList = new ArrayList<HistoryComment>(articleListJSONArray.size());
         for(int i=0; i<articleListJSONArray.size(); i++){
             JSONObject jsonObject = (JSONObject)articleListJSONArray.get(i);
-            HistoryArticle article = new HistoryArticle(jsonObject);
-            articleList.add(article);
+            HistoryComment comment = new HistoryComment(jsonObject);
+            commentList.add(comment);
         }
-        return articleList;
+        return commentList;
     }
 
     @Override
-    public List<HistoryArticle> fromDisk(File baseDir) throws Exception {
+    public List<HistoryComment> fromDisk(File baseDir) throws Exception {
         //read json file from SD Card
         JSONArray historyArticlesJSONArray = readDiskJSONArray(baseDir);
         return parseHistoryArticleListJSON(historyArticlesJSONArray);
@@ -55,32 +51,33 @@ public class HistoryArticleListLoader extends AbstractLoader<List<HistoryArticle
     }
 
 
-    public void writeHistory(File baseDir, HistoryArticle historyArticle) throws Exception{
+    public void writeHistory(File baseDir, HistoryComment historyComment) throws Exception{
         synchronized (LOCK) {
             JSONArray historyArticlesJSONArray = readDiskJSONArray(baseDir);
             for(Iterator<JSONObject> it= historyArticlesJSONArray.iterator(); it.hasNext(); ){
                 JSONObject article = it.next();
-                if(article.get("sid").equals(historyArticle.getSid())) {
+                if(article.get("sid").equals(historyComment.getSid())) {
                     it.remove();
                     break;
                 }
             }
-            historyArticlesJSONArray.add(historyArticleToJSONObject(historyArticle));
+            historyArticlesJSONArray.add(historyArticleToJSONObject(historyComment));
             writeDisk(baseDir, historyArticlesJSONArray.toJSONString());
         }
     }
 
-    private JSONObject historyArticleToJSONObject( HistoryArticle historyArticle) throws Exception {
+    private JSONObject historyArticleToJSONObject( HistoryComment historyComment) throws Exception {
         JSONObject jSONObject = new JSONObject();
-        jSONObject.put("sid", historyArticle.getSid());
-        jSONObject.put("title", historyArticle.getTitle());
-        jSONObject.put("date", historyArticle.getDate());
+        jSONObject.put("sid", historyComment.getSid());
+        jSONObject.put("title", historyComment.getTitle());
+        jSONObject.put("date", historyComment.getDate());
+        jSONObject.put("comment", historyComment.getComment());
         return jSONObject;
     }
 
     @Override
     public String getFileName() {
-        return "history_article";
+        return "history_comment";
     }
 
 }

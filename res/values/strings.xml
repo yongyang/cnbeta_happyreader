@@ -34,4 +34,6 @@
     <string name="tab_recommend">推荐榜</string>
     <string name="tab_topics">选择主题</string>
     <string name="tab_topic_articles">资讯列表</string>
+    <string name="tab_history_article">我的阅读</string>
+    <string name="tab_history_comment">我的评论</string>
 </resources>

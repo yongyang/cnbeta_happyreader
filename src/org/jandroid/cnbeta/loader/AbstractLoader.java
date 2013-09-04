@@ -51,7 +51,7 @@ public abstract class AbstractLoader<T> {
         return new File(baseDir, getFileName());
     }
 
-    public final boolean isCached(File baseDir) {
+    public boolean isCached(File baseDir) {
         return getFile(baseDir).exists();
     }
 }
