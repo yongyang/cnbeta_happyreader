@@ -3,6 +3,9 @@ package org.jandroid.cnbeta;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.WriterOutputStream;
+import org.apache.http.util.EntityUtils;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.entity.HistoryArticle;
@@ -12,7 +15,12 @@ import org.jandroid.common.IntentUtils;
 import org.jandroid.common.ToastUtils;
 import org.json.simple.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.StringWriter;
 import java.util.Date;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -92,9 +100,9 @@ public class Utils {
         theActivity.startActivity(intent);
     }
 
-    public static void openImageViewerActivity(Activity theActivity, String imgSrc) {
+    public static void openImageViewerActivity(Activity theActivity, String imgOsrc) {
         Bundle bundle = new Bundle();
-        bundle.putString("src", imgSrc);
+        bundle.putString("src", imgOsrc);
         Intent intent = IntentUtils.newIntent(theActivity, ImageViewerActivity.class, bundle);
         theActivity.startActivity(intent);
     }

@@ -131,7 +131,7 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
             //设置一个默认图片
             imgElement.attr("src", "file:///android_asset/default_img.png");
             //设置 alt，作为对照记录
-            imgElement.attr("osrc", imgSrc);
+            imgElement.attr("alt", imgSrc);
             //设置 onclick 事件， topics 图片除外
             if((imgElement.parent().attr("href") != null && imgElement.parent().attr("href").contains("topics"))) {
                 String topicHref = imgElement.parent().attr("href");
@@ -139,7 +139,7 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
                 imgElement.attr("onclick", "javascript:window.JS.openTopic(" + topic + ")");
             }
             else {
-                imgElement.attr("onclick", "javascript:window.JS.openImage(this.src)");
+                imgElement.attr("onclick", "javascript:window.JS.openImage(this.alt)");
             }
         }
         //必须最后设置 content，以保证img src 已经修改

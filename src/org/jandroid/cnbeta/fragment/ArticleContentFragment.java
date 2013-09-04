@@ -100,9 +100,9 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
 
         contentWebView.addJavascriptInterface(new Object() {
             @JavascriptInterface
-            public void openImage(String img) {
+            public void openImage(String imgSrc) {
                 //新开一个 Transparent Activity, 使用 WebView 打开大图
-                Utils.openImageViewerActivity(getActivity(), img);
+                Utils.openImageViewerActivity(getActivity(), imgSrc);
             }
 
             @JavascriptInterface

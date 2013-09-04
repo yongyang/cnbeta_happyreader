@@ -1,11 +1,21 @@
 package org.jandroid.cnbeta;
 
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.ReaderInputStream;
+import org.apache.commons.io.output.WriterOutputStream;
+import org.jandroid.cnbeta.loader.ImageBytesLoader;
 import org.jandroid.common.BaseActivity;
+
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -18,8 +28,17 @@ public class ImageViewerActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String imgSrc = getIntent().getExtras().getString("src");
         setContentView(R.layout.image_viewer);
+
+        byte[] imageData = {};
+        String imageSrc = getIntent().getExtras().getString("src");
+        try {
+            imageData = new ImageBytesLoader(imageSrc).fromDisk(((CnBetaApplication)getApplicationContext()).getBaseDir());
+        }
+        catch (Exception e) {
+
+        }
+        final String image64 = Base64.encodeToString(imageData, Base64.NO_WRAP);
         topContainer = (ViewGroup) findViewById(R.id.imageviewer_container);
         //右上角的关闭按钮
         Button closeButton = (Button)findViewById(R.id.closeButton);
@@ -35,7 +54,7 @@ public class ImageViewerActivity extends BaseActivity {
 //        webView.getSettings().setAllowFileAccessFromFileURLs(true);
 //        webView.getSettings().setDisplayZoomControls(true);
 //        webView.getSettings().setUseWideViewPort(true);
-        imageWebView.loadDataWithBaseURL("", "<img src='" + imgSrc + "'>", "text/html", "UTF-8", "");
+        imageWebView.loadDataWithBaseURL("", "<img src='data:image/*;base64," + image64 + "'>", "text/html", "UTF-8", "");
     }
 
 
