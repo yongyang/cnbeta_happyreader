@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import org.jandroid.cnbeta.R;
@@ -36,7 +37,7 @@ public abstract class AbstractRefreshListFragment<T> extends AbstractAsyncListFr
         lineLayoutRefresh = (LinearLayout) footbarRefresh.findViewById(R.id.linelayout_refresh);
         tvLastTimeRefresh = (TextView) footbarRefresh.findViewById(R.id.refresh_last_time);
 
-        mListView.addFooterView(footbarRefresh);
+        ((ListView)mListView).addFooterView(footbarRefresh);
 
         footbarRefresh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

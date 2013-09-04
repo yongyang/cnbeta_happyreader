@@ -2,6 +2,7 @@ package org.jandroid.cnbeta.view;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -27,6 +28,10 @@ public class PagingView {
 
     public static PagingView load(LayoutInflater inflater, int resource) {
         return new PagingView((LinearLayout) inflater.inflate(resource, null, false));
+    }
+
+    public static PagingView load(LayoutInflater inflater, ViewGroup root, int resource) {
+        return new PagingView((LinearLayout) inflater.inflate(resource, root, true));
     }
 
     private PagingView(LinearLayout rootView) {
@@ -71,6 +76,10 @@ public class PagingView {
 
     public void setOnClickListener(View.OnClickListener onClickListener) {
         footerbar.setOnClickListener(onClickListener);
+    }
+
+    public void setClickable(boolean clickable) {
+        footerbar.setClickable(clickable);
     }
 
 }

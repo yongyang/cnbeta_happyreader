@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
-import org.jandroid.cnbeta.fragment.ArticleListFragment;
 import org.jandroid.cnbeta.fragment.TopicArticleListFragment;
 import org.jandroid.cnbeta.fragment.TopicListFragment;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
@@ -54,6 +53,7 @@ public class TopicActivity extends BaseActivity {
         setContentView(R.layout.main);
 
         final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -88,6 +88,14 @@ public class TopicActivity extends BaseActivity {
         this.topicName = topicName;
     }
 
+    public void openTopic(long topicId, String topicName) {
+        setTopicId(topicId);
+        setTopicName(topicName);
+        TopicArticleListFragment fragment = (TopicArticleListFragment)fragments[1];
+        fragment.updateTopicId(getTopicId());
+        getActionBar().setSelectedNavigationItem(1);
+    }
+
     private void initViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
@@ -104,7 +112,7 @@ public class TopicActivity extends BaseActivity {
                     case 0:
                         if (fragments[0] == null) {
                             //TODO: 创建 TopicListFragment
-                            fragments[0] = new TopicListFragment(ArticleListLoader.Type.ALL);
+                            fragments[0] = new TopicListFragment();
                         }
                         return fragments[0];
                     case 1:

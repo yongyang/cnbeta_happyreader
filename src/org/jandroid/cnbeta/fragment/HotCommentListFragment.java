@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
@@ -37,7 +38,7 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
     public void onActivityCreated(Bundle savedInstanceState) {
 
         footerPagingView = PagingView.load(getActivity().getLayoutInflater(), R.layout.listvew_footbar_paging);
-        mListView.addFooterView(footerPagingView.getRootView());
+        ((ListView)mListView).addFooterView(footerPagingView.getRootView());
 
         footerPagingView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

@@ -28,7 +28,7 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
 
     public final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    protected ListView mListView;
+    protected AbsListView mListView;
 
     private final List<T> loadedDatas = new ArrayList<T>();
 

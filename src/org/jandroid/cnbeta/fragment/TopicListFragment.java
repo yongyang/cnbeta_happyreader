@@ -8,17 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
-import org.jandroid.cnbeta.Utils;
-import org.jandroid.cnbeta.async.ArticleListAsyncTask;
+import org.jandroid.cnbeta.TopicActivity;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HasAsyncDelegate;
 import org.jandroid.cnbeta.async.ImageAsyncTask;
-import org.jandroid.cnbeta.entity.Article;
-import org.jandroid.cnbeta.loader.ArticleListLoader;
+import org.jandroid.cnbeta.async.TopicListAsyncTask;
+import org.jandroid.cnbeta.entity.Topic;
+import org.jandroid.cnbeta.loader.TopicListLoader;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.adapter.AsyncImageAdapter;
@@ -30,21 +32,16 @@ import java.util.List;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 
-public class TopicListFragment extends AbstractAsyncListFragment<Article> {
+public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
 
-    // 新闻分类
-    private ArticleListLoader.Type category;
 
     protected int page = 0;
 
     private PagingView footerPagingView;
 
-    public TopicListFragment(ArticleListLoader.Type category) {
-        this.category = category;
-    }
+    private LinearLayout footerContainer;
 
-    public ArticleListLoader.Type getCategory() {
-        return category;
+    public TopicListFragment() {
     }
 
     public int getPage() {
@@ -53,11 +50,10 @@ public class TopicListFragment extends AbstractAsyncListFragment<Article> {
 
     @Override
     protected void loadData() {
-        executeAsyncTaskMultiThreading(new ArticleListAsyncTask() {
-            @Override
-            protected ArticleListLoader.Type getCategory() {
-                return TopicListFragment.this.getCategory();
-            }
+        if(getPage() == TopicListLoader.MAX_PAGE) { //已经达到最大页
+            return;
+        }
+        executeAsyncTaskMultiThreading(new TopicListAsyncTask() {
 
             @Override
             protected int getPage() {
@@ -65,7 +61,7 @@ public class TopicListFragment extends AbstractAsyncListFragment<Article> {
             }
 
             @Override
-            public HasAsync<List<Article>> getAsyncContext() {
+            public HasAsync<List<Topic>> getAsyncContext() {
                 return TopicListFragment.this;
             }
         });
@@ -73,22 +69,17 @@ public class TopicListFragment extends AbstractAsyncListFragment<Article> {
 
     protected void reloadData() {
         page = 0;
-        executeAsyncTaskMultiThreading(new ArticleListAsyncTask() {
-            @Override
-            protected ArticleListLoader.Type getCategory() {
-                return TopicListFragment.this.getCategory();
-            }
-
+        executeAsyncTaskMultiThreading(new TopicListAsyncTask() {
             @Override
             protected int getPage() {
                 return TopicListFragment.this.getPage() + 1;
             }
 
             @Override
-            public HasAsync<List<Article>> getAsyncContext() {
-                return new HasAsyncDelegate<List<Article>>(TopicListFragment.this) {
+            public HasAsync<List<Topic>> getAsyncContext() {
+                return new HasAsyncDelegate<List<Topic>>(TopicListFragment.this) {
                     @Override
-                    public void onSuccess(AsyncResult<List<Article>> listAsyncResult) {
+                    public void onSuccess(AsyncResult<List<Topic>> listAsyncResult) {
                         clearData();
                         super.onSuccess(listAsyncResult);
                     }
@@ -105,14 +96,19 @@ public class TopicListFragment extends AbstractAsyncListFragment<Article> {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View rootView = inflater.inflate(R.layout.topics, container, false);
+        mListView = (GridView) rootView.findViewById(R.id.gridview_topics);
+        footerContainer = (LinearLayout) rootView.findViewById(R.id.footer_container);
+        return rootView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        footerPagingView = PagingView.load(getActivity().getLayoutInflater(), R.layout.listvew_footbar_paging);
 
-        mListView.addFooterView(footerPagingView.getRootView());
+
+        footerPagingView = PagingView.load(getActivity().getLayoutInflater(), footerContainer, R.layout.listvew_footbar_paging);
+
+//        ((ListView)mListView).addFooterView(footerPagingView.getRootView());
 
         footerPagingView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -195,26 +191,13 @@ public class TopicListFragment extends AbstractAsyncListFragment<Article> {
 
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
-                    convertView = getActivity().getLayoutInflater().inflate(R.layout.lv_article_item, null);
+                    convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_topic_item, null);
                 }
-                Article article = getData(position);
-                TextView tvTitleShow = (TextView) convertView.findViewById(R.id.tile_show);
-                tvTitleShow.setText(article.getTitleShow());
-                TextView tvHometextShowShort = (TextView) convertView.findViewById(R.id.hometext_show_short);
-                tvHometextShowShort.setText(article.getHometextShowShort());
-                TextView tvComments = (TextView) convertView.findViewById(R.id.comments);
-                tvComments.setText("" + article.getComments());
-                TextView tvCounter = (TextView) convertView.findViewById(R.id.counter);
-                tvCounter.setText("" + article.getCounter());
-                TextView tvTime = (TextView) convertView.findViewById(R.id.time);
-                tvTime.setText("" + article.getTime());
-        /*
-                        TextView tvScore = (TextView)convertView.findViewById(R.id.score);
-                        tvScore.setText(""+article.getScore());
-        */
+                Topic article = getData(position);
+                TextView tvName = (TextView) convertView.findViewById(R.id.name);
+                tvName.setText(article.getName());
 
-
-                ImageView ivLogo = (ImageView) convertView.findViewById(R.id.item_logo);
+                ImageView ivLogo = (ImageView) convertView.findViewById(R.id.logo);
                 // queue to image load list or set a cached bitmap if has been cached
                 ivLogo.setImageBitmap(queueImageView(position, ivLogo, article.getLogo()));
                 return convertView;
@@ -224,8 +207,9 @@ public class TopicListFragment extends AbstractAsyncListFragment<Article> {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Article article = (Article) getAdapter().getItem(position);
-        Utils.openContentActivity(getActivity(), article.getSid(), article.getTitleShow());
+        Topic article = (Topic) getAdapter().getItem(position);
+        TopicActivity topicActivity = (TopicActivity) getActivity();
+        topicActivity.openTopic(article.getId(), article.getName());
     }
 
     @Override
@@ -244,10 +228,18 @@ public class TopicListFragment extends AbstractAsyncListFragment<Article> {
 
 
     @Override
-    public void onSuccess(AsyncResult<List<Article>> listAsyncResult) {
+    public void onSuccess(AsyncResult<List<Topic>> listAsyncResult) {
         super.onSuccess(listAsyncResult);
-        page++;
-        footerPagingView.setPage(page);
+        footerPagingView.setPage(++page);
+//            mListView.smoothScrollToPosition(mListView.getAdapter().getCount());
+        if(getPage() == TopicListLoader.MAX_PAGE) {
+            footerPagingView.setClickable(false);
+        }
+    }
+
+    @Override
+    public void onFailure(AsyncResult<List<Topic>> listAsyncResult) {
+        super.onFailure(listAsyncResult);
     }
 
     @Override

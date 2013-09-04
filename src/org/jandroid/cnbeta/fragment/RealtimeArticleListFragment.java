@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
@@ -39,7 +40,7 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
     public void onActivityCreated(Bundle savedInstanceState) {
         footerRefreshView = RefreshView.load(getActivity().getLayoutInflater(), R.layout.listview_footbar_refresh);
 
-        mListView.addFooterView(footerRefreshView.getRootView());
+        ((ListView)mListView).addFooterView(footerRefreshView.getRootView());
 
         footerRefreshView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

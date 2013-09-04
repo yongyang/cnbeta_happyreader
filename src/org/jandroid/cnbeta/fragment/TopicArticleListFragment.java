@@ -3,24 +3,22 @@ package org.jandroid.cnbeta.fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
-import org.jandroid.cnbeta.async.ArticleListAsyncTask;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HasAsyncDelegate;
 import org.jandroid.cnbeta.async.ImageAsyncTask;
 import org.jandroid.cnbeta.async.TopicArticleListAsyncTask;
-import org.jandroid.cnbeta.entity.Article;
+import org.jandroid.cnbeta.entity.Topic;
 import org.jandroid.cnbeta.entity.TopicArticle;
-import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.adapter.AsyncImageAdapter;
@@ -37,8 +35,8 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
     protected long topicId;
     protected String topicName;
 
-    protected int page = 1;
-    protected int splitPage = 1;
+    protected int page = 0;
+    protected int splitPage = 0;
     public static final int splitCount = 3;
 
     private PagingView footerPagingView;
@@ -75,12 +73,12 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 
             @Override
             protected int getSplitPage() {
-                return TopicArticleListFragment.this.getSplitPage();
+                return TopicArticleListFragment.this.getSplitPage() + 1;
             }
 
             @Override
             protected int getPage() {
-                return TopicArticleListFragment.this.getPage();
+                return TopicArticleListFragment.this.getPage() + 1;
             }
 
             @Override
@@ -90,9 +88,16 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
         });
     }
 
+    public void updateTopicId(long topicId){
+        this.topicId = topicId;
+        clearData();
+        getAdapter().notifyDataSetChanged();
+        reloadData();
+    }
+
     protected void reloadData() {
-        page = 1;
-        splitPage =1;
+        page = 0;
+        splitPage = 0;
         executeAsyncTaskMultiThreading(new TopicArticleListAsyncTask() {
             @Override
             protected long getId() {
@@ -101,12 +106,12 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 
             @Override
             protected int getSplitPage() {
-                return TopicArticleListFragment.this.getSplitPage();
+                return TopicArticleListFragment.this.getSplitPage() + 1;
             }
 
             @Override
             protected int getPage() {
-                return TopicArticleListFragment.this.getPage();
+                return TopicArticleListFragment.this.getPage() + 1;
             }
 
             @Override
@@ -120,7 +125,6 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
                 };
             }
         });
-
     }
 
     @Override
@@ -132,7 +136,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
     public void onActivityCreated(Bundle savedInstanceState) {
         footerPagingView = PagingView.load(getActivity().getLayoutInflater(), R.layout.listvew_footbar_paging);
 
-        mListView.addFooterView(footerPagingView.getRootView());
+        ((ListView)mListView).addFooterView(footerPagingView.getRootView());
 
         footerPagingView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -215,7 +219,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
-                    convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_topic_item, null);
+                    convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_topic_article_item, null);
                 }
                 TopicArticle article = getData(position);
                 TextView tvTitleShow = (TextView) convertView.findViewById(R.id.tile_show);
@@ -265,15 +269,15 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
     public void onSuccess(AsyncResult<List<TopicArticle>> listAsyncResult) {
         super.onSuccess(listAsyncResult);
 
-        //需要控制显示正确的页面，第一页时  1/4 2/4 4/3 4/4
-        if(page == 1 && splitPage < splitCount) {
-            footerPagingView.setPage(page, splitPage + "/" + splitCount);
+        //需要控制显示正确的页面，第一页时  1/3 2/3 1
+        if(page + 1 == 1 && splitPage + 1 < splitCount) {
             splitPage++;
+            footerPagingView.setPage(page, splitPage + "/" + splitCount);
         }
         else {
-            footerPagingView.setPage(page);
             page++;
-            splitPage = 1;
+            splitPage = 0;
+            footerPagingView.setPage(page);
         }
     }
 
