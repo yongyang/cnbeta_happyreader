@@ -135,8 +135,9 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
             //设置 onclick 事件， topics 图片除外
             if((imgElement.parent().attr("href") != null && imgElement.parent().attr("href").contains("topics"))) {
                 String topicHref = imgElement.parent().attr("href");
-                String topic = topicHref.substring("/topics/".length(),topicHref.indexOf(".htm"));
-                imgElement.attr("onclick", "javascript:window.JS.openTopic(" + topic + ")");
+                String topicId = topicHref.substring("/topics/".length(),topicHref.indexOf(".htm"));
+                String topicName = imgElement.attr("title");
+                imgElement.attr("onclick", "javascript:window.JS.openTopic(\'" + topicId + "\',\'" + topicName + "\')");
             }
             else {
                 imgElement.attr("onclick", "javascript:window.JS.openImage(this.alt)");
