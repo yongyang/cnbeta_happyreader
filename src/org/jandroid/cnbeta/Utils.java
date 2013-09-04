@@ -74,6 +74,14 @@ public class Utils {
         theActivity.startActivity(intent);
     }
 
+    public static void openTopicActivity(Activity theActivity, long topicId, String topicName) {
+        Intent intent = IntentUtils.newIntent(theActivity, TopicActivity.class);
+        intent.putExtra("id", topicId);
+        intent.putExtra("name", topicName);
+        theActivity.startActivity(intent);
+    }
+
+
     public static void openTypesActivity(Activity theActivity) {
         Intent intent = IntentUtils.newIntent(theActivity, TypesActivity.class);
         theActivity.startActivity(intent);

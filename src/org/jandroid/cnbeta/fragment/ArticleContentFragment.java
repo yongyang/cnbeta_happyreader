@@ -107,12 +107,13 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
 
             @JavascriptInterface
             public void openTopic(String topicId, String topicName) {
+                Utils.openTopicActivity(getActivity(), Long.parseLong(topicId), topicName);
+/*
                 Intent intent = new Intent();
                 intent.putExtra("topicId", topicId);
                 intent.putExtra("topicName", topicName);
-                //			intent.setClass(context, ShowWebImageActivity.class);
-                //			context.startActivity(intent);
                 Toast.makeText(getActivity(), "点击了Topic: " + topicId + ", " + topicName, Toast.LENGTH_SHORT).show();
+*/
             }
 
         }, "JS");

@@ -85,8 +85,9 @@ public class MainActivity extends BaseActivity {
 
         public void onPageSelected(int position) {
             final ActionBar actionBar = getActionBar();
-            actionBar.setSelectedNavigationItem(position);
-
+            if(actionBar.getSelectedNavigationIndex() != position) {
+                actionBar.setSelectedNavigationItem(position);
+            }
         }
 
         public void onPageScrollStateChanged(int state) {

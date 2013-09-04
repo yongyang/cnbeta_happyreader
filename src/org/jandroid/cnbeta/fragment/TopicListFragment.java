@@ -17,9 +17,7 @@ import org.jandroid.cnbeta.async.ArticleListAsyncTask;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HasAsyncDelegate;
 import org.jandroid.cnbeta.async.ImageAsyncTask;
-import org.jandroid.cnbeta.async.TopicArticleListAsyncTask;
 import org.jandroid.cnbeta.entity.Article;
-import org.jandroid.cnbeta.entity.TopicArticle;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.BaseActivity;
@@ -32,32 +30,21 @@ import java.util.List;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 
-public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArticle> {
+public class TopicListFragment extends AbstractAsyncListFragment<Article> {
 
-    protected long topicId;
-    protected String topicName;
+    // 新闻分类
+    private ArticleListLoader.Type category;
 
-    protected int page = 1;
-    protected int splitPage = 1;
-    public static final int splitCount = 3;
+    protected int page = 0;
 
     private PagingView footerPagingView;
 
-    public TopicArticleListFragment(long topicId, String topicName) {
-        this.topicId = topicId;
-        this.topicName = topicName;
+    public TopicListFragment(ArticleListLoader.Type category) {
+        this.category = category;
     }
 
-    public int getSplitPage() {
-        return splitPage;
-    }
-
-    public long getTopicId() {
-        return topicId;
-    }
-
-    public String getTopicName() {
-        return topicName;
+    public ArticleListLoader.Type getCategory() {
+        return category;
     }
 
     public int getPage() {
@@ -66,54 +53,42 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 
     @Override
     protected void loadData() {
-        executeAsyncTaskMultiThreading(new TopicArticleListAsyncTask() {
-
+        executeAsyncTaskMultiThreading(new ArticleListAsyncTask() {
             @Override
-            protected long getId() {
-                return TopicArticleListFragment.this.getTopicId();
-            }
-
-            @Override
-            protected int getSplitPage() {
-                return TopicArticleListFragment.this.getSplitPage();
+            protected ArticleListLoader.Type getCategory() {
+                return TopicListFragment.this.getCategory();
             }
 
             @Override
             protected int getPage() {
-                return TopicArticleListFragment.this.getPage();
+                return TopicListFragment.this.getPage() + 1;
             }
 
             @Override
-            public HasAsync<List<TopicArticle>> getAsyncContext() {
-                return TopicArticleListFragment.this;
+            public HasAsync<List<Article>> getAsyncContext() {
+                return TopicListFragment.this;
             }
         });
     }
 
     protected void reloadData() {
-        page = 1;
-        splitPage =1;
-        executeAsyncTaskMultiThreading(new TopicArticleListAsyncTask() {
+        page = 0;
+        executeAsyncTaskMultiThreading(new ArticleListAsyncTask() {
             @Override
-            protected long getId() {
-                return TopicArticleListFragment.this.getTopicId();
-            }
-
-            @Override
-            protected int getSplitPage() {
-                return TopicArticleListFragment.this.getSplitPage();
+            protected ArticleListLoader.Type getCategory() {
+                return TopicListFragment.this.getCategory();
             }
 
             @Override
             protected int getPage() {
-                return TopicArticleListFragment.this.getPage();
+                return TopicListFragment.this.getPage() + 1;
             }
 
             @Override
-            public HasAsync<List<TopicArticle>> getAsyncContext() {
-                return new HasAsyncDelegate<List<TopicArticle>>(TopicArticleListFragment.this) {
+            public HasAsync<List<Article>> getAsyncContext() {
+                return new HasAsyncDelegate<List<Article>>(TopicListFragment.this) {
                     @Override
-                    public void onSuccess(AsyncResult<List<TopicArticle>> listAsyncResult) {
+                    public void onSuccess(AsyncResult<List<Article>> listAsyncResult) {
                         clearData();
                         super.onSuccess(listAsyncResult);
                     }
@@ -126,6 +101,11 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -176,7 +156,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
                     public HasAsync<Bitmap> getAsyncContext() {
                         return new HasAsync<Bitmap>() {
                             public CnBetaApplicationContext getCnBetaApplicationContext() {
-                                return TopicArticleListFragment.this.getCnBetaApplicationContext();
+                                return TopicListFragment.this.getCnBetaApplicationContext();
                             }
 
                             public void onProgressShow() {
@@ -215,15 +195,17 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
-                    convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_topic_item, null);
+                    convertView = getActivity().getLayoutInflater().inflate(R.layout.lv_article_item, null);
                 }
-                TopicArticle article = getData(position);
+                Article article = getData(position);
                 TextView tvTitleShow = (TextView) convertView.findViewById(R.id.tile_show);
                 tvTitleShow.setText(article.getTitleShow());
-                TextView tvHometextShowShort2 = (TextView) convertView.findViewById(R.id.hometext_show_short2);
-                tvHometextShowShort2.setText(article.getHometextShowShort2());
+                TextView tvHometextShowShort = (TextView) convertView.findViewById(R.id.hometext_show_short);
+                tvHometextShowShort.setText(article.getHometextShowShort());
                 TextView tvComments = (TextView) convertView.findViewById(R.id.comments);
                 tvComments.setText("" + article.getComments());
+                TextView tvCounter = (TextView) convertView.findViewById(R.id.counter);
+                tvCounter.setText("" + article.getCounter());
                 TextView tvTime = (TextView) convertView.findViewById(R.id.time);
                 tvTime.setText("" + article.getTime());
         /*
@@ -242,7 +224,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        TopicArticle article =  (TopicArticle)getAdapter().getItem(position);
+        Article article = (Article) getAdapter().getItem(position);
         Utils.openContentActivity(getActivity(), article.getSid(), article.getTitleShow());
     }
 
@@ -262,19 +244,10 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 
 
     @Override
-    public void onSuccess(AsyncResult<List<TopicArticle>> listAsyncResult) {
+    public void onSuccess(AsyncResult<List<Article>> listAsyncResult) {
         super.onSuccess(listAsyncResult);
-
-        //需要控制显示正确的页面，第一页时  1/4 2/4 4/3 4/4
-        if(page == 1 && splitPage < splitCount) {
-            footerPagingView.setPage(page, splitPage + "/" + splitCount);
-            splitPage++;
-        }
-        else {
-            footerPagingView.setPage(page);
-            page++;
-            splitPage = 1;
-        }
+        page++;
+        footerPagingView.setPage(page);
     }
 
     @Override
@@ -298,6 +271,4 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 //            stopRotateRefreshActionView();
         }
     }
-
-
 }
