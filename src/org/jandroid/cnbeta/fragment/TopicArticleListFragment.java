@@ -35,8 +35,9 @@ import java.util.List;
 public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArticle> {
 
     protected long topicId;
-    protected int page = 0;
+    protected int page = 1;
     protected int splitPage = 1;
+    public static final int splitCount = 3;
 
     private PagingView footerPagingView;
 
@@ -72,7 +73,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 
             @Override
             protected int getPage() {
-                return TopicArticleListFragment.this.getPage() + 1;
+                return TopicArticleListFragment.this.getPage();
             }
 
             @Override
@@ -83,7 +84,8 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
     }
 
     protected void reloadData() {
-        page = 0;
+        page = 1;
+        splitPage =1;
         executeAsyncTaskMultiThreading(new TopicArticleListAsyncTask() {
             @Override
             protected long getId() {
@@ -97,7 +99,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 
             @Override
             protected int getPage() {
-                return TopicArticleListFragment.this.getPage() + 1;
+                return TopicArticleListFragment.this.getPage();
             }
 
             @Override
@@ -238,7 +240,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Article article = (Article) getAdapter().getItem(position);
+        TopicArticle article =  (TopicArticle)getAdapter().getItem(position);
         Utils.openContentActivity(getActivity(), article.getSid(), article.getTitleShow());
     }
 
@@ -260,10 +262,17 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
     @Override
     public void onSuccess(AsyncResult<List<TopicArticle>> listAsyncResult) {
         super.onSuccess(listAsyncResult);
-        page++;
 
-        //TODO: 需要控制显示正确的页面，第一页时  1/4 2/4 4/3 4/4
-        footerPagingView.setPage(page);
+        //需要控制显示正确的页面，第一页时  1/4 2/4 4/3 4/4
+        if(page == 1 && splitPage < splitCount) {
+            footerPagingView.setPage(page, splitPage + "/" + splitCount);
+            splitPage++;
+        }
+        else {
+            footerPagingView.setPage(page);
+            page++;
+            splitPage = 1;
+        }
     }
 
     @Override
@@ -287,4 +296,6 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 //            stopRotateRefreshActionView();
         }
     }
+
+
 }

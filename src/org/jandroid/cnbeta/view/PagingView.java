@@ -51,6 +51,11 @@ public class PagingView {
         tvPage.setText("" + page);
     }
 
+    public void setPage(int page, String displayPage) {
+        this.page = page;
+        tvPage.setText(displayPage);
+    }
+
     public void onProgressShow() {
         footerbar.setClickable(false);
         progressBarLineLinearLayout.setVisibility(View.VISIBLE);
