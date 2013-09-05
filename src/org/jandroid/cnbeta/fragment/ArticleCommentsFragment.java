@@ -2,18 +2,14 @@ package org.jandroid.cnbeta.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.ContentActivity;
@@ -25,12 +21,9 @@ import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.loader.SupportCommentPoster;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.BaseFragment;
-import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
 import org.json.simple.JSONObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,10 +39,6 @@ public class ArticleCommentsFragment extends BaseFragment {
 
     private BaseAdapter adapter;
 
-    private TextView scoreTextView;
-    private TextView reasonTextView;
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +53,7 @@ public class ArticleCommentsFragment extends BaseFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.comments_listview, container, false);
+        ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.listview_comments, container, false);
         commentsListView = (ListView)rootView.findViewById(R.id.comments_listview);
         commentsListView.setItemsCanFocus(true);
 		return rootView;
@@ -89,7 +78,7 @@ public class ArticleCommentsFragment extends BaseFragment {
 
             public View getView(int position, View convertView, ViewGroup parent) {
                 if(convertView == null) {
-                    convertView = getActivity().getLayoutInflater().inflate(R.layout.comment_item, null);
+                    convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_comment_item, null);
                 }
                 final Comment comment = comments.get(position);
                 TextView positionTextView = (TextView)convertView.findViewById(R.id.position);
@@ -105,22 +94,25 @@ public class ArticleCommentsFragment extends BaseFragment {
                 TextView commentTextView = (TextView)convertView.findViewById(R.id.comment);
                 commentTextView.setText(comment.getComment());
 
-                scoreTextView = (TextView)convertView.findViewById(R.id.score);
+                final TextView supportTextView = (TextView)convertView.findViewById(R.id.supportText);
+                final TextView againstTextView = (TextView)convertView.findViewById(R.id.againstText);
+
+                final TextView scoreTextView = (TextView)convertView.findViewById(R.id.score);
                 scoreTextView.setText("" + comment.getScore());
-                reasonTextView = (TextView)convertView.findViewById(R.id.reason);
+                final TextView reasonTextView = (TextView)convertView.findViewById(R.id.reason);
                 reasonTextView.setText("" + comment.getReason());
 
-                LinearLayout supportLinearLayout = (LinearLayout)convertView.findViewById(R.id.supportLinearLayout);
-                LinearLayout againstLinearLayout = (LinearLayout)convertView.findViewById(R.id.againstLinearLayout);
+                final LinearLayout supportLinearLayout = (LinearLayout)convertView.findViewById(R.id.supportLinearLayout);
+                final LinearLayout againstLinearLayout = (LinearLayout)convertView.findViewById(R.id.againstLinearLayout);
                 TextView replyButton = (TextView)convertView.findViewById(R.id.reply);
                 supportLinearLayout.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        supportComment(comment, true);
+                        supportComment(supportLinearLayout, supportTextView, scoreTextView, comment, true);
                     }
                 });
                 againstLinearLayout.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        supportComment(comment, false);
+                        supportComment(againstLinearLayout, againstTextView, reasonTextView, comment, false);
                     }
                 });
                 replyButton.setOnClickListener(new View.OnClickListener() {
@@ -140,7 +132,7 @@ public class ArticleCommentsFragment extends BaseFragment {
         super.onStart();
     }
 
-    private void supportComment(final Comment comment, final boolean isSupport) {
+    private void supportComment(final LinearLayout supportLinearLayout, final TextView supportTextView, final TextView scoreTextView, final Comment comment, final boolean isSupport) {
         ((BaseActivity)getActivity()).executeAsyncTaskMultiThreading(new SupportCommentAsyncTask() {
             @Override
             protected Comment getComment() {
@@ -172,9 +164,30 @@ public class ArticleCommentsFragment extends BaseFragment {
                     }
 
                     public void onSuccess(AsyncResult<JSONObject> jsonObjectAsyncResult) {
-                        //TODO: +1
-                        ToastUtils.showShortToast(getActivity(), "supported");
+                        supportLinearLayout.setClickable(false);
 
+                        ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 1.8f, 1.0f, 1.8f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                        scaleAnimation.setFillAfter(false);
+                        scaleAnimation.setDuration(200);
+                        scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
+                            public void onAnimationStart(Animation animation) {
+                            }
+
+                            public void onAnimationEnd(Animation animation) {
+                                if (isSupport) {
+                                    supportTextView.setText("已支持");
+                                    scoreTextView.setText("" + (comment.getScore() + 1));
+                                }
+                                else {
+                                    supportTextView.setText("已反对");
+                                    scoreTextView.setText("" + (comment.getReason() + 1));
+                                }
+                            }
+
+                            public void onAnimationRepeat(Animation animation) {
+                            }
+                        });
+                        scoreTextView.startAnimation(scaleAnimation);
                     }
                 };
             }

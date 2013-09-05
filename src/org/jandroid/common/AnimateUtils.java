@@ -21,7 +21,7 @@ public class AnimateUtils {
      */
     public static void move(View v, int startX, int toX, int startY, int toY) {
         TranslateAnimation animation = new TranslateAnimation(startX, toX, startY, toY);
-        animation.setDuration(200);
+        animation.setDuration(5000);
         animation.setFillAfter(true);
         v.startAnimation(animation);
     }
@@ -35,7 +35,8 @@ public class AnimateUtils {
 
     public static void fadeout(View v) {
         AlphaAnimation animation = new AlphaAnimation(1.0f, 0.0f);
-        animation.setFillAfter(false);
+        animation.setFillAfter(true);
+        animation.setDuration(500);
         v.startAnimation(animation);
     }
 

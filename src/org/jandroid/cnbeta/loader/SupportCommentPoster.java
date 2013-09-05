@@ -73,9 +73,9 @@ public class SupportCommentPoster extends AbstractLoader<JSONObject> {
 
 
         Map<String, String> datas = new HashMap<String, String>();
-        datas.put("op", op.getType());
-        datas.put("sid", "" + comment.getSid());
-        datas.put("tid", "" + comment.getTid());
+        datas.put("op", getOp().getType());
+        datas.put("sid", "" + getComment().getSid());
+        datas.put("tid", "" + getComment().getTid());
         //需要这个 token 来执行 support/against
         datas.put("YII_CSRF_TOKEN", CnBetaHttpClient.getInstance().getCookie("YII_CSRF_TOKEN"));
         
