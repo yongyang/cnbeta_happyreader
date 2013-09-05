@@ -22,6 +22,7 @@ import org.json.simple.JSONObject;
 public class ReplyCommentActivity extends BaseActivity {
 
     private ProgressBar captchaProgressBar;
+    private ProgressBar postProgressBar;
 
     private ImageView captchaImageView;
 
@@ -67,6 +68,8 @@ public class ReplyCommentActivity extends BaseActivity {
                 reply();
             }
         });
+
+        postProgressBar = (ProgressBar)findViewById(R.id.post_progessBar);
     }
 
     public Comment getComment() {
@@ -124,7 +127,7 @@ public class ReplyCommentActivity extends BaseActivity {
     }
 
 
-    public void reply(){
+    private void reply(){
         executeAsyncTaskMultiThreading(new PublishCommentAsyncTask() {
             @Override
             protected long getSid() {
@@ -154,16 +157,24 @@ public class ReplyCommentActivity extends BaseActivity {
                     }
 
                     public void onProgressShow() {
-
+                        postProgressBar.setVisibility(View.VISIBLE);
                     }
 
                     public void onProgressDismiss() {
-
+                        postProgressBar.setVisibility(View.INVISIBLE);
                     }
 
                     public void onSuccess(AsyncResult<JSONObject> jsonObjectAsyncResult) {
-                        finish();
-                        ToastUtils.showShortToast(ReplyCommentActivity.this, jsonObjectAsyncResult.getResult().toJSONString());
+                        JSONObject resultJSON = jsonObjectAsyncResult.getResult();
+                        if(!resultJSON.get("status").equals("success")) {
+                            initCaptcha(); // 重新生成验证码
+                            String message = ((JSONObject)resultJSON.get("result")).get("message").toString();
+                            ToastUtils.showShortToast(ReplyCommentActivity.this, message);
+                        }
+                        else {
+                            finish();
+                        //TODO: reload comments
+                        }
                     }
 
                     public void onFailure(AsyncResult<JSONObject> jsonObjectAsyncResult) {
@@ -178,5 +189,4 @@ public class ReplyCommentActivity extends BaseActivity {
     public void onDestroy() {
         super.onDestroy();
     }
-
 }
