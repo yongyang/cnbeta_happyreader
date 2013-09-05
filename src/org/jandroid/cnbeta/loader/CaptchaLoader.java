@@ -23,10 +23,14 @@ public class CaptchaLoader extends AbstractLoader<Bitmap> {
 
     public static final String URL_TEMPLATE = "http://www.cnbeta.com/captcha.htm?refresh=1&_={0}";
     
-    private Content content;
+    private long sid;
 
-    public CaptchaLoader(Content content) {
-        this.content = content;
+    public CaptchaLoader(long sid) {
+        this.sid = sid;
+    }
+
+    public long getSid() {
+        return sid;
     }
 
     @Override
@@ -37,7 +41,7 @@ public class CaptchaLoader extends AbstractLoader<Bitmap> {
         headers.put("X-Requested-With", "XMLHttpRequest");
         //this header is optional, better to add
         //httpget.addHeader("Referer", "http://www.cnbeta.com/articles/250243.htm");
-        headers.put("Referer", "http://www.cnbeta.com/articles/" + content.getSid() + ".htm");
+        headers.put("Referer", "http://www.cnbeta.com/articles/" + getSid() + ".htm");
 
         String url = MessageFormat.format(URL_TEMPLATE, "" + System.currentTimeMillis());
         String responseJSONString = CnBetaHttpClient.getInstance().httpGet(url, headers);
@@ -50,7 +54,7 @@ public class CaptchaLoader extends AbstractLoader<Bitmap> {
         Map<String, String> headers2 = new HashMap<String, String>();
         //this header is optional, better to add
         //httpget.addHeader("Referer", "http://www.cnbeta.com/articles/250243.htm");
-        headers2.put("Referer", "http://www.cnbeta.com/articles/" + content.getSid() + ".htm");
+        headers2.put("Referer", "http://www.cnbeta.com/articles/" + getSid() + ".htm");
         byte[] imageBytes = CnBetaHttpClient.getInstance().httpGetBytes(captchaImageURL, headers2);       
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
     }

@@ -10,7 +10,7 @@ import org.json.simple.JSONObject;
  */
 public abstract class PublishCommentAsyncTask extends LoadingAsyncTask<JSONObject> {
 
-    protected abstract Content getContent();
+    protected abstract long getSid();
 
     protected abstract String getCommentContent();
 
@@ -28,6 +28,6 @@ public abstract class PublishCommentAsyncTask extends LoadingAsyncTask<JSONObjec
 
     @Override
     public AbstractLoader<JSONObject> getLoader() {
-        return new PublishCommentPoster(getContent(), getCommentContent(), getPid(), getSeccode());
+        return new PublishCommentPoster(getSid(), getCommentContent(), getPid(), getSeccode());
     }
 }

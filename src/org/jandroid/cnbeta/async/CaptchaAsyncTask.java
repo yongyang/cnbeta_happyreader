@@ -11,7 +11,7 @@ import org.jandroid.cnbeta.loader.CaptchaLoader;
  */
 public abstract class CaptchaAsyncTask extends LoadingAsyncTask<Bitmap> {
 
-    protected abstract Content getContent();
+    protected abstract long getSid();
 
     @Override
     protected boolean isRemoteLoadOnly() {
@@ -20,6 +20,6 @@ public abstract class CaptchaAsyncTask extends LoadingAsyncTask<Bitmap> {
 
     @Override
     public AbstractLoader<Bitmap> getLoader() {
-        return new CaptchaLoader(getContent());
+        return new CaptchaLoader(getSid());
     }
 }
