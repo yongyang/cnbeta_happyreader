@@ -38,7 +38,7 @@ public class PublishCommentPoster extends AbstractLoader<JSONObject> {
     //只支持匿名
 //    private String name;
     
-    private Content content;
+    private long sid;
     
     private String commentContent;
     
@@ -48,23 +48,23 @@ public class PublishCommentPoster extends AbstractLoader<JSONObject> {
     
     
     //匿名新发布
-    public PublishCommentPoster(Content content, String commentContent, String seccode) {
-        this.content = content;
+    public PublishCommentPoster(long sid, String commentContent, String seccode) {
+        this.sid = sid;
         this.commentContent = commentContent;
         this.seccode = seccode;
     }
     
     //匿名回复
-    public PublishCommentPoster(Content content, String commentContent, long pid, String seccode) {
-        this.content = content;
+    public PublishCommentPoster(long sid, String commentContent, long pid, String seccode) {
+        this.sid = sid;
         this.pid = pid;
         this.commentContent = commentContent;
         this.seccode = seccode;
     }
 
 
-    public Content getContent() {
-        return content;
+    public long getSid() {
+        return sid;
     }
 
     public String getCommentContent() {
@@ -87,13 +87,13 @@ public class PublishCommentPoster extends AbstractLoader<JSONObject> {
         headers.put("X-Requested-With", "XMLHttpRequest");
         //this header is optional, better to add
         //httpget.addHeader("Referer", "http://www.cnbeta.com/articles/250243.htm");
-        headers.put("Referer", "http://www.cnbeta.com/articles/" + content.getSid() + ".htm");
+        headers.put("Referer", "http://www.cnbeta.com/articles/" + getSid() + ".htm");
 
 
         Map<String, String> datas = new HashMap<String, String>();
         datas.put("op", "publish");
         datas.put("name", "");
-        datas.put("sid", "" + content.getSid());
+        datas.put("sid", "" + getSid());
         if(getPid() != 0) {
             datas.put("pid", "" + getPid());
         }
@@ -106,7 +106,7 @@ public class PublishCommentPoster extends AbstractLoader<JSONObject> {
         
         //if failed
         if(response.indexOf("error") > 0){
-            throw new Exception("Failed to publish comment: " + content.getSid() + ", " + response );
+            throw new Exception("Failed to publish comment: " + getSid() + ", " + response );
         }
 
         return (JSONObject) JSONValue.parse(response);
