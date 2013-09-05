@@ -2,6 +2,7 @@ package org.jandroid.cnbeta.loader;
 
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.cnbeta.entity.Content;
+import org.jandroid.common.UnicodeUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -103,11 +104,8 @@ public class PublishCommentPoster extends AbstractLoader<JSONObject> {
         datas.put("YII_CSRF_TOKEN", CnBetaHttpClient.getInstance().getCookie("YII_CSRF_TOKEN"));
         
         String response = CnBetaHttpClient.getInstance().httpPost(URL_TEMPLATE, headers, datas);
-        
-        //if failed
-        if(response.indexOf("error") > 0){
-            throw new Exception("Failed to publish comment: " + getSid() + ", " + response );
-        }
+
+        response = UnicodeUtils.unicode2Chinese(response);
 
         return (JSONObject) JSONValue.parse(response);
     }

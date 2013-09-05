@@ -8,11 +8,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import org.jandroid.cnbeta.async.CaptchaAsyncTask;
 import org.jandroid.cnbeta.async.HasAsync;
+import org.jandroid.cnbeta.async.PublishCommentAsyncTask;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
+import org.json.simple.JSONObject;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -22,6 +24,10 @@ public class ReplyCommentActivity extends BaseActivity {
     private ProgressBar captchaProgressBar;
 
     private ImageView captchaImageView;
+
+    private TextView commentTextView;
+    private TextView captchaTextView;
+
 
     private Comment comment;
 
@@ -45,6 +51,9 @@ public class ReplyCommentActivity extends BaseActivity {
         TextView replyCommentTitleTextView = (TextView)findViewById(R.id.re_comment);
         replyCommentTitleTextView.setText(comment.getComment());
 
+        commentTextView = (TextView)findViewById(R.id.comment);
+        captchaTextView = (TextView)findViewById(R.id.seccode);
+
         TextView cancelTextView = (TextView)findViewById(R.id.cancel);
         cancelTextView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -58,6 +67,10 @@ public class ReplyCommentActivity extends BaseActivity {
                 reply();
             }
         });
+    }
+
+    public Comment getComment() {
+        return comment;
     }
 
     @Override
@@ -83,7 +96,7 @@ public class ReplyCommentActivity extends BaseActivity {
             public HasAsync<Bitmap> getAsyncContext() {
                 return new HasAsync<Bitmap>() {
                     public CnBetaApplicationContext getCnBetaApplicationContext() {
-                        return (CnBetaApplication)ReplyCommentActivity.this.getApplicationContext();
+                        return (CnBetaApplication) ReplyCommentActivity.this.getApplicationContext();
                     }
 
                     public void onProgressShow() {
@@ -112,7 +125,53 @@ public class ReplyCommentActivity extends BaseActivity {
 
 
     public void reply(){
+        executeAsyncTaskMultiThreading(new PublishCommentAsyncTask() {
+            @Override
+            protected long getSid() {
+                return getComment().getSid();
+            }
 
+            @Override
+            protected long getPid() {
+                return getComment().getTid();
+            }
+
+            @Override
+            protected String getCommentContent() {
+                return commentTextView.getText().toString();
+            }
+
+            @Override
+            protected String getSeccode() {
+                return captchaTextView.getText().toString();
+            }
+
+            @Override
+            public HasAsync<JSONObject> getAsyncContext() {
+                return new HasAsync<JSONObject>() {
+                    public CnBetaApplicationContext getCnBetaApplicationContext() {
+                        return (CnBetaApplication) ReplyCommentActivity.this.getApplicationContext();
+                    }
+
+                    public void onProgressShow() {
+
+                    }
+
+                    public void onProgressDismiss() {
+
+                    }
+
+                    public void onSuccess(AsyncResult<JSONObject> jsonObjectAsyncResult) {
+                        finish();
+                        ToastUtils.showShortToast(ReplyCommentActivity.this, jsonObjectAsyncResult.getResult().toJSONString());
+                    }
+
+                    public void onFailure(AsyncResult<JSONObject> jsonObjectAsyncResult) {
+
+                    }
+                };
+            }
+        });
     }
 
     @Override
