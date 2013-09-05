@@ -82,7 +82,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:layout_marginTop="10.0dip"            >
+            android:layout_marginTop="10.0dip">
 
 
         <TextView
@@ -95,7 +95,8 @@
                 android:paddingLeft="20dip"
                 android:paddingRight="20dip"
                 android:background="@drawable/btn_bg_comment_selector"
-                android:text="取 消"/>
+                android:text="取 消"
+                android:layout_centerVertical="true"/>
 
         <TextView
                 android:id="@+id/send"
@@ -108,7 +109,8 @@
                 android:paddingLeft="20dip"
                 android:paddingRight="20dip"
                 android:background="@drawable/btn_bg_comment_selector"
-                android:text="回 复"/>
+                android:text="回 复"
+                android:layout_centerVertical="true"/>
 
         <ProgressBar
                 android:id="@+id/post_progessBar"
@@ -117,8 +119,10 @@
                 android:indeterminate="true"
                 android:layout_toLeftOf="@id/send"
                 android:visibility="invisible"
-                android:layout_marginRight="20dip"
-                style="?android:progressBarStyleSmall"/>
+                android:layout_marginRight="5dip"
+                style="?android:progressBarStyleSmall"
+                android:layout_alignParentStart="false"
+                android:layout_centerVertical="true"/>
 
     </RelativeLayout>
 </LinearLayout>

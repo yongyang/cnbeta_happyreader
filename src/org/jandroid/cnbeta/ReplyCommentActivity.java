@@ -128,6 +128,12 @@ public class ReplyCommentActivity extends BaseActivity {
 
 
     private void reply(){
+
+        if(commentTextView.getText().toString().isEmpty() || captchaTextView.getText().toString().isEmpty() ) {
+            ToastUtils.showShortToast(ReplyCommentActivity.this, "请输入评论内容和验证码！");
+            return;
+        }
+
         executeAsyncTaskMultiThreading(new PublishCommentAsyncTask() {
             @Override
             protected long getSid() {
@@ -173,7 +179,7 @@ public class ReplyCommentActivity extends BaseActivity {
                         }
                         else {
                             finish();
-                        //TODO: reload comments
+                        //TODO: 添加到 Comments list 中，并刷新 List
                         }
                     }
 
