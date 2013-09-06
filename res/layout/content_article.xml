@@ -147,14 +147,36 @@
 
         </FrameLayout>
 
-        <RatingBar
-                android:id="@+id/rating"
+        <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:stepSize="0.5"
-                android:numStars="5"
-                android:visibility="gone"
-                />
+                android:layout_gravity="center_horizontal">
+
+            <RatingBar
+                    android:id="@+id/rate_ratingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:stepSize="0.5"
+                    android:numStars="5"
+                    android:visibility="gone"/>
+            <ProgressBar
+                    android:id="@+id/rating_progessBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:visibility="gone"
+                    android:layout_gravity="center_horizontal"
+                    style="?android:progressBarStyleSmall"/>
+            <RatingBar
+                    android:id="@+id/result_ratingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:stepSize="0.5"
+                    android:numStars="5"
+                    android:isIndicator="true"
+                    android:visibility="gone"/>
+        </FrameLayout>
     </LinearLayout>
 </ScrollView>

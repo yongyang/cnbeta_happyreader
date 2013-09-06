@@ -1,8 +1,6 @@
 package org.jandroid.cnbeta.fragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -16,6 +14,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,10 +43,13 @@ public class ArticleContentFragment extends BaseFragment {
     private TextView whereTextView;
     private TextView viewNumTextView;
     private TextView commentNumTextView;
-    private RatingBar ratingBar;
     private WebView contentWebView;
-
     private LinearLayout loadingLayout;
+
+    private RatingBar rateRatingBar;
+    private RatingBar resultRatingBar;
+    private ProgressBar ratingProgressBar;
+
 
     //TODO: 支持 视频？？？
 
@@ -62,18 +64,29 @@ public class ArticleContentFragment extends BaseFragment {
         commentNumTextView = (TextView) root.findViewById(R.id.tv_commentNum);
         whereTextView = (TextView) root.findViewById(R.id.tv_where);
 
-        ratingBar = (RatingBar) root.findViewById(R.id.rating);
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+        rateRatingBar = (RatingBar) root.findViewById(R.id.rate_ratingBar);
+        resultRatingBar = (RatingBar) root.findViewById(R.id.result_ratingBar);
+        ratingProgressBar = (ProgressBar)root.findViewById(R.id.rating_progessBar);
+        setupRatingBar();
+
+        loadingLayout = (LinearLayout) root.findViewById(R.id.loadingLayout);
+        contentWebView = (WebView) root.findViewById(R.id.wv_articleContent);
+        setupWebView();
+        return root;
+    }
+
+    private void setupRatingBar() {
+        rateRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                ArticleContentFragment.this.ratingBar.setIsIndicator(true);
-                final int score = (int)(2 * ArticleContentFragment.this.ratingBar.getRating() -5);
-                ToastUtils.showShortToast(getActivity(), "评分: " + score );
+                ArticleContentFragment.this.rateRatingBar.setIsIndicator(true);
+                final int score = (int) (2 * ArticleContentFragment.this.rateRatingBar.getRating() - 5);
+                ToastUtils.showShortToast(getActivity(), "评分: " + score);
 
                 executeAsyncTaskMultiThreading(new RateArticleAsyncTask() {
 
                     @Override
                     protected long getSid() {
-                        return ((ContentActivity)getActivity()).getArticleSid();
+                        return ((ContentActivity) getActivity()).getArticleSid();
                     }
 
                     @Override
@@ -89,24 +102,28 @@ public class ArticleContentFragment extends BaseFragment {
                             }
 
                             public void onProgressShow() {
-
+                                rateRatingBar.setVisibility(View.GONE);
+                                ratingProgressBar.setVisibility(View.VISIBLE);
+                                resultRatingBar.setVisibility(View.GONE);
                             }
 
                             public void onProgressDismiss() {
-
+                                rateRatingBar.setVisibility(View.GONE);
+                                ratingProgressBar.setVisibility(View.GONE);
+                                resultRatingBar.setVisibility(View.VISIBLE);
                             }
 
                             public void onSuccess(AsyncResult<JSONObject> jsonObjectAsyncResult) {
                                 //{"status":"success","result":{"average":"0.6","count":"10"}}
                                 JSONObject resultJSON = jsonObjectAsyncResult.getResult();
-                                if(resultJSON.get("status").toString().equals("success")) {
-                                    String average = ((JSONObject)resultJSON.get("result")).get("average").toString();
-                                    String count = ((JSONObject)resultJSON.get("result")).get("count").toString();
+                                if (resultJSON.get("status").toString().equals("success")) {
+                                    String average = ((JSONObject) resultJSON.get("result")).get("average").toString();
+                                    String count = ((JSONObject) resultJSON.get("result")).get("count").toString();
                                     ToastUtils.showLongToast(getActivity(), "当前平均分: " + average + " (共 " + count + " 次打分)");
-                                    ArticleContentFragment.this.ratingBar.setRating((5.0f + Float.parseFloat(average))/2);
+                                    ArticleContentFragment.this.resultRatingBar.setRating((5.0f + Float.parseFloat(average)) / 2);
                                 }
                                 else {
-                                    String message = ((JSONObject)resultJSON.get("result")).get("message").toString();
+                                    String message = ((JSONObject) resultJSON.get("result")).get("message").toString();
                                     ToastUtils.showShortToast(getActivity(), message);
                                 }
                             }
@@ -120,8 +137,10 @@ public class ArticleContentFragment extends BaseFragment {
             }
         });
 
-        loadingLayout = (LinearLayout) root.findViewById(R.id.loadingLayout);
-        contentWebView = (WebView) root.findViewById(R.id.wv_articleContent);
+    }
+
+
+    private void setupWebView() {
         // work weird
 //        contentWebView.setBackgroundColor(R.color.cnBeta_bg_introduction);
         contentWebView.getSettings().setJavaScriptEnabled(true);
@@ -154,12 +173,6 @@ public class ArticleContentFragment extends BaseFragment {
             @JavascriptInterface
             public void openTopic(String topicId, String topicName) {
                 Utils.openTopicActivity(getActivity(), Long.parseLong(topicId), topicName);
-/*
-                Intent intent = new Intent();
-                intent.putExtra("topicId", topicId);
-                intent.putExtra("topicName", topicName);
-                Toast.makeText(getActivity(), "点击了Topic: " + topicId + ", " + topicName, Toast.LENGTH_SHORT).show();
-*/
             }
 
         }, "JS");
@@ -171,12 +184,12 @@ public class ArticleContentFragment extends BaseFragment {
                 loadingLayout.setVisibility(View.GONE);
                 contentWebView.setVisibility(View.VISIBLE);
                 //load images here, after Page Loaded
-                ((ContentActivity)getActivity()).loadImages();
+                ((ContentActivity) getActivity()).loadImages();
                 //load comments and view_num, comment_num etc
-                ((ContentActivity)getActivity()).loadComments();
+                ((ContentActivity) getActivity()).loadComments();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        ratingBar.setVisibility(View.VISIBLE);
+                        rateRatingBar.setVisibility(View.VISIBLE);
                     }
                 }, 1000);
 
@@ -214,7 +227,6 @@ public class ArticleContentFragment extends BaseFragment {
             }
 
         });
-        return root;
     }
 
     @Override
@@ -246,7 +258,7 @@ public class ArticleContentFragment extends BaseFragment {
         viewNumTextView.setText("" + content.getViewNum());
         commentNumTextView.setText("" + content.getCommentNum());
     }
-    
+
 
     public void updateImage(final String id, final byte[] imageData) {
         // 在android代码中调用javaScript方法
@@ -254,14 +266,14 @@ public class ArticleContentFragment extends BaseFragment {
 //        imageData = "file://" + ((CnBetaApplication)getActivity().getApplicationContext()).getBaseDir().getAbsolutePath()+"/" + imageData;
         contentWebView.loadUrl("javascript:(function(){" +
                 "var img = document.getElementById('" + id + "');"
-                + "img.src='data:image/*;base64,"+ image64 + "';" +
+                + "img.src='data:image/*;base64," + image64 + "';" +
                 "})()");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if(contentWebView != null) {
+        if (contentWebView != null) {
             contentWebView.onPause();
         }
     }
@@ -269,14 +281,14 @@ public class ArticleContentFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(contentWebView != null) {
+        if (contentWebView != null) {
             contentWebView.onResume();
         }
     }
 
     @Override
     public void onDestroy() {
-        if(contentWebView != null) {
+        if (contentWebView != null) {
             contentWebView.destroy();
             contentWebView = null;
         }
