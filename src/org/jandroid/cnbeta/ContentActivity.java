@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.Toast;
 import org.jandroid.cnbeta.async.ArticleCommentsAsyncTask;
 import org.jandroid.cnbeta.async.ArticleContentAsyncTask;
 import org.jandroid.cnbeta.async.HasAsync;
@@ -102,6 +101,8 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
         clockWiseRotationAnimation = AnimationUtils.loadAnimation(this, R.anim.rotation_clockwise_refresh);
         clockWiseRotationAnimation.setRepeatCount(Animation.INFINITE);
 
+        // load content only once
+        loadContent();
     }
 
     private void setupActionBar() {
@@ -134,7 +135,6 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
     @Override
     protected void onStart() {
         super.onStart();
-        loadContent();
     }
 
     @Override
@@ -158,7 +158,7 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
         ((CnBetaApplication)getApplicationContext()).onOptionsItemSelected(this, mi);
         switch (mi.getItemId()) {
             case R.id.comment_item:
-                Utils.openPublishCommentActivity(this, getContent());
+                Utils.openPublishCommentActivityForResult(this, getContent().getSid());
                 break;
         }
         return true;
@@ -257,7 +257,7 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
 
                     public void onSuccess(AsyncResult<List<Comment>> listAsyncResult) {
                         List<Comment> comments = listAsyncResult.getResult();
-                        //TODO: update view_number, update comment fragment
+                        //update view_number, update comment fragment
                         contentFragment.updateCommentNumbers(content);
                         commentsFragment.updateComments(comments);
                     }
@@ -274,7 +274,7 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode ==0 && resultCode ==0) {
-            if(data.hasExtra("comment")) {
+            if(data != null && data.hasExtra("comment")) { // 直接 finish 时， data==null
                 Comment comment = (Comment)data.getSerializableExtra("comment");
                 appendComment(comment);
             }

@@ -57,13 +57,6 @@ public class Utils {
         }.start();
     }
 
-    public static void openPublishCommentActivity(Activity theActivity, Content content) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("content", content);
-        Intent intent = IntentUtils.newIntent(theActivity, PublishCommentActivity.class, bundle);
-        theActivity.startActivity(intent);
-    }
-
     public static void openMainActivity(Activity theActivity) {
         Intent intent = IntentUtils.newIntent(theActivity, MainActivity.class);
         theActivity.startActivity(intent);
@@ -81,12 +74,12 @@ public class Utils {
         theActivity.startActivity(intent);
     }
 
-
     public static void openTypesActivity(Activity theActivity) {
         Intent intent = IntentUtils.newIntent(theActivity, TypesActivity.class);
         theActivity.startActivity(intent);
         theActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
+
 
     public static void openMRankActivity(Activity theActivity) {
         Intent intent = IntentUtils.newIntent(theActivity, MRankActivity.class);
@@ -100,8 +93,16 @@ public class Utils {
         theActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
+    public static void openPublishCommentActivityForResult(Activity theActivity, long sid) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("sid", sid);
+        Intent intent = IntentUtils.newIntent(theActivity, PublishCommentActivity.class, bundle);
+        theActivity.startActivityForResult(intent, 0);
+    }
+
     public static void openReplyCommentActivityForResult(Activity theActivity, Comment comment) {
         Bundle bundle = new Bundle();
+        bundle.putSerializable("sid", comment.getSid());
         bundle.putSerializable("comment", comment);
         Intent intent = IntentUtils.newIntent(theActivity, ReplyCommentActivity.class, bundle);
         theActivity.startActivityForResult(intent, 0);
