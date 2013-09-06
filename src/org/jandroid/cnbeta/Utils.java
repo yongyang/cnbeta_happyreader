@@ -29,11 +29,10 @@ public class Utils {
         new Thread(){
             @Override
             public void run() {
-                JSONObject jSONObject = new JSONObject();
-                jSONObject.put("sid", sid);
-                jSONObject.put("title", title);
-                jSONObject.put("date", DateFormatUtils.getDefault().format(new Date()));
-                HistoryArticle historyArticle = new HistoryArticle(jSONObject);
+                HistoryArticle historyArticle = new HistoryArticle();
+                historyArticle.setSid(sid);
+                historyArticle.setTitle(title);
+                historyArticle.setDate(DateFormatUtils.getDefault().format(new Date()));
                 try {
                     new HistoryArticleListLoader().writeHistory(((CnBetaApplicationContext)theActivity.getApplicationContext()).getBaseDir(), historyArticle);
                 }

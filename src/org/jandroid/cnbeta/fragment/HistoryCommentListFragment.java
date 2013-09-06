@@ -35,8 +35,8 @@ public class HistoryCommentListFragment extends AbstractAsyncListFragment<Histor
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        HistoryArticle article = (HistoryArticle) getAdapter().getItem(position);
-        Utils.openContentActivity(getActivity(), article.getSid(), article.getTitle());
+        HistoryComment comment = (HistoryComment) getAdapter().getItem(position);
+        Utils.openContentActivity(getActivity(), comment.getSid(), comment.getTitle());
     }
 
     @Override
@@ -59,7 +59,7 @@ public class HistoryCommentListFragment extends AbstractAsyncListFragment<Histor
                     convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_history_comment_item, null);
                 }
                 HistoryComment comment = getData(position);
-                TextView tvTitle = (TextView) convertView.findViewById(R.id.tile);
+                TextView tvTitle = (TextView) convertView.findViewById(R.id.title);
                 tvTitle.setText(comment.getTitle());
                 TextView tvComment = (TextView) convertView.findViewById(R.id.comment);
                 tvComment.setText(comment.getComment());

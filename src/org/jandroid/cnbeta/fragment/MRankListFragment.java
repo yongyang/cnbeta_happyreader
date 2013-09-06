@@ -87,7 +87,7 @@ public class MRankListFragment extends AbstractAsyncListFragment<MRankArticle> {
                     rank = " " + rank;
                 }
                 tvRank.setText(rank + ". ");
-                TextView tvTitle = (TextView) convertView.findViewById(R.id.tile);
+                TextView tvTitle = (TextView) convertView.findViewById(R.id.title);
                 tvTitle.setText(article.getTitle());
                 return convertView;
             }

@@ -13,6 +13,9 @@ public class HistoryComment implements Serializable {
     private String comment;
     private String date;
 
+    public HistoryComment() {
+    }
+
     public HistoryComment(Map<String, Object> jSONObject) {
         parse(jSONObject);
     }

@@ -77,7 +77,7 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
                     convertView = getActivity().getLayoutInflater().inflate(R.layout.lv_realtime_article_item, null);
                 }
                 RealtimeArticle article = getData(position);
-                TextView tvTitle = (TextView) convertView.findViewById(R.id.tile);
+                TextView tvTitle = (TextView) convertView.findViewById(R.id.title);
                 tvTitle.setText(article.getTitle());
                 TextView tvHometextShowShort2 = (TextView) convertView.findViewById(R.id.hometext_show_short2);
                 tvHometextShowShort2.setText(article.getHometextShowShort2());

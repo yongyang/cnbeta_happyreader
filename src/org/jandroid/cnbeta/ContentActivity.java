@@ -18,11 +18,17 @@ import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.ImageBytesLoadingAsyncTask;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
+import org.jandroid.cnbeta.entity.HistoryComment;
 import org.jandroid.cnbeta.fragment.ArticleCommentsFragment;
 import org.jandroid.cnbeta.fragment.ArticleContentFragment;
+import org.jandroid.cnbeta.loader.HistoryCommentListLoader;
 import org.jandroid.common.BaseActivity;
+import org.jandroid.common.DateFormatUtils;
+import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
+import org.json.simple.JSONObject;
 
+import java.util.Date;
 import java.util.List;
 
 public class ContentActivity extends BaseActivity implements HasAsync<Content> {
@@ -265,8 +271,31 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode ==0 && resultCode ==0) {
             if(data != null && data.hasExtra("comment")) { // 直接 finish 时， data==null
-                Comment comment = (Comment)data.getSerializableExtra("comment");
-                appendComment(comment);
+                final Comment newComment = (Comment)data.getSerializableExtra("comment");
+                appendComment(newComment);
+                        // write history
+        new Thread(){
+            @Override
+            public void run() {
+                HistoryComment historyComment = new HistoryComment();
+                historyComment.setSid(getArticleSid());
+                historyComment.setComment(newComment.getComment());
+                historyComment.setTitle(getArticleTitle());
+                historyComment.setDate(DateFormatUtils.getDefault().format(new Date()));
+
+                try {
+                    new HistoryCommentListLoader().writeHistory(((CnBetaApplicationContext)getApplicationContext()).getBaseDir(), historyComment);
+                }
+                catch (final Exception e) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            ToastUtils.showShortToast(getApplicationContext(), e.toString());
+                        }
+                    });
+                }
+            }
+        }.start();
+
             }
         }
     }

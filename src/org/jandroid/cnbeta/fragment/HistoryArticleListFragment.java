@@ -58,7 +58,7 @@ public class HistoryArticleListFragment extends AbstractAsyncListFragment<Histor
                     convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_history_article_item, null);
                 }
                 HistoryArticle article = getData(position);
-                TextView tvTitle = (TextView) convertView.findViewById(R.id.tile);
+                TextView tvTitle = (TextView) convertView.findViewById(R.id.title);
                 tvTitle.setText(article.getTitle());
                 TextView dateTextView = (TextView) convertView.findViewById(R.id.date);
                 dateTextView.setText(article.getDate());

@@ -52,7 +52,7 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
                     convertView = getActivity().getLayoutInflater().inflate(R.layout.lv_editor_recommend_article_item, null);
                 }
                 EditorRecommend article = getData(position);
-                TextView tvTitle = (TextView) convertView.findViewById(R.id.tile);
+                TextView tvTitle = (TextView) convertView.findViewById(R.id.title);
                 tvTitle.setText(article.getTitle());
                 TextView tvHometextShowShort = (TextView) convertView.findViewById(R.id.hometext_show_short);
                 tvHometextShowShort.setText(article.getHometextShowShort());

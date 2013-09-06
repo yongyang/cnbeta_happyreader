@@ -35,8 +35,8 @@ public class HistoryCommentListLoader extends AbstractLoader<List<HistoryComment
     @Override
     public List<HistoryComment> fromDisk(File baseDir) throws Exception {
         //read json file from SD Card
-        JSONArray historyArticlesJSONArray = readDiskJSONArray(baseDir);
-        return parseHistoryArticleListJSON(historyArticlesJSONArray);
+        JSONArray historyCommentJSONArray = readDiskJSONArray(baseDir);
+        return parseHistoryArticleListJSON(historyCommentJSONArray);
     }
 
     protected JSONArray readDiskJSONArray(File baseDir) throws Exception {
