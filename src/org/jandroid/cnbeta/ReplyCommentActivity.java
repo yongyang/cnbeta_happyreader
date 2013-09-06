@@ -1,5 +1,6 @@
 package org.jandroid.cnbeta;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
@@ -12,9 +13,14 @@ import org.jandroid.cnbeta.async.PublishCommentAsyncTask;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.common.BaseActivity;
+import org.jandroid.common.DateFormatUtils;
 import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
 import org.json.simple.JSONObject;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -178,8 +184,17 @@ public class ReplyCommentActivity extends BaseActivity {
                             ToastUtils.showShortToast(ReplyCommentActivity.this, message);
                         }
                         else {
+                            Comment newComment = new Comment();
+                            newComment.setName("匿名人士");
+                            newComment.setComment(getCommentContent());
+                            newComment.setSid(getSid());
+                            newComment.setDate(DateFormatUtils.getDefault().format(new Date()));
+                            newComment.setHostName("");
+                            //设置结果给 ContentActivity, 新comment 将添加到 comments list 中，并刷新 List
+                            Intent intent = new Intent();
+                            intent.putExtra("comment", newComment);
+                            ReplyCommentActivity.this.setResult(0, intent);
                             finish();
-                        //TODO: 添加到 Comments list 中，并刷新 List
                         }
                     }
 

@@ -94,32 +94,39 @@ public class ArticleCommentsFragment extends BaseFragment {
                 TextView commentTextView = (TextView)convertView.findViewById(R.id.comment);
                 commentTextView.setText(comment.getComment());
 
-                final TextView supportTextView = (TextView)convertView.findViewById(R.id.supportText);
-                final TextView againstTextView = (TextView)convertView.findViewById(R.id.againstText);
+                LinearLayout supportAgainstLinearLayout = (LinearLayout)convertView.findViewById(R.id.support_against_lineLayout);
+                if(comment.getTid() == 0) { //新发表的评论，只是暂存，无法支持和反对
+                    supportAgainstLinearLayout.setVisibility(View.INVISIBLE);
+                }
+                else {
 
-                final TextView scoreTextView = (TextView)convertView.findViewById(R.id.score);
-                scoreTextView.setText("" + comment.getScore());
-                final TextView reasonTextView = (TextView)convertView.findViewById(R.id.reason);
-                reasonTextView.setText("" + comment.getReason());
+                    final TextView supportTextView = (TextView)convertView.findViewById(R.id.supportText);
+                    final TextView againstTextView = (TextView)convertView.findViewById(R.id.againstText);
 
-                final LinearLayout supportLinearLayout = (LinearLayout)convertView.findViewById(R.id.supportLinearLayout);
-                final LinearLayout againstLinearLayout = (LinearLayout)convertView.findViewById(R.id.againstLinearLayout);
-                TextView replyButton = (TextView)convertView.findViewById(R.id.reply);
-                supportLinearLayout.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        supportComment(supportLinearLayout, supportTextView, scoreTextView, comment, true);
-                    }
-                });
-                againstLinearLayout.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        supportComment(againstLinearLayout, againstTextView, reasonTextView, comment, false);
-                    }
-                });
-                replyButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        Utils.openReplyCommentActivity(getActivity(), ((ContentActivity)getActivity()).getContent(), comment);
-                    }
-                });
+                    final TextView scoreTextView = (TextView)convertView.findViewById(R.id.score);
+                    scoreTextView.setText("" + comment.getScore());
+                    final TextView reasonTextView = (TextView)convertView.findViewById(R.id.reason);
+                    reasonTextView.setText("" + comment.getReason());
+
+                    final LinearLayout supportLinearLayout = (LinearLayout)convertView.findViewById(R.id.supportLinearLayout);
+                    final LinearLayout againstLinearLayout = (LinearLayout)convertView.findViewById(R.id.againstLinearLayout);
+                    TextView replyButton = (TextView)convertView.findViewById(R.id.reply);
+                    supportLinearLayout.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            supportComment(supportLinearLayout, supportTextView, scoreTextView, comment, true);
+                        }
+                    });
+                    againstLinearLayout.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            supportComment(againstLinearLayout, againstTextView, reasonTextView, comment, false);
+                        }
+                    });
+                    replyButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            Utils.openReplyCommentActivityForResult(getActivity(), comment);
+                        }
+                    });
+                }
                 return convertView;
             }
         };
@@ -198,6 +205,12 @@ public class ArticleCommentsFragment extends BaseFragment {
         this.comments.clear();
         this.comments.addAll(comments);
         adapter.notifyDataSetChanged();
+    }
+
+    public void appendComment(Comment comment) {
+        this.comments.add(0, comment); // 放在最上面
+        adapter.notifyDataSetChanged();
+        commentsListView.smoothScrollToPosition(0);
     }
 
     //TODO: 点击 Parent 跳转到 parent comment

@@ -271,6 +271,24 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
         );
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode ==0 && resultCode ==0) {
+            if(data.hasExtra("comment")) {
+                Comment comment = (Comment)data.getSerializableExtra("comment");
+                appendComment(comment);
+            }
+        }
+    }
+
+    // 发布/回复一个新评论时调用该方法即使显示
+    private void appendComment(Comment comment){
+        commentsFragment.appendComment(comment);
+        if(this.getActionBar().getSelectedNavigationIndex() == 0) { // 选中 comment fragment
+            this.getActionBar().setSelectedNavigationItem(1);
+        }
+    }
+
 
     private void rotateRefreshActionView() {
         if (refreshMenuItem != null) {

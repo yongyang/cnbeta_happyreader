@@ -28,6 +28,8 @@ public class Comment implements Serializable{
     
     private String token;
 
+    public Comment() {
+    }
 
     public Comment(Map<String, Object> jSonObject) {
         parse(jSonObject);

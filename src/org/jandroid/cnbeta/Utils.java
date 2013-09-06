@@ -100,12 +100,11 @@ public class Utils {
         theActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
-    public static void openReplyCommentActivity(Activity theActivity, Content content, Comment comment) {
+    public static void openReplyCommentActivityForResult(Activity theActivity, Comment comment) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable("content", content);
         bundle.putSerializable("comment", comment);
         Intent intent = IntentUtils.newIntent(theActivity, ReplyCommentActivity.class, bundle);
-        theActivity.startActivity(intent);
+        theActivity.startActivityForResult(intent, 0);
     }
 
     public static void openImageViewerActivity(Activity theActivity, String imgOsrc) {

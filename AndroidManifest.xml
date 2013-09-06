@@ -57,14 +57,14 @@
                 android:launchMode="singleTask"
                 android:theme="@style/Dialog.NoTitle"
                 />
+        <!--android:launchMode="singleTask" startActivityForResult不能是 singleTask singleInstance-->
         <activity
                 android:name=".PublishCommentActivity"
-                android:launchMode="singleTask"
                 android:theme="@style/Dialog.NoTitle"
                 />
+        <!--android:launchMode="singleTask" startActivityForResult不能是 singleTask singleInstance-->
         <activity
                 android:name=".ReplyCommentActivity"
-                android:launchMode="singleTask"
                 android:theme="@style/Dialog.NoTitle"
                 />
 

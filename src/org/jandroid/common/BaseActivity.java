@@ -4,6 +4,7 @@ import android.R;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,6 +14,8 @@ import java.util.List;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 public class BaseActivity extends Activity {
+
+    protected Handler handler = new Handler();
     
     protected Logger logger = Logger.getLogger(this.getClass());
     
@@ -80,9 +83,14 @@ public class BaseActivity extends Activity {
         }
    	}
 
-  	public void finishAnim() 	{
+    public void finishWithSlideAnimation() 	{
+    		super.finish();
+    		overridePendingTransition(android.R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+  	public void finish(int enterAnimation, int exitAnimation) 	{
    		super.finish();
-   		overridePendingTransition(android.R.anim.slide_in_left, R.anim.slide_out_right);
+   		overridePendingTransition(enterAnimation, exitAnimation);
    	}
 
    	public void finish()	{
