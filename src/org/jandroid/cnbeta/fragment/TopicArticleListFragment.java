@@ -62,7 +62,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
     }
 
     @Override
-    protected void loadData() {
+    public void loadData() {
         executeAsyncTaskMultiThreading(new TopicArticleListAsyncTask() {
 
             @Override
@@ -94,7 +94,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
         reloadData();
     }
 
-    protected void reloadData() {
+    public void reloadData() {
         page = 0;
         splitPage = 0;
         executeAsyncTaskMultiThreading(new TopicArticleListAsyncTask() {

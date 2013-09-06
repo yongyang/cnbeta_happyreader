@@ -62,7 +62,7 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
     }
 
     @Override
-    protected void loadData() {
+    public void loadData() {
         executeAsyncTaskMultiThreading(new EditorRecommendListAsyncTask() {
             @Override
             protected int getPage() {
@@ -76,7 +76,7 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
         });
     }
 
-    protected void reloadData() {
+    public void reloadData() {
         page = 0;
         executeAsyncTaskMultiThreading(new EditorRecommendListAsyncTask() {
             @Override
@@ -91,6 +91,7 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
                     public void onSuccess(AsyncResult<List<EditorRecommend>> listAsyncResult) {
                         clearData();
                         super.onSuccess(listAsyncResult);
+                        mListView.smoothScrollToPosition(0);
                     }
                 };
             }

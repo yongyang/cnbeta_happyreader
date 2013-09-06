@@ -58,11 +58,6 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         if (item.isCheckable()) {
             item.setChecked(true);
         }
-        switch (item.getItemId()) {
-            case R.id.more_item:
-                break;
-            default:
-        }
 
         switch (item.getItemId()) {
             case android.R.id.home:

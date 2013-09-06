@@ -48,7 +48,7 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
     }
 
     @Override
-    protected void loadData() {
+    public void loadData() {
         executeAsyncTaskMultiThreading(new HotCommentListAsyncTask() {
                     @Override
                     protected int getPage() {
@@ -62,7 +62,7 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
                 });
     }
 
-    protected void reloadData() {
+    public void reloadData() {
         page = 0;
         executeAsyncTaskMultiThreading(new HotCommentListAsyncTask() {
                             @Override
@@ -77,6 +77,7 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
                                     public void onSuccess(AsyncResult<List<HotComment>> listAsyncResult) {
                                         clearData();
                                         super.onSuccess(listAsyncResult);
+                                        mListView.smoothScrollToPosition(0);
                                     }
                                 };
                             }

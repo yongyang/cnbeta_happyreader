@@ -66,7 +66,7 @@ public class ArticleContentFragment extends BaseFragment {
 
         rateRatingBar = (RatingBar) root.findViewById(R.id.rate_ratingBar);
         resultRatingBar = (RatingBar) root.findViewById(R.id.result_ratingBar);
-        ratingProgressBar = (ProgressBar)root.findViewById(R.id.rating_progessBar);
+        ratingProgressBar = (ProgressBar)root.findViewById(R.id.rating_progressBar);
         setupRatingBar();
 
         loadingLayout = (LinearLayout) root.findViewById(R.id.loadingLayout);
@@ -81,38 +81,31 @@ public class ArticleContentFragment extends BaseFragment {
                 ArticleContentFragment.this.rateRatingBar.setIsIndicator(true);
                 final int score = (int) (2 * ArticleContentFragment.this.rateRatingBar.getRating() - 5);
                 ToastUtils.showShortToast(getActivity(), "评分: " + score);
-
                 executeAsyncTaskMultiThreading(new RateArticleAsyncTask() {
-
                     @Override
                     protected long getSid() {
                         return ((ContentActivity) getActivity()).getArticleSid();
                     }
-
                     @Override
                     protected int getScore() {
                         return score;
                     }
-
                     @Override
                     public HasAsync<JSONObject> getAsyncContext() {
                         return new HasAsync<JSONObject>() {
                             public CnBetaApplicationContext getCnBetaApplicationContext() {
                                 return ((ContentActivity) getActivity()).getCnBetaApplicationContext();
                             }
-
                             public void onProgressShow() {
                                 rateRatingBar.setVisibility(View.GONE);
                                 ratingProgressBar.setVisibility(View.VISIBLE);
                                 resultRatingBar.setVisibility(View.GONE);
                             }
-
                             public void onProgressDismiss() {
                                 rateRatingBar.setVisibility(View.GONE);
                                 ratingProgressBar.setVisibility(View.GONE);
                                 resultRatingBar.setVisibility(View.VISIBLE);
                             }
-
                             public void onSuccess(AsyncResult<JSONObject> jsonObjectAsyncResult) {
                                 //{"status":"success","result":{"average":"0.6","count":"10"}}
                                 JSONObject resultJSON = jsonObjectAsyncResult.getResult();
@@ -127,7 +120,6 @@ public class ArticleContentFragment extends BaseFragment {
                                     ToastUtils.showShortToast(getActivity(), message);
                                 }
                             }
-
                             public void onFailure(AsyncResult<JSONObject> jsonObjectAsyncResult) {
 
                             }
@@ -208,7 +200,7 @@ public class ArticleContentFragment extends BaseFragment {
 
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                log.e("ERRROR: " + errorCode + ", " + description + ", " + failingUrl);
+                log.e("ERROR: " + errorCode + ", " + description + ", " + failingUrl);
             }
         });
 

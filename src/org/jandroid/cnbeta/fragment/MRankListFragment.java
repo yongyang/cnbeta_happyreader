@@ -95,7 +95,7 @@ public class MRankListFragment extends AbstractAsyncListFragment<MRankArticle> {
     }
 
     @Override
-    protected void loadData() {
+    public void loadData() {
         executeAsyncTaskMultiThreading(new MRankArticleListAsyncTask() {
 
             @Override
@@ -117,7 +117,7 @@ public class MRankListFragment extends AbstractAsyncListFragment<MRankArticle> {
     }
 
     @Override
-    protected void reloadData() {
+    public void reloadData() {
         loadData();
     }
 

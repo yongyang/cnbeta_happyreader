@@ -119,9 +119,9 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
         return loadedDatas.size();
     }
 
-    protected abstract void loadData();
+    public abstract void loadData();
 
-    protected abstract void reloadData();
+    public abstract void reloadData();
 
     protected abstract BaseAdapter newAdapter();
 

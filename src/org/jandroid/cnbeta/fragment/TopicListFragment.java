@@ -49,7 +49,7 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
     }
 
     @Override
-    protected void loadData() {
+    public void loadData() {
         if(getPage() == TopicListLoader.MAX_PAGE) { //已经达到最大页
             return;
         }
@@ -67,7 +67,7 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
         });
     }
 
-    protected void reloadData() {
+    public void reloadData() {
         page = 0;
         executeAsyncTaskMultiThreading(new TopicListAsyncTask() {
             @Override

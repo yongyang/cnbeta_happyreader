@@ -53,7 +53,7 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
     }
 
     @Override
-    protected void loadData() {
+    public void loadData() {
         executeAsyncTaskMultiThreading(new ArticleListAsyncTask() {
             @Override
             protected ArticleListLoader.Type getCategory() {
@@ -72,7 +72,7 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
         });
     }
 
-    protected void reloadData() {
+    public void reloadData() {
         page = 0;
         executeAsyncTaskMultiThreading(new ArticleListAsyncTask() {
             @Override
@@ -92,6 +92,7 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
                     public void onSuccess(AsyncResult<List<Article>> listAsyncResult) {
                         clearData();
                         super.onSuccess(listAsyncResult);
+                        mListView.smoothScrollToPosition(0);
                     }
                 };
             }

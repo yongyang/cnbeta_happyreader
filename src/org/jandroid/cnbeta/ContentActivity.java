@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -94,7 +93,7 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
         setupActionBar();
 
         // load content only once
-        loadContent();
+        loadArticleContent();
     }
 
     private void setupActionBar() {
@@ -147,10 +146,14 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
     public boolean onOptionsItemSelected(MenuItem mi) {
         ((CnBetaApplication)getApplicationContext()).onOptionsItemSelected(this, mi);
         switch (mi.getItemId()) {
+            case R.id.refresh_item:
+                loadArticleContent(); // will load content and comments
+                break;
             case R.id.comment_item:
                 Utils.openPublishCommentActivityForResult(this, getContent().getSid());
                 break;
         }
+
         return true;
     }
 
@@ -160,10 +163,7 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
         }
     }
 
-    private void loadContent() {
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("加载文章中...");
-
+    private void loadArticleContent() {
         executeAsyncTaskMultiThreading(new ArticleContentAsyncTask() {
 
             @Override

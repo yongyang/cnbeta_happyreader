@@ -72,7 +72,7 @@ public class HistoryCommentListFragment extends AbstractAsyncListFragment<Histor
     }
 
     @Override
-    protected void loadData() {
+    public void loadData() {
         executeAsyncTaskMultiThreading(new HistoryCommentListAsyncTask() {
 
             @Override
@@ -91,7 +91,7 @@ public class HistoryCommentListFragment extends AbstractAsyncListFragment<Histor
     }
 
     @Override
-    protected void reloadData() {
+    public void reloadData() {
         loadData();
     }
 }

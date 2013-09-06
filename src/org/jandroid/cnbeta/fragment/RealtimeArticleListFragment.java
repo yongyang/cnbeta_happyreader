@@ -94,12 +94,12 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
     }
 
     @Override
-    protected void loadData() {
+    public void loadData() {
         reloadData();
     }
 
     @Override
-    protected void reloadData() {
+    public void reloadData() {
         executeAsyncTaskMultiThreading(new RealtimeArticleListAsyncTask() {
 
             @Override

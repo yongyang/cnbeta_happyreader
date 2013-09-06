@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Toast;
+import org.jandroid.cnbeta.fragment.AbstractAsyncListFragment;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
 import org.jandroid.cnbeta.fragment.EditorRecommendListFragment;
 import org.jandroid.cnbeta.fragment.HotCommentListFragment;
@@ -29,7 +30,7 @@ public class MainActivity extends BaseActivity {
     private static final String SELECTED_ITEM = "selected_item";
 
     public final static int[] tabs = new int[]{R.string.tab_quanbuzixun, R.string.tab_shishigengxin, R.string.tab_bianjituijian, R.string.tab_jingcaipinglun};
-    private final Fragment[] fragments = new Fragment[tabs.length];
+    private final AbstractAsyncListFragment[] fragments = new AbstractAsyncListFragment[tabs.length];
 
     private ViewPager mViewPager;
 
@@ -162,7 +163,13 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
+        switch (mi.getItemId()) {
+            case R.id.refresh_item:
+                fragments[getActionBar().getSelectedNavigationIndex()].reloadData();
+                break;
+        }
         return ((CnBetaApplication)getApplicationContext()).onOptionsItemSelected(this, mi);
+
     }
 
     @Override

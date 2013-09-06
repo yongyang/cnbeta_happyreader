@@ -161,13 +161,14 @@
                     android:numStars="5"
                     android:visibility="gone"/>
             <ProgressBar
-                    android:id="@+id/rating_progessBar"
+                    android:id="@+id/rating_progressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:indeterminate="true"
                     android:visibility="gone"
                     android:layout_gravity="center_horizontal"
-                    style="?android:progressBarStyleSmall"/>
+                    style="?android:progressBarStyle"
+                    android:layout_marginBottom="8dip"/>
             <RatingBar
                     android:id="@+id/result_ratingBar"
                     android:layout_width="wrap_content"
