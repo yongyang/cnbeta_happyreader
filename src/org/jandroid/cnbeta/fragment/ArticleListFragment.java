@@ -196,7 +196,7 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
 
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
-                    convertView = getActivity().getLayoutInflater().inflate(R.layout.lv_article_item, null);
+                    convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_article_item, null);
                 }
                 Article article = getData(position);
                 TextView tvTitleShow = (TextView) convertView.findViewById(R.id.tile_show);

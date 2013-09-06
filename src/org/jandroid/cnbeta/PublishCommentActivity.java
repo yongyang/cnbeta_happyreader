@@ -120,14 +120,14 @@ public class PublishCommentActivity extends BaseActivity {
                     }
 
                     public void onSuccess(AsyncResult<Bitmap> bitmapAsyncResult) {
-                        captchaImageView.setImageBitmap(bitmapAsyncResult.getResult());
+                        captchaImageView.setImageResource(R.drawable.default_img);
                         captchaImageView.setVisibility(View.VISIBLE);
                     }
 
                     public void onFailure(AsyncResult<Bitmap> bitmapAsyncResult) {
-                        //TODO: 显示请刷新提示图片
+                        captchaImageView.setImageResource(R.drawable.default_img);
                         captchaImageView.setVisibility(View.VISIBLE);
-                        logger.e("获取验证码失败，点击刷新！");
+                        ToastUtils.showLongToast(PublishCommentActivity.this, "验证码获取失败，点击图片刷新！");
                     }
                 };
             }
