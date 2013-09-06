@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import org.jandroid.cnbeta.fragment.AbstractAsyncListFragment;
 import org.jandroid.cnbeta.fragment.HistoryArticleListFragment;
 import org.jandroid.cnbeta.fragment.HistoryCommentListFragment;
 import org.jandroid.common.BaseActivity;
@@ -21,10 +22,8 @@ public class HistoryActivity extends BaseActivity {
         }
     }
 
-    private static final String SELECTED_ITEM = "selected_item";
-
     public final static int[] tabs = new int[]{R.string.tab_history_article, R.string.tab_history_comment};
-    private final Fragment[] fragments = new Fragment[tabs.length];
+    private final AbstractAsyncListFragment[] fragments = new AbstractAsyncListFragment[tabs.length];
 
     private ViewPager mViewPager;
 
@@ -140,6 +139,11 @@ public class HistoryActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
+        switch (mi.getItemId()) {
+            case R.id.refresh_item:
+                fragments[getActionBar().getSelectedNavigationIndex()].reloadData();
+                break;
+        }
         return ((CnBetaApplicationContext)getApplicationContext()).onOptionsItemSelected(this, mi);
     }
 

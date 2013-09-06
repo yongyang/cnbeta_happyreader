@@ -91,7 +91,6 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
                     public void onSuccess(AsyncResult<List<EditorRecommend>> listAsyncResult) {
                         clearData();
                         super.onSuccess(listAsyncResult);
-                        mListView.smoothScrollToPosition(0);
                     }
                 };
             }

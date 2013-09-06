@@ -211,6 +211,5 @@ public class ArticleCommentsFragment extends BaseFragment {
         adapter.notifyDataSetChanged();
         commentsListView.smoothScrollToPosition(0);
     }
-
     //TODO: 点击 Parent 跳转到 parent comment
 }

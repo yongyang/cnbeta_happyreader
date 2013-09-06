@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import org.jandroid.cnbeta.fragment.AbstractAsyncListFragment;
 import org.jandroid.cnbeta.fragment.TopicArticleListFragment;
 import org.jandroid.cnbeta.fragment.TopicListFragment;
 import org.jandroid.common.BaseActivity;
@@ -25,7 +26,7 @@ public class TopicActivity extends BaseActivity {
     private static final String SELECTED_ITEM = "selected_item";
 
     public final static int[] tabs = new int[]{R.string.tab_topics, R.string.tab_topic_articles};
-    private final Fragment[] fragments = new Fragment[tabs.length];
+    private final AbstractAsyncListFragment[] fragments = new AbstractAsyncListFragment[tabs.length];
 
     private ViewPager mViewPager;
 
@@ -102,7 +103,6 @@ public class TopicActivity extends BaseActivity {
                 switch (position) {
                     case 0:
                         if (fragments[0] == null) {
-                            //TODO: 创建 TopicListFragment
                             fragments[0] = new TopicListFragment();
                         }
                         return fragments[0];
@@ -192,6 +192,11 @@ public class TopicActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
+        switch (mi.getItemId()) {
+            case R.id.refresh_item:
+                fragments[getActionBar().getSelectedNavigationIndex()].reloadData();
+                break;
+        }
         return ((CnBetaApplication)getApplicationContext()).onOptionsItemSelected(this, mi);
     }
 

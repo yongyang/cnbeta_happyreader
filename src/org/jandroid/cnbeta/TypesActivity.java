@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import org.jandroid.cnbeta.fragment.AbstractAsyncListFragment;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.common.BaseActivity;
@@ -24,8 +25,8 @@ public class TypesActivity extends BaseActivity {
 
     private static final String SELECTED_ITEM = "selected_item";
 
-    public final static int[] tabs2 = new int[]{R.string.tab_dig, R.string.tab_software, R.string.tab_industry, R.string.tab_interact};
-    private final Fragment[] fragments2 = new Fragment[tabs2.length];
+    public final static int[] tabs = new int[]{R.string.tab_dig, R.string.tab_software, R.string.tab_industry, R.string.tab_interact};
+    private final AbstractAsyncListFragment[] fragments = new AbstractAsyncListFragment[tabs.length];
 
     private ViewPager mViewPager;
     private ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
@@ -39,25 +40,25 @@ public class TypesActivity extends BaseActivity {
         public Fragment getItem(int position) {
                 switch (position) {
                     case 0:
-                        if(fragments2[0] == null) {
-                            fragments2[0] = new ArticleListFragment(ArticleListLoader.Type.DIG);
+                        if(fragments[0] == null) {
+                            fragments[0] = new ArticleListFragment(ArticleListLoader.Type.DIG);
                         }
-                        return fragments2[0];
+                        return fragments[0];
                     case 1:
-                        if(fragments2[1] == null) {
-                            fragments2[1] = new ArticleListFragment(ArticleListLoader.Type.SOFT);
+                        if(fragments[1] == null) {
+                            fragments[1] = new ArticleListFragment(ArticleListLoader.Type.SOFT);
                         }
-                        return fragments2[1];
+                        return fragments[1];
                     case 2:
-                        if(fragments2[2] == null) {
-                            fragments2[2] = new ArticleListFragment(ArticleListLoader.Type.INDUSTRY);
+                        if(fragments[2] == null) {
+                            fragments[2] = new ArticleListFragment(ArticleListLoader.Type.INDUSTRY);
                         }
-                        return fragments2[2];
+                        return fragments[2];
                     case 3:
-                        if(fragments2[3] == null) {
-                            fragments2[3] = new ArticleListFragment(ArticleListLoader.Type.INTERACT);
+                        if(fragments[3] == null) {
+                            fragments[3] = new ArticleListFragment(ArticleListLoader.Type.INTERACT);
                         }
-                        return fragments2[3];
+                        return fragments[3];
                     default:
                         // 4 tabs
                         return null;
@@ -116,7 +117,7 @@ public class TypesActivity extends BaseActivity {
 
     private void setupActionBar() {
         final ActionBar actionBar = getActionBar();
-        for(int resourceId : tabs2){
+        for(int resourceId : tabs){
             //全部资讯, 实时更新, 阅读历史
             actionBar.addTab(actionBar.newTab().setText(resourceId).setTabListener(pagerAdapter));
         }
@@ -149,11 +150,18 @@ public class TypesActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+                //refresh actionitem
+        getMenuInflater().inflate(R.menu.search_refresh_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
+        switch (mi.getItemId()) {
+            case R.id.refresh_item:
+                fragments[getActionBar().getSelectedNavigationIndex()].reloadData();
+                break;
+        }
         return ((CnBetaApplication)getApplicationContext()).onOptionsItemSelected(this, mi);
     }
 

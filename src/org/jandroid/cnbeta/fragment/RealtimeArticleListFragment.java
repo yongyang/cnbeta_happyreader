@@ -109,7 +109,6 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
                     public void onSuccess(AsyncResult<List<RealtimeArticle>> listAsyncResult) {
                         clearData();
                         super.onSuccess(listAsyncResult);
-                        mListView.smoothScrollToPosition(0);
                     }
                 };
             }

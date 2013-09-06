@@ -145,13 +145,12 @@ public class MRankActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
+        switch (mi.getItemId()) {
+            case R.id.refresh_item:
+                fragments[getActionBar().getSelectedNavigationIndex()].reloadData();
+                break;
+        }
         return ((CnBetaApplication)getApplicationContext()).onOptionsItemSelected(this, mi);
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // 每次都会调用该方法, 可以动态改变 menu
-        return super.onPrepareOptionsMenu(menu);
     }
 
     public CnBetaApplicationContext getCnBetaApplicationContext() {
