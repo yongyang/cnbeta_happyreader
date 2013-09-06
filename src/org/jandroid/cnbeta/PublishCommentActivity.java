@@ -120,7 +120,7 @@ public class PublishCommentActivity extends BaseActivity {
                     }
 
                     public void onSuccess(AsyncResult<Bitmap> bitmapAsyncResult) {
-                        captchaImageView.setImageResource(R.drawable.default_img);
+                        captchaImageView.setImageBitmap(bitmapAsyncResult.getResult());
                         captchaImageView.setVisibility(View.VISIBLE);
                     }
 

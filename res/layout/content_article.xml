@@ -10,6 +10,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
         <TextView
                 android:textSize="15.0dip"
                 android:textColor="@color/cnBeta_text_blue"
@@ -27,10 +28,13 @@
                 android:freezesText="true"
                 android:focusable="true"
                 android:focusableInTouchMode="true"/>
+
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:gravity="center_horizontal">
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal">
+
             <TextView
                     android:textSize="10.0dip"
                     android:textColor="@color/cnBeta_text_description_gray"
@@ -40,6 +44,7 @@
                     android:text="0000-00-00 00:00:00"
                     android:singleLine="true"
                     android:paddingRight="2.0dip"/>
+
             <TextView
                     android:textSize="10.0dip"
                     android:textColor="@color/cnBeta_text_description_gray"
@@ -49,6 +54,7 @@
                     android:text="阅读:"
                     android:paddingLeft="2.0dip"
                     />
+
             <TextView
                     android:textSize="10.0dip"
                     android:textColor="@color/cnBeta_text_description_gray"
@@ -59,6 +65,7 @@
                     android:singleLine="true"
                     android:paddingLeft="2.0dip"
                     android:paddingRight="2.0dip"/>
+
             <TextView
                     android:textSize="10.0dip"
                     android:textColor="@color/cnBeta_text_description_gray"
@@ -68,6 +75,7 @@
                     android:text="评论:"
                     android:paddingLeft="2.0dip"
                     />
+
             <TextView
                     android:textSize="10.0dip"
                     android:textColor="@color/cnBeta_text_description_gray"
@@ -78,6 +86,7 @@
                     android:singleLine="true"
                     android:paddingLeft="2.0dip"
                     android:paddingRight="2.0dip"/>
+
             <TextView
                     android:textSize="10.0dip"
                     android:textColor="@color/cnBeta_text_description_gray"
@@ -87,6 +96,7 @@
                     android:text="稿源:"
                     android:paddingLeft="2.0dip"
                     />
+
             <TextView
                     android:textSize="10.0dip"
                     android:textColor="@color/cnBeta_text_description_gray"
@@ -98,11 +108,44 @@
                     android:paddingLeft="2.0dip"/>
 
         </LinearLayout>
-        <WebView
-                android:id="@+id/wv_articleContent"
-                android:fitsSystemWindows="true"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"/>
+
+        <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/loadingLayout"
+                    android:gravity="center"
+                    android:layout_marginTop="20dip"
+                    android:layout_marginBottom="20dip">
+
+                <ProgressBar
+                        android:id="@+id/loading_progessBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true"
+                        style="?android:progressBarStyleLarge"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/cnBeta_text_description_gray"
+                        android:textSize="16dip"
+                        android:text="内容加载中..."
+                        />
+
+            </LinearLayout>
+
+            <WebView
+                    android:id="@+id/wv_articleContent"
+                    android:fitsSystemWindows="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
+
+        </FrameLayout>
 
         <RatingBar
                 android:id="@+id/rating"
@@ -110,8 +153,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:stepSize="0.5"
-                android:numStars="5"
+                android:numStars="6"
+                android:visibility="gone"
                 />
-
     </LinearLayout>
 </ScrollView>

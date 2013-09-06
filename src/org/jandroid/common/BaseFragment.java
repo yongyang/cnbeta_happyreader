@@ -3,6 +3,7 @@ package org.jandroid.common;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
 /**
@@ -12,6 +13,8 @@ import android.view.View;
 public abstract class BaseFragment extends Fragment {
     
     protected Logger logger = Logger.getLogger(this.getClass());
+
+    protected Handler handler = new Handler();
 
     @Override
    	public void onCreate(Bundle savedInstanceState) {

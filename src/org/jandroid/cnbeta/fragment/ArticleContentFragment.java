@@ -15,6 +15,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,12 +23,13 @@ import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.entity.Content;
+import org.jandroid.common.BaseFragment;
 import org.jandroid.common.Logger;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class ArticleContentFragment extends Fragment {
+public class ArticleContentFragment extends BaseFragment {
 
     static Logger log = Logger.getLogger(ArticleContentFragment.class);
 
@@ -39,26 +41,7 @@ public class ArticleContentFragment extends Fragment {
     private RatingBar ratingBar;
     private WebView contentWebView;
 
-    private Handler handler = new Handler();
-
-
-    //TODO: sn 从 article.html 页面中取, sid和sn必须要匹配
-    //TODO: 可能还需要拿到 TOKEN: 'ae14639495b0ae0c848e2adaefc0f31db276167a',
-    // http://www.cnbeta.com/cmt?jsoncallback=okcb91797948&op=info&page=1&sid=247973&sn=88747
-    // okcb91797948({"status":"success","result":"Y25iZXRheyJjbW50ZGljdCI6W10sImhvdGxpc3QiOltdLCJjbW50bGlzdCI6W10sImNvbW1lbnRfbnVtIjoiMjEiLCJqb2luX251bSI6MCwidG9rZW4iOiIyYzM3MzBmY2I3OTE4N2IxNDU2NmQwMzFiOTc2MGQ1YzIxMGRlMWVhIiwidmlld19udW0iOjQzOTAsInBhZ2UiOjEsInNpZCI6MjQ3OTczLCJ1IjpbXX0="})
-    // base64 decode 之后
-    // cnbeta{"cmntdict":[],"hotlist":[],"cmntlist":[],"join_num":0,"comment_num":0,"token":"1555e16583e8fd4f30b360f78f9d79cf0b5288f4","view_num":169,"page":1,"sid":249281,"u":[]}
-    // cnbeta{"cmntdict":[],"hotlist":[],"cmntlist":[{"tid":"7764550","pid":"0","sid":"249281","parent":"","thread":""}],"cmntstore":{"7764550":{"tid":"7764550","pid":"0","sid":"249281","date":"2013-08-20 15:14:01","name":"\u533f\u540d\u4eba\u58eb","host_name":"\u6d59\u6c5f\u7701\u7ecd\u5174\u5e02","comment":"\u8def\u8fc7...","score":"0","reason":1,"userid":"0","icon":""}},"comment_num":"2","join_num":"1","token":"38a5032136b4e3097c28670a7cdd0c7fad2d1c62","view_num":370,"page":1,"sid":249281,"u":[]}
-    
-/*
-http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
-
-    if(res.comment_num != 'undefined'){
-        $("#comment_num").html(res.comment_num);
-        $("#view_num").html(res.view_num);
-        $(".post_count").html('共有<em>'+res.comment_num+'</em>条评论，显示<em>'+res.join_num+'</em>条').fadeIn();
-    }
-*/
+    private LinearLayout loadingLayout;
 
     //TODO: 支持 视频？？？
 
@@ -74,6 +57,7 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
         whereTextView = (TextView) root.findViewById(R.id.tv_where);
 
         ratingBar = (RatingBar) root.findViewById(R.id.rating);
+        loadingLayout = (LinearLayout) root.findViewById(R.id.loadingLayout);
         contentWebView = (WebView) root.findViewById(R.id.wv_articleContent);
         // work weird
 //        contentWebView.setBackgroundColor(R.color.cnBeta_bg_introduction);
@@ -121,17 +105,17 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                loadingLayout.setVisibility(View.GONE);
+                contentWebView.setVisibility(View.VISIBLE);
                 //load images here, after Page Loaded
                 ((ContentActivity)getActivity()).loadImages();
                 //load comments and view_num, comment_num etc
                 ((ContentActivity)getActivity()).loadComments();
-
-/*
-                List<String> images =((ContentActivity)getActivity()).getContent().getImages();
-                for(String imgSrc : images){
-                    ((ContentActivity)getActivity()).loadImages();
-                }
-*/
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        ratingBar.setVisibility(View.VISIBLE);
+                    }
+                }, 1000);
 
             }
 
@@ -167,12 +151,6 @@ http://static.cnbetacdn.com/assets/js/utils/article.js?v=20130808
             }
 
         });
-
-        //TODO: 在WebView load 的之前, 重写topic img url, 并注入JS，使得img load完之后，通过JS更新内容
-
-        //TODO: use a WebView to enlarge image, http://mobile.tutsplus.com/tutorials/android/image-display-and-interaction-with-android-webviews/
-        //picView.getSettings().setBuiltInZoomControls(true);
-        //picView.getSettings().setUseWideViewPort(true);
         return root;
     }
 
