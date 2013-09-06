@@ -47,7 +47,8 @@
         <activity
                 android:name=".ContentActivity"
                 android:label="@string/label_article_content"
-                android:launchMode="singleTask"/>
+                android:launchMode="singleTask"
+                android:hardwareAccelerated="true"/>
         <activity
                 android:name=".HistoryActivity"
                 android:label="@string/label_history"

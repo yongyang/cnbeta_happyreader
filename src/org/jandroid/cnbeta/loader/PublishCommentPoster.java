@@ -103,9 +103,7 @@ public class PublishCommentPoster extends AbstractLoader<JSONObject> {
         datas.put("YII_CSRF_TOKEN", CnBetaHttpClient.getInstance().getCookie("YII_CSRF_TOKEN"));
         
         String response = CnBetaHttpClient.getInstance().httpPost(URL_TEMPLATE, headers, datas);
-
         response = UnicodeUtils.unicode2Chinese(response);
-
         return (JSONObject) JSONValue.parse(response);
     }
 

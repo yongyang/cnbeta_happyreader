@@ -10,7 +10,7 @@ import org.json.simple.JSONObject;
  */
 public abstract class RateArticleAsyncTask extends LoadingAsyncTask<JSONObject> {
 
-    protected abstract Content getContent();
+    protected abstract long getSid();
     
     protected abstract int getScore();
     
@@ -21,6 +21,6 @@ public abstract class RateArticleAsyncTask extends LoadingAsyncTask<JSONObject> 
 
     @Override
     public AbstractLoader<JSONObject> getLoader() {
-        return new RateArticlePoster(getContent(), getScore());
+        return new RateArticlePoster(getSid(), getScore());
     }
 }

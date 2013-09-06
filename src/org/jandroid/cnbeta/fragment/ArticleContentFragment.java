@@ -19,12 +19,18 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
+import org.jandroid.cnbeta.async.HasAsync;
+import org.jandroid.cnbeta.async.RateArticleAsyncTask;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.common.BaseFragment;
 import org.jandroid.common.Logger;
+import org.jandroid.common.ToastUtils;
+import org.jandroid.common.async.AsyncResult;
+import org.json.simple.JSONObject;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -57,6 +63,63 @@ public class ArticleContentFragment extends BaseFragment {
         whereTextView = (TextView) root.findViewById(R.id.tv_where);
 
         ratingBar = (RatingBar) root.findViewById(R.id.rating);
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                ArticleContentFragment.this.ratingBar.setIsIndicator(true);
+                final int score = (int)(2 * ArticleContentFragment.this.ratingBar.getRating() -5);
+                ToastUtils.showShortToast(getActivity(), "评分: " + score );
+
+                executeAsyncTaskMultiThreading(new RateArticleAsyncTask() {
+
+                    @Override
+                    protected long getSid() {
+                        return ((ContentActivity)getActivity()).getArticleSid();
+                    }
+
+                    @Override
+                    protected int getScore() {
+                        return score;
+                    }
+
+                    @Override
+                    public HasAsync<JSONObject> getAsyncContext() {
+                        return new HasAsync<JSONObject>() {
+                            public CnBetaApplicationContext getCnBetaApplicationContext() {
+                                return ((ContentActivity) getActivity()).getCnBetaApplicationContext();
+                            }
+
+                            public void onProgressShow() {
+
+                            }
+
+                            public void onProgressDismiss() {
+
+                            }
+
+                            public void onSuccess(AsyncResult<JSONObject> jsonObjectAsyncResult) {
+                                //{"status":"success","result":{"average":"0.6","count":"10"}}
+                                JSONObject resultJSON = jsonObjectAsyncResult.getResult();
+                                if(resultJSON.get("status").toString().equals("success")) {
+                                    String average = ((JSONObject)resultJSON.get("result")).get("average").toString();
+                                    String count = ((JSONObject)resultJSON.get("result")).get("count").toString();
+                                    ToastUtils.showLongToast(getActivity(), "当前平均分: " + average + " (共 " + count + " 次打分)");
+                                    ArticleContentFragment.this.ratingBar.setRating((5.0f + Float.parseFloat(average))/2);
+                                }
+                                else {
+                                    String message = ((JSONObject)resultJSON.get("result")).get("message").toString();
+                                    ToastUtils.showShortToast(getActivity(), message);
+                                }
+                            }
+
+                            public void onFailure(AsyncResult<JSONObject> jsonObjectAsyncResult) {
+
+                            }
+                        };
+                    }
+                });
+            }
+        });
+
         loadingLayout = (LinearLayout) root.findViewById(R.id.loadingLayout);
         contentWebView = (WebView) root.findViewById(R.id.wv_articleContent);
         // work weird

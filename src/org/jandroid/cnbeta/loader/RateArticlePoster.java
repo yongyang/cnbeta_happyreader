@@ -2,6 +2,7 @@ package org.jandroid.cnbeta.loader;
 
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.cnbeta.entity.Content;
+import org.jandroid.common.UnicodeUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -25,17 +26,17 @@ public class RateArticlePoster extends AbstractLoader<JSONObject> {
     private static String URL_TEMPLATE = "http://www.cnbeta.com/comment";
 
     
-    private Content content;
+    private long sid;
     
     private int score;
 
-    public RateArticlePoster(Content content, int score) {
-        this.content = content;
+    public RateArticlePoster(long sid, int score) {
+        this.sid = sid;
         this.score = score;
     }
 
-    public Content getContent() {
-        return content;
+    public long getSid() {
+        return sid;
     }
 
     public int getScore() {
@@ -50,24 +51,19 @@ public class RateArticlePoster extends AbstractLoader<JSONObject> {
         headers.put("X-Requested-With", "XMLHttpRequest");
         //this header is optional, better to add
         //httpget.addHeader("Referer", "http://www.cnbeta.com/articles/250243.htm");
-        headers.put("Referer", "http://www.cnbeta.com/articles/" + content.getSid() + ".htm");
+        headers.put("Referer", "http://www.cnbeta.com/articles/" + getSid() + ".htm");
 
 
         Map<String, String> datas = new HashMap<String, String>();
         datas.put("op", "rate");
-        datas.put("sid", "" + content.getSid());
+        datas.put("sid", "" + getSid());
         datas.put("score", "" + getScore());
         //需要这个 token 来执行 support/against
         datas.put("YII_CSRF_TOKEN", CnBetaHttpClient.getInstance().getCookie("YII_CSRF_TOKEN"));
         
         
         String response = CnBetaHttpClient.getInstance().httpPost(URL_TEMPLATE, headers, datas);
-        
-        //if failed
-        if(response.indexOf("error") > 0){
-            throw new Exception("Failed to rate article: " + content.getSid() + ", " + response );
-        }
-
+        response = UnicodeUtils.unicode2Chinese(response);
         return (JSONObject) JSONValue.parse(response);
     }
 
