@@ -131,7 +131,6 @@ public class ArticleContentFragment extends BaseFragment {
 
     }
 
-
     private void setupWebView() {
         // work weird
 //        contentWebView.setBackgroundColor(R.color.cnBeta_bg_introduction);
@@ -178,7 +177,7 @@ public class ArticleContentFragment extends BaseFragment {
                 //load images here, after Page Loaded
                 ((ContentActivity) getActivity()).loadImages();
                 //load comments and view_num, comment_num etc
-                ((ContentActivity) getActivity()).loadComments();
+                ((ContentActivity) getActivity()).loadArticleComments();
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         rateRatingBar.setVisibility(View.VISIBLE);
@@ -224,20 +223,16 @@ public class ArticleContentFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
     }
 
-/*
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.content_menu, menu);
-//        menu.add("MENU").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        super.onCreateOptionsMenu(menu, inflater);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((ContentActivity)getActivity()).loadArticleContent();
     }
-*/
 
     public void updateArticleContent(final Content content) {
-        //TODO: 偶尔抛出 NPE
         titleTextView.setText(content.getTitle());
         // enable marquee
         titleTextView.setSelected(true);

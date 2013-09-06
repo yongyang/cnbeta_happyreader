@@ -97,9 +97,6 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
         setContentView(R.layout.content);
         setupViewPager();
         setupActionBar();
-
-        // load content only once
-        loadArticleContent();
     }
 
     private void setupActionBar() {
@@ -169,7 +166,7 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
         }
     }
 
-    private void loadArticleContent() {
+    public void loadArticleContent() {
         executeAsyncTaskMultiThreading(new ArticleContentAsyncTask() {
 
             @Override
@@ -229,7 +226,7 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
 
     }
 
-    public void loadComments() {
+    public void loadArticleComments() {
         executeAsyncTaskMultiThreading(new ArticleCommentsAsyncTask() {
             @Override
             protected Content getArticleContent() {
@@ -328,9 +325,6 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
     public void onSuccess(AsyncResult<Content> contentAsyncResult) {
         content = contentAsyncResult.getResult();
         //update content in ContentActivity
-        if(content == null) { //TODO: 偶尔 content == null
-            logger.w("Content is null???", new NullPointerException());
-        }
         contentFragment.updateArticleContent(content);
     }
 
