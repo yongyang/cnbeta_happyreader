@@ -12,10 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
+import android.view.Window;
 import org.jandroid.cnbeta.async.ArticleCommentsAsyncTask;
 import org.jandroid.cnbeta.async.ArticleContentAsyncTask;
 import org.jandroid.cnbeta.async.HasAsync;
@@ -37,11 +34,6 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
     private long sid;
     private String title;
     private Content content = null;
-
-    private MenuItem refreshMenuItem;
-    private ImageView refreshActionView;
-    private Animation clockWiseRotationAnimation;
-
 
     private ViewPager mViewPager;
     private ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
@@ -90,16 +82,16 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_PROGRESS);
+//        this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        this.setProgressBarIndeterminate(true);
+
         sid = getIntent().getExtras().getLong("sid");
         title = getIntent().getExtras().getString("title");
 
         setContentView(R.layout.content);
         setupViewPager();
         setupActionBar();
-
-        refreshActionView = (ImageView) getLayoutInflater().inflate(R.layout.iv_refresh_action_view, null);
-        clockWiseRotationAnimation = AnimationUtils.loadAnimation(this, R.anim.rotation_clockwise_refresh);
-        clockWiseRotationAnimation.setRepeatCount(Animation.INFINITE);
 
         // load content only once
         loadContent();
@@ -140,11 +132,9 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        //refresh actionitem
-        getMenuInflater().inflate(R.menu.search_refresh_menu, menu);
-        refreshMenuItem = menu.findItem(R.id.refresh_item);
-
         getMenuInflater().inflate(R.menu.content_menu, menu);
+        //add  refresh actionitem
+        getMenuInflater().inflate(R.menu.search_refresh_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -178,7 +168,7 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
 
             @Override
             protected long getSid() {
-                return sid;
+                return getArticleSid();
             }
 
             @Override
@@ -248,11 +238,11 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
                     }
 
                     public void onProgressShow() {
-
+                        ContentActivity.this.onProgressShow();
                     }
 
                     public void onProgressDismiss() {
-
+                        ContentActivity.this.onProgressDismiss();
                     }
 
                     public void onSuccess(AsyncResult<List<Comment>> listAsyncResult) {
@@ -289,25 +279,6 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
         }
     }
 
-
-    private void rotateRefreshActionView() {
-        if (refreshMenuItem != null) {
-            /* Attach a rotating ImageView to the refresh item as an ActionView */
-            refreshActionView.startAnimation(clockWiseRotationAnimation);
-            refreshMenuItem.setActionView(refreshActionView);
-        }
-    }
-
-    private void dismissRefreshActionView() {
-        if (refreshMenuItem != null) {
-            View actionView = refreshMenuItem.getActionView();
-            if (actionView != null) {
-                actionView.clearAnimation();
-                refreshMenuItem.setActionView(null);
-            }
-        }
-    }
-
     public Content getContent() {
         return content;
     }
@@ -319,12 +290,10 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
     public void onProgressShow() {
         setProgressBarIndeterminate(true);
         setProgressBarVisibility(true);
-        rotateRefreshActionView();
     }
 
     public void onProgressDismiss() {
         setProgressBarVisibility(false);
-        dismissRefreshActionView();
     }
 
     public void onSuccess(AsyncResult<Content> contentAsyncResult) {

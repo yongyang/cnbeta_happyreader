@@ -11,7 +11,6 @@ import android.widget.ListView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.async.HasAsync;
-import org.jandroid.cnbeta.async.LoadingAsyncTask;
 import org.jandroid.common.BaseFragment;
 import org.jandroid.common.async.AsyncResult;
 

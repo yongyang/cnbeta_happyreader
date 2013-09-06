@@ -1,9 +1,6 @@
 package org.jandroid.cnbeta.fragment;
 
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;

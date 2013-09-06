@@ -1,10 +1,7 @@
 package org.jandroid.cnbeta.loader;
 
-import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.entity.TopicArticle;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 import java.text.MessageFormat;
 

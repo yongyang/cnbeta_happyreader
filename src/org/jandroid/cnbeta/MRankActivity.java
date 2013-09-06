@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
@@ -19,17 +18,10 @@ import org.jandroid.common.BaseActivity;
 
 public class MRankActivity extends BaseActivity {
 
-    private Handler handler = new Handler();
-
-
     public final static int[] tabs = new int[]{R.string.tab_hot, R.string.tab_argue, R.string.tab_recommend};
     private final MRankListFragment[] fragments = new MRankListFragment[tabs.length];
 
     private ViewPager mViewPager;
-
-    // 当前是否正在加载数据，避免多次加载
-    private volatile boolean isLoading = false;
-
 
     public static abstract class ActionTabFragmentPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
         protected ActionTabFragmentPagerAdapter(FragmentManager fm) {

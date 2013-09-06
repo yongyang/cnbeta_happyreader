@@ -1,7 +1,6 @@
 package org.jandroid.cnbeta.async;
 
 import android.graphics.Bitmap;
-import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.CaptchaLoader;
 

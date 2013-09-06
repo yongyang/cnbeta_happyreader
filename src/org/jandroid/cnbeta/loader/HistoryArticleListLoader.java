@@ -1,16 +1,12 @@
 package org.jandroid.cnbeta.loader;
 
-import org.apache.commons.io.FileUtils;
 import org.jandroid.cnbeta.entity.HistoryArticle;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 

@@ -9,7 +9,6 @@ import android.widget.TextView;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
-import org.jandroid.cnbeta.async.HistoryArticleListAsyncTask;
 import org.jandroid.cnbeta.async.HistoryCommentListAsyncTask;
 import org.jandroid.cnbeta.entity.HistoryArticle;
 import org.jandroid.cnbeta.entity.HistoryComment;

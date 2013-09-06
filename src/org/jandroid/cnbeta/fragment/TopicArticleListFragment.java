@@ -17,7 +17,6 @@ import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HasAsyncDelegate;
 import org.jandroid.cnbeta.async.ImageAsyncTask;
 import org.jandroid.cnbeta.async.TopicArticleListAsyncTask;
-import org.jandroid.cnbeta.entity.Topic;
 import org.jandroid.cnbeta.entity.TopicArticle;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.BaseActivity;

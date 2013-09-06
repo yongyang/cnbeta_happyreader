@@ -1,7 +1,6 @@
 package org.jandroid.cnbeta.loader;
 
 import org.jandroid.cnbeta.entity.Topic;
-import org.jandroid.cnbeta.entity.TopicArticle;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;

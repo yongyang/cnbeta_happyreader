@@ -1,9 +1,7 @@
 package org.jandroid.cnbeta.async;
 
 import org.jandroid.cnbeta.entity.Topic;
-import org.jandroid.cnbeta.entity.TopicArticle;
 import org.jandroid.cnbeta.loader.AbstractLoader;
-import org.jandroid.cnbeta.loader.TopicArticleListLoader;
 import org.jandroid.cnbeta.loader.TopicListLoader;
 
 import java.util.List;
