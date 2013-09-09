@@ -38,7 +38,7 @@ public class RefreshView {
     }
 
     public void onProgressShow() {
-        footbarRefresh.setClickable(false);
+        footbarRefresh.setEnabled(false);
         progressBarLineLinearLayout.setVisibility(View.VISIBLE);
         lineLayoutRefresh.setVisibility(View.GONE);
     }
@@ -46,7 +46,7 @@ public class RefreshView {
     public void onProgressDismiss() {
         progressBarLineLinearLayout.setVisibility(View.GONE);
         lineLayoutRefresh.setVisibility(View.VISIBLE);
-        footbarRefresh.setClickable(true);
+        footbarRefresh.setEnabled(true);
         tvLastTimeRefresh.setText(dateFormat.format(new Date()));
     }
 

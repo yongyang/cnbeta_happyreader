@@ -92,26 +92,21 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
         //Stop refresh animation anyway
     }
 
-    public void onFailure(AsyncResult<List<T>> listAsyncResult) {
+    public synchronized void onFailure(AsyncResult<List<T>> listAsyncResult) {
         getAdapter().notifyDataSetChanged();
         logger.e("Failure: ", listAsyncResult.getException());
     }
 
-    public void onSuccess(AsyncResult<List<T>> listAsyncResult) {
+    public synchronized void onSuccess(AsyncResult<List<T>> listAsyncResult) {
         loadedDatas.addAll(listAsyncResult.getResult());
         getAdapter().notifyDataSetChanged();
     }
 
-    public void onSuccess(AsyncResult<List<T>> listAsyncResult , boolean refresh) {
-        loadedDatas.addAll(listAsyncResult.getResult());
-        getAdapter().notifyDataSetChanged();
-    }
-
-    public void clearData(){
+    public synchronized void clearData(){
         loadedDatas.clear();
     }
 
-    public T getData(int index){
+    public synchronized T getData(int index){
         return loadedDatas.get(index);
     }
 

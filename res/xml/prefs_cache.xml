@@ -19,6 +19,6 @@
                 android:key="@string/pref_key_cleanCache"
                 android:persistent="false"
                 android:title="清空缓存"
-                android:summary="点击清空所有已缓存的数据"/>
+                android:summary="点击清空已缓存的数据"/>
     </PreferenceCategory>
 </PreferenceScreen>

@@ -233,7 +233,7 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
         footerPagingView.setPage(++page);
 //            mListView.smoothScrollToPosition(mListView.getAdapter().getCount());
         if(getPage() == TopicListLoader.MAX_PAGE) {
-            footerPagingView.setClickable(false);
+            footerPagingView.setEnable(false);
         }
     }
 

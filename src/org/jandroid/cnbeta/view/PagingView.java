@@ -61,7 +61,7 @@ public class PagingView {
     }
 
     public void onProgressShow() {
-        footerbar.setClickable(false);
+        footerbar.setEnabled(false);
         progressBarLineLinearLayout.setVisibility(View.VISIBLE);
         pageBar.setVisibility(View.GONE);
     }
@@ -69,7 +69,7 @@ public class PagingView {
     public void onProgressDismiss() {
         progressBarLineLinearLayout.setVisibility(View.GONE);
         pageBar.setVisibility(View.VISIBLE);
-        footerbar.setClickable(true);
+        footerbar.setEnabled(true);
         tvLastTimeRefresh.setText(dateFormat.format(new Date()));
     }
 
@@ -77,8 +77,9 @@ public class PagingView {
         footerbar.setOnClickListener(onClickListener);
     }
 
-    public void setClickable(boolean clickable) {
-        footerbar.setClickable(clickable);
+    public void setEnable(boolean enable) {
+//        footerbar.setClickable(clickable);
+        footerbar.setEnabled(enable);
     }
 
 }

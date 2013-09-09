@@ -28,7 +28,8 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
     // 当前的 cmt URL
     //op 需要编码
     //编码方式如下： 1,{SID},{SN}, Base64编码，然后加上8位随机字符数字，参考 generateOp
-    private static String URL_TEMPLATE = "http://www.cnbeta.com/cmt?jsoncallback=okcb{0}&op={1}";
+//    private static String URL_TEMPLATE = "http://www.cnbeta.com/cmt?jsoncallback=okcb{0}&op={1}";
+    private static String URL_TEMPLATE = "http://www.cnbeta.com/cmt";
 
     private static String b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
@@ -59,17 +60,21 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
         headers.put("Referer", "http://www.cnbeta.com/articles/" + content.getSid() + ".htm");
 
         // see article.min.js#initData
-        String url = MessageFormat.format(URL_TEMPLATE, "" + Math.round((System.currentTimeMillis() / 15e3)), generateOP());
-        String response = CnBetaHttpClient.getInstance().httpGet(url, headers);
+//        String url = MessageFormat.format(URL_TEMPLATE, "" + Math.round((System.currentTimeMillis() / 15e3)), generateOP());
+
+        Map<String, String> datas = new HashMap<String, String>();
+        datas.put("op", generateOP());
+
+        String response = CnBetaHttpClient.getInstance().httpPost(URL_TEMPLATE, headers, datas);
         
         //if failed
         if(response.indexOf("error") > 0){
             throw new Exception("Failed to read comments of article: " + content.getSid() + ", " + response );
         }
-        String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
-        JSONObject responseJSON = (JSONObject) JSONValue.parse(responseJSONString);
+//        String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
+        JSONObject responseJSON = (JSONObject) JSONValue.parse(response);
         Object resultBase64String = responseJSON.get("result");
-        String resultJSONString = new String(Base64.decode(resultBase64String.toString(), Base64.DEFAULT), "utf-8");
+        String resultJSONString = new String(Base64.decode(resultBase64String.toString(), Base64.DEFAULT), "UTF-8");
         resultJSONString = resultJSONString.substring(resultJSONString.indexOf('{'), resultJSONString.lastIndexOf('}')+1);
 
         writeDisk(baseDir, resultJSONString);
@@ -122,7 +127,7 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
             encoded += b64.charAt((int)(Math.random() * b64.length()));
         }
         // 两次 url encode，主要为转换 "="
-        encoded = URLEncoder.encode(URLEncoder.encode(encoded, "UTF-8"), "UTF-8");
+        encoded = URLEncoder.encode(encoded, "UTF-8");
         return encoded;
     }
 }

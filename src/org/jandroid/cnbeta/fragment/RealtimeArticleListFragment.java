@@ -17,6 +17,7 @@ import org.jandroid.cnbeta.view.RefreshView;
 import org.jandroid.common.async.AsyncResult;
 
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>

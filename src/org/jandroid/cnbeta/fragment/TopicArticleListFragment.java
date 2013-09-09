@@ -20,6 +20,7 @@ import org.jandroid.cnbeta.async.TopicArticleListAsyncTask;
 import org.jandroid.cnbeta.entity.TopicArticle;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.BaseActivity;
+import org.jandroid.common.ToastUtils;
 import org.jandroid.common.adapter.AsyncImageAdapter;
 import org.jandroid.common.async.AsyncResult;
 
@@ -134,10 +135,10 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         footerPagingView = PagingView.load(getActivity().getLayoutInflater(), R.layout.listvew_footbar_paging);
-
         ((ListView)mListView).addFooterView(footerPagingView.getRootView());
 
         footerPagingView.setOnClickListener(new View.OnClickListener() {
+
             public void onClick(View v) {
                 loadData();
             }
@@ -268,15 +269,20 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
     public void onSuccess(AsyncResult<List<TopicArticle>> listAsyncResult) {
         super.onSuccess(listAsyncResult);
 
-        //需要控制显示正确的页面，第一页时  1/3 2/3 1
-        if(page + 1 == 1 && splitPage + 1 < splitCount) {
-            splitPage++;
-            footerPagingView.setPage(page, splitPage + "/" + splitCount);
+        if(!listAsyncResult.getResult().isEmpty()) {
+            //需要控制显示正确的页面，第一页时  1/3 2/3 1
+            if(page + 1 == 1 && splitPage + 1 < splitCount) {
+                splitPage++;
+                footerPagingView.setPage(page, splitPage + "/" + splitCount);
+            }
+            else {
+                page++;
+                splitPage = 0;
+                footerPagingView.setPage(page);
+            }
         }
         else {
-            page++;
-            splitPage = 0;
-            footerPagingView.setPage(page);
+            ToastUtils.showShortToast(getActivity(), "已到最后页！");
         }
     }
 

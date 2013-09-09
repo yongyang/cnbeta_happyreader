@@ -52,6 +52,7 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
 
                         @Override
                         protected Boolean doInBackground(Object... params) {
+                            //TODO: 是否清楚历史记录
                             return FileUtils.deleteQuietly(((CnBetaApplicationContext)getActivity().getApplicationContext()).getBaseDir());
                         }
 

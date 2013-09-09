@@ -7,11 +7,15 @@ import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
 import org.jandroid.common.async.BaseAsyncTask;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  * @create 7/30/13 4:15 PM
  */
 public abstract class LoadingAsyncTask<R>  extends BaseAsyncTask<R> {
+
+    private final ReentrantLock locker = new ReentrantLock();
 
     protected Logger logger = Logger.getLogger(this.getClass());
 
@@ -63,12 +67,24 @@ public abstract class LoadingAsyncTask<R>  extends BaseAsyncTask<R> {
     protected void onFailure(AsyncResult<R> asyncResult) {
         logger.w(asyncResult.getErrorMsg(), asyncResult.getException());
         ToastUtils.showShortToast((Application) getAsyncContext().getCnBetaApplicationContext(), asyncResult.getErrorMsg());
-        getAsyncContext().onFailure(asyncResult);
+        locker.lock(); //防止快速重复点击造成 ListView data 数据不一致
+        try {
+            getAsyncContext().onFailure(asyncResult);
+        }
+        finally {
+            locker.unlock();
+        }
     }
 
     @Override
     protected void onSuccess(AsyncResult<R> rAsyncResult) {
-        getAsyncContext().onSuccess(rAsyncResult);
+        locker.lock(); //防止快速重复点击造成 ListView data 数据不一致
+        try {
+            getAsyncContext().onSuccess(rAsyncResult);
+        }
+        finally {
+            locker.unlock();
+        }
     }
 
     @Override
