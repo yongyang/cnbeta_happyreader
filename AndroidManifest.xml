@@ -68,6 +68,11 @@
                 android:theme="@style/Dialog.NoTitle"
                 />
 
+        <activity
+                android:name=".CnBetaPreferenceActivity"
+                android:label="参数设置">
+        </activity>
+
     </application>
 
     <!--for test case-->

@@ -11,7 +11,7 @@
 
     <string name="refresh_item">刷新</string>
     <string name="more_item">更多选项</string>
-    <string name="setting_item">设置</string>
+    <string name="setting_item">参数设置</string>
    	<string name="offline_downloader">离线下载</string>
     <string name="aboutus_item">关于</string>
     <string name="comment_item">评论</string>
@@ -36,4 +36,6 @@
     <string name="tab_topic_articles">资讯列表</string>
     <string name="tab_history_article">我的阅读</string>
     <string name="tab_history_comment">我的评论</string>
+
+    <string name="pref_key_cleanCache">cleanCache</string>
 </resources>

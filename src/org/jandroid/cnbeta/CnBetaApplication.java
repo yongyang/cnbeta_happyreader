@@ -80,6 +80,9 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
             case R.id.history:
                 Utils.openHistoryActivity(theActivity);
                 break;
+            case R.id.setting_item:
+                Utils.openPreferenceActivity(theActivity);
+                break;
             case R.id.aboutus_item:
                 break;
         }

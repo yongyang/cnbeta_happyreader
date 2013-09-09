@@ -105,4 +105,9 @@ public class Utils {
         theActivity.startActivity(intent);
     }
 
+    public static void openPreferenceActivity(Activity theActivity) {
+        Intent intent = IntentUtils.newIntent(theActivity, CnBetaPreferenceActivity.class);
+        theActivity.startActivity(intent);
+    }
+
 }

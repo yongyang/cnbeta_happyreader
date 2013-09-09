@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="缓存清除">
+        <CheckBoxPreference
+                android:key="pref_key_includeHistory"
+                android:title="同时清除历史记录"
+                android:summaryOn="开启(不建议，可以单独清除历史)"
+                android:summaryOff="关闭"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="pref_key_autoCleanCache"
+                android:title="程序退出时自动清空缓存"
+                android:summaryOn="开启(不建议)"
+                android:summaryOff="关闭"
+                android:defaultValue="false"/>
+        <Preference
+                android:key="@string/pref_key_cleanCache"
+                android:persistent="false"
+                android:title="清空缓存"
+                android:summary="点击清空所有已缓存的数据"/>
+    </PreferenceCategory>
+</PreferenceScreen>
