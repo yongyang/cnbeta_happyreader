@@ -22,13 +22,17 @@
         <uses-library android:name="android.test.runner"/>
 
         <activity
-                android:name=".MainActivity"
-                android:label="@string/app_name"
+                android:name=".SplashActivity"
                 android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity
+                android:name=".MainActivity"
+                android:label="@string/app_name"
+                android:launchMode="singleTask">
         </activity>
         <activity
                 android:name=".TypesActivity"
