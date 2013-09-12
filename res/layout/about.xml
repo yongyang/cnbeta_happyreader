@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView
-        android:id="@+id/contentScrollView"
+        android:id="@+id/aboutScrollView"
         android:background="#fffcfcfc"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

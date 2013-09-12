@@ -25,12 +25,9 @@ import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.loader.SupportCommentPoster;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.BaseActivity;
-import org.jandroid.common.BaseFragment;
-import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
 import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -157,7 +154,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                         toParentTextView.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
                                 logger.d("position: " + position);
-                                showParentComment(position, comment.getPid());
+                                jumpToParentComment(position, comment.getPid());
                             }
                         });
                     }
@@ -296,7 +293,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
     }
 
 
-    private void showParentComment(int position, long parentId) {
+    private void jumpToParentComment(int position, long parentId) {
         int parentPos = position;
         int index = position;
         while (index < getDataSize()) {
@@ -322,30 +319,21 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
         super.onSuccess(listAsyncResult);
         footerPagingView.increasePage();
         // update comment count in ContentFragment
-        ((ContentActivity) getActivity()).updateCommentNumbers();
-
+        if(footerPagingView.getPage() == 1) { // 仅第一页需要 update comment numbers
+            ((ContentActivity) getActivity()).updateCommentNumbers();
+        }
     }
 
     @Override
     public void onProgressShow() {
-        //TODO: refresh action view only page=1
         super.onProgressShow();
         footerPagingView.onProgressShow();
-        if (footerPagingView.getPage() == 1) { //page 1 is reload
-//            startRotateRefreshActionView();
-        }
-
     }
 
     @Override
     public void onProgressDismiss() {
-        //TODO: refresh action view only page=1
         super.onProgressDismiss();
         footerPagingView.onProgressDismiss();
-        // stop refresh rotation anyway
-        if (footerPagingView.getPage() == 1) { //page 1 is reload
-//            stopRotateRefreshActionView();
-        }
     }
 
 }

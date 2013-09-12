@@ -108,9 +108,10 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
 
     private void parseResultJSON(JSONObject resultJSON) throws Exception {
         //阅读和评论次数
-        content.setViewNum(Integer.parseInt(resultJSON.get("view_num").toString()));
-        content.setCommentNum(Integer.parseInt(resultJSON.get("comment_num").toString()));
-
+        if(getPage() == 1) {//仅第一页有 comment_num
+            content.setViewNum(Integer.parseInt(resultJSON.get("view_num").toString()));
+            content.setCommentNum(Integer.parseInt(resultJSON.get("comment_num").toString()));
+        }
 
         JSONObject commentStoreJSONObject = (JSONObject)resultJSON.get("cmntstore");
 

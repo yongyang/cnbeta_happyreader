@@ -48,7 +48,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     private TextView viewNumTextView;
     private TextView commentNumTextView;
     private WebView contentWebView;
-    private LinearLayout loadingLayout;
+    private LinearLayout progressBarLayout;
 
     private RatingBar rateRatingBar;
     private RatingBar resultRatingBar;
@@ -73,7 +73,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         ratingProgressBar = (ProgressBar)root.findViewById(R.id.rating_progressBar);
         setupRatingBar();
 
-        loadingLayout = (LinearLayout) root.findViewById(R.id.loadingLayout);
+        progressBarLayout = (LinearLayout) root.findViewById(R.id.progressBarLayout);
         contentWebView = (WebView) root.findViewById(R.id.wv_articleContent);
         setupWebView();
         return root;
@@ -176,21 +176,31 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                loadingLayout.setVisibility(View.GONE);
                 contentWebView.setVisibility(View.VISIBLE);
+                progressBarLayout.setVisibility(View.GONE);
+
+                //Delay loading images comments to give the contentWebView high priority to paint
+
                 //load images here, after Page Loaded
-                loadImages();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        loadImages();
+                    }
+                }, 100);
 
                 //Stat to load comments and view_num, comment_num etc
                 //!!!NOTE: this is the best point to start to load comments, after content page loaded
-                ((ContentActivity) getActivity()).loadComments();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        ((ContentActivity) getActivity()).loadComments();
+                    }
+                }, 500);
 
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         rateRatingBar.setVisibility(View.VISIBLE);
                     }
                 }, 1000);
-
             }
 
             @Override
@@ -335,7 +345,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     }
 
 
-    public void loadImages() {
+    private void loadImages() {
         for (String image : content.getImages()) {
             loadImage(image);
         }
