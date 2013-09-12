@@ -114,6 +114,7 @@ public class MRankListFragment extends AbstractAsyncListFragment<MRankArticle> {
     public void onSuccess(AsyncResult<List<MRankArticle>> listAsyncResult) {
         clearData();
         super.onSuccess(listAsyncResult);
+        mListView.setSelection(0);
     }
 
     @Override

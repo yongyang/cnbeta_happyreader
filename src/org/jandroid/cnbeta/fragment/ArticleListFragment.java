@@ -92,7 +92,8 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
                     public void onSuccess(AsyncResult<List<Article>> listAsyncResult) {
                         clearData();
                         super.onSuccess(listAsyncResult);
-                        mListView.setFastScrollAlwaysVisible(false);
+                        // scroll to top
+                        mListView.setSelection(0);
                     }
                 };
             }

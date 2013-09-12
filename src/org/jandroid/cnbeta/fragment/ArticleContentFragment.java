@@ -22,7 +22,9 @@ import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
+import org.jandroid.cnbeta.async.ArticleContentAsyncTask;
 import org.jandroid.cnbeta.async.HasAsync;
+import org.jandroid.cnbeta.async.ImageBytesLoadingAsyncTask;
 import org.jandroid.cnbeta.async.RateArticleAsyncTask;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.common.BaseFragment;
@@ -34,9 +36,11 @@ import org.json.simple.JSONObject;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class ArticleContentFragment extends BaseFragment {
+public class ArticleContentFragment extends BaseFragment implements HasAsync<Content>{
 
     static Logger log = Logger.getLogger(ArticleContentFragment.class);
+
+    private Content content;
 
     private TextView titleTextView;
     private TextView timeTextView;
@@ -94,7 +98,7 @@ public class ArticleContentFragment extends BaseFragment {
                     public HasAsync<JSONObject> getAsyncContext() {
                         return new HasAsync<JSONObject>() {
                             public CnBetaApplicationContext getCnBetaApplicationContext() {
-                                return ((ContentActivity) getActivity()).getCnBetaApplicationContext();
+                                return (CnBetaApplicationContext)(getActivity().getApplicationContext());
                             }
                             public void onProgressShow() {
                                 rateRatingBar.setVisibility(View.GONE);
@@ -175,9 +179,12 @@ public class ArticleContentFragment extends BaseFragment {
                 loadingLayout.setVisibility(View.GONE);
                 contentWebView.setVisibility(View.VISIBLE);
                 //load images here, after Page Loaded
-                ((ContentActivity) getActivity()).loadImages();
-                //load comments and view_num, comment_num etc
-                ((ContentActivity) getActivity()).loadArticleComments();
+                loadImages();
+
+                //Stat to load comments and view_num, comment_num etc
+                //!!!NOTE: this is the best point to start to load comments, after content page loaded
+                ((ContentActivity) getActivity()).loadComments();
+
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         rateRatingBar.setVisibility(View.VISIBLE);
@@ -229,10 +236,15 @@ public class ArticleContentFragment extends BaseFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((ContentActivity)getActivity()).loadArticleContent();
+        loadArticleContent();
     }
 
-    public void updateArticleContent(final Content content) {
+    public Content getContent() {
+        return content;
+    }
+
+    private void updateArticleContent(final Content content) {
+        this.content = content;
         titleTextView.setText(content.getTitle());
         // enable marquee
         titleTextView.setSelected(true);
@@ -241,7 +253,8 @@ public class ArticleContentFragment extends BaseFragment {
         contentWebView.loadDataWithBaseURL("", content.getContent(), "text/html", "UTF-8", "");
     }
 
-    public void updateCommentNumbers(Content content) {
+    public void updateCommentNumbers() {
+        // Content viewNum has been updated in ArticleCommentsLoader
         viewNumTextView.setText("" + content.getViewNum());
         commentNumTextView.setText("" + content.getCommentNum());
     }
@@ -281,4 +294,89 @@ public class ArticleContentFragment extends BaseFragment {
         }
         super.onDestroy();
     }
+
+    private void loadArticleContent() {
+        executeAsyncTaskMultiThreading(new ArticleContentAsyncTask() {
+
+            @Override
+            protected long getSid() {
+                return ((ContentActivity)getActivity()).getArticleSid();
+            }
+
+            @Override
+            public HasAsync<Content> getAsyncContext() {
+                return ArticleContentFragment.this;
+            }
+        }
+        );
+    }
+
+    public CnBetaApplicationContext getCnBetaApplicationContext() {
+        return (CnBetaApplicationContext)getActivity().getApplicationContext();
+    }
+
+    public void onProgressShow() {
+        getActivity().setProgressBarIndeterminate(true);
+        getActivity().setProgressBarVisibility(true);
+
+    }
+
+    public void onProgressDismiss() {
+        getActivity().setProgressBarVisibility(false);
+    }
+
+    public void onSuccess(AsyncResult<Content> contentAsyncResult) {
+        //update content in ContentActivity
+        this.updateArticleContent(contentAsyncResult.getResult());
+    }
+
+    public void onFailure(AsyncResult<Content> contentAsyncResult) {
+
+    }
+
+
+    public void loadImages() {
+        for (String image : content.getImages()) {
+            loadImage(image);
+        }
+    }
+
+    private void loadImage(final String imgSrc) {
+        executeAsyncTaskMultiThreading(new ImageBytesLoadingAsyncTask() {
+            @Override
+            protected String getImageUrl() {
+                return imgSrc;
+            }
+
+            @Override
+            public HasAsync<byte[]> getAsyncContext() {
+                return new HasAsync<byte[]>() {
+                    public CnBetaApplicationContext getCnBetaApplicationContext() {
+                        return (CnBetaApplicationContext) getActivity().getApplicationContext();
+                    }
+
+                    public void onProgressShow() {
+
+                    }
+
+                    public void onProgressDismiss() {
+
+                    }
+
+                    public void onSuccess(AsyncResult<byte[]> asyncResult) {
+                        String id = Base64.encodeToString(imgSrc.getBytes(), Base64.NO_WRAP);
+                        //update image in WebView by javascript
+                        updateImage(id, asyncResult.getResult());
+                    }
+
+                    public void onFailure(AsyncResult<byte[]> asyncResult) {
+
+                    }
+                };
+            }
+        }
+        );
+
+    }
+
 }

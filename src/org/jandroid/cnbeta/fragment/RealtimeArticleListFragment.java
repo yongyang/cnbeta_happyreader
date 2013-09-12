@@ -17,7 +17,6 @@ import org.jandroid.cnbeta.view.RefreshView;
 import org.jandroid.common.async.AsyncResult;
 
 import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -75,7 +74,7 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
 
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
-                    convertView = getActivity().getLayoutInflater().inflate(R.layout.lv_realtime_article_item, null);
+                    convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_realtime_article_item, null);
                 }
                 RealtimeArticle article = getData(position);
                 TextView tvTitle = (TextView) convertView.findViewById(R.id.title);
@@ -110,6 +109,7 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
                     public void onSuccess(AsyncResult<List<RealtimeArticle>> listAsyncResult) {
                         clearData();
                         super.onSuccess(listAsyncResult);
+                        mListView.setSelection(0);
                     }
                 };
             }

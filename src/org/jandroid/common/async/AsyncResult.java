@@ -40,6 +40,7 @@ public class AsyncResult<T> {
 
     public static <T> AsyncResult<T> errorResult(String errorMsg, T result, Exception e){
         AsyncResult<T> errorAsyncResult = new AsyncResult<T>(false, result, e);
+        errorAsyncResult.errorMsg = errorMsg;
         errorAsyncResult.exception = e;
         return errorAsyncResult;
     }
@@ -49,14 +50,14 @@ public class AsyncResult<T> {
             return null;
         }
         else {
-            //TODO: result may be null
-            if(errorMsg != null) {
+            //result may be null
+            if(errorMsg != null && !errorMsg.isEmpty()) {
                 return errorMsg;
             }
             else if(exception != null) {
                 return exception.toString();
             }
-            return "error";
+            return "Unknown Error!";
         }
     }
 

@@ -77,7 +77,7 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
                                     public void onSuccess(AsyncResult<List<HotComment>> listAsyncResult) {
                                         clearData();
                                         super.onSuccess(listAsyncResult);
-                                        mListView.smoothScrollToPosition(0);
+                                        mListView.setSelection(0);
                                     }
                                 };
                             }

@@ -82,6 +82,7 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
                     public void onSuccess(AsyncResult<List<Topic>> listAsyncResult) {
                         clearData();
                         super.onSuccess(listAsyncResult);
+                        mListView.setSelection(0);
                     }
                 };
             }

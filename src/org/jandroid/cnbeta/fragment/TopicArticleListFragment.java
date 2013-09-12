@@ -121,6 +121,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
                     public void onSuccess(AsyncResult<List<TopicArticle>> listAsyncResult) {
                         clearData();
                         super.onSuccess(listAsyncResult);
+                        mListView.setSelection(0);
                     }
                 };
             }

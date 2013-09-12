@@ -89,5 +89,6 @@ public class HistoryArticleListFragment extends AbstractAsyncListFragment<Histor
     @Override
     public void reloadData() {
         loadData();
+        mListView.setSelection(0);
     }
 }

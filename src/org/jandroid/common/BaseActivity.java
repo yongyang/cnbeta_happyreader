@@ -9,6 +9,10 @@ import android.os.Handler;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -21,6 +25,8 @@ public class BaseActivity extends Activity {
     
     protected List<AsyncTask> runningTasks = new ArrayList<AsyncTask>();
 
+    public static final int MULTI_THREADING_SLOW_DOWN_VALVE = 80;
+
    	/******************************** 【Activity LifeCycle For Debug】 *******************************************/
    	@Override
    	protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +38,14 @@ public class BaseActivity extends Activity {
    	protected void onStart() {
    		logger.d(" onStart() invoked!!");
    		super.onStart();
+/*
+        pendingExecutor.scheduleWithFixedDelay(new Runnable() {
+            public void run() {
+
+            }
+        }, 500, 500, TimeUnit.MILLISECONDS);
+*/
+
    	}
 
    	@Override
@@ -58,26 +72,39 @@ public class BaseActivity extends Activity {
    		super.onStop();
    	}
 
-    public synchronized void executeAsyncTaskMultiThreading(AsyncTask asyncTask){
+    public synchronized void executeAsyncTaskMultiThreading(final AsyncTask asyncTask){
+        logger.d(" executeAsyncTaskMultiThreading() running tasks: " + runningTasks.size());
         for(Iterator<AsyncTask> it = runningTasks.iterator(); it.hasNext();){
             AsyncTask runningTask = it.next();
             if(runningTask.isCancelled() || runningTask.getStatus() == AsyncTask.Status.FINISHED) {
                 it.remove();
             }
         }
+
+        //Slow down to avoid rejecting
+//      java.util.concurrent.ThreadPoolExecutor@b11d4808[Running, pool size = 128, active threads = 127, queued tasks = 10, completed tasks = 527]
+//      09-11 18:55:30.566: E/AndroidRuntime(2088): 	at java.util.concurrent.ThreadPoolExecutor$AbortPolicy.rejectedExecution(ThreadPoolExecutor.java:1967)
+        if(runningTasks.size() > MULTI_THREADING_SLOW_DOWN_VALVE) {
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    executeAsyncTaskMultiThreading(asyncTask);
+                }
+            }, 50);
+            return;
+        }
+
         runningTasks.add(asyncTask);
         asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
    	@Override
    	public void onDestroy() {
-   		logger.d(" onDestroy() invoked!!");
+   		logger.d(" onDestroy() invoked!!  Active async task: " + ((ThreadPoolExecutor)AsyncTask.THREAD_POOL_EXECUTOR).getActiveCount());
    		super.onDestroy();
-
         for(Iterator<AsyncTask> it = runningTasks.iterator(); it.hasNext();){
             AsyncTask runningTask = it.next();
             if(!runningTask.isCancelled() || runningTask.getStatus() != AsyncTask.Status.FINISHED) {
-                runningTask.cancel(true);
+                boolean cancelled = runningTask.cancel(true);
             }
             it.remove();
         }

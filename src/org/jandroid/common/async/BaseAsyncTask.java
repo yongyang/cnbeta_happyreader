@@ -11,24 +11,31 @@ public abstract class BaseAsyncTask<R>  extends AsyncTask<Object, Integer, Async
     protected abstract R run() throws Exception;
 
     @Override
-    protected AsyncResult doInBackground(Object... params) {
-        try {
-            R result = run();
-            return AsyncResult.successResult(result);
+    protected AsyncResult<R> doInBackground(Object... params) {
+        if(!isCancelled()) {
+            try {
+                R result = run();
+                return AsyncResult.successResult(result);
+            }
+            catch (Exception e) {
+                return AsyncResult.errorResult(e.getMessage(), (R)null, e);
+            }
         }
-        catch (Exception e) {
-            return AsyncResult.errorResult(e.toString(), null, e);
+        else {
+            return null;
         }
     }
 
     @Override
     protected void onPostExecute(AsyncResult<R> rAsyncResult) {
-        super.onPostExecute(rAsyncResult);
-        if(rAsyncResult.isSuccess()) {
-            onSuccess(rAsyncResult);
-        }
-        else {
-            onFailure(rAsyncResult);
+        if(!isCancelled()) {
+            super.onPostExecute(rAsyncResult);
+            if(rAsyncResult.isSuccess()) {
+                onSuccess(rAsyncResult);
+            }
+            else {
+                onFailure(rAsyncResult);
+            }
         }
     }
 

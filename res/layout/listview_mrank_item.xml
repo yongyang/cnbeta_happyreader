@@ -13,12 +13,13 @@
             android:paddingTop="4dip"
             android:paddingBottom="4dip">
         <TextView
-                android:textSize="14.0sp"
+                android:textSize="18.0sp"
                 android:textColor="@color/red"
-                android:textStyle="bold"
+                android:textStyle="bold|italic"
                 android:id="@+id/rank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:singleLine="true"/>
 
         <TextView
@@ -27,6 +28,6 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:singleLine="true"/>
+                android:maxLines="2"/>
     </LinearLayout>
 </LinearLayout>

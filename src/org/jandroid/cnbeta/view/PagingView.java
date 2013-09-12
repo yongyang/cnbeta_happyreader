@@ -50,6 +50,21 @@ public class PagingView {
         return page;
     }
 
+    public int getNextPage() {
+        return page + 1;
+    }
+
+
+    public void increasePage(){
+        page++;
+        tvPage.setText("" + page);
+    }
+
+    public void reloaded(){
+        page = 1;
+        tvPage.setText("" + page);
+    }
+
     public void setPage(int page) {
         this.page = page;
         tvPage.setText("" + page);

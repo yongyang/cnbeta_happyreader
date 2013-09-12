@@ -49,7 +49,7 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
 
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
-                    convertView = getActivity().getLayoutInflater().inflate(R.layout.lv_editor_recommend_article_item, null);
+                    convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_editor_recommend_article_item, null);
                 }
                 EditorRecommend article = getData(position);
                 TextView tvTitle = (TextView) convertView.findViewById(R.id.title);
@@ -91,6 +91,7 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
                     public void onSuccess(AsyncResult<List<EditorRecommend>> listAsyncResult) {
                         clearData();
                         super.onSuccess(listAsyncResult);
+                        mListView.setSelection(0);
                     }
                 };
             }

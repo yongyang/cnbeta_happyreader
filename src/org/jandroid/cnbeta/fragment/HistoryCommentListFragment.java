@@ -93,5 +93,6 @@ public class HistoryCommentListFragment extends AbstractAsyncListFragment<Histor
     @Override
     public void reloadData() {
         loadData();
+        mListView.setSelection(0);
     }
 }

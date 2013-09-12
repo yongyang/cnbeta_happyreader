@@ -4,6 +4,7 @@ import android.util.Base64;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
+import org.jandroid.cnbeta.exception.NoDataInfoException;
 import org.jandroid.common.UnicodeUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -44,9 +45,15 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
 
     List<Comment> comments = new ArrayList<Comment>();
 
+    private int page =0;
 
-    public ArticleCommentsLoader(Content content) {
+    public ArticleCommentsLoader(Content content, int page) {
         this.content = content;
+        this.page = page;
+    }
+
+    public int getPage() {
+        return page;
     }
 
     @Override
@@ -81,18 +88,34 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
 
         JSONObject resultJSON = (JSONObject) JSONValue.parse(resultJSONString);
         parseResultJSON(resultJSON);
+        checkEmptyResult();
         //返回 updated Content
         return comments;
+    }
+
+    @Override
+    public List<Comment> fromDisk(File baseDir) throws Exception {
+        String resultJSONString = readDisk(baseDir);
+        JSONObject resultJSON = (JSONObject) JSONValue.parse(resultJSONString);
+        parseResultJSON(resultJSON);
+        checkEmptyResult();
+        return comments;
+    }
+
+    private void checkEmptyResult() throws Exception {
+        if(getPage() ==2 && comments.isEmpty()) {
+            throw new NoDataInfoException("没有数据啦!");
+        }
     }
 
     private void parseResultJSON(JSONObject resultJSON) throws Exception {
         //阅读和评论次数
         content.setViewNum(Integer.parseInt(resultJSON.get("view_num").toString()));
         content.setCommentNum(Integer.parseInt(resultJSON.get("comment_num").toString()));
-        
-        
+
+
         JSONObject commentStoreJSONObject = (JSONObject)resultJSON.get("cmntstore");
-       
+
         for(Object scommentObject : (JSONArray)resultJSON.get("cmntlist")){
             JSONObject scommentJSONObject = (JSONObject)scommentObject;
             String tid = scommentJSONObject.get("tid").toString();
@@ -104,15 +127,7 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
             commentJSONObject.put("token", resultJSON.get("token").toString());
             comments.add(new Comment(commentJSONObject));
         }
-        
-    }
-    
-    @Override
-    public List<Comment> fromDisk(File baseDir) throws Exception {
-        String resultJSONString = readDisk(baseDir);
-        JSONObject resultJSON = (JSONObject) JSONValue.parse(resultJSONString);
-        parseResultJSON(resultJSON);
-        return comments;
+
     }
 
     @Override
@@ -121,8 +136,7 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
     }
 
     private String generateOP() throws Exception {
-        
-        String encoded = Base64.encodeToString(("1," + content.getSid() + "," + content.getSn()).getBytes("UTF-8"), Base64.NO_WRAP);
+        String encoded = Base64.encodeToString((getPage() +"," + content.getSid() + "," + content.getSn()).getBytes("UTF-8"), Base64.NO_WRAP);
         for(int i=0; i<8; i++){
             encoded += b64.charAt((int)(Math.random() * b64.length()));
         }

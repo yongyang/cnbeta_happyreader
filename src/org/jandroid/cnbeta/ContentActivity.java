@@ -8,14 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
-import org.jandroid.cnbeta.async.ArticleCommentsAsyncTask;
-import org.jandroid.cnbeta.async.ArticleContentAsyncTask;
-import org.jandroid.cnbeta.async.HasAsync;
-import org.jandroid.cnbeta.async.ImageBytesLoadingAsyncTask;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.entity.HistoryComment;
@@ -25,20 +20,16 @@ import org.jandroid.cnbeta.loader.HistoryCommentListLoader;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.DateFormatUtils;
 import org.jandroid.common.ToastUtils;
-import org.jandroid.common.async.AsyncResult;
-import org.json.simple.JSONObject;
 
 import java.util.Date;
-import java.util.List;
 
-public class ContentActivity extends BaseActivity implements HasAsync<Content> {
+public class ContentActivity extends BaseActivity {
 
     private ArticleContentFragment contentFragment;
     private ArticleCommentsFragment commentsFragment;
 
     private long sid;
     private String title;
-    private Content content = null;
 
     private ViewPager mViewPager;
     private ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
@@ -120,6 +111,10 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
         return title;
     }
 
+    public boolean isPageLoaded() {
+        return contentFragment.getContent() != null;
+    }
+
     private void setupViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.content_viewpager);
         mViewPager.setAdapter(pagerAdapter);
@@ -147,10 +142,10 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
-        ((CnBetaApplication)getApplicationContext()).onOptionsItemSelected(this, mi);
+        ((CnBetaApplication) getApplicationContext()).onOptionsItemSelected(this, mi);
         switch (mi.getItemId()) {
             case R.id.refresh_item:
-                loadArticleContent(); // will load content and comments
+                commentsFragment.reloadData(); // will reload comments, and update comment Numbers
                 break;
             case R.id.comment_item:
                 Utils.openPublishCommentActivityForResult(this, getContent().getSid());
@@ -166,169 +161,57 @@ public class ContentActivity extends BaseActivity implements HasAsync<Content> {
         }
     }
 
-    public void loadArticleContent() {
-        executeAsyncTaskMultiThreading(new ArticleContentAsyncTask() {
-
-            @Override
-            protected long getSid() {
-                return getArticleSid();
-            }
-
-            @Override
-            public HasAsync<Content> getAsyncContext() {
-                return ContentActivity.this;
-            }
-        }
-        );
-    }
-
-    public void loadImages() {
-        for (String image : content.getImages()) {
-            loadImage(image);
-        }
-    }
-
-    private void loadImage(final String imgSrc) {
-        executeAsyncTaskMultiThreading(new ImageBytesLoadingAsyncTask() {
-            @Override
-            protected String getImageUrl() {
-                return imgSrc;
-            }
-
-            @Override
-            public HasAsync<byte[]> getAsyncContext() {
-                return new HasAsync<byte[]>() {
-                    public CnBetaApplicationContext getCnBetaApplicationContext() {
-                        return (CnBetaApplicationContext) getApplicationContext();
-                    }
-
-                    public void onProgressShow() {
-
-                    }
-
-                    public void onProgressDismiss() {
-
-                    }
-
-                    public void onSuccess(AsyncResult<byte[]> asyncResult) {
-                        String id = Base64.encodeToString(imgSrc.getBytes(), Base64.NO_WRAP);
-                        //update image in WebView by javascript
-                        contentFragment.updateImage(id, asyncResult.getResult());
-                    }
-
-                    public void onFailure(AsyncResult<byte[]> asyncResult) {
-
-                    }
-                };
-            }
-        }
-        );
-
-    }
-
-    public void loadArticleComments() {
-        executeAsyncTaskMultiThreading(new ArticleCommentsAsyncTask() {
-            @Override
-            protected Content getArticleContent() {
-                return content;
-            }
-
-            @Override
-            public HasAsync<List<Comment>> getAsyncContext() {
-                return new HasAsync<List<Comment>>() {
-                    public CnBetaApplicationContext getCnBetaApplicationContext() {
-                        return (CnBetaApplicationContext) getApplicationContext();
-                    }
-
-                    public void onProgressShow() {
-                        ContentActivity.this.onProgressShow();
-                    }
-
-                    public void onProgressDismiss() {
-                        ContentActivity.this.onProgressDismiss();
-                    }
-
-                    public void onSuccess(AsyncResult<List<Comment>> listAsyncResult) {
-                        List<Comment> comments = listAsyncResult.getResult();
-                        //update view_number, update comment fragment
-                        contentFragment.updateCommentNumbers(content);
-                        commentsFragment.updateComments(comments);
-                    }
-
-                    public void onFailure(AsyncResult<List<Comment>> listAsyncResult) {
-
-                    }
-                };
-            }
-        }
-        );
+    // call by ArticleContentFragment
+    public void loadComments() {
+        commentsFragment.loadData();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode ==0 && resultCode ==0) {
-            if(data != null && data.hasExtra("comment")) { // 直接 finish 时， data==null
-                final Comment newComment = (Comment)data.getSerializableExtra("comment");
-                appendComment(newComment);
-                        // write history
-        new Thread(){
-            @Override
-            public void run() {
-                HistoryComment historyComment = new HistoryComment();
-                historyComment.setSid(getArticleSid());
-                historyComment.setComment(newComment.getComment());
-                historyComment.setTitle(getArticleTitle());
-                historyComment.setDate(DateFormatUtils.getDefault().format(new Date()));
+        if (requestCode == 0 && resultCode == 0) {
+            if (data != null && data.hasExtra("comment")) { // 直接 finish 时， data==null
+                final Comment newComment = (Comment) data.getSerializableExtra("comment");
+                newPostedComment(newComment);
+                // write history
+                new Thread() {
+                    @Override
+                    public void run() {
+                        HistoryComment historyComment = new HistoryComment();
+                        historyComment.setSid(getArticleSid());
+                        historyComment.setComment(newComment.getComment());
+                        historyComment.setTitle(getArticleTitle());
+                        historyComment.setDate(DateFormatUtils.getDefault().format(new Date()));
 
-                try {
-                    new HistoryCommentListLoader().writeHistory(((CnBetaApplicationContext)getApplicationContext()).getBaseDir(), historyComment);
-                }
-                catch (final Exception e) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            ToastUtils.showShortToast(getApplicationContext(), e.toString());
+                        try {
+                            new HistoryCommentListLoader().writeHistory(((CnBetaApplicationContext) getApplicationContext()).getBaseDir(), historyComment);
                         }
-                    });
-                }
-            }
-        }.start();
+                        catch (final Exception e) {
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    ToastUtils.showShortToast(getApplicationContext(), e.toString());
+                                }
+                            });
+                        }
+                    }
+                }.start();
 
             }
         }
     }
 
     // 发布/回复一个新评论时调用该方法即使显示
-    private void appendComment(Comment comment){
-        commentsFragment.appendComment(comment);
-        if(this.getActionBar().getSelectedNavigationIndex() == 0) { // 选中 comment fragment
+    private void newPostedComment(Comment comment) {
+        commentsFragment.newPostedComment(comment);
+        if (this.getActionBar().getSelectedNavigationIndex() == 0) { // 选中 comment fragment
             this.getActionBar().setSelectedNavigationItem(1);
         }
     }
 
+    public void updateCommentNumbers() {
+        contentFragment.updateCommentNumbers();
+    }
+
     public Content getContent() {
-        return content;
-    }
-
-    public CnBetaApplicationContext getCnBetaApplicationContext() {
-        return (CnBetaApplicationContext) getApplicationContext();
-    }
-
-    public void onProgressShow() {
-        setProgressBarIndeterminate(true);
-        setProgressBarVisibility(true);
-    }
-
-    public void onProgressDismiss() {
-        setProgressBarVisibility(false);
-    }
-
-    public void onSuccess(AsyncResult<Content> contentAsyncResult) {
-        content = contentAsyncResult.getResult();
-        //update content in ContentActivity
-        contentFragment.updateArticleContent(content);
-    }
-
-    public void onFailure(AsyncResult<Content> contentAsyncResult) {
-
+        return contentFragment.getContent();
     }
 }

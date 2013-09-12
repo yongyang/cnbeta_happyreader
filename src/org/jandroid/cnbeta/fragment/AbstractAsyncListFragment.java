@@ -45,7 +45,7 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.lv_article_list, container, false);
+        View rootView = inflater.inflate(R.layout.listview_article_list, container, false);
         mListView = (ListView) rootView.findViewById(R.id.article_listview);
         return rootView;
     }
@@ -112,6 +112,10 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
 
     public int getDataSize() {
         return loadedDatas.size();
+    }
+
+    public void addData(int location, T data){
+        loadedDatas.add(location, data);
     }
 
     public abstract void loadData();
