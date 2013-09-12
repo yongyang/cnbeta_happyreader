@@ -114,7 +114,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
             public void run() {
                 System.exit(0);
             }
-        }, 500);
+        }, 100);
     }
 
     public boolean cleanCache(){

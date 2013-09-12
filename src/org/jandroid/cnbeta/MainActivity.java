@@ -192,7 +192,7 @@ public class MainActivity extends BaseActivity {
                 @Override
                 public void run() {
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(50);
                     }
                     catch (Exception e){}
                     ((CnBetaApplication)getApplicationContext()).exit();
