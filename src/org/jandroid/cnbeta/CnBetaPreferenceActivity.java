@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
@@ -18,6 +19,7 @@ import org.apache.commons.io.IOUtils;
 import org.jandroid.common.ToastUtils;
 
 public class CnBetaPreferenceActivity extends PreferenceActivity {
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +34,13 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
             button.setText("一键清除缓存和浏览记录");
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    getCnBetaApplication().cleanCache();
+                    cleanHistory();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            cleanCache();
+                        }
+                    }, 1000);
+
                 }
             });
             // 将该按钮添加到该界面上
@@ -43,7 +51,6 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
     public boolean onOptionsItemSelected(MenuItem mi) {
         return ((CnBetaApplication) getApplicationContext()).onOptionsItemSelected(this, mi);
     }
-
 
     // 重写该该方法，负责加载页面布局文件
     @Override
@@ -65,29 +72,7 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
             Preference button = findPreference(getString(R.string.pref_key_cleanCache));
             button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference arg0) {
-                    new AsyncTask<Object, Integer, Boolean>() {
-
-                        @Override
-                        protected void onPreExecute() {
-                            ToastUtils.showShortToast(getActivity(), "正在清除缓存，请稍等...");
-                        }
-
-                        @Override
-                        protected Boolean doInBackground(Object... params) {
-                            return ((CnBetaPreferenceActivity) getActivity()).getCnBetaApplication().cleanCache();
-                        }
-
-                        @Override
-                        protected void onPostExecute(Boolean aBoolean) {
-                            super.onPostExecute(aBoolean);
-                            if (aBoolean) {
-                                ToastUtils.showShortToast(getActivity(), "缓存清除成功！");
-                            }
-                            else {
-                                ToastUtils.showShortToast(getActivity(), "缓存清除失败，请重启软件后重试！");
-                            }
-                        }
-                    }.execute();
+                    ((CnBetaPreferenceActivity)getActivity()).cleanCache();
                     return true;
                 }
             });
@@ -104,33 +89,64 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
 
             button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference arg0) {
-                    new AsyncTask<Object, Integer, Boolean>() {
-
-                        @Override
-                        protected void onPreExecute() {
-                            ToastUtils.showShortToast(getActivity(), "正在清除历史记录，请稍等...");
-                        }
-
-                        @Override
-                        protected Boolean doInBackground(Object... params) {
-                            return ((CnBetaPreferenceActivity) getActivity()).getCnBetaApplication().cleanHistory();
-                        }
-
-                        @Override
-                        protected void onPostExecute(Boolean aBoolean) {
-                            super.onPostExecute(aBoolean);
-                            if (aBoolean) {
-                                ToastUtils.showShortToast(getActivity(), "历史记录清除成功！");
-                            }
-                            else {
-                                ToastUtils.showShortToast(getActivity(), "历史记录清除失败，请重启软件后重试！");
-                            }
-                        }
-                    }.execute();
                     return true;
                 }
             });
 
         }
+    }
+
+    private void cleanCache(){
+        new AsyncTask<Object, Integer, Boolean>() {
+
+            @Override
+            protected void onPreExecute() {
+                ToastUtils.showShortToast(CnBetaPreferenceActivity.this, "正在清除缓存，请稍等...");
+            }
+
+            @Override
+            protected Boolean doInBackground(Object... params) {
+                return getCnBetaApplication().cleanCache();
+            }
+
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                super.onPostExecute(aBoolean);
+                if (aBoolean) {
+                    ToastUtils.showShortToast(CnBetaPreferenceActivity.this, "缓存清除成功！");
+                }
+                else {
+                    ToastUtils.showShortToast(CnBetaPreferenceActivity.this, "缓存清除失败，请重启软件后重试！");
+                }
+            }
+        }.execute();
+
+    }
+
+    private void cleanHistory(){
+        new AsyncTask<Object, Integer, Boolean>() {
+
+            @Override
+            protected void onPreExecute() {
+                ToastUtils.showShortToast(CnBetaPreferenceActivity.this, "正在清除历史记录，请稍等...");
+            }
+
+            @Override
+            protected Boolean doInBackground(Object... params) {
+                return getCnBetaApplication().cleanHistory();
+            }
+
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                super.onPostExecute(aBoolean);
+                if (aBoolean) {
+                    ToastUtils.showShortToast(CnBetaPreferenceActivity.this, "历史记录清除成功！");
+                }
+                else {
+                    ToastUtils.showShortToast(CnBetaPreferenceActivity.this, "历史记录清除失败，请重启软件后重试！");
+                }
+            }
+        }.execute();
+
     }
 }
