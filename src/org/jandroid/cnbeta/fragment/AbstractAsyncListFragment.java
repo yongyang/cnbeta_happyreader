@@ -12,6 +12,7 @@ import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.common.BaseFragment;
+import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
 
 import java.text.DateFormat;
@@ -94,7 +95,7 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
 
     public synchronized void onFailure(AsyncResult<List<T>> listAsyncResult) {
         getAdapter().notifyDataSetChanged();
-        logger.e("Failure: ", listAsyncResult.getException());
+        ToastUtils.showShortToast(getActivity(), listAsyncResult.getErrorMsg());
     }
 
     public synchronized void onSuccess(AsyncResult<List<T>> listAsyncResult) {

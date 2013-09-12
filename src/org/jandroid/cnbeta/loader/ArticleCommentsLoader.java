@@ -83,12 +83,10 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
         Object resultBase64String = responseJSON.get("result");
         String resultJSONString = new String(Base64.decode(resultBase64String.toString(), Base64.DEFAULT), "UTF-8");
         resultJSONString = resultJSONString.substring(resultJSONString.indexOf('{'), resultJSONString.lastIndexOf('}')+1);
-
-        writeDisk(baseDir, resultJSONString);
-
         JSONObject resultJSON = (JSONObject) JSONValue.parse(resultJSONString);
         parseResultJSON(resultJSON);
         checkEmptyResult();
+        writeDisk(baseDir, resultJSONString);
         //返回 updated Content
         return comments;
     }

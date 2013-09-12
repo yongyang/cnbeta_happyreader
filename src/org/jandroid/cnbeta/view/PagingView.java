@@ -60,8 +60,8 @@ public class PagingView {
         tvPage.setText("" + page);
     }
 
-    public void reloaded(){
-        page = 1;
+    public void resetPage(){
+        page = 0;
         tvPage.setText("" + page);
     }
 

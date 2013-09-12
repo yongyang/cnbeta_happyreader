@@ -35,7 +35,6 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
     protected long topicId;
     protected String topicName;
 
-    protected int page = 0;
     protected int splitPage = 0;
     public static final int splitCount = 3;
 
@@ -58,10 +57,6 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
         return topicName;
     }
 
-    public int getPage() {
-        return page;
-    }
-
     @Override
     public void loadData() {
         executeAsyncTaskMultiThreading(new TopicArticleListAsyncTask() {
@@ -78,7 +73,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 
             @Override
             protected int getPage() {
-                return TopicArticleListFragment.this.getPage() + 1;
+                return footerPagingView.getNextPage();
             }
 
             @Override
@@ -88,7 +83,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
         });
     }
 
-    public void updateTopicId(long topicId){
+    public void updateTopicId(long topicId) {
         this.topicId = topicId;
         clearData();
         getAdapter().notifyDataSetChanged();
@@ -96,7 +91,6 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
     }
 
     public void reloadData() {
-        page = 0;
         splitPage = 0;
         executeAsyncTaskMultiThreading(new TopicArticleListAsyncTask() {
             @Override
@@ -111,7 +105,8 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 
             @Override
             protected int getPage() {
-                return TopicArticleListFragment.this.getPage() + 1;
+                footerPagingView.resetPage();
+                return footerPagingView.getNextPage();
             }
 
             @Override
@@ -136,7 +131,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         footerPagingView = PagingView.load(getActivity().getLayoutInflater(), R.layout.listvew_footbar_paging);
-        ((ListView)mListView).addFooterView(footerPagingView.getRootView());
+        ((ListView) mListView).addFooterView(footerPagingView.getRootView());
 
         footerPagingView.setOnClickListener(new View.OnClickListener() {
 
@@ -247,7 +242,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        TopicArticle article =  (TopicArticle)getAdapter().getItem(position);
+        TopicArticle article = (TopicArticle) getAdapter().getItem(position);
         Utils.openContentActivity(getActivity(), article.getSid(), article.getTitleShow());
     }
 
@@ -269,44 +264,27 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
     @Override
     public void onSuccess(AsyncResult<List<TopicArticle>> listAsyncResult) {
         super.onSuccess(listAsyncResult);
-
-        if(!listAsyncResult.getResult().isEmpty()) {
-            //需要控制显示正确的页面，第一页时  1/3 2/3 1
-            if(page + 1 == 1 && splitPage + 1 < splitCount) {
-                splitPage++;
-                footerPagingView.setPage(page, splitPage + "/" + splitCount);
-            }
-            else {
-                page++;
-                splitPage = 0;
-                footerPagingView.setPage(page);
-            }
+        //需要控制显示正确的页面，第一页时  1/3 2/3 1
+        if (footerPagingView.getPage() + 1 == 1 && splitPage + 1 < splitCount) {
+            splitPage++;
+            footerPagingView.setPage(footerPagingView.getPage(), splitPage + "/" + splitCount);
         }
         else {
-            ToastUtils.showShortToast(getActivity(), "已到最后页！");
+            splitPage = 0;
+            footerPagingView.increasePage();
         }
     }
 
     @Override
     public void onProgressShow() {
-        //TODO: refresh action view only page=1
         super.onProgressShow();
         footerPagingView.onProgressShow();
-        if (getPage() == 1) { //page 1 is reload
-//            startRotateRefreshActionView();
-        }
-
     }
 
     @Override
     public void onProgressDismiss() {
-        //TODO: refresh action view only page=1
         super.onProgressDismiss();
         footerPagingView.onProgressDismiss();
-        // stop refresh rotation anyway
-        if (getPage() == 1) { //page 1 is reload
-//            stopRotateRefreshActionView();
-        }
     }
 
 

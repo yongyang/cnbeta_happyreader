@@ -24,13 +24,7 @@ import java.util.List;
  */
 public class EditorRecommendListFragment extends AbstractAsyncListFragment<EditorRecommend> {
 
-    protected int page = 0;
-
     private PagingView footerPagingView;
-
-    public int getPage() {
-        return page;
-    }
 
     @Override
     protected BaseAdapter newAdapter() {
@@ -66,7 +60,7 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
         executeAsyncTaskMultiThreading(new EditorRecommendListAsyncTask() {
             @Override
             protected int getPage() {
-                return EditorRecommendListFragment.this.getPage() + 1;
+                return footerPagingView.getNextPage();
             }
 
             @Override
@@ -77,11 +71,11 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
     }
 
     public void reloadData() {
-        page = 0;
         executeAsyncTaskMultiThreading(new EditorRecommendListAsyncTask() {
             @Override
             protected int getPage() {
-                return EditorRecommendListFragment.this.getPage() + 1;
+                footerPagingView.resetPage();
+                return footerPagingView.getNextPage();
             }
 
             @Override
@@ -128,30 +122,19 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
     @Override
     public void onSuccess(AsyncResult<List<EditorRecommend>> listAsyncResult) {
         super.onSuccess(listAsyncResult);
-        page++;
-        footerPagingView.setPage(page);
+        footerPagingView.increasePage();
     }
 
     @Override
     public void onProgressShow() {
-        //TODO: refresh action view only page=1
         super.onProgressShow();
         footerPagingView.onProgressShow();
-        if (getPage() == 1) { //page 1 is reload
-//            startRotateRefreshActionView();
-        }
-
     }
 
     @Override
     public void onProgressDismiss() {
-        //TODO: refresh action view only page=1
         super.onProgressDismiss();
         footerPagingView.onProgressDismiss();
-        // stop refresh rotation anyway
-        if (getPage() == 1) { //page 1 is reload
-//            stopRotateRefreshActionView();
-        }
     }
 
 }

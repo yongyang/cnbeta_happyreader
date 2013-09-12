@@ -1,6 +1,7 @@
 package org.jandroid.cnbeta.loader;
 
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
+import org.jandroid.cnbeta.exception.NoDataInfoException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -70,14 +71,16 @@ public abstract class AbstractListLoader<T> extends AbstractLoader<List<T>> {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("X-Requested-With", "XMLHttpRequest");
 
-        //TODO: clear cache if page=1, reload
         String url = getURL();
         //user json-simple to parse returned json string
         String response = CnBetaHttpClient.getInstance().httpGet(url, headers);
 
         JSONArray articleListJSONArray = getJSONArray(response);
         List<T> articles = parseJSONArray(articleListJSONArray);
+
+        checkEmptyResult(articles);
         //parse成功才存盘
+        //FIXEME: clear cache if page=1, reload?? looks like don't need to do so
         writeDisk(baseDir, articleListJSONArray.toJSONString());
         return articles;
     }
@@ -108,6 +111,12 @@ public abstract class AbstractListLoader<T> extends AbstractLoader<List<T>> {
         return articleList;
     }
 
+    protected void checkEmptyResult(List<T> result) throws Exception {
+        if(getPage() > 1 && result.isEmpty()) {
+            throw new NoDataInfoException("没有数据啦!");
+        }
+    }
+
     protected abstract T newEntity(JSONObject jSONObject);
 
     @Override
@@ -115,7 +124,9 @@ public abstract class AbstractListLoader<T> extends AbstractLoader<List<T>> {
         //read json file from SD Card
         String articleListJSONString = readDisk(baseDir);
         JSONArray articleListJSONArray = (JSONArray)JSONValue.parse(articleListJSONString);
-        return parseJSONArray(articleListJSONArray);
+        List<T> articles = parseJSONArray(articleListJSONArray);
+        checkEmptyResult(articles);
+        return articles;
     }
 
     @Override

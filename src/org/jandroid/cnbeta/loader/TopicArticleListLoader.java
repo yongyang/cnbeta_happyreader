@@ -1,9 +1,11 @@
 package org.jandroid.cnbeta.loader;
 
 import org.jandroid.cnbeta.entity.TopicArticle;
+import org.jandroid.cnbeta.exception.NoDataInfoException;
 import org.json.simple.JSONObject;
 
 import java.text.MessageFormat;
+import java.util.List;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -40,6 +42,13 @@ public class TopicArticleListLoader extends AbstractListLoader<TopicArticle> {
         }
         else {
             return MessageFormat.format(URL_TEMPLATE, randomJQueryCallback(), "" + getPage(),  ""+ getId(), "" + (System.currentTimeMillis() + 1));
+        }
+    }
+
+    @Override
+    protected void checkEmptyResult(List<TopicArticle> result) throws Exception {
+        if((getSplitPage() > 1 || getPage() > 1) && result.isEmpty()) {
+            throw new NoDataInfoException("没有数据啦!");
         }
     }
 

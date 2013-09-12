@@ -254,7 +254,32 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
     @Override
     public void reloadData() {
         if (((ContentActivity) getActivity()).isPageLoaded()) {
+            executeAsyncTaskMultiThreading(new ArticleCommentsAsyncTask() {
+                @Override
+                protected Content getArticleContent() {
+                    return ((ContentActivity) getActivity()).getContent();
+                }
 
+                @Override
+                protected int getPage() {
+                    footerPagingView.resetPage();
+                    return footerPagingView.getNextPage();
+                }
+
+                @Override
+                public HasAsync<List<Comment>> getAsyncContext() {
+                    return new HasAsyncDelegate<List<Comment>>(ArticleCommentsFragment.this){
+                        @Override
+                        public void onSuccess(AsyncResult<List<Comment>> listAsyncResult) {
+                            clearData();
+                            super.onSuccess(listAsyncResult);
+                            // scroll to top
+                            mListView.setSelection(0);
+                        }
+                    };
+                }
+            }
+            );
         }
     }
 
@@ -287,12 +312,6 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
         // update comment count in ContentFragment
         ((ContentActivity) getActivity()).updateCommentNumbers();
 
-    }
-
-    @Override
-    public synchronized void onFailure(AsyncResult<List<Comment>> listAsyncResult) {
-        super.onFailure(listAsyncResult);
-        ToastUtils.showShortToast(getActivity(), listAsyncResult.getErrorMsg());
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class TopicListLoader extends AbstractListLoader<Topic> {
 
-    public static final int MAX_PAGE = 9;
+//    public static final int MAX_PAGE = 9;
 
     public static final String URL_TEMPLATE = "http://www.cnbeta.com/topics.htm?page={0}&_={1}";
 
@@ -33,17 +33,21 @@ public class TopicListLoader extends AbstractListLoader<Topic> {
 
     @Override
     public List<Topic> fromHttp(File baseDir) throws Exception {
+/*
         if(getPage() > MAX_PAGE){
             return Collections.EMPTY_LIST;
         }
+*/
         return super.fromHttp(baseDir);
     }
 
     @Override
     public List<Topic> fromDisk(File baseDir) throws Exception {
+/*
         if(getPage() > MAX_PAGE){
             return Collections.EMPTY_LIST;
         }
+*/
         return super.fromDisk(baseDir);
     }
 

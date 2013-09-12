@@ -36,8 +36,6 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
     // 新闻分类
     private ArticleListLoader.Type category;
 
-    protected int page = 0;
-
     private PagingView footerPagingView;
 
     public ArticleListFragment(ArticleListLoader.Type category) {
@@ -46,10 +44,6 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
 
     public ArticleListLoader.Type getCategory() {
         return category;
-    }
-
-    public int getPage() {
-        return page;
     }
 
     @Override
@@ -62,7 +56,7 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
 
             @Override
             protected int getPage() {
-                return ArticleListFragment.this.getPage() + 1;
+                return footerPagingView.getNextPage();
             }
 
             @Override
@@ -73,7 +67,6 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
     }
 
     public void reloadData() {
-        page = 0;
         executeAsyncTaskMultiThreading(new ArticleListAsyncTask() {
             @Override
             protected ArticleListLoader.Type getCategory() {
@@ -82,7 +75,8 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
 
             @Override
             protected int getPage() {
-                return ArticleListFragment.this.getPage() + 1;
+                footerPagingView.resetPage();
+                return footerPagingView.getNextPage();
             }
 
             @Override
@@ -249,19 +243,13 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
     @Override
     public void onSuccess(AsyncResult<List<Article>> listAsyncResult) {
         super.onSuccess(listAsyncResult);
-        page++;
-        footerPagingView.setPage(page);
+        footerPagingView.increasePage();
     }
 
     @Override
     public void onProgressShow() {
-        //TODO: refresh action view only page=1
         super.onProgressShow();
         footerPagingView.onProgressShow();
-        if (getPage() == 1) { //page 1 is reload
-//            startRotateRefreshActionView();
-        }
-
     }
 
     @Override
@@ -269,9 +257,5 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
         //TODO: refresh action view only page=1
         super.onProgressDismiss();
         footerPagingView.onProgressDismiss();
-        // stop refresh rotation anyway
-        if (getPage() == 1) { //page 1 is reload
-//            stopRotateRefreshActionView();
-        }
     }
 }

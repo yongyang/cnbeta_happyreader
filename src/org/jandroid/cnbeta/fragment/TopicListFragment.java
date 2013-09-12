@@ -23,6 +23,7 @@ import org.jandroid.cnbeta.entity.Topic;
 import org.jandroid.cnbeta.loader.TopicListLoader;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.BaseActivity;
+import org.jandroid.common.ToastUtils;
 import org.jandroid.common.adapter.AsyncImageAdapter;
 import org.jandroid.common.async.AsyncResult;
 
@@ -35,8 +36,6 @@ import java.util.List;
 public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
 
 
-    protected int page = 0;
-
     private PagingView footerPagingView;
 
     private LinearLayout footerContainer;
@@ -44,20 +43,18 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
     public TopicListFragment() {
     }
 
-    public int getPage() {
-        return page;
-    }
-
     @Override
     public void loadData() {
-        if(getPage() == TopicListLoader.MAX_PAGE) { //已经达到最大页
+/*
+        if(footerPagingView.getPage() == TopicListLoader.MAX_PAGE) { //已经达到最大页
             return;
         }
+*/
         executeAsyncTaskMultiThreading(new TopicListAsyncTask() {
 
             @Override
             protected int getPage() {
-                return TopicListFragment.this.getPage() + 1;
+                return footerPagingView.getNextPage();
             }
 
             @Override
@@ -68,11 +65,11 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
     }
 
     public void reloadData() {
-        page = 0;
         executeAsyncTaskMultiThreading(new TopicListAsyncTask() {
             @Override
             protected int getPage() {
-                return TopicListFragment.this.getPage() + 1;
+                footerPagingView.resetPage();
+                return footerPagingView.getNextPage();
             }
 
             @Override
@@ -231,37 +228,24 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
     @Override
     public void onSuccess(AsyncResult<List<Topic>> listAsyncResult) {
         super.onSuccess(listAsyncResult);
-        footerPagingView.setPage(++page);
+        footerPagingView.increasePage();
 //            mListView.smoothScrollToPosition(mListView.getAdapter().getCount());
-        if(getPage() == TopicListLoader.MAX_PAGE) {
+/*
+        if(footerPagingView.getPage() == TopicListLoader.MAX_PAGE) {
             footerPagingView.setEnable(false);
         }
-    }
-
-    @Override
-    public void onFailure(AsyncResult<List<Topic>> listAsyncResult) {
-        super.onFailure(listAsyncResult);
+*/
     }
 
     @Override
     public void onProgressShow() {
-        //TODO: refresh action view only page=1
         super.onProgressShow();
         footerPagingView.onProgressShow();
-        if (getPage() == 1) { //page 1 is reload
-//            startRotateRefreshActionView();
-        }
-
     }
 
     @Override
     public void onProgressDismiss() {
-        //TODO: refresh action view only page=1
         super.onProgressDismiss();
         footerPagingView.onProgressDismiss();
-        // stop refresh rotation anyway
-        if (getPage() == 1) { //page 1 is reload
-//            stopRotateRefreshActionView();
-        }
     }
 }
