@@ -110,4 +110,9 @@ public class Utils {
         theActivity.startActivity(intent);
     }
 
+    public static void openAboutActivity(Activity theActivity) {
+        Intent intent = IntentUtils.newIntent(theActivity, AboutActivity.class);
+        theActivity.startActivity(intent);
+    }
+
 }

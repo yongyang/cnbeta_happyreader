@@ -77,6 +77,11 @@
                 android:label="参数设置">
         </activity>
 
+        <activity
+                android:name=".AboutActivity"
+                android:label="关于">
+        </activity>
+
     </application>
 
     <!--for test case-->

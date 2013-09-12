@@ -90,6 +90,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
                 Utils.openPreferenceActivity(theActivity);
                 break;
             case R.id.aboutus_item:
+                Utils.openAboutActivity(theActivity);
                 break;
         }
 
