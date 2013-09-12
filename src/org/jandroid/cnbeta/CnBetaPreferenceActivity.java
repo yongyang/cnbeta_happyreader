@@ -2,6 +2,7 @@ package org.jandroid.cnbeta;
 
 import java.util.List;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -34,6 +35,10 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
         loadHeadersFromResource(R.xml.preference_headers, target);
     }
 
+    private CnBetaApplication getCnBetaApplication() {
+        return (CnBetaApplication)getApplication();
+    }
+
     public static class PrefsCacheFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -52,8 +57,7 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
 
                         @Override
                         protected Boolean doInBackground(Object... params) {
-                            //TODO: 是否清楚历史记录
-                            return FileUtils.deleteQuietly(((CnBetaApplicationContext)getActivity().getApplicationContext()).getBaseDir());
+                            return ((CnBetaPreferenceActivity)getActivity()).getCnBetaApplication().cleanCache();
                         }
 
                         @Override
@@ -78,12 +82,38 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.prefs_history);
-            // 获取传入该Fragment的参数
-//            String website = getArguments().getString("site_url");
-//            Toast.makeText(getActivity(), "网站域名是：" + website, Toast.LENGTH_LONG).show();
+
+            Preference button = findPreference(getString(R.string.pref_key_cleanHistory));
+
+            button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference arg0) {
+                    new AsyncTask<Object, Integer, Boolean>() {
+
+                        @Override
+                        protected void onPreExecute() {
+                            ToastUtils.showShortToast(getActivity(), "正在清除历史记录，请稍等...");
+                        }
+
+                        @Override
+                        protected Boolean doInBackground(Object... params) {
+                            return ((CnBetaPreferenceActivity)getActivity()).getCnBetaApplication().cleanHistory();
+                        }
+
+                        @Override
+                        protected void onPostExecute(Boolean aBoolean) {
+                            super.onPostExecute(aBoolean);
+                            if(aBoolean) {
+                                ToastUtils.showShortToast(getActivity(), "历史记录清除成功！");
+                            }
+                            else {
+                                ToastUtils.showShortToast(getActivity(), "历史记录清除失败，请重启软件后重试！");
+                            }
+                        }
+                    }.execute();
+                    return true;
+                }
+            });
 
         }
-
-
     }
 }

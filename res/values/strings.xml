@@ -38,4 +38,5 @@
     <string name="tab_history_comment">我的评论</string>
 
     <string name="pref_key_cleanCache">cleanCache</string>
+    <string name="pref_key_cleanHistory">cleanHistory</string>
 </resources>

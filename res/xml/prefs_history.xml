@@ -11,7 +11,7 @@
                 android:defaultValue="false"/>
 
         <Preference
-                android:key="@string/pref_key_cleanCache"
+                android:key="@string/pref_key_cleanHistory"
                 android:persistent="false"
                 android:title="清除历史记录"
                 android:summary="点击清除浏览及评论记录"/>

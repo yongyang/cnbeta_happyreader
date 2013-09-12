@@ -2,10 +2,14 @@ package org.jandroid.cnbeta;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.os.Environment;
+import android.os.Handler;
 import android.view.MenuItem;
 import org.apache.commons.io.FileUtils;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
+import org.jandroid.cnbeta.loader.HistoryArticleListLoader;
+import org.jandroid.cnbeta.loader.HistoryCommentListLoader;
 import org.jandroid.common.EnvironmentUtils;
 import org.jandroid.common.Logger;
 
@@ -18,6 +22,8 @@ import java.io.IOException;
 public class CnBetaApplication extends Application implements CnBetaApplicationContext{
 
     static Logger logger = Logger.getLogger(CnBetaApplication.class);
+
+    Handler handler = new Handler();
 
     private CnBetaHttpClient httpClient = CnBetaHttpClient.getInstance();
 
@@ -91,9 +97,76 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     }
 
     public void exit() {
+        SharedPreferences prefs = getSharedPreferences(getPackageName() + "_preferences", MODE_PRIVATE);
+
+        if(prefs.getBoolean("pref_key_autoCleanCache", false)) {
+            cleanCache();
+        }
+
+        if(prefs.getBoolean("pref_key_autoCleanHistory", false)) {
+            cleanHistory();
+        }
+
 //        shutdown httpClient 会导致再次打开程序无法获取网络数据
         httpClient.shutdown();
-        System.exit(0);
+
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                System.exit(0);
+            }
+        }, 2000);
+    }
+
+    public boolean cleanCache(){
+
+        boolean success = true;
+        SharedPreferences prefs = getSharedPreferences(getPackageName() + "_preferences", MODE_PRIVATE);
+
+        boolean cleanHistory = prefs.getBoolean("pref_key_includeHistory", false);
+        if(!cleanHistory) {
+            try {
+                FileUtils.moveFileToDirectory(new HistoryArticleListLoader().getFile(getBaseDir()), getBaseDir().getParentFile(), false);
+            }
+            catch (Exception e) {
+                success = false;
+            }
+            try {
+                FileUtils.moveFileToDirectory(new HistoryCommentListLoader().getFile(getBaseDir()), getBaseDir().getParentFile(), false);
+            }
+            catch (Exception e) {
+                success = false;
+            }
+        }
+
+        FileUtils.deleteQuietly(getBaseDir());
+        if(!cleanHistory) {
+            try {
+                FileUtils.moveFileToDirectory(new HistoryArticleListLoader().getFile(getBaseDir().getParentFile()), getBaseDir(), true);
+            }
+            catch (Exception e){
+                success = false;
+            }
+
+            try {
+                FileUtils.moveFileToDirectory(new HistoryCommentListLoader().getFile(getBaseDir().getParentFile()), getBaseDir(), true);
+            }
+            catch (Exception e) {
+                success = false;
+            }
+        }
+        return success;
+    }
+
+    public boolean cleanHistory() {
+        boolean success = true;
+        try {
+            FileUtils.deleteQuietly(new HistoryCommentListLoader().getFile(getBaseDir()));
+            FileUtils.deleteQuietly(new HistoryArticleListLoader().getFile(getBaseDir()));
+        }
+        catch (Exception e) {
+            success = false;
+        }
+        return success;
     }
 
 }
