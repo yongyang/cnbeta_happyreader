@@ -2,12 +2,15 @@ package org.jandroid.cnbeta;
 
 import java.util.List;
 
+import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import org.apache.commons.io.FileUtils;
@@ -19,14 +22,28 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         // 该方法用于为该界面设置一个标题按钮
         if (hasHeaders()) {
             Button button = new Button(this);
             button.setText("一键清除缓存和浏览记录");
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    getCnBetaApplication().cleanCache();
+                }
+            });
             // 将该按钮添加到该界面上
             setListFooter(button);
         }
     }
+
+    public boolean onOptionsItemSelected(MenuItem mi) {
+        return ((CnBetaApplication) getApplicationContext()).onOptionsItemSelected(this, mi);
+    }
+
 
     // 重写该该方法，负责加载页面布局文件
     @Override
@@ -36,7 +53,7 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
     }
 
     private CnBetaApplication getCnBetaApplication() {
-        return (CnBetaApplication)getApplication();
+        return (CnBetaApplication) getApplication();
     }
 
     public static class PrefsCacheFragment extends PreferenceFragment {
@@ -57,13 +74,13 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
 
                         @Override
                         protected Boolean doInBackground(Object... params) {
-                            return ((CnBetaPreferenceActivity)getActivity()).getCnBetaApplication().cleanCache();
+                            return ((CnBetaPreferenceActivity) getActivity()).getCnBetaApplication().cleanCache();
                         }
 
                         @Override
                         protected void onPostExecute(Boolean aBoolean) {
                             super.onPostExecute(aBoolean);
-                            if(aBoolean) {
+                            if (aBoolean) {
                                 ToastUtils.showShortToast(getActivity(), "缓存清除成功！");
                             }
                             else {
@@ -96,13 +113,13 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
 
                         @Override
                         protected Boolean doInBackground(Object... params) {
-                            return ((CnBetaPreferenceActivity)getActivity()).getCnBetaApplication().cleanHistory();
+                            return ((CnBetaPreferenceActivity) getActivity()).getCnBetaApplication().cleanHistory();
                         }
 
                         @Override
                         protected void onPostExecute(Boolean aBoolean) {
                             super.onPostExecute(aBoolean);
-                            if(aBoolean) {
+                            if (aBoolean) {
                                 ToastUtils.showShortToast(getActivity(), "历史记录清除成功！");
                             }
                             else {

@@ -100,11 +100,11 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     public void exit() {
         SharedPreferences prefs = getSharedPreferences(getPackageName() + "_preferences", MODE_PRIVATE);
 
-        if(prefs.getBoolean("pref_key_autoCleanCache", false)) {
+        if(prefs.getBoolean(getString(R.string.pref_key_autoCleanCache), false)) {
             cleanCache();
         }
 
-        if(prefs.getBoolean("pref_key_autoCleanHistory", false)) {
+        if(prefs.getBoolean(getString(R.string.pref_key_autoCleanHistory), false)) {
             cleanHistory();
         }
 
@@ -123,33 +123,44 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         boolean success = true;
         SharedPreferences prefs = getSharedPreferences(getPackageName() + "_preferences", MODE_PRIVATE);
 
-        boolean cleanHistory = prefs.getBoolean("pref_key_includeHistory", false);
+        boolean cleanHistory = prefs.getBoolean(getString(R.string.pref_key_alsoCleanHistory), false);
         if(!cleanHistory) {
             try {
-                FileUtils.moveFileToDirectory(new HistoryArticleListLoader().getFile(getBaseDir()), getBaseDir().getParentFile(), false);
+                File historyArticleFile = new HistoryArticleListLoader().getFile(getBaseDir());
+                if(historyArticleFile.exists()) {
+                    FileUtils.moveFileToDirectory(historyArticleFile, getBaseDir().getParentFile(), false);
+                }
             }
             catch (Exception e) {
                 success = false;
             }
             try {
-                FileUtils.moveFileToDirectory(new HistoryCommentListLoader().getFile(getBaseDir()), getBaseDir().getParentFile(), false);
+                File historyCommentFile = new HistoryCommentListLoader().getFile(getBaseDir());
+                if(historyCommentFile.exists()) {
+                    FileUtils.moveFileToDirectory(historyCommentFile, getBaseDir().getParentFile(), false);
+                }
             }
             catch (Exception e) {
                 success = false;
             }
         }
-
         FileUtils.deleteQuietly(getBaseDir());
         if(!cleanHistory) {
             try {
-                FileUtils.moveFileToDirectory(new HistoryArticleListLoader().getFile(getBaseDir().getParentFile()), getBaseDir(), true);
+                File tempHistoryArticleFile = new HistoryArticleListLoader().getFile(getBaseDir().getParentFile());
+                if(tempHistoryArticleFile.exists()) {
+                    FileUtils.moveFileToDirectory(tempHistoryArticleFile, getBaseDir(), true);
+                }
             }
             catch (Exception e){
                 success = false;
             }
 
             try {
-                FileUtils.moveFileToDirectory(new HistoryCommentListLoader().getFile(getBaseDir().getParentFile()), getBaseDir(), true);
+                File templHistoryCommentFile = new HistoryCommentListLoader().getFile(getBaseDir().getParentFile());
+                if(templHistoryCommentFile.exists()) {
+                    FileUtils.moveFileToDirectory(templHistoryCommentFile, getBaseDir(), true);
+                }
             }
             catch (Exception e) {
                 success = false;
