@@ -134,7 +134,7 @@ public class HistoryActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        getMenuInflater().inflate(R.menu.search_refresh_menu, menu);
+        getMenuInflater().inflate(R.menu.default_action_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

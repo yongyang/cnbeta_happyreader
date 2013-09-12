@@ -44,7 +44,7 @@ public abstract class AbstractListFragment<T> extends BaseFragment implements Ad
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.listview_article_list, container, false);
+        View rootView = inflater.inflate(R.layout.listview_default, container, false);
         mListView = (ListView) rootView.findViewById(R.id.article_listview);
         return rootView;
     }

@@ -186,7 +186,7 @@ public class TopicActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         //add  refresh actionitem
-        getMenuInflater().inflate(R.menu.search_refresh_menu, menu);
+        getMenuInflater().inflate(R.menu.default_action_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -76,6 +76,10 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
         super.onActivityCreated(savedInstanceState);
     }
 
+    private int getCommentCount(){
+        return ((ContentActivity)getActivity()).getContent().getCommentNum();
+    }
+
     @Override
     protected BaseAdapter newAdapter() {
         return new BaseAdapter() {
@@ -97,7 +101,15 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                 }
                 final Comment comment = (Comment) getItem(position);
                 TextView positionTextView = (TextView) convertView.findViewById(R.id.position);
-                positionTextView.setText("" + (adapter.getCount() - position));
+
+                //comment一页100条
+                if(getCommentCount() > 100) {
+                    positionTextView.setText("" + (getCommentCount() - position));
+                }
+                else {
+                    positionTextView.setText("" + (getDataSize() - position));
+                }
+
                 TextView nameTextView = (TextView) convertView.findViewById(R.id.name);
                 nameTextView.setText(comment.getName());
 

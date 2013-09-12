@@ -84,7 +84,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 ArticleContentFragment.this.rateRatingBar.setIsIndicator(true);
                 final int score = (int) (2 * ArticleContentFragment.this.rateRatingBar.getRating() - 5);
-                ToastUtils.showShortToast(getActivity(), "评分: " + score);
+                ToastUtils.showShortToast(getActivity(), "您的评分: " + score);
                 executeAsyncTaskMultiThreading(new RateArticleAsyncTask() {
                     @Override
                     protected long getSid() {

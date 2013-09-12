@@ -82,7 +82,7 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
         JSONObject responseJSON = (JSONObject) JSONValue.parse(response);
         Object resultBase64String = responseJSON.get("result");
         String resultJSONString = new String(Base64.decode(resultBase64String.toString(), Base64.DEFAULT), "UTF-8");
-        resultJSONString = resultJSONString.substring(resultJSONString.indexOf('{'), resultJSONString.lastIndexOf('}')+1);
+        resultJSONString = UnicodeUtils.unicode2Chinese(resultJSONString.substring(resultJSONString.indexOf('{'), resultJSONString.lastIndexOf('}')+1));
         JSONObject resultJSON = (JSONObject) JSONValue.parse(resultJSONString);
         parseResultJSON(resultJSON);
         checkEmptyResult();
@@ -119,9 +119,9 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
             String tid = scommentJSONObject.get("tid").toString();
             JSONObject commentJSONObject = (JSONObject)commentStoreJSONObject.get(tid);
             // unicode to Chinese
-            commentJSONObject.put("name", UnicodeUtils.unicode2Chinese(commentJSONObject.get("name").toString()));
-            commentJSONObject.put("host_name", UnicodeUtils.unicode2Chinese(commentJSONObject.get("host_name").toString()));
-            commentJSONObject.put("comment", UnicodeUtils.unicode2Chinese(commentJSONObject.get("comment").toString()));
+            commentJSONObject.put("name", commentJSONObject.get("name").toString());
+            commentJSONObject.put("host_name", commentJSONObject.get("host_name").toString());
+            commentJSONObject.put("comment", commentJSONObject.get("comment").toString());
             commentJSONObject.put("token", resultJSON.get("token").toString());
             comments.add(new Comment(commentJSONObject));
         }

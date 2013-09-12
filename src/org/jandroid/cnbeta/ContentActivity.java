@@ -131,7 +131,7 @@ public class ContentActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         getMenuInflater().inflate(R.menu.content_menu, menu);
         //add  refresh actionitem
-        getMenuInflater().inflate(R.menu.search_refresh_menu, menu);
+        getMenuInflater().inflate(R.menu.default_action_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -27,8 +27,8 @@
     <string name="tab_software">软件</string>
     <string name="tab_industry">业界</string>
     <string name="tab_interact">互动</string>
-    <string name="tab_zhengwen">正文</string>
-    <string name="tab_pinglun">评论</string>
+    <string name="tab_zhengwen">新闻正文</string>
+    <string name="tab_pinglun">全部评论</string>
     <string name="tab_hot">人气榜</string>
     <string name="tab_argue">争议榜</string>
     <string name="tab_recommend">推荐榜</string>

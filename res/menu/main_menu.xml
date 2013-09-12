@@ -25,9 +25,13 @@
                 <item
                         android:id="@+id/history"
                         android:title="@string/label_history"/>
+
+                <!-- TODO: 离线下载 V2.0-->
+<!--
                 <item
                         android:id="@+id/offline_downloader"
                         android:title="@string/offline_downloader"/>
+-->
                 <item
                         android:id="@+id/setting_item"
                         android:title="@string/setting_item"/>
