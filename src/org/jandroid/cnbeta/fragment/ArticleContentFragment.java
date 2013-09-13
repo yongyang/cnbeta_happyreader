@@ -141,8 +141,8 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         contentWebView.getSettings().setJavaScriptEnabled(true);
         contentWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
         //设置嫩参数
-        contentWebView.getSettings().setDefaultFontSize(14);
-        contentWebView.getSettings().setDefaultFixedFontSize(14);
+        contentWebView.getSettings().setDefaultFontSize(15);
+        contentWebView.getSettings().setDefaultFixedFontSize(15);
         contentWebView.getSettings().setAllowFileAccess(true);
         contentWebView.getSettings().setAllowFileAccessFromFileURLs(true);
         contentWebView.getSettings().setAllowUniversalAccessFromFileURLs(true);

@@ -20,6 +20,8 @@ import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.cookie.Cookie;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
@@ -28,6 +30,7 @@ import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.jandroid.common.Logger;
 import org.jandroid.common.UnicodeUtils;
@@ -58,7 +61,7 @@ public class CnBetaHttpClient {
 
     private HttpClient httpClient;
     
-    public static String DEFAULT_ENCODING = "UTF-8";
+    public static String DEFAULT_ENCODING = HTTP.UTF_8;
     private static final Map<String, String> DEFAULT_HEADERS = new HashMap<String, String>();
     
     static {
@@ -68,6 +71,7 @@ public class CnBetaHttpClient {
         DEFAULT_HEADERS.put("Connection", "keep-alive");
         // Must add Referer, so site return data, default Referer
         DEFAULT_HEADERS.put("Referer", "http://www.cnbeta.com/");
+        DEFAULT_HEADERS.put("Content-Type", "application/x-www-form-urlencoded; charset=" + DEFAULT_ENCODING);
     }
     
     private CnBetaHttpClient() {
@@ -79,6 +83,7 @@ public class CnBetaHttpClient {
         HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_READ);
         HttpConnectionParams.setTcpNoDelay(httpParams, true);
         HttpProtocolParams.setContentCharset(httpParams, DEFAULT_ENCODING);
+        HttpProtocolParams.setHttpElementCharset(httpParams, DEFAULT_ENCODING);
 
         SchemeRegistry schemeRegistry = new SchemeRegistry();
         schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
@@ -123,7 +128,7 @@ public class CnBetaHttpClient {
 
     @SuppressWarnings("unchecked")
     public String httpGet(String url, String encoding) throws Exception {
-        return httpGet(url, DEFAULT_ENCODING, Collections.EMPTY_MAP);
+        return httpGet(url, encoding, Collections.EMPTY_MAP);
     }
 
     public String httpGet(String url, String encoding, Map<String, String> headers) throws Exception {
@@ -151,7 +156,8 @@ public class CnBetaHttpClient {
     public String httpPost(String url, String encoding, Map<String, String> headers, Map<String, String> datas) throws Exception {
         long start = System.currentTimeMillis();
         logger.d("POST: " + url);
-        HttpPost httpPost = newHttpPost(url, encoding, headers, datas);        
+        HttpPost httpPost = newHttpPost(url, encoding, headers, datas);
+
         HttpResponse response = httpClient.execute(httpPost);
         String result =  handleRequest(httpPost, response);
         logger.d("POST: " + url + ", consume " + ((System.currentTimeMillis() - start)) + "ms");
@@ -215,19 +221,20 @@ public class CnBetaHttpClient {
     public static HttpPost newHttpPost(String url, String encoding, Map<String, String> headers, Map<String, String> datas) throws Exception {
         HttpPost httpPost = new HttpPost(url);
         httpPost.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, encoding);
-        
         setDefaultHeaders(httpPost);
-        
+
         for (Map.Entry<String, String> entry : headers.entrySet()) {
             httpPost.setHeader(entry.getKey(), entry.getValue());
         }
 
-        List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-       
+        StringBuilder sb = new StringBuilder();
         for(Map.Entry<String, String> entry : datas.entrySet()){
-            nvps.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+            if(sb.length() != 0) {
+                sb.append("&");
+            }
+            sb.append(entry.getKey()).append("=").append(entry.getValue());
         }
-        httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+        httpPost.setEntity(new StringEntity(sb.toString(), encoding));
         return httpPost;
     }
 

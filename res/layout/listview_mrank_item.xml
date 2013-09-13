@@ -11,7 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <TextView
-                android:textSize="@dimen/listitem_rank_text_size"
+                android:textSize="@dimen/listitem_rank_no_text_size"
                 android:textColor="@color/cnBeta_orange"
                 android:textStyle="bold|italic"
                 android:id="@+id/rank"
