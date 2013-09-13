@@ -145,7 +145,7 @@ public class ContentActivity extends BaseActivity {
         ((CnBetaApplication) getApplicationContext()).onOptionsItemSelected(this, mi);
         switch (mi.getItemId()) {
             case R.id.refresh_item:
-                commentsFragment.reloadData(); // will reload comments, and update comment Numbers
+                reload(); // will reload comments, and update comment Numbers
                 break;
             case R.id.comment_item:
                 Utils.openPublishCommentActivityForResult(this, getContent().getSid());
@@ -161,9 +161,13 @@ public class ContentActivity extends BaseActivity {
         }
     }
 
+    public void reload(){
+        contentFragment.reloadContent();
+    }
+
     // call by ArticleContentFragment
-    public void loadComments() {
-        commentsFragment.loadData();
+    public void reloadComments() {
+        commentsFragment.reloadData();
     }
 
     @Override

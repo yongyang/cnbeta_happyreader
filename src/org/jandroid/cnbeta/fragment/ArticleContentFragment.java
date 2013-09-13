@@ -192,7 +192,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
                 //!!!NOTE: this is the best point to start to load comments, after content page loaded
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        ((ContentActivity) getActivity()).loadComments();
+                        ((ContentActivity) getActivity()).reloadComments();
                     }
                 }, 500);
 
@@ -247,14 +247,14 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        loadArticleContent();
+        reloadContent();
     }
 
     public Content getContent() {
         return content;
     }
 
-    private void updateArticleContent(final Content content) {
+    private void updateContent(final Content content) {
         this.content = content;
         titleTextView.setText(content.getTitle());
         // enable marquee
@@ -306,12 +306,12 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         super.onDestroy();
     }
 
-    private void loadArticleContent() {
+    public void reloadContent() {
         executeAsyncTaskMultiThreading(new ArticleContentAsyncTask() {
 
             @Override
             protected long getSid() {
-                return ((ContentActivity)getActivity()).getArticleSid();
+                return ((ContentActivity) getActivity()).getArticleSid();
             }
 
             @Override
@@ -330,6 +330,10 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         getActivity().setProgressBarIndeterminate(true);
         getActivity().setProgressBarVisibility(true);
 
+        //由 WebView.onPageFishi 负责切换显示
+        contentWebView.setVisibility(View.GONE);
+        rateRatingBar.setVisibility(View.GONE);
+        progressBarLayout.setVisibility(View.VISIBLE);
     }
 
     public void onProgressDismiss() {
@@ -338,11 +342,11 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
 
     public void onSuccess(AsyncResult<Content> contentAsyncResult) {
         //update content in ContentActivity
-        this.updateArticleContent(contentAsyncResult.getResult());
+        this.updateContent(contentAsyncResult.getResult());
     }
 
     public void onFailure(AsyncResult<Content> contentAsyncResult) {
-
+        progressBarLayout.setVisibility(View.GONE);
     }
 
 
