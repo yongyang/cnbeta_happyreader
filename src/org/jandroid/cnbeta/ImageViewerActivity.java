@@ -2,10 +2,17 @@ package org.jandroid.cnbeta;
 
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.ConsoleMessage;
+import android.webkit.JavascriptInterface;
+import android.webkit.JsResult;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.Toast;
 import org.jandroid.cnbeta.loader.ImageBytesLoader;
 import org.jandroid.common.BaseActivity;
 
@@ -32,6 +39,7 @@ public class ImageViewerActivity extends BaseActivity {
         }
         final String image64 = Base64.encodeToString(imageData, Base64.NO_WRAP);
         topContainer = (ViewGroup) findViewById(R.id.imageviewer_container);
+
         //右上角的关闭按钮
         Button closeButton = (Button)findViewById(R.id.closeButton);
         closeButton.setOnClickListener(new View.OnClickListener() {
@@ -42,11 +50,16 @@ public class ImageViewerActivity extends BaseActivity {
 
         imageWebView = (WebView)findViewById(R.id.imageviewer);
         imageWebView.getSettings().setBuiltInZoomControls(true);
-//        webView.getSettings().setAllowFileAccess(true);
-//        webView.getSettings().setAllowFileAccessFromFileURLs(true);
-//        webView.getSettings().setDisplayZoomControls(true);
-//        webView.getSettings().setUseWideViewPort(true);
-        imageWebView.loadDataWithBaseURL("", "<img src='data:image/*;base64," + image64 + "'>", "text/html", "UTF-8", "");
+        imageWebView.getSettings().setJavaScriptEnabled(true);
+        imageWebView.addJavascriptInterface(new Object() {
+            @JavascriptInterface
+            public void close() {
+                finish();
+            }
+
+        }, "JS");
+
+        imageWebView.loadDataWithBaseURL("", "<img onclick='javascript:window.JS.close()' src='data:image/*;base64," + image64 + "'>", "text/html", "UTF-8", "");
     }
 
 
