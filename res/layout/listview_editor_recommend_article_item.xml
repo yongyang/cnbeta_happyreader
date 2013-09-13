@@ -39,11 +39,38 @@
         <TextView
                 android:textSize="@dimen/listitem_description_text_size"
                 android:textColor="@color/cnBeta_text_description_gray"
-                android:id="@+id/hometext_show_short"
+                android:id="@+id/hometext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="false"
                 android:maxLines="2"
+                android:paddingLeft="4dip"
+                android:paddingRight="4dip"
                 android:ellipsize="end"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="right"
+                android:paddingRight="4.0dip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="1dp">
+
+            <TextView
+                    android:textSize="@dimen/listitem_status_text_size"
+                    android:textColor="@color/cnBeta_text_status_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="发表于: "/>
+
+            <TextView
+                    android:textSize="@dimen/listitem_status_text_size"
+                    android:textColor="@color/cnBeta_text_status_gray"
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"/>
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

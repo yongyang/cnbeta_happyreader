@@ -45,11 +45,15 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
                 if (convertView == null) {
                     convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_editor_recommend_article_item, null);
                 }
-                EditorRecommend article = getData(position);
+                EditorRecommend editorRecommend = getData(position);
                 TextView tvTitle = (TextView) convertView.findViewById(R.id.title);
-                tvTitle.setText(article.getTitle());
-                TextView tvHometextShowShort = (TextView) convertView.findViewById(R.id.hometext_show_short);
-                tvHometextShowShort.setText(article.getHometextShowShort());
+                tvTitle.setText(editorRecommend.getTitle());
+                TextView tvHomeText = (TextView) convertView.findViewById(R.id.hometext);
+                tvHomeText.setText(editorRecommend.getHometextShowShort());
+
+                TextView tvTime = (TextView) convertView.findViewById(R.id.time);
+                tvTime.setText(editorRecommend.getTime());
+
                 return convertView;
             }
         };

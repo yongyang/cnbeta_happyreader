@@ -197,7 +197,7 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
                 Article article = getData(position);
                 TextView tvTitleShow = (TextView) convertView.findViewById(R.id.tile_show);
                 tvTitleShow.setText(article.getTitleShow());
-                TextView tvHometextShowShort = (TextView) convertView.findViewById(R.id.hometext_show_short);
+                TextView tvHometextShowShort = (TextView) convertView.findViewById(R.id.hometext);
                 tvHometextShowShort.setText(article.getHometextShowShort());
                 TextView tvComments = (TextView) convertView.findViewById(R.id.comments);
                 tvComments.setText("" + article.getComments());

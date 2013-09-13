@@ -105,6 +105,8 @@ public class BaseActivity extends Activity {
 
    	@Override
    	public void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
+
    		logger.d(" onDestroy() invoked!!  Active async task: " + ((ThreadPoolExecutor)AsyncTask.THREAD_POOL_EXECUTOR).getActiveCount());
    		super.onDestroy();
         for(Iterator<AsyncTask> it = runningTasks.iterator(); it.hasNext();){
