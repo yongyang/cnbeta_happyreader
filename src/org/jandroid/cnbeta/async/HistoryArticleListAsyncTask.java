@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class HistoryArticleListAsyncTask extends LoadingAsyncTask<List<HistoryArticle>> {
+public abstract class HistoryArticleListAsyncTask extends AbstractLoaderAsyncTask<List<HistoryArticle>> {
 
     @Override
     protected boolean isLocalLoadOnly() {

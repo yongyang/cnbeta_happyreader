@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class EditorRecommendListAsyncTask extends LoadingAsyncTask<List<EditorRecommend>> {
+public abstract class EditorRecommendListAsyncTask extends AbstractLoaderAsyncTask<List<EditorRecommend>> {
 
     protected abstract int getPage();
 

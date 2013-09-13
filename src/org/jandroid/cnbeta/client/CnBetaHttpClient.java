@@ -48,10 +48,10 @@ public class CnBetaHttpClient {
 
     private static Logger logger = Logger.getLogger(CnBetaHttpClient.class);
 
-    public static final int MAX_TOTAL_CONNECTIONS = 20;
-    public static final int MAX_CONNECTIONS_PER_ROUTE = 20;
-    public static final int TIMEOUT_CONNECT = 6000;
-    public static final int TIMEOUT_READ = 30000;
+    public static final int MAX_TOTAL_CONNECTIONS = 30;
+    public static final int MAX_CONNECTIONS_PER_ROUTE = 30;
+    public static final int TIMEOUT_CONNECT = 10000;
+    public static final int TIMEOUT_READ = 60000;
 
     
     private final static CnBetaHttpClient client = new CnBetaHttpClient();

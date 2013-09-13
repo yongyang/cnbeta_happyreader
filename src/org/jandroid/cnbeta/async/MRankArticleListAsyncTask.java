@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class MRankArticleListAsyncTask extends LoadingAsyncTask<List<MRankArticle>> {
+public abstract class MRankArticleListAsyncTask extends AbstractLoaderAsyncTask<List<MRankArticle>> {
 
     protected abstract MRankListLoader.Type getType();
 

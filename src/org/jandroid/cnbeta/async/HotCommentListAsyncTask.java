@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class HotCommentListAsyncTask extends LoadingAsyncTask<List<HotComment>> {
+public abstract class HotCommentListAsyncTask extends AbstractLoaderAsyncTask<List<HotComment>> {
 
     protected abstract int getPage();
 

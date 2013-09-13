@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  * @create 7/30/13 4:15 PM
  */
-public abstract class LoadingAsyncTask<R> extends BaseAsyncTask<R> {
+public abstract class AbstractLoaderAsyncTask<R> extends BaseAsyncTask<R> {
 
     private final ReentrantLock locker = new ReentrantLock();
 
@@ -70,7 +70,7 @@ public abstract class LoadingAsyncTask<R> extends BaseAsyncTask<R> {
         if(!isCancelled()) {
             // 只有处理底层错误类异常, 所有信息提示类异常继承自 InfoException
             if((asyncResult.getException() != null) && !(asyncResult.getException() instanceof InfoException)) {
-                ToastUtils.showShortToast((Application) getAsyncContext().getCnBetaApplicationContext(), asyncResult.getException().getMessage());
+                ToastUtils.showShortToast((Application) getAsyncContext().getCnBetaApplicationContext(), asyncResult.getException().toString());
             }
             locker.lock(); //防止快速重复点击造成 ListView data 数据不一致
             try {

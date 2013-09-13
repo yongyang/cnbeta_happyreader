@@ -8,7 +8,7 @@ import org.jandroid.cnbeta.loader.CaptchaLoader;
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  * @create 7/29/13 3:21 PM
  */
-public abstract class CaptchaAsyncTask extends LoadingAsyncTask<Bitmap> {
+public abstract class CaptchaAsyncTask extends AbstractLoaderAsyncTask<Bitmap> {
 
     protected abstract long getSid();
 

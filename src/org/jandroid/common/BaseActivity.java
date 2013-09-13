@@ -5,10 +5,12 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import org.jandroid.cnbeta.client.CnBetaHttpClient;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -19,13 +21,17 @@ import java.util.concurrent.TimeUnit;
  */
 public class BaseActivity extends Activity {
 
+    //用来生成随机数，用于 postDelay，以分散线程创建和执行，提速
+    private static final Random random = new Random();
+
     protected Handler handler = new Handler();
     
     protected Logger logger = Logger.getLogger(this.getClass());
     
     protected List<AsyncTask> runningTasks = new ArrayList<AsyncTask>();
 
-    public static final int MULTI_THREADING_SLOW_DOWN_VALVE = 80;
+    public static final int MULTI_THREADING_SLOW_DOWN_VALVE = (int)(CnBetaHttpClient.MAX_TOTAL_CONNECTIONS/2);
+    public static final int DELAY_TIME_MILLIS = 1000;
 
    	/******************************** 【Activity LifeCycle For Debug】 *******************************************/
    	@Override
@@ -89,7 +95,7 @@ public class BaseActivity extends Activity {
                 public void run() {
                     executeAsyncTaskMultiThreading(asyncTask);
                 }
-            }, 50);
+            }, random.nextInt(DELAY_TIME_MILLIS));
             return;
         }
 

@@ -24,7 +24,7 @@ import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.ArticleContentAsyncTask;
 import org.jandroid.cnbeta.async.HasAsync;
-import org.jandroid.cnbeta.async.ImageBytesLoadingAsyncTask;
+import org.jandroid.cnbeta.async.ImageBytesAsyncTask;
 import org.jandroid.cnbeta.async.RateArticleAsyncTask;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.common.BaseFragment;
@@ -196,6 +196,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
                     }
                 }, 500);
 
+                // 延迟显示，以免早于显示 WebView paint完成之前显示
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         rateRatingBar.setVisibility(View.VISIBLE);
@@ -352,7 +353,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     }
 
     private void loadImage(final String imgSrc) {
-        executeAsyncTaskMultiThreading(new ImageBytesLoadingAsyncTask() {
+        executeAsyncTaskMultiThreading(new ImageBytesAsyncTask() {
             @Override
             protected String getImageUrl() {
                 return imgSrc;
