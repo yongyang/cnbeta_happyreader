@@ -12,7 +12,7 @@
             android:layout_height="wrap_content">
 
         <TextView
-                android:textSize="15.0dip"
+                android:textSize="@dimen/listitem_title_text_size"
                 android:textColor="@color/cnBeta_text_blue"
                 android:gravity="center_horizontal"
                 android:id="@+id/tv_articleTitle"
@@ -36,7 +36,7 @@
                 android:gravity="center_horizontal">
 
             <TextView
-                    android:textSize="10.0dip"
+                    android:textSize="@dimen/listitem_status_text_size"
                     android:textColor="@color/cnBeta_text_description_gray"
                     android:id="@+id/tv_date"
                     android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
                     android:paddingRight="2.0dip"/>
 
             <TextView
-                    android:textSize="10.0dip"
+                    android:textSize="@dimen/listitem_status_text_size"
                     android:textColor="@color/cnBeta_text_description_gray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -56,18 +56,18 @@
                     />
 
             <TextView
-                    android:textSize="10.0dip"
+                    android:textSize="@dimen/listitem_status_text_size"
                     android:textColor="@color/cnBeta_text_description_gray"
                     android:id="@+id/tv_viewNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="00"
+                    android:text="0"
                     android:singleLine="true"
                     android:paddingLeft="2.0dip"
                     android:paddingRight="2.0dip"/>
 
             <TextView
-                    android:textSize="10.0dip"
+                    android:textSize="@dimen/listitem_status_text_size"
                     android:textColor="@color/cnBeta_text_description_gray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
                     />
 
             <TextView
-                    android:textSize="10.0dip"
+                    android:textSize="@dimen/listitem_status_text_size"
                     android:textColor="@color/cnBeta_text_description_gray"
                     android:id="@+id/tv_commentNum"
                     android:layout_width="wrap_content"
@@ -88,7 +88,7 @@
                     android:paddingRight="2.0dip"/>
 
             <TextView
-                    android:textSize="10.0dip"
+                    android:textSize="@dimen/listitem_status_text_size"
                     android:textColor="@color/cnBeta_text_description_gray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
                     />
 
             <TextView
-                    android:textSize="10.0dip"
+                    android:textSize="@dimen/listitem_status_text_size"
                     android:textColor="@color/cnBeta_text_description_gray"
                     android:id="@+id/tv_where"
                     android:layout_width="wrap_content"
@@ -132,7 +132,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/cnBeta_text_description_gray"
-                        android:textSize="16dip"
+                        android:textSize="@dimen/listitem_title_text_size"
                         android:text="内容加载中..."
                         />
 

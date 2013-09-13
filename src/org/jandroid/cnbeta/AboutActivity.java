@@ -9,8 +9,6 @@ import android.view.MenuItem;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 
-//TODO 版权，内容免责，捐赠, 技巧
-
 public class AboutActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

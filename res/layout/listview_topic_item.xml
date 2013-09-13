@@ -10,14 +10,14 @@
             android:layout_gravity="center"
             android:id="@+id/logo"
             android:padding="2.0dip"
-            android:layout_width="60.0dip"
-            android:layout_height="60.0dip"
+            android:layout_width="@dimen/listitem_logo_width"
+            android:layout_height="@dimen/listitem_logo_height"
             android:src="@drawable/default_img"/>
 
 
     <TextView
             android:layout_gravity="center"
-            android:textSize="10.0sp"
+            android:textSize="@dimen/listitem_status_text_size"
             android:textColor="@color/cnBeta_text_status_gray"
             android:id="@+id/name"
             android:layout_width="wrap_content"

@@ -59,6 +59,10 @@ public class HistoryCommentListFragment extends AbstractAsyncListFragment<Histor
                     convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_history_comment_item, null);
                 }
                 HistoryComment comment = getData(position);
+
+                TextView toTextView = (TextView) convertView.findViewById(R.id.to);
+                toTextView.getPaint().setFakeBoldText(true);
+
                 TextView tvTitle = (TextView) convertView.findViewById(R.id.title);
                 tvTitle.setText(comment.getTitle());
                 TextView tvComment = (TextView) convertView.findViewById(R.id.comment);

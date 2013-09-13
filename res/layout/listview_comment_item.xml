@@ -17,21 +17,23 @@
             android:layout_height="wrap_content">
 
         <TextView
-                android:textSize="12.0sp"
-                android:textColor="@color/cnBeta_text_description_gray"
+                android:textSize="@dimen/listitem_status_text_size"
+                android:textColor="@color/cnBeta_orange"
+                android:textStyle="italic"
+                android:paddingRight="2dip"
                 android:id="@+id/position"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         <TextView
-                android:textSize="12.0sp"
+                android:textSize="@dimen/listitem_status_text_size"
                 android:textColor="@color/cnBeta_text_description_gray"
                 android:text="楼"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         <TextView
-                android:textSize="12.0sp"
+                android:textSize="@dimen/listitem_status_text_size"
                 android:textColor="@color/cnBeta_text_description_gray"
                 android:id="@+id/name"
                 android:paddingLeft="4.0dip"
@@ -39,7 +41,7 @@
                 android:layout_height="wrap_content"/>
 
         <TextView
-                android:textSize="12.0sp"
+                android:textSize="@dimen/listitem_status_text_size"
                 android:textColor="@color/cnBeta_text_description_gray"
                 android:text="来自 "
                 android:paddingLeft="4.0dip"
@@ -47,7 +49,7 @@
                 android:layout_height="wrap_content"/>
 
         <TextView
-                android:textSize="12.0sp"
+                android:textSize="@dimen/listitem_status_text_size"
                 android:textColor="@color/cnBeta_text_description_gray"
                 android:id="@+id/host_name"
                 android:paddingLeft="4.0dip"
@@ -58,8 +60,8 @@
     </LinearLayout>
 
     <TextView
-            android:textSize="14.0sp"
-            android:textColor="@color/color_title"
+            android:textSize="@dimen/listitem_description_text_size"
+            android:textColor="@color/cnBeta_comment_text_color"
             android:id="@+id/comment"
             android:padding="4.0dip"
             android:layout_width="match_parent"
@@ -77,24 +79,16 @@
                 android:layout_alignParentBottom="true">
 
             <TextView
-                    android:textSize="10.0sp"
+                    android:textSize="@dimen/listitem_status_text_size"
                     android:textColor="@color/cnBeta_text_description_gray"
-                    android:text="发表于:"
-                    android:id="@+id/postDateText"
-                    android:paddingRight="2dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-            <TextView
-                    android:textSize="10.0sp"
-                    android:textColor="@color/cnBeta_text_description_gray"
+                    android:paddingLeft="4dip"
                     android:id="@+id/date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
         </LinearLayout>
 
         <TextView
-                android:textSize="12.0sp"
+                android:textSize="@dimen/listitem_description_text_size"
                 android:background="@drawable/btn_bg_selector"
                 android:textColor="@color/cnBeta_text_description_gray"
                 android:id="@+id/toParent"
@@ -126,7 +120,7 @@
                     android:paddingRight="4.0dip">
 
                 <TextView
-                        android:textSize="12.0sp"
+                        android:textSize="@dimen/listitem_description_text_size"
                         android:textColor="@color/cnBeta_text_description_gray"
                         android:id="@+id/supportText"
                         android:text="支持"
@@ -134,14 +128,14 @@
                         android:layout_height="wrap_content"/>
 
                 <TextView
-                        android:textSize="12.0sp"
+                        android:textSize="@dimen/listitem_description_text_size"
                         android:text="("
                         android:paddingLeft="1.0dip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                 <TextView
-                        android:textSize="12.0sp"
+                        android:textSize="@dimen/listitem_description_text_size"
                         android:id="@+id/score"
                         android:paddingLeft="1.0dip"
                         android:paddingRight="1.0dip"
@@ -151,7 +145,7 @@
                         android:layout_height="wrap_content"/>
 
                 <TextView
-                        android:textSize="12.0sp"
+                        android:textSize="@dimen/listitem_description_text_size"
                         android:text=")"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
@@ -169,7 +163,7 @@
                     android:paddingRight="4.0dip">
 
                 <TextView
-                        android:textSize="12.0sp"
+                        android:textSize="@dimen/listitem_description_text_size"
                         android:textColor="@color/cnBeta_text_description_gray"
                         android:text="反对"
                         android:id="@+id/againstText"
@@ -177,14 +171,14 @@
                         android:layout_height="wrap_content"/>
 
                 <TextView
-                        android:textSize="12.0sp"
+                        android:textSize="@dimen/listitem_description_text_size"
                         android:text="("
                         android:paddingLeft="1.0dip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                 <TextView
-                        android:textSize="12.0sp"
+                        android:textSize="@dimen/listitem_description_text_size"
                         android:id="@+id/reason"
                         android:text="0"
                         android:paddingLeft="1.0dip"
@@ -194,7 +188,7 @@
                         android:layout_height="wrap_content"/>
 
                 <TextView
-                        android:textSize="12.0sp"
+                        android:textSize="@dimen/listitem_description_text_size"
                         android:text=")"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>

@@ -125,7 +125,8 @@
 
 
     <color name="foot_bar_text">#ff606466</color>
-    <color name="color_title">#ff000000</color>
+    <color name="cnBeta_comment_text_color">#ff000000</color>
+    <color name="cnBeta_default_bg">#fffcfcfc</color>
     <color name="cnBeta_text_description_gray">#666666</color>
     <color name="cnBeta_text_status_gray">#999999</color>
     <color name="cnBeta_text_status_realtime_green">#009900</color>
@@ -137,8 +138,8 @@
     <color name="cnBeta_text_introduction_black">#434343</color>
     <color name="cnBeta_bg_introduction">#ffeb620e</color>
 
-
-    <!--<color name="transparent_background">#80000000</color>-->
+    <color name="cnBeta_orange">#FF6131</color>
+        <!--<color name="transparent_background">#80000000</color>-->
     <color name="cnBeta_comment_dialog_bg_yellow">#FFFFEF</color>
     <color name="cnBeta_hotcomment_bg_yellow">#FFFFCE</color>
 </resources>

@@ -2,12 +2,14 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:id="@+id/article_listview_container"
              android:layout_width="match_parent"
-             android:layout_height="match_parent">
+             android:layout_height="match_parent"
+             android:background="@color/cnBeta_default_bg">
 
     <ListView android:id="@+id/article_listview"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:drawSelectorOnTop="false"
+              android:background="@color/cnBeta_default_bg"
             />
 
     <TextView android:id="@+id/empty_textview"

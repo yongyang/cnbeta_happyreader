@@ -13,17 +13,18 @@
             android:layout_marginRight="2dip">
 
         <TextView
-                android:textSize="12.0sp"
+                android:textSize="@dimen/listitem_description_text_size"
                 android:id="@+id/to"
+                android:textStyle="bold"
                 android:text="评论: "
-                android:textColor="@color/cnBeta_text_description_gray"
+                android:textColor="@color/cnBeta_text_blue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="2dip"
                 android:singleLine="true"/>
 
         <TextView
-                android:textSize="12.0sp"
+                android:textSize="@dimen/listitem_description_text_size"
                 android:textColor="@color/cnBeta_text_blue"
                 android:id="@+id/titleShow"
                 android:layout_width="wrap_content"
@@ -40,7 +41,7 @@
             android:layout_marginRight="2dip">
 
         <TextView
-                android:textSize="14.0sp"
+                android:textSize="@dimen/listitem_description_text_size"
                 android:id="@+id/comment"
                 android:padding="4.0dip"
                 android:layout_width="wrap_content"
@@ -53,7 +54,7 @@
             android:layout_gravity="right">
 
         <TextView
-                android:textSize="12.0sp"
+                android:textSize="@dimen/listitem_status_text_size"
                 android:textColor="@color/cnBeta_text_description_gray"
                 android:id="@+id/from"
                 android:text="来自"
@@ -62,7 +63,7 @@
                 android:singleLine="true"/>
 
         <TextView
-                android:textSize="12.0sp"
+                android:textSize="@dimen/listitem_status_text_size"
                 android:textColor="@color/cnBeta_text_description_gray"
                 android:id="@+id/hostNameShow"
                 android:layout_width="wrap_content"
@@ -70,7 +71,7 @@
                 android:singleLine="true"/>
 
         <TextView
-                android:textSize="12.0sp"
+                android:textSize="@dimen/listitem_status_text_size"
                 android:textColor="@color/cnBeta_text_description_gray"
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
