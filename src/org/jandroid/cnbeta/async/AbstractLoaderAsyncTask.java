@@ -8,6 +8,7 @@ import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
 import org.jandroid.common.async.BaseAsyncTask;
 
+import java.net.ConnectException;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -41,23 +42,32 @@ public abstract class AbstractLoaderAsyncTask<R> extends BaseAsyncTask<R> {
 //    public abstract CnBetaApplicationContext getCnBetaApplicationContext();
 
     protected R run() throws Exception {
-        boolean hasNetwork = getAsyncContext().getCnBetaApplicationContext().isNetworkConnected();
-
-        if (!hasNetwork && isRemoteLoadOnly()) {
-            throw new Exception("No network!");
+        if(isCancelled()) {
+            return null;
         }
-
+        boolean hasNetwork = getAsyncContext().getCnBetaApplicationContext().isNetworkConnected();
         AbstractLoader loader = getLoader();
-        //优先从Disk装载
-        if (isLocalLoadFirst() || isLocalLoadOnly()) {
-            if (loader.isCached(getAsyncContext().getCnBetaApplicationContext().getBaseDir())) {
+
+        if(hasNetwork) {
+            if((isLocalLoadOnly() || isLocalLoadFirst()) && loader.isCached(getAsyncContext().getCnBetaApplicationContext().getBaseDir())) {
+                //优先从Disk装载
                 return (R) loader.fromDisk(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
             }
+            else {
+                return (R) loader.fromHttp(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
+            }
         }
-        if (!isLocalLoadOnly()) {
-            return (R) loader.fromHttp(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
+        else {
+            if(isRemoteLoadOnly()) {
+                throw new ConnectException("没有网络连接");
+            }
+            else if(loader.isCached(getAsyncContext().getCnBetaApplicationContext().getBaseDir())){
+                return (R) loader.fromDisk(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
+            }
+            else {
+                return defaultResult();
+            }
         }
-        return defaultResult();
     }
 
     protected R defaultResult() {
