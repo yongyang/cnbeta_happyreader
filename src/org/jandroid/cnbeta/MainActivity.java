@@ -22,8 +22,6 @@ import org.jandroid.common.adapter.ActionTabFragmentPagerAdapter;
 
 public class MainActivity extends BaseActivity {
 
-    private static final String SELECTED_ITEM = "selected_item";
-
     public final static int[] tabs = new int[]{R.string.tab_quanbuzixun, R.string.tab_shishigengxin, R.string.tab_bianjituijian, R.string.tab_jingcaipinglun};
     private final AbstractAsyncListFragment[] fragments = new AbstractAsyncListFragment[tabs.length];
 
@@ -79,7 +77,7 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
-//        this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         this.setProgressBarIndeterminate(true);
         setContentView(R.layout.main);
 
@@ -113,18 +111,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        if (savedInstanceState.containsKey(SELECTED_ITEM)) {
-            getActionBar().setSelectedNavigationItem(savedInstanceState.getInt(SELECTED_ITEM));
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putInt(SELECTED_ITEM, getActionBar().getSelectedNavigationIndex());
     }
 
     @Override

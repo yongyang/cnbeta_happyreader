@@ -69,7 +69,7 @@ public class TypesActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
-//        this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         this.setProgressBarIndeterminate(true);
         setContentView(R.layout.main);
 

@@ -36,7 +36,7 @@ public class TopicActivity extends BaseActivity {
         }
 
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
-//        this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         this.setProgressBarIndeterminate(true);
         setContentView(R.layout.main);
 

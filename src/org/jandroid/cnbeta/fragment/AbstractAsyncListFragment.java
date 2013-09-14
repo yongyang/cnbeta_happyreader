@@ -86,9 +86,11 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
         // should call setProgressBarIndeterminate(true) each time before setProgressBarVisibility(true)
         getActivity().setProgressBarIndeterminate(true);
         getActivity().setProgressBarVisibility(true);
+        getActivity().setProgressBarIndeterminateVisibility(true);
     }
 
     public void onProgressDismiss() {
+        getActivity().setProgressBarIndeterminateVisibility(false);
         getActivity().setProgressBarVisibility(false);
         //Stop refresh animation anyway
     }

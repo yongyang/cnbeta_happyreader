@@ -56,6 +56,11 @@ public class TopicArticleListLoader extends AbstractListLoader<TopicArticle> {
     protected TopicArticle newEntity(JSONObject jSONObject) {
         return  new TopicArticle(jSONObject);
     }
+
+    @Override
+    public String getFileName() {
+        return "topic_" + getId() + "_" + getPage() + "_" + getSplitPage();
+    }
 }
 /*
 http://www.cnbeta.com/more.htm?jsoncallback=jQuery18007005875239260606_1373612093876&type=realtime&sid=244461&_=1373612267852
