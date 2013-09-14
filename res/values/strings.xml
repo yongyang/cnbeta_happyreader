@@ -21,6 +21,12 @@
     <string name="aboutus_item">关于</string>
     <string name="comment_item">评论</string>
 
+
+    <string name="support">支持</string>
+    <string name="supported">已支持</string>
+    <string name="against">反对</string>
+    <string name="againsted">已反对</string>
+
     <string name="loadmore">更多</string>
     
     <string name="tab_quanbuzixun">全部新闻</string>
@@ -47,5 +53,6 @@
     <string name="pref_key_autoCleanHistory">autoCleanHistory</string>
     <string name="pref_key_autoCleanCache">autoCleanCache</string>
     <string name="pref_key_alsoCleanHistory">alsoCleanHistory</string>
+
 
 </resources>

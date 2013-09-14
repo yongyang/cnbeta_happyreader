@@ -42,6 +42,7 @@ public class Content implements Serializable {
         setSn(jsonObject.get("sn").toString());
         setWhere(jsonObject.get("where").toString());
         setContent(jsonObject.get("content").toString());
+        setToken(jsonObject.get("token").toString());
     }
 
     public long getSid() {
@@ -121,6 +122,8 @@ public class Content implements Serializable {
     }
 
     public void setWhere(String where) {
+        where = where.replace("稿源:", "");
+        where = where.replace("稿源：", "");
         this.where = where;
     }
 

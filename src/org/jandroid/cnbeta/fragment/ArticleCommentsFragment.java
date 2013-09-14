@@ -73,8 +73,8 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
         super.onActivityCreated(savedInstanceState);
     }
 
-    private int getCommentCount(){
-        return ((ContentActivity)getActivity()).getContent().getCommentNum();
+    private int getCommentCount() {
+        return ((ContentActivity) getActivity()).getContent().getCommentNum();
     }
 
     @Override
@@ -100,7 +100,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                 TextView positionTextView = (TextView) convertView.findViewById(R.id.position);
 
                 //comment一页100条
-                if(getCommentCount() > 100) {
+                if (getCommentCount() > 100) {
                     positionTextView.setText("" + (getCommentCount() - position));
                 }
                 else {
@@ -119,21 +119,24 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                 commentTextView.setText(comment.getComment());
 
                 LinearLayout supportAgainstLinearLayout = (LinearLayout) convertView.findViewById(R.id.support_against_lineLayout);
+                final TextView supportTextView = (TextView) convertView.findViewById(R.id.supportText);
+                final TextView againstTextView = (TextView) convertView.findViewById(R.id.againstText);
+                supportTextView.setText(R.string.support);
+                againstTextView.setText(R.string.against);
+                final TextView scoreTextView = (TextView) convertView.findViewById(R.id.score);
+                scoreTextView.setText("" + comment.getScore());
+                final TextView reasonTextView = (TextView) convertView.findViewById(R.id.reason);
+                reasonTextView.setText("" + comment.getReason());
+                final LinearLayout supportLinearLayout = (LinearLayout) convertView.findViewById(R.id.supportLinearLayout);
+                final LinearLayout againstLinearLayout = (LinearLayout) convertView.findViewById(R.id.againstLinearLayout);
+                final TextView toParentTextView = (TextView) convertView.findViewById(R.id.toParent);
+
                 if (comment.getTid() == 0) { //新发表的评论，只是暂存，无法支持和反对
                     supportAgainstLinearLayout.setVisibility(View.INVISIBLE);
+                    toParentTextView.setVisibility(View.GONE);
                 }
                 else {
                     supportAgainstLinearLayout.setVisibility(View.VISIBLE);
-                    final TextView supportTextView = (TextView) convertView.findViewById(R.id.supportText);
-                    final TextView againstTextView = (TextView) convertView.findViewById(R.id.againstText);
-
-                    final TextView scoreTextView = (TextView) convertView.findViewById(R.id.score);
-                    scoreTextView.setText("" + comment.getScore());
-                    final TextView reasonTextView = (TextView) convertView.findViewById(R.id.reason);
-                    reasonTextView.setText("" + comment.getReason());
-
-                    final LinearLayout supportLinearLayout = (LinearLayout) convertView.findViewById(R.id.supportLinearLayout);
-                    final LinearLayout againstLinearLayout = (LinearLayout) convertView.findViewById(R.id.againstLinearLayout);
                     supportLinearLayout.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             supportComment(supportLinearLayout, supportTextView, scoreTextView, comment, true);
@@ -144,16 +147,13 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                             supportComment(againstLinearLayout, againstTextView, reasonTextView, comment, false);
                         }
                     });
-
-                    final TextView toParentTextView = (TextView) convertView.findViewById(R.id.toParent);
-                    if (comment.getPid() == 0) {
+                    if (comment.getPid() == 0) { // 没有父评论
                         toParentTextView.setVisibility(View.GONE);
                     }
-                    else {
+                    else { // 有父评论
                         toParentTextView.setVisibility(View.VISIBLE);
                         toParentTextView.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
-                                logger.d("position: " + position);
                                 jumpToParentComment(position, comment.getPid());
                             }
                         });
@@ -218,11 +218,11 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
 
                             public void onAnimationEnd(Animation animation) {
                                 if (isSupport) {
-                                    supportTextView.setText("已支持");
+                                    supportTextView.setText(R.string.supported);
                                     scoreTextView.setText("" + (comment.getScore() + 1));
                                 }
                                 else {
-                                    supportTextView.setText("已反对");
+                                    supportTextView.setText(R.string.againsted);
                                     scoreTextView.setText("" + (comment.getReason() + 1));
                                 }
                             }
@@ -277,7 +277,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
 
                 @Override
                 public HasAsync<List<Comment>> getAsyncContext() {
-                    return new HasAsyncDelegate<List<Comment>>(ArticleCommentsFragment.this){
+                    return new HasAsyncDelegate<List<Comment>>(ArticleCommentsFragment.this) {
                         @Override
                         public void onSuccess(AsyncResult<List<Comment>> listAsyncResult) {
                             clearData();
@@ -319,7 +319,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
         super.onSuccess(listAsyncResult);
         footerPagingView.increasePage();
         // update comment count in ContentFragment
-        if(footerPagingView.getPage() == 1) { // 仅第一页需要 update comment numbers
+        if (footerPagingView.getPage() == 1) { // 仅第一页需要 update comment numbers
             ((ContentActivity) getActivity()).updateCommentNumbers();
         }
     }
