@@ -14,13 +14,9 @@ import org.jandroid.cnbeta.fragment.AbstractAsyncListFragment;
 import org.jandroid.cnbeta.fragment.HistoryArticleListFragment;
 import org.jandroid.cnbeta.fragment.HistoryCommentListFragment;
 import org.jandroid.common.BaseActivity;
+import org.jandroid.common.adapter.ActionTabFragmentPagerAdapter;
 
 public class HistoryActivity extends BaseActivity {
-    public static abstract class ActionTabFragmentPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
-        protected ActionTabFragmentPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-    }
 
     public final static int[] tabs = new int[]{R.string.tab_history_article, R.string.tab_history_comment};
     private final AbstractAsyncListFragment[] fragments = new AbstractAsyncListFragment[tabs.length];
@@ -30,8 +26,13 @@ public class HistoryActivity extends BaseActivity {
     private ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
 
         @Override
-        public int getCount() {
-            return HistoryActivity.this.getActionBar().getTabCount();
+        protected ActionBar getActionBar() {
+            return HistoryActivity.this.getActionBar();
+        }
+
+        @Override
+        protected ViewPager getViewPager() {
+            return mViewPager;
         }
 
         @Override
@@ -53,33 +54,6 @@ public class HistoryActivity extends BaseActivity {
             }
         }
 
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
-
-        public void onPageSelected(int position) {
-            final ActionBar actionBar = getActionBar();
-            if(actionBar.getSelectedNavigationIndex() != position) {
-                actionBar.setSelectedNavigationItem(position);
-            }
-
-        }
-
-        public void onPageScrollStateChanged(int state) {
-
-        }
-
-        public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-            mViewPager.setCurrentItem(HistoryActivity.this.getActionBar().getSelectedNavigationIndex());
-        }
-
-        public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-        }
-
-        public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-        }
     };
 
     @Override

@@ -14,16 +14,9 @@ import org.jandroid.cnbeta.fragment.AbstractAsyncListFragment;
 import org.jandroid.cnbeta.fragment.TopicArticleListFragment;
 import org.jandroid.cnbeta.fragment.TopicListFragment;
 import org.jandroid.common.BaseActivity;
+import org.jandroid.common.adapter.ActionTabFragmentPagerAdapter;
 
 public class TopicActivity extends BaseActivity {
-
-    public static abstract class ActionTabFragmentPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
-        protected ActionTabFragmentPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-    }
-
-    private static final String SELECTED_ITEM = "selected_item";
 
     public final static int[] tabs = new int[]{R.string.tab_topics, R.string.tab_topic_articles};
     private final AbstractAsyncListFragment[] fragments = new AbstractAsyncListFragment[tabs.length];
@@ -94,8 +87,13 @@ public class TopicActivity extends BaseActivity {
         ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
 
             @Override
-            public int getCount() {
-                return TopicActivity.this.getActionBar().getTabCount();
+            protected ActionBar getActionBar() {
+                return TopicActivity.this.getActionBar();
+            }
+
+            @Override
+            protected ViewPager getViewPager() {
+                return mViewPager;
             }
 
             @Override
@@ -117,39 +115,6 @@ public class TopicActivity extends BaseActivity {
                         return null;
                 }
             }
-
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            public void onPageSelected(int position) {
-                final ActionBar actionBar = getActionBar();
-                if(position == 0) {
-                    getActionBar().setTitle(getTitle());
-                }
-                else {
-                    getActionBar().setTitle(getTopicName());
-                }
-                if(actionBar.getSelectedNavigationIndex() != position) {
-                    actionBar.setSelectedNavigationItem(position);
-                }
-            }
-
-            public void onPageScrollStateChanged(int state) {
-
-            }
-
-            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-                mViewPager.setCurrentItem(TopicActivity.this.getActionBar().getSelectedNavigationIndex());
-            }
-
-            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-            }
-
-            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-            }
         };
 
         mViewPager.setAdapter(pagerAdapter);
@@ -168,18 +133,6 @@ public class TopicActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        if (savedInstanceState.containsKey(SELECTED_ITEM)) {
-            getActionBar().setSelectedNavigationItem(savedInstanceState.getInt(SELECTED_ITEM));
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putInt(SELECTED_ITEM, getActionBar().getSelectedNavigationIndex());
     }
 
     @Override

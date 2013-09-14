@@ -18,14 +18,9 @@ import org.jandroid.cnbeta.fragment.HotCommentListFragment;
 import org.jandroid.cnbeta.fragment.RealtimeArticleListFragment;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.common.BaseActivity;
+import org.jandroid.common.adapter.ActionTabFragmentPagerAdapter;
 
 public class MainActivity extends BaseActivity {
-
-    public static abstract class ActionTabFragmentPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
-        protected ActionTabFragmentPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-    }
 
     private static final String SELECTED_ITEM = "selected_item";
 
@@ -37,8 +32,13 @@ public class MainActivity extends BaseActivity {
     private ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
 
         @Override
-        public int getCount() {
-            return MainActivity.this.getActionBar().getTabCount();
+        protected ActionBar getActionBar() {
+            return MainActivity.this.getActionBar();
+        }
+
+        @Override
+        protected ViewPager getViewPager() {
+            return mViewPager;
         }
 
         @Override
@@ -73,32 +73,6 @@ public class MainActivity extends BaseActivity {
             }
         }
 
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
-
-        public void onPageSelected(int position) {
-            final ActionBar actionBar = getActionBar();
-            if(actionBar.getSelectedNavigationIndex() != position) {
-                actionBar.setSelectedNavigationItem(position);
-            }
-        }
-
-        public void onPageScrollStateChanged(int state) {
-
-        }
-
-        public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-            mViewPager.setCurrentItem(MainActivity.this.getActionBar().getSelectedNavigationIndex());
-        }
-
-        public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-        }
-
-        public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-        }
     };
 
     @Override

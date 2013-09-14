@@ -20,6 +20,7 @@ import org.jandroid.cnbeta.loader.HistoryCommentListLoader;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.DateFormatUtils;
 import org.jandroid.common.ToastUtils;
+import org.jandroid.common.adapter.ActionTabFragmentPagerAdapter;
 
 import java.util.Date;
 
@@ -35,8 +36,13 @@ public class ContentActivity extends BaseActivity {
     private ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
 
         @Override
-        public int getCount() {
-            return ContentActivity.this.getActionBar().getTabCount();
+        protected ActionBar getActionBar() {
+            return ContentActivity.this.getActionBar();
+        }
+
+        @Override
+        protected ViewPager getViewPager() {
+            return mViewPager;
         }
 
         @Override
@@ -44,34 +50,6 @@ public class ContentActivity extends BaseActivity {
             return position == 0 ? contentFragment : commentsFragment;
         }
 
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
-
-        public void onPageSelected(int position) {
-            final ActionBar actionBar = getActionBar();
-            //未选中时才调用setSelectedNavigationItem,
-            if (position != actionBar.getSelectedNavigationIndex()) {
-                actionBar.setSelectedNavigationItem(position);
-            }
-
-        }
-
-        public void onPageScrollStateChanged(int state) {
-
-        }
-
-        public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-            mViewPager.setCurrentItem(ContentActivity.this.getActionBar().getSelectedNavigationIndex());
-        }
-
-        public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-        }
-
-        public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-        }
     };
 
 
@@ -153,12 +131,6 @@ public class ContentActivity extends BaseActivity {
         }
 
         return true;
-    }
-
-    public static abstract class ActionTabFragmentPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
-        protected ActionTabFragmentPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
     }
 
     public void reload(){
