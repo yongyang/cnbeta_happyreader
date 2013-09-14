@@ -26,10 +26,10 @@ public class RealtimeArticleListLoader extends AbstractLoader<List<RealtimeArtic
         String response = CnBetaHttpClient.getInstance().httpGet(url);
         String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
         JSONObject responseJSON = (JSONObject)JSONValue.parse(responseJSONString);
-        JSONArray articleListJSONArray;
-        articleListJSONArray = (JSONArray)responseJSON.get("result");
+        JSONArray articleListJSONArray = (JSONArray)responseJSON.get("result");
+        List<RealtimeArticle> realtimeArticleList = parseArticleListJSON(articleListJSONArray);
         writeDisk(baseDir, responseJSONString);
-        return parseArticleListJSON(articleListJSONArray);
+        return realtimeArticleList;
     }
 
     private List<RealtimeArticle> parseArticleListJSON(JSONArray articleListJSONArray){
@@ -45,8 +45,9 @@ public class RealtimeArticleListLoader extends AbstractLoader<List<RealtimeArtic
     @Override
     public List<RealtimeArticle> fromDisk(File baseDir) throws Exception {
         //read json file from SD Card
-        String articleListJSONString = readDisk(getFile(baseDir));
-        JSONArray articleListJSONArray = (JSONArray)JSONValue.parse(articleListJSONString);
+        String responseJSONString = readDisk(baseDir);
+        JSONObject responseJSON = (JSONObject)JSONValue.parse(responseJSONString);
+        JSONArray articleListJSONArray = (JSONArray)responseJSON.get("result");
         return parseArticleListJSON(articleListJSONArray);
     }
 

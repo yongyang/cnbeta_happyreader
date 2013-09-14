@@ -2,6 +2,7 @@ package org.jandroid.cnbeta.async;
 
 import android.app.Application;
 import org.jandroid.cnbeta.exception.InfoException;
+import org.jandroid.cnbeta.exception.NoCachedDataException;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.common.Logger;
 import org.jandroid.common.ToastUtils;
@@ -59,7 +60,7 @@ public abstract class AbstractLoaderAsyncTask<R> extends BaseAsyncTask<R> {
         }
         else {
             if(isRemoteLoadOnly()) {
-                throw new ConnectException("没有网络连接");
+                throw new ConnectException("没有网络连接，无法加载数据！");
             }
             else if(loader.isCached(getAsyncContext().getCnBetaApplicationContext().getBaseDir())){
                 return (R) loader.fromDisk(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
@@ -70,8 +71,8 @@ public abstract class AbstractLoaderAsyncTask<R> extends BaseAsyncTask<R> {
         }
     }
 
-    protected R defaultResult() {
-        return null;
+    protected R defaultResult() throws Exception {
+        throw new NoCachedDataException("没有缓存数据，请连接网络后重试！");
     }
 
     @Override

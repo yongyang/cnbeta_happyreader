@@ -4,6 +4,7 @@ import org.jandroid.cnbeta.entity.MRankArticle;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.MRankListLoader;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,5 +17,10 @@ public abstract class MRankArticleListAsyncTask extends AbstractLoaderAsyncTask<
     @Override
     public AbstractLoader<List<MRankArticle>> getLoader() {
         return new MRankListLoader(getType());
+    }
+
+    @Override
+    protected List<MRankArticle> defaultResult() throws Exception {
+        return Collections.emptyList();
     }
 }

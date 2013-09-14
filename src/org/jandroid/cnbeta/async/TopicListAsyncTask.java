@@ -4,6 +4,7 @@ import org.jandroid.cnbeta.entity.Topic;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.TopicListLoader;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,5 +22,10 @@ import java.util.List;
     @Override
     public AbstractLoader<List<Topic>> getLoader() {
         return new TopicListLoader(getPage());
+    }
+
+    @Override
+    protected List<Topic> defaultResult() throws Exception {
+        return Collections.emptyList();
     }
 }

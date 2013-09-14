@@ -5,6 +5,7 @@ import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.ArticleCommentsLoader;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,5 +20,10 @@ public abstract class ArticleCommentsAsyncTask extends AbstractLoaderAsyncTask<L
     @Override
     public AbstractLoader<List<Comment>> getLoader() {
         return new ArticleCommentsLoader(getArticleContent(), getPage());
+    }
+
+    @Override
+    protected List<Comment> defaultResult() throws Exception {
+        return Collections.emptyList();
     }
 }

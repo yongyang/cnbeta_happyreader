@@ -4,6 +4,7 @@ import org.jandroid.cnbeta.entity.EditorRecommend;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.EditorRecommendListLoader;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,4 +19,8 @@ public abstract class EditorRecommendListAsyncTask extends AbstractLoaderAsyncTa
         return new EditorRecommendListLoader(getPage());
     }
 
+    @Override
+    protected List<EditorRecommend> defaultResult() throws Exception {
+        return Collections.emptyList();
+    }
 }

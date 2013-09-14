@@ -1,7 +1,13 @@
 package org.jandroid.cnbeta.async;
 
+import android.app.Application;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.ImageBytesLoader;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
@@ -19,5 +25,13 @@ public abstract class ImageBytesAsyncTask extends AbstractLoaderAsyncTask<byte[]
     @Override
     public AbstractLoader<byte[]> getLoader() {
         return new ImageBytesLoader(getImageUrl());
+    }
+
+    @Override
+    protected byte[] defaultResult() throws Exception {
+        Bitmap bm =  BitmapFactory.decodeResource(((Application) getAsyncContext().getCnBetaApplicationContext()).getResources(), R.drawable.default_img);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
     }
 }

@@ -4,6 +4,7 @@ import org.jandroid.cnbeta.entity.RealtimeArticle;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.RealtimeArticleListLoader;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,4 +17,8 @@ public abstract class RealtimeArticleListAsyncTask extends AbstractLoaderAsyncTa
         return new RealtimeArticleListLoader();
     }
 
+    @Override
+    protected List<RealtimeArticle> defaultResult() throws Exception {
+        return Collections.emptyList();
+    }
 }

@@ -4,6 +4,7 @@ import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,5 +19,10 @@ import java.util.List;
     @Override
     public AbstractLoader<List<Article>> getLoader() {
         return new ArticleListLoader(getCategory(), getPage());
+    }
+
+    @Override
+    protected List<Article> defaultResult() throws Exception {
+        return Collections.emptyList();
     }
 }

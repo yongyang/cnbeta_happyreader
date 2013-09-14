@@ -4,6 +4,7 @@ import org.jandroid.cnbeta.entity.HotComment;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.HotCommentListLoader;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,4 +19,8 @@ public abstract class HotCommentListAsyncTask extends AbstractLoaderAsyncTask<Li
         return new HotCommentListLoader(getPage());
     }
 
+    @Override
+    protected List<HotComment> defaultResult() throws Exception {
+        return Collections.emptyList();
+    }
 }
