@@ -21,7 +21,7 @@ public class HistoryCommentListLoader extends AbstractLoader<List<HistoryComment
 
     @Override
     public List<HistoryComment> httpLoad(File baseDir) throws Exception {
-        throw new UnsupportedOperationException("load history article list from http.");
+        throw new UnsupportedOperationException("load history comment list from http.");
     }
 
     private List<HistoryComment> parseHistoryArticleListJSON(JSONArray articleListJSONArray){

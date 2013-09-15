@@ -50,7 +50,7 @@ public abstract class AbstractLoaderAsyncTask<R> extends BaseAsyncTask<R> {
         AbstractLoader loader = getLoader();
 
         if(hasNetwork) {
-            if((isLocalLoadOnly() || isLocalLoadFirst()) && loader.isCached(getAsyncContext().getCnBetaApplicationContext().getBaseDir())) {
+            if(isLocalLoadOnly() || (isLocalLoadFirst() && loader.isCached(getAsyncContext().getCnBetaApplicationContext().getBaseDir()))) {
                 //优先从Disk装载
                 return (R) loader.diskLoad(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
             }
