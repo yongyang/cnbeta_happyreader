@@ -299,11 +299,25 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
         if (contentWebView != null) {
+            // Stopping a webview and all of the background processes (flash,
+            // javascript, etc) is a very big mess.
+            // The following steps are to counter most of the issues seen on
+            // internals still going on after the webview is destroyed.
+
+            contentWebView.stopLoading();
+            contentWebView.loadData("", "text/html", "utf-8");
+            contentWebView.reload();
+
+            contentWebView.setWebChromeClient(null);
+            contentWebView.setWebViewClient(null);
+            contentWebView.removeAllViews();
+            contentWebView.clearHistory();
             contentWebView.destroy();
             contentWebView = null;
         }
-        super.onDestroy();
+
     }
 
     public void reloadContent() {

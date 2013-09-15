@@ -20,7 +20,7 @@ public class RealtimeArticleListLoader extends AbstractLoader<List<RealtimeArtic
 
 
     @Override
-    public List<RealtimeArticle> fromHttp(File baseDir) throws Exception {
+    public List<RealtimeArticle> httpLoad(File baseDir) throws Exception {
         String url = MessageFormat.format(URL_FORMAT, ""+System.currentTimeMillis(), ""+(System.currentTimeMillis() + 1));
         //user json-simple to parse returned json string
         String response = CnBetaHttpClient.getInstance().httpGet(url);

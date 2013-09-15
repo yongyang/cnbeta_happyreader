@@ -52,27 +52,20 @@ public abstract class AbstractLoaderAsyncTask<R> extends BaseAsyncTask<R> {
         if(hasNetwork) {
             if((isLocalLoadOnly() || isLocalLoadFirst()) && loader.isCached(getAsyncContext().getCnBetaApplicationContext().getBaseDir())) {
                 //优先从Disk装载
-                return (R) loader.fromDisk(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
+                return (R) loader.diskLoad(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
             }
             else {
-                return (R) loader.fromHttp(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
+                return (R) loader.httpLoad(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
             }
         }
         else {
             if(isRemoteLoadOnly()) {
                 throw new ConnectException("没有网络连接，无法加载数据！");
             }
-            else if(loader.isCached(getAsyncContext().getCnBetaApplicationContext().getBaseDir())){
-                return (R) loader.fromDisk(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
-            }
             else {
-                return defaultResult();
+                return (R) loader.diskLoad(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
             }
         }
-    }
-
-    protected R defaultResult() throws Exception {
-        throw new NoCachedDataException("没有缓存数据，请连接网络后重试！");
     }
 
     @Override

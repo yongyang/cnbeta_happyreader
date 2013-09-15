@@ -63,7 +63,7 @@ public class MRankListLoader extends AbstractLoader<List<MRankArticle>>{
     }
 
     @Override
-    public List<MRankArticle> fromHttp(File baseDir) throws Exception {
+    public List<MRankArticle> httpLoad(File baseDir) throws Exception {
         String url = getURL();
         String responseHTML = CnBetaHttpClient.getInstance().httpGet(url);
         List<MRankArticle>  mRankArticles = parsePage(responseHTML);

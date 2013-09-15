@@ -27,11 +27,4 @@ public abstract class ImageBytesAsyncTask extends AbstractLoaderAsyncTask<byte[]
         return new ImageBytesLoader(getImageUrl());
     }
 
-    @Override
-    protected byte[] defaultResult() throws Exception {
-        Bitmap bm =  BitmapFactory.decodeResource(((Application) getAsyncContext().getCnBetaApplicationContext()).getResources(), R.drawable.default_img);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        return baos.toByteArray();
-    }
 }

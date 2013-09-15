@@ -21,8 +21,4 @@ import java.util.List;
         return new ArticleListLoader(getCategory(), getPage());
     }
 
-    @Override
-    protected List<Article> defaultResult() throws Exception {
-        return Collections.emptyList();
-    }
 }

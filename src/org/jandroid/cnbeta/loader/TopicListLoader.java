@@ -10,7 +10,6 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.text.MessageFormat;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,13 +31,13 @@ public class TopicListLoader extends AbstractListLoader<Topic> {
     }
 
     @Override
-    public List<Topic> fromHttp(File baseDir) throws Exception {
+    public List<Topic> httpLoad(File baseDir) throws Exception {
 /*
         if(getPage() > MAX_PAGE){
             return Collections.EMPTY_LIST;
         }
 */
-        return super.fromHttp(baseDir);
+        return super.httpLoad(baseDir);
     }
 
     @Override

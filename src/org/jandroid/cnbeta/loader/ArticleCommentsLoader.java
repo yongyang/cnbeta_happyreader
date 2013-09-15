@@ -57,7 +57,7 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
     }
 
     @Override
-    public List<Comment> fromHttp(File baseDir) throws Exception {
+    public List<Comment> httpLoad(File baseDir) throws Exception {
         Map<String, String> headers = new HashMap<String, String>();
         //should add this "X-Requested-With" header, so remote return result
         //httpget.addHeader("X-Requested-With", "XMLHttpRequest");
@@ -131,7 +131,7 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
 
     @Override
     public String getFileName() {
-        return "comment_" + content.getSid();
+        return "comment_" + content.getSid() + "_" + getPage();
     }
 
     private String generateOP() throws Exception {

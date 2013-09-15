@@ -1,5 +1,6 @@
 package org.jandroid.cnbeta.loader;
 
+import org.jandroid.cnbeta.entity.HistoryArticle;
 import org.jandroid.cnbeta.entity.HistoryComment;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -7,6 +8,7 @@ import org.json.simple.JSONValue;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,7 +20,7 @@ public class HistoryCommentListLoader extends AbstractLoader<List<HistoryComment
     private final static Object LOCK = new Object();
 
     @Override
-    public List<HistoryComment> fromHttp(File baseDir) throws Exception {
+    public List<HistoryComment> httpLoad(File baseDir) throws Exception {
         throw new UnsupportedOperationException("load history article list from http.");
     }
 
@@ -78,6 +80,11 @@ public class HistoryCommentListLoader extends AbstractLoader<List<HistoryComment
     @Override
     public String getFileName() {
         return "history_comment";
+    }
+
+    @Override
+    protected List<HistoryComment> noCache() throws Exception {
+        return Collections.emptyList();
     }
 
 }

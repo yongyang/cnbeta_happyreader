@@ -1,6 +1,8 @@
 package org.jandroid.cnbeta.loader;
 
 import org.apache.commons.io.FileUtils;
+import org.jandroid.cnbeta.exception.NoCachedDataException;
+import org.jandroid.cnbeta.exception.NoDataInfoException;
 
 import java.io.File;
 
@@ -15,7 +17,7 @@ public abstract class AbstractLoader<T> {
      * @return
      * @throws Exception
      */
-    public abstract T fromHttp(File baseDir) throws Exception;
+    public abstract T httpLoad(File baseDir) throws Exception;
 
     /**
      * 
@@ -23,8 +25,18 @@ public abstract class AbstractLoader<T> {
      * @return
      * @throws Exception
      */
-    public abstract T fromDisk(File baseDir) throws Exception;
+    public T diskLoad(File baseDir) throws Exception {
+        if(!isCached(baseDir)) {
+            return noCache();
+        }
+        return fromDisk(baseDir);
+    }
 
+    protected abstract T fromDisk(File baseDir) throws Exception;
+
+    protected T noCache() throws Exception {
+        throw new NoCachedDataException("未能从本地磁盘加载所请求的缓存数据");
+    }
     /**
      *
      * @return filename to store data

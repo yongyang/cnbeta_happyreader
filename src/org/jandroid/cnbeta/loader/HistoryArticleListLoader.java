@@ -7,6 +7,7 @@ import org.json.simple.JSONValue;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class HistoryArticleListLoader extends AbstractLoader<List<HistoryArticle
     private final static Object LOCK = new Object();
 
     @Override
-    public List<HistoryArticle> fromHttp(File baseDir) throws Exception {
+    public List<HistoryArticle> httpLoad(File baseDir) throws Exception {
         throw new UnsupportedOperationException("load history article list from http.");
     }
 
@@ -79,4 +80,8 @@ public class HistoryArticleListLoader extends AbstractLoader<List<HistoryArticle
         return "history_article";
     }
 
+    @Override
+    protected List<HistoryArticle> noCache() throws Exception {
+        return Collections.emptyList();
+    }
 }

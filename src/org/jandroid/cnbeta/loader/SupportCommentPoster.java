@@ -62,7 +62,7 @@ public class SupportCommentPoster extends AbstractLoader<JSONObject> {
     }
 
     @Override
-    public JSONObject fromHttp(File baseDir) throws Exception {
+    public JSONObject httpLoad(File baseDir) throws Exception {
         Map<String, String> headers = new HashMap<String, String>();
         //should add this "X-Requested-With" header, so remote return result
         //httpget.addHeader("X-Requested-With", "XMLHttpRequest");

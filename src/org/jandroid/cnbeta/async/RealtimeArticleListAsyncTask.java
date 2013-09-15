@@ -16,9 +16,4 @@ public abstract class RealtimeArticleListAsyncTask extends AbstractLoaderAsyncTa
     public AbstractLoader<List<RealtimeArticle>> getLoader() {
         return new RealtimeArticleListLoader();
     }
-
-    @Override
-    protected List<RealtimeArticle> defaultResult() throws Exception {
-        return Collections.emptyList();
-    }
 }

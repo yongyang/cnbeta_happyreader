@@ -1,4 +1,3 @@
-1. 支持视频
-2. ListView 过滤
-3. 一键离线下载
-4. HttpClient增加 abort，在 httpGet中传入 RequestContext，提供 isCacelled 进行判断是否 AsyncTask cancel了
+1. 一键离线下载
+2. HttpClient增加 abort，在 httpGet中传入 RequestContext，提供 isCacelled 进行判断是否 AsyncTask cancel了
+3. ListView 过滤

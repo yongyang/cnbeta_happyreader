@@ -23,9 +23,4 @@ import java.util.List;
     public AbstractLoader<List<Topic>> getLoader() {
         return new TopicListLoader(getPage());
     }
-
-    @Override
-    protected List<Topic> defaultResult() throws Exception {
-        return Collections.emptyList();
-    }
 }

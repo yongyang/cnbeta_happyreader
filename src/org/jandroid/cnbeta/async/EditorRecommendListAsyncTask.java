@@ -19,8 +19,4 @@ public abstract class EditorRecommendListAsyncTask extends AbstractLoaderAsyncTa
         return new EditorRecommendListLoader(getPage());
     }
 
-    @Override
-    protected List<EditorRecommend> defaultResult() throws Exception {
-        return Collections.emptyList();
-    }
 }

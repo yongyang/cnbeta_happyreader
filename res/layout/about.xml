@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="13sp"
                 android:maxLines="10"
-                android:text="1.多线程异步加载列表、内容、图片，提供最流畅体验；\n2.压缩传输所有网络数据，节省流量；\n3.支持文章评分，新评论，回复评论，支持/反对评论；\n4.支持板块、热评、排行榜以及主题等；\n5.浏览过的数据及时缓存，避免无必要的重复网络加载"/>
+                android:text="1.多线程异步加载列表、内容、图片，提供最流畅体验；\n2.压缩传输所有网络数据，节省流量；\n3.支持视频播放（需安装有Flash播放器）；\n4.支持文章评分，新评论，回复评论，支持/反对评论；\n5.支持板块、热评、排行榜以及主题等；\n6.浏览过的数据及时缓存，避免无必要的重复网络加载"/>
 
         <TextView
                 android:layout_width="wrap_content"

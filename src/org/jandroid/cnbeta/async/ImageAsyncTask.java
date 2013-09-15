@@ -24,9 +24,4 @@ public abstract class ImageAsyncTask extends AbstractLoaderAsyncTask<Bitmap> {
     public AbstractLoader<Bitmap> getLoader() {
         return new ImageLoader(getImageUrl());
     }
-
-    @Override
-    protected Bitmap defaultResult() throws Exception {
-        return BitmapFactory.decodeResource(((Application) getAsyncContext().getCnBetaApplicationContext()).getResources(), R.drawable.default_img);
-    }
 }

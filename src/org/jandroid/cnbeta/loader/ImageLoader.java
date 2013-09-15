@@ -3,7 +3,9 @@ package org.jandroid.cnbeta.loader;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
+import org.apache.commons.io.FileUtils;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
+import org.jandroid.cnbeta.exception.NoCachedImageException;
 
 import java.io.File;
 import java.net.URLEncoder;
@@ -20,8 +22,12 @@ public class ImageLoader extends AbstractLoader<Bitmap> {
         this.imageUrl = imageUrl;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     @Override
-    public Bitmap fromHttp(File baseDir) throws Exception {
+    public Bitmap httpLoad(File baseDir) throws Exception {
         // some url has space char
         String url = imageUrl.replace(" ", "%20");
         byte[] bytes = CnBetaHttpClient.getInstance().httpGetBytes(url);
@@ -43,5 +49,10 @@ public class ImageLoader extends AbstractLoader<Bitmap> {
             Log.w(this.getClass().getSimpleName(), "URLEncoder exception", e);
             return imageUrl;
         }
+    }
+
+    @Override
+    protected Bitmap noCache() throws Exception {
+        throw new NoCachedImageException(getImageUrl());
     }
 }

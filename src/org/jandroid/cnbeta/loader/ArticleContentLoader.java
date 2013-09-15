@@ -31,7 +31,7 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
     }
 
     @Override
-    public Content fromHttp(File baseDir) throws Exception {
+    public Content httpLoad(File baseDir) throws Exception {
         String url = getURL();
         String responseHTML = CnBetaHttpClient.getInstance().httpGet(url);
 

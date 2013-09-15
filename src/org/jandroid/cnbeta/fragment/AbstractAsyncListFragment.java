@@ -11,6 +11,7 @@ import android.widget.ListView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.async.HasAsync;
+import org.jandroid.cnbeta.exception.InfoException;
 import org.jandroid.common.BaseFragment;
 import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
@@ -96,8 +97,11 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
     }
 
     public synchronized void onFailure(AsyncResult<List<T>> listAsyncResult) {
-        getAdapter().notifyDataSetChanged();
-        ToastUtils.showShortToast(getActivity(), listAsyncResult.getErrorMsg());
+//        getAdapter().notifyDataSetChanged();
+        Exception e = listAsyncResult.getException();
+        if (e != null && e instanceof InfoException) {
+            ToastUtils.showShortToast(getActivity(), listAsyncResult.getErrorMsg());
+        }
     }
 
     public synchronized void onSuccess(AsyncResult<List<T>> listAsyncResult) {
@@ -105,11 +109,11 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
         getAdapter().notifyDataSetChanged();
     }
 
-    public synchronized void clearData(){
+    public synchronized void clearData() {
         loadedDatas.clear();
     }
 
-    public synchronized T getData(int index){
+    public synchronized T getData(int index) {
         return loadedDatas.get(index);
     }
 
@@ -117,7 +121,7 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
         return loadedDatas.size();
     }
 
-    public void addData(int location, T data){
+    public void addData(int location, T data) {
         loadedDatas.add(location, data);
     }
 

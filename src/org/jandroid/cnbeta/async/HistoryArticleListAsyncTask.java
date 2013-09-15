@@ -18,11 +18,6 @@ public abstract class HistoryArticleListAsyncTask extends AbstractLoaderAsyncTas
     }
 
     @Override
-    protected List<HistoryArticle> defaultResult() throws Exception {
-        return Collections.emptyList();
-    }
-
-    @Override
     public AbstractLoader<List<HistoryArticle>> getLoader() {
         return new HistoryArticleListLoader();
     }

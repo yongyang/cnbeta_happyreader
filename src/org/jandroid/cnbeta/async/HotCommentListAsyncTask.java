@@ -19,8 +19,4 @@ public abstract class HotCommentListAsyncTask extends AbstractLoaderAsyncTask<Li
         return new HotCommentListLoader(getPage());
     }
 
-    @Override
-    protected List<HotComment> defaultResult() throws Exception {
-        return Collections.emptyList();
-    }
 }

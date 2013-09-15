@@ -19,8 +19,4 @@ public abstract class MRankArticleListAsyncTask extends AbstractLoaderAsyncTask<
         return new MRankListLoader(getType());
     }
 
-    @Override
-    protected List<MRankArticle> defaultResult() throws Exception {
-        return Collections.emptyList();
-    }
 }

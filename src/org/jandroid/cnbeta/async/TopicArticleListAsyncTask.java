@@ -22,9 +22,4 @@ import java.util.List;
     public AbstractLoader<List<TopicArticle>> getLoader() {
         return new TopicArticleListLoader(getId(), getPage(), getSplitPage());
     }
-
-    @Override
-    protected List<TopicArticle> defaultResult() throws Exception {
-        return Collections.emptyList();
-    }
 }

@@ -18,11 +18,6 @@ public abstract class HistoryCommentListAsyncTask extends AbstractLoaderAsyncTas
     }
 
     @Override
-    protected List<HistoryComment> defaultResult() throws Exception {
-        return Collections.emptyList();
-    }
-
-    @Override
     public AbstractLoader<List<HistoryComment>> getLoader() {
         return new HistoryCommentListLoader();
     }

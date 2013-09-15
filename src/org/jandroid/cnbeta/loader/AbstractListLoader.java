@@ -67,7 +67,7 @@ public abstract class AbstractListLoader<T> extends AbstractLoader<List<T>> {
     }
 
     @Override
-    public List<T> fromHttp(File baseDir) throws Exception {
+    public List<T> httpLoad(File baseDir) throws Exception {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("X-Requested-With", "XMLHttpRequest");
 

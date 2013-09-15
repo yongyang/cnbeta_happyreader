@@ -33,7 +33,7 @@ public class CaptchaLoader extends AbstractLoader<Bitmap> {
     }
 
     @Override
-    public Bitmap fromHttp(File baseDir) throws Exception {
+    public Bitmap httpLoad(File baseDir) throws Exception {
         Map<String, String> headers = new HashMap<String, String>();
         //should add this "X-Requested-With" header, so remote return result
         //httpget.addHeader("X-Requested-With", "XMLHttpRequest");

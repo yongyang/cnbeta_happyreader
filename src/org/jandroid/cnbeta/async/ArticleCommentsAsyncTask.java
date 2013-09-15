@@ -21,9 +21,4 @@ public abstract class ArticleCommentsAsyncTask extends AbstractLoaderAsyncTask<L
     public AbstractLoader<List<Comment>> getLoader() {
         return new ArticleCommentsLoader(getArticleContent(), getPage());
     }
-
-    @Override
-    protected List<Comment> defaultResult() throws Exception {
-        return Collections.emptyList();
-    }
 }
