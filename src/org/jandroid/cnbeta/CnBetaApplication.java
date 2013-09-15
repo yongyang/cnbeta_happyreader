@@ -12,6 +12,7 @@ import org.jandroid.cnbeta.loader.HistoryArticleListLoader;
 import org.jandroid.cnbeta.loader.HistoryCommentListLoader;
 import org.jandroid.common.EnvironmentUtils;
 import org.jandroid.common.Logger;
+import org.jandroid.common.ToastUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,13 +28,25 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
 
     private CnBetaHttpClient httpClient = CnBetaHttpClient.getInstance();
 
+    //当网络变化时, 要显示 Toast 提示用户
+    private boolean hasNetwork = false;
+
     @Override
     public void onCreate() {
         super.onCreate();
     }
     
     public boolean isNetworkConnected() {
-        return EnvironmentUtils.checkNetworkConnected(this);
+        boolean connected = EnvironmentUtils.checkNetworkConnected(this);
+        if(hasNetwork && !connected) {
+            handler.post(new Runnable() {
+                public void run() {
+                    ToastUtils.showShortToast(CnBetaApplication.this, "网络未连接，仅能加载本地已缓存的数据");
+                }
+            });
+        }
+        hasNetwork = connected;
+        return hasNetwork;
     }
     
     public boolean isSdCardMounted() {

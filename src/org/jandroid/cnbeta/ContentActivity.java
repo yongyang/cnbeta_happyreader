@@ -162,7 +162,7 @@ public class ContentActivity extends BaseActivity {
                             new HistoryCommentListLoader().writeHistory(((CnBetaApplicationContext) getApplicationContext()).getBaseDir(), historyComment);
                         }
                         catch (final Exception e) {
-                            runOnUiThread(new Runnable() {
+                            handler.post(new Runnable() {
                                 public void run() {
                                     ToastUtils.showShortToast(getApplicationContext(), e.toString());
                                 }

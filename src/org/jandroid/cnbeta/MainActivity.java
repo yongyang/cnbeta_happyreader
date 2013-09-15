@@ -16,6 +16,7 @@ import org.jandroid.cnbeta.fragment.ArticleListFragment;
 import org.jandroid.cnbeta.fragment.EditorRecommendListFragment;
 import org.jandroid.cnbeta.fragment.HotCommentListFragment;
 import org.jandroid.cnbeta.fragment.RealtimeArticleListFragment;
+import org.jandroid.cnbeta.loader.AbstractListLoader;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.adapter.ActionTabFragmentPagerAdapter;
@@ -44,7 +45,7 @@ public class MainActivity extends BaseActivity {
             switch (position) {
                 case 0:
                     if (fragments[0] == null) {
-                        fragments[0] = new ArticleListFragment(ArticleListLoader.Type.ALL);
+                        fragments[0] = newArticleListFragment(AbstractListLoader.Type.ALL);
                     }
                     return fragments[0];
                 case 1:
@@ -72,6 +73,15 @@ public class MainActivity extends BaseActivity {
         }
 
     };
+
+    private ArticleListFragment newArticleListFragment(AbstractListLoader.Type type){
+        ArticleListFragment fragment = new ArticleListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("type", type);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

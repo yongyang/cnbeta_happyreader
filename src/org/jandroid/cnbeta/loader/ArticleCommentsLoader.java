@@ -4,6 +4,7 @@ import android.util.Base64;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
+import org.jandroid.cnbeta.exception.LoaderException;
 import org.jandroid.cnbeta.exception.NoDataInfoException;
 import org.jandroid.common.UnicodeUtils;
 import org.json.simple.JSONArray;
@@ -76,7 +77,7 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
         
         //if failed
         if(response.indexOf("error") > 0){
-            throw new Exception("Failed to read comments of article: " + content.getSid() + ", " + response );
+            throw new LoaderException(response );
         }
 //        String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
         JSONObject responseJSON = (JSONObject) JSONValue.parse(response);

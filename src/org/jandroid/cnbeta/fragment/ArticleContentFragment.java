@@ -38,8 +38,6 @@ import org.json.simple.JSONObject;
  */
 public class ArticleContentFragment extends BaseFragment implements HasAsync<Content>{
 
-    static Logger log = Logger.getLogger(ArticleContentFragment.class);
-
     private Content content;
 
     private TextView titleTextView;
@@ -53,9 +51,6 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     private RatingBar rateRatingBar;
     private RatingBar resultRatingBar;
     private ProgressBar ratingProgressBar;
-
-
-    //TODO: 支持 视频？？？
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -146,6 +141,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         contentWebView.getSettings().setAllowFileAccess(true);
         contentWebView.getSettings().setAllowFileAccessFromFileURLs(true);
         contentWebView.getSettings().setAllowUniversalAccessFromFileURLs(true);
+        //支持视频，需安装 Flash Player
         contentWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
         contentWebView.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY); // no scroll
         contentWebView.getSettings().setBuiltInZoomControls(true);
@@ -217,7 +213,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
 
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                log.e("ERROR: " + errorCode + ", " + description + ", " + failingUrl);
+                logger.e("ERROR: " + errorCode + ", " + description + ", " + failingUrl);
             }
         });
 
@@ -225,13 +221,13 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         contentWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage cm) {
-                log.d(cm.message() + " -- From line " + cm.lineNumber() + " of " + cm.sourceId());
+                logger.d(cm.message() + " -- From line " + cm.lineNumber() + " of " + cm.sourceId());
                 return true;
             }
 
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                Toast.makeText(getActivity(), "JSAlert: " + message, Toast.LENGTH_SHORT).show();
+                logger.d("JSAlert: " + message);
                 return true;
             }
 
@@ -405,7 +401,5 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
             }
         }
         );
-
     }
-
 }

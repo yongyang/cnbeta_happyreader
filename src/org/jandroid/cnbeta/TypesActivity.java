@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import org.jandroid.cnbeta.fragment.AbstractAsyncListFragment;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
+import org.jandroid.cnbeta.loader.AbstractListLoader;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.adapter.ActionTabFragmentPagerAdapter;
@@ -39,22 +40,22 @@ public class TypesActivity extends BaseActivity {
                 switch (position) {
                     case 0:
                         if(fragments[0] == null) {
-                            fragments[0] = new ArticleListFragment(ArticleListLoader.Type.DIG);
+                            fragments[0] = newArticleListFragment(ArticleListLoader.Type.DIG);
                         }
                         return fragments[0];
                     case 1:
                         if(fragments[1] == null) {
-                            fragments[1] = new ArticleListFragment(ArticleListLoader.Type.SOFT);
+                            fragments[1] = newArticleListFragment(ArticleListLoader.Type.SOFT);
                         }
                         return fragments[1];
                     case 2:
                         if(fragments[2] == null) {
-                            fragments[2] = new ArticleListFragment(ArticleListLoader.Type.INDUSTRY);
+                            fragments[2] = newArticleListFragment(ArticleListLoader.Type.INDUSTRY);
                         }
                         return fragments[2];
                     case 3:
                         if(fragments[3] == null) {
-                            fragments[3] = new ArticleListFragment(ArticleListLoader.Type.INTERACT);
+                            fragments[3] = newArticleListFragment(ArticleListLoader.Type.INTERACT);
                         }
                         return fragments[3];
                     default:
@@ -62,8 +63,15 @@ public class TypesActivity extends BaseActivity {
                         return null;
                 }
         }
-
     };
+
+    private ArticleListFragment newArticleListFragment(AbstractListLoader.Type type){
+        ArticleListFragment fragment = new ArticleListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("type", type);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -19,6 +19,7 @@ import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HasAsyncDelegate;
 import org.jandroid.cnbeta.async.ImageAsyncTask;
 import org.jandroid.cnbeta.entity.Article;
+import org.jandroid.cnbeta.loader.AbstractListLoader;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.BaseActivity;
@@ -34,16 +35,20 @@ import java.util.List;
 public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
 
     // 新闻分类
-    private ArticleListLoader.Type category;
+    private AbstractListLoader.Type type;
 
     private PagingView footerPagingView;
 
-    public ArticleListFragment(ArticleListLoader.Type category) {
-        this.category = category;
+    public ArticleListFragment() {
+
     }
 
-    public ArticleListLoader.Type getCategory() {
-        return category;
+    private void setType(ArticleListLoader.Type type) {
+        this.type = type;
+    }
+
+    public ArticleListLoader.Type getType() {
+        return type;
     }
 
     @Override
@@ -51,7 +56,7 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
         executeAsyncTaskMultiThreading(new ArticleListAsyncTask() {
             @Override
             protected ArticleListLoader.Type getCategory() {
-                return ArticleListFragment.this.getCategory();
+                return ArticleListFragment.this.getType();
             }
 
             @Override
@@ -70,7 +75,7 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
         executeAsyncTaskMultiThreading(new ArticleListAsyncTask() {
             @Override
             protected ArticleListLoader.Type getCategory() {
-                return ArticleListFragment.this.getCategory();
+                return ArticleListFragment.this.getType();
             }
 
             @Override
@@ -97,6 +102,8 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Bundle arg = getArguments();
+        setType((AbstractListLoader.Type)arg.getSerializable("type"));
         super.onCreate(savedInstanceState);
     }
 
