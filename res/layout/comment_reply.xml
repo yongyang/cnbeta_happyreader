@@ -95,6 +95,8 @@
                 android:textSize="@dimen/listitem_title_text_size"
                 android:paddingLeft="20dip"
                 android:paddingRight="20dip"
+                android:paddingTop="5dip"
+                android:paddingBottom="5dip"
                 android:background="@drawable/btn_bg_comment_selector"
                 android:text="取 消"
                 android:layout_centerVertical="true"/>
@@ -109,6 +111,8 @@
                 android:textSize="@dimen/listitem_title_text_size"
                 android:paddingLeft="20dip"
                 android:paddingRight="20dip"
+                android:paddingTop="5dip"
+                android:paddingBottom="5dip"
                 android:background="@drawable/btn_bg_comment_selector"
                 android:text="回 复"
                 android:layout_centerVertical="true"/>

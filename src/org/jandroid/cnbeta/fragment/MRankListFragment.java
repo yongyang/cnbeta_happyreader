@@ -28,7 +28,11 @@ public class MRankListFragment extends AbstractAsyncListFragment<MRankArticle> {
 
     private MRankListLoader.Type type;
 
-    public MRankListFragment(MRankListLoader.Type type) {
+    public MRankListFragment() {
+
+    }
+
+    private void setType(MRankListLoader.Type type) {
         this.type = type;
     }
 
@@ -38,6 +42,9 @@ public class MRankListFragment extends AbstractAsyncListFragment<MRankArticle> {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Bundle args = getArguments();
+        setType((MRankListLoader.Type)args.getSerializable("type"));
+
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(false);
     }

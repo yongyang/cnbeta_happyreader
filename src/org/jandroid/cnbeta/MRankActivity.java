@@ -39,17 +39,17 @@ public class MRankActivity extends BaseActivity {
             switch (position) {
                 case 0:
                     if (fragments[0] == null) {
-                        fragments[0] = new MRankListFragment(MRankListLoader.Type.HOT);
+                        fragments[0] = newMRankListFragment(MRankListLoader.Type.HOT);
                     }
                     return fragments[0];
                 case 1:
                     if (fragments[1] == null) {
-                        fragments[1] = new MRankListFragment(MRankListLoader.Type.ARGUE);
+                        fragments[1] = newMRankListFragment(MRankListLoader.Type.ARGUE);
                     }
                     return fragments[1];
                 case 2:
                     if (fragments[2] == null) {
-                        fragments[2] = new MRankListFragment(MRankListLoader.Type.RECOMMEND);
+                        fragments[2] = newMRankListFragment(MRankListLoader.Type.RECOMMEND);
                     }
                     return fragments[2];
                 default:
@@ -58,6 +58,14 @@ public class MRankActivity extends BaseActivity {
             }
         }
     };
+
+    private MRankListFragment newMRankListFragment(MRankListLoader.Type type) {
+        MRankListFragment fragment = new MRankListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("type", type);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

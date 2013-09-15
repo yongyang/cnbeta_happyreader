@@ -40,8 +40,14 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 
     private PagingView footerPagingView;
 
-    public TopicArticleListFragment(long topicId, String topicName) {
+    public TopicArticleListFragment() {
+    }
+
+    private void setTopicId(long topicId) {
         this.topicId = topicId;
+    }
+
+    private void setTopicName(String topicName) {
         this.topicName = topicName;
     }
 
@@ -125,6 +131,9 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Bundle args = getArguments();
+        setTopicId(args.getLong("id"));
+        setTopicName(args.getString("name"));
         super.onCreate(savedInstanceState);
     }
 

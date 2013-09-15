@@ -29,7 +29,7 @@ public class TopicActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        topicId = getIntent().getLongExtra("id", 9);
+        topicId = getIntent().getLongExtra("id", 9); // 9 is apple
         topicName = getIntent().getStringExtra("name");
         if(topicName == null) {
             topicName = "Apple 苹果";
@@ -107,7 +107,7 @@ public class TopicActivity extends BaseActivity {
                     case 1:
                         if (fragments[1] == null) {
                             //默认显示"苹果"主题文章
-                            fragments[1] = new TopicArticleListFragment(getTopicId(), getTopicName());
+                            fragments[1] = newTopicArticleListFragment(getTopicId(), getTopicName());
                         }
                         return fragments[1];
                     default:
@@ -119,6 +119,15 @@ public class TopicActivity extends BaseActivity {
 
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setOnPageChangeListener(pagerAdapter);
+    }
+
+    private TopicArticleListFragment newTopicArticleListFragment(long topicId, String topicName) {
+        TopicArticleListFragment fragment = new TopicArticleListFragment();
+        Bundle args = new Bundle();
+        args.putLong("id", topicId);
+        args.putString("name", topicName);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     private void initActionBar() {
