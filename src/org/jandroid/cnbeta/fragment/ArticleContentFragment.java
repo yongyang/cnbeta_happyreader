@@ -52,9 +52,11 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     private RatingBar resultRatingBar;
     private ProgressBar ratingProgressBar;
 
+    private ViewGroup root;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.content_article, null);
+        root = (ViewGroup)inflater.inflate(R.layout.content_article, null);
         titleTextView = (TextView) root.findViewById(R.id.tv_articleTitle);
         titleTextView.setText(((ContentActivity) getActivity()).getArticleTitle());
         titleTextView.setSelected(true); // select to enable marque
@@ -145,6 +147,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         contentWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
         contentWebView.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY); // no scroll
         contentWebView.getSettings().setBuiltInZoomControls(true);
+        contentWebView.getSettings().setLoadWithOverviewMode(true);
         contentWebView.getSettings().setAppCacheEnabled(true);
         contentWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
         contentWebView.getSettings().setLoadsImagesAutomatically(true);
@@ -281,6 +284,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     public void onPause() {
         super.onPause();
         if (contentWebView != null) {
+            contentWebView.pauseTimers();
             contentWebView.onPause();
         }
     }
@@ -290,12 +294,13 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         super.onResume();
         if (contentWebView != null) {
             contentWebView.onResume();
+            contentWebView.resumeTimers();
         }
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         if (contentWebView != null) {
             // Stopping a webview and all of the background processes (flash,
             // javascript, etc) is a very big mess.
@@ -303,17 +308,27 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
             // internals still going on after the webview is destroyed.
 
             contentWebView.stopLoading();
-            contentWebView.loadData("", "text/html", "utf-8");
-            contentWebView.reload();
-
+            contentWebView.clearCache(true);
+            contentWebView.clearView();
+            contentWebView.freeMemory();
             contentWebView.setWebChromeClient(null);
             contentWebView.setWebViewClient(null);
-            contentWebView.removeAllViews();
+            contentWebView.loadData("", "text/html", "utf-8");
+            contentWebView.reload();
             contentWebView.clearHistory();
+            contentWebView.clearView();
+            contentWebView.removeAllViews();
             contentWebView.destroy();
             contentWebView = null;
+            if(root != null) {
+                root.removeAllViews();
+            }
         }
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     public void reloadContent() {
