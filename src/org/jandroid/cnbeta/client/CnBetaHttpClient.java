@@ -54,7 +54,7 @@ public class CnBetaHttpClient {
     public static final int MAX_TOTAL_CONNECTIONS = 30;
     public static final int MAX_CONNECTIONS_PER_ROUTE = 30;
     public static final int TIMEOUT_CONNECT = 10000;
-    public static final int TIMEOUT_READ = 60000;
+    public static final int TIMEOUT_READ = 30000;
 
     
     private final static CnBetaHttpClient client = new CnBetaHttpClient();

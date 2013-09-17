@@ -110,7 +110,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         return true;
     }
 
-    public void exit() {
+    public void onExit() {
         SharedPreferences prefs = getSharedPreferences(getPackageName() + "_preferences", MODE_PRIVATE);
 
         if(prefs.getBoolean(getString(R.string.pref_key_autoCleanCache), false)) {
@@ -122,13 +122,15 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         }
 
 //        shutdown httpClient 会导致再次打开程序无法获取网络数据
-        httpClient.shutdown();
+//        httpClient.shutdown();
 
+/*
         handler.postDelayed(new Runnable() {
             public void run() {
                 System.exit(0);
             }
         }, 100);
+*/
     }
 
     public boolean cleanCache(){

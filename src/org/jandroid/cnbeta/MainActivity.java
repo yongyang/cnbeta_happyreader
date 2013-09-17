@@ -2,10 +2,8 @@ package org.jandroid.cnbeta;
 
 import android.app.ActionBar;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +15,6 @@ import org.jandroid.cnbeta.fragment.EditorRecommendListFragment;
 import org.jandroid.cnbeta.fragment.HotCommentListFragment;
 import org.jandroid.cnbeta.fragment.RealtimeArticleListFragment;
 import org.jandroid.cnbeta.loader.AbstractListLoader;
-import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.adapter.ActionTabFragmentPagerAdapter;
 
@@ -157,18 +154,13 @@ public class MainActivity extends BaseActivity {
             exitTime = System.currentTimeMillis();
         }
         else {
-            finish();
             new Thread(){
                 @Override
                 public void run() {
-                    try {
-                        Thread.sleep(50);
-                    }
-                    catch (Exception e){}
-                    ((CnBetaApplication)getApplicationContext()).exit();
+                    ((CnBetaApplication)getApplicationContext()).onExit();
                 }
             }.start();
-
+            super.onBackPressed();
         }
     }
 }

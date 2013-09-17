@@ -190,4 +190,9 @@ public class ContentActivity extends BaseActivity {
     public Content getContent() {
         return contentFragment.getContent();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 }

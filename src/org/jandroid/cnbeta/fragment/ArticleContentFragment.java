@@ -1,5 +1,6 @@
 package org.jandroid.cnbeta.fragment;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.KeyEvent;
@@ -10,6 +11,7 @@ import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -17,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
@@ -28,15 +29,16 @@ import org.jandroid.cnbeta.async.ImageBytesAsyncTask;
 import org.jandroid.cnbeta.async.RateArticleAsyncTask;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.common.BaseFragment;
-import org.jandroid.common.Logger;
 import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
 import org.json.simple.JSONObject;
 
+import java.io.ByteArrayInputStream;
+
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class ArticleContentFragment extends BaseFragment implements HasAsync<Content>{
+public class ArticleContentFragment extends BaseFragment implements HasAsync<Content> {
 
     private Content content;
 
@@ -56,7 +58,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = (ViewGroup)inflater.inflate(R.layout.content_article, null);
+        root = (ViewGroup) inflater.inflate(R.layout.content_article, null);
         titleTextView = (TextView) root.findViewById(R.id.tv_articleTitle);
         titleTextView.setText(((ContentActivity) getActivity()).getArticleTitle());
         titleTextView.setSelected(true); // select to enable marque
@@ -67,7 +69,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
 
         rateRatingBar = (RatingBar) root.findViewById(R.id.rate_ratingBar);
         resultRatingBar = (RatingBar) root.findViewById(R.id.result_ratingBar);
-        ratingProgressBar = (ProgressBar)root.findViewById(R.id.rating_progressBar);
+        ratingProgressBar = (ProgressBar) root.findViewById(R.id.rating_progressBar);
         setupRatingBar();
 
         progressBarLayout = (LinearLayout) root.findViewById(R.id.progressBarLayout);
@@ -87,26 +89,31 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
                     protected long getSid() {
                         return ((ContentActivity) getActivity()).getArticleSid();
                     }
+
                     @Override
                     protected int getScore() {
                         return score;
                     }
+
                     @Override
                     public HasAsync<JSONObject> getAsyncContext() {
                         return new HasAsync<JSONObject>() {
                             public CnBetaApplicationContext getCnBetaApplicationContext() {
-                                return (CnBetaApplicationContext)(getActivity().getApplicationContext());
+                                return (CnBetaApplicationContext) (getActivity().getApplicationContext());
                             }
+
                             public void onProgressShow() {
                                 rateRatingBar.setVisibility(View.GONE);
                                 ratingProgressBar.setVisibility(View.VISIBLE);
                                 resultRatingBar.setVisibility(View.GONE);
                             }
+
                             public void onProgressDismiss() {
                                 rateRatingBar.setVisibility(View.GONE);
                                 ratingProgressBar.setVisibility(View.GONE);
                                 resultRatingBar.setVisibility(View.VISIBLE);
                             }
+
                             public void onSuccess(AsyncResult<JSONObject> jsonObjectAsyncResult) {
                                 //{"status":"success","result":{"average":"0.6","count":"10"}}
                                 JSONObject resultJSON = jsonObjectAsyncResult.getResult();
@@ -121,6 +128,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
                                     ToastUtils.showShortToast(getActivity(), message);
                                 }
                             }
+
                             public void onFailure(AsyncResult<JSONObject> jsonObjectAsyncResult) {
 
                             }
@@ -148,7 +156,8 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         contentWebView.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY); // no scroll
         contentWebView.getSettings().setBuiltInZoomControls(true);
         contentWebView.getSettings().setLoadWithOverviewMode(true);
-        contentWebView.getSettings().setAppCacheEnabled(true);
+        contentWebView.getSettings().setAppCacheEnabled(false);
+        contentWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         contentWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
         contentWebView.getSettings().setLoadsImagesAutomatically(true);
         contentWebView.getSettings().setBlockNetworkImage(true);
@@ -162,6 +171,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
             public void openImage(String imgSrc) {
                 //新开一个 Transparent Activity, 使用 WebView 打开大图
                 Utils.openImageViewerActivity(getActivity(), imgSrc);
+                //TODO: try to save image first, in case cache cleared, WONT_FIX
             }
 
             @JavascriptInterface
@@ -172,6 +182,31 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         }, "JS");
 
         contentWebView.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+//                ToastUtils.showShortToast(getActivity(), url);
+                //NOTE!!!! 过滤掉这些 url，来自优酷视频，可能造成 Flash plugin锁死，进而WebView 不再加载
+                if (
+                        url.contains("atm.youku.com")
+                                || url.contains("stat.youku.com")
+                                || url.contains("stat.ykimg.com")
+                                || url.contains("log.ykimg.com")
+                                || url.contains("scorecardresearch.com")
+                                || url.contains("irs01.com")
+                        ) {
+//                    ToastUtils.showShortToast(getActivity(), "Cancel, " + url);
+                    return new WebResourceResponse("text/plain", "UTF-8", new ByteArrayInputStream("".getBytes()));
+                }
+
+                return super.shouldInterceptRequest(view, url);
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+            }
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
@@ -217,6 +252,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 logger.e("ERROR: " + errorCode + ", " + description + ", " + failingUrl);
+//                ToastUtils.showShortToast(getActivity(), "ERROR: " + errorCode + ", " + description + ", " + failingUrl);
             }
         });
 
@@ -224,7 +260,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         contentWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage cm) {
-                logger.d(cm.message() + " -- From line " + cm.lineNumber() + " of " + cm.sourceId());
+                logger.d("onConsoleMessage" + cm.message() + " -- line " + cm.lineNumber() + " of " + cm.sourceId());
                 return true;
             }
 
@@ -253,38 +289,37 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         return content;
     }
 
-    private void updateContent(final Content content) {
-        this.content = content;
-        titleTextView.setText(content.getTitle());
-        // enable marquee
-        titleTextView.setSelected(true);
-        timeTextView.setText(content.getTime());
-        whereTextView.setText(content.getWhere());
-        contentWebView.loadDataWithBaseURL("", content.getContent(), "text/html", "UTF-8", "");
-    }
-
     public void updateCommentNumbers() {
         // Content viewNum has been updated in ArticleCommentsLoader
-        viewNumTextView.setText("" + content.getViewNum());
-        commentNumTextView.setText("" + content.getCommentNum());
+        handler.post(new Runnable() {
+            public void run() {
+                viewNumTextView.setText("" + content.getViewNum());
+                commentNumTextView.setText("" + content.getCommentNum());
+            }
+        });
     }
 
 
     public void updateImage(final String id, final byte[] imageData) {
         // 在android代码中调用javaScript方法
-        final String image64 = Base64.encodeToString(imageData, Base64.NO_WRAP);
-//        imageData = "file://" + ((CnBetaApplication)getActivity().getApplicationContext()).getBaseDir().getAbsolutePath()+"/" + imageData;
-        contentWebView.loadUrl("javascript:(function(){" +
-                "var img = document.getElementById('" + id + "');"
-                + "img.src='data:image/*;base64," + image64 + "';" +
-                "})()");
+        handler.post(new Runnable() {
+            public void run() {
+                final String image64 = Base64.encodeToString(imageData, Base64.NO_WRAP);
+                //        imageData = "file://" + ((CnBetaApplication)getActivity().getApplicationContext()).getBaseDir().getAbsolutePath()+"/" + imageData;
+                contentWebView.loadUrl("javascript:(function(){" +
+                        "var img = document.getElementById('" + id + "');"
+                        + "img.src='data:image/*;base64," + image64 + "';" +
+                        "})()");
+            }
+        });
     }
 
     @Override
     public void onPause() {
         super.onPause();
         if (contentWebView != null) {
-            contentWebView.pauseTimers();
+            //NOTE!!! This will pause all WebView, and then the ImageViewerActivity can NOT load image
+//            contentWebView.pauseTimers();
             contentWebView.onPause();
         }
     }
@@ -293,42 +328,48 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     public void onResume() {
         super.onResume();
         if (contentWebView != null) {
-            contentWebView.onResume();
+            // Try resumeTimers anyway, flash plugin may case pauseTimers
             contentWebView.resumeTimers();
+            contentWebView.onResume();
         }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         if (contentWebView != null) {
             // Stopping a webview and all of the background processes (flash,
             // javascript, etc) is a very big mess.
             // The following steps are to counter most of the issues seen on
             // internals still going on after the webview is destroyed.
-
+            contentWebView.pauseTimers();
             contentWebView.stopLoading();
             contentWebView.clearCache(true);
+            contentWebView.clearHistory();
             contentWebView.clearView();
             contentWebView.freeMemory();
             contentWebView.setWebChromeClient(null);
             contentWebView.setWebViewClient(null);
             contentWebView.loadData("", "text/html", "utf-8");
             contentWebView.reload();
+            contentWebView.stopLoading();
+            contentWebView.clearCache(true);
             contentWebView.clearHistory();
             contentWebView.clearView();
+            contentWebView.freeMemory();
             contentWebView.removeAllViews();
-            contentWebView.destroy();
-            contentWebView = null;
-            if(root != null) {
+            if (root != null) {
                 root.removeAllViews();
             }
+            contentWebView.destroy();
+            contentWebView = null;
+            logger.d("Content WebView destroyed.");
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     public void reloadContent() {
@@ -348,7 +389,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     }
 
     public CnBetaApplicationContext getCnBetaApplicationContext() {
-        return (CnBetaApplicationContext)getActivity().getApplicationContext();
+        return (CnBetaApplicationContext) getActivity().getApplicationContext();
     }
 
     public void onProgressShow() {
@@ -369,6 +410,24 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         //update content in ContentActivity
         this.updateContent(contentAsyncResult.getResult());
     }
+
+    private void updateContent(final Content _content) {
+        handler.post(new Runnable() {
+            public void run() {
+                content = _content;
+                titleTextView.setText(content.getTitle());
+                // enable marquee
+                titleTextView.setSelected(true);
+                timeTextView.setText(content.getTime());
+                whereTextView.setText(content.getWhere());
+                contentWebView.loadDataWithBaseURL("", content.getContent(), "text/html", "UTF-8", "");
+                //reload() again fires onPageFinished but this time with new data
+                contentWebView.reload();
+
+            }
+        });
+    }
+
 
     public void onFailure(AsyncResult<Content> contentAsyncResult) {
         progressBarLayout.setVisibility(View.GONE);

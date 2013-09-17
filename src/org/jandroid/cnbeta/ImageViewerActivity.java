@@ -32,10 +32,10 @@ public class ImageViewerActivity extends BaseActivity {
         byte[] imageData = {};
         String imageSrc = getIntent().getExtras().getString("src");
         try {
-            imageData = new ImageBytesLoader(imageSrc).fromDisk(((CnBetaApplication)getApplicationContext()).getBaseDir());
+            imageData = new ImageBytesLoader(imageSrc).diskLoad(((CnBetaApplication)getApplicationContext()).getBaseDir());
         }
         catch (Exception e) {
-
+            logger.e(e.toString());
         }
         final String image64 = Base64.encodeToString(imageData, Base64.NO_WRAP);
         topContainer = (ViewGroup) findViewById(R.id.imageviewer_container);
@@ -59,14 +59,38 @@ public class ImageViewerActivity extends BaseActivity {
 
         }, "JS");
 
-        imageWebView.loadDataWithBaseURL("", "<img onclick='javascript:window.JS.close()' src='data:image/*;base64," + image64 + "'>", "text/html", "UTF-8", "");
+        imageWebView.loadDataWithBaseURL("", "<img onclick='javascript:window.JS.close()' src='data:image/jpeg;base64," + image64 + "'>", "text/html", "UTF-8", "");
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (imageWebView != null) {
+            //NOTE!!! This will pause all WebView, and then the ImageViewerActivity can NOT load image
+//            contentWebView.pauseTimers();
+            imageWebView.onPause();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (imageWebView != null) {
+            // Try resumeTimers anyway, flash plugin may case pauseTimers
+            imageWebView.resumeTimers();
+            imageWebView.onResume();
+        }
+    }
 
     @Override
     public void onDestroy() {
         topContainer.removeAllViews();
         if(imageWebView != null) {
+            imageWebView.stopLoading();
+            imageWebView.clearCache(true);
+            imageWebView.clearHistory();
+            imageWebView.clearView();
+            imageWebView.freeMemory();
             imageWebView.destroy();
             imageWebView = null;
         }
