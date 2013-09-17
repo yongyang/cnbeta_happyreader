@@ -120,16 +120,20 @@ public class BaseActivity extends Activity {
 
     public void finishWithSlideAnimation() 	{
     		super.finish();
-    		overridePendingTransition(android.R.anim.slide_in_left, R.anim.slide_out_right);
+    		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
   	public void finish(int enterAnimation, int exitAnimation) 	{
-   		super.finish();
-   		overridePendingTransition(enterAnimation, exitAnimation);
-   	}
+        super.finish();
+        overridePendingTransition(enterAnimation, exitAnimation);
+    }
 
    	public void finish()	{
+        finishWithSlideAnimation();
+/*
    		super.finish();
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+*/
    	}
 
 }

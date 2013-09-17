@@ -87,11 +87,11 @@
     </application>
 
     <!--for test case-->
-    <!--
-        <instrumentation
-                android:name="android.test.InstrumentationTestRunner"
-                android:targetPackage="org.jandroid.cnbeta"
-                android:label="TestCases"/>
-    -->
+<!--
+    <instrumentation
+            android:name="android.test.InstrumentationTestRunner"
+            android:targetPackage="org.jandroid.cnbeta"
+            android:label="TestCases"/>
+-->
 
 </manifest>

@@ -24,6 +24,7 @@ public class Utils {
         bundle.putString("title", title);
         Intent intent = IntentUtils.newIntent(theActivity, ContentActivity.class, bundle);
         theActivity.startActivity(intent);
+        theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
         // write history
         new Thread(){
@@ -50,11 +51,13 @@ public class Utils {
     public static void openMainActivity(Activity theActivity) {
         Intent intent = IntentUtils.newIntent(theActivity, MainActivity.class);
         theActivity.startActivity(intent);
+        theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public static void openTopicActivity(Activity theActivity) {
         Intent intent = IntentUtils.newIntent(theActivity, TopicActivity.class);
         theActivity.startActivity(intent);
+        theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public static void openTopicActivity(Activity theActivity, long topicId, String topicName) {
@@ -62,25 +65,26 @@ public class Utils {
         intent.putExtra("id", topicId);
         intent.putExtra("name", topicName);
         theActivity.startActivity(intent);
+        theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public static void openTypesActivity(Activity theActivity) {
         Intent intent = IntentUtils.newIntent(theActivity, TypesActivity.class);
         theActivity.startActivity(intent);
-        theActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
 
     public static void openMRankActivity(Activity theActivity) {
         Intent intent = IntentUtils.newIntent(theActivity, MRankActivity.class);
         theActivity.startActivity(intent);
-        theActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public static void openHistoryActivity(Activity theActivity) {
         Intent intent = IntentUtils.newIntent(theActivity, HistoryActivity.class);
         theActivity.startActivity(intent);
-        theActivity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public static void openPublishCommentActivityForResult(Activity theActivity, long sid) {
@@ -88,6 +92,7 @@ public class Utils {
         bundle.putSerializable("sid", sid);
         Intent intent = IntentUtils.newIntent(theActivity, PublishCommentActivity.class, bundle);
         theActivity.startActivityForResult(intent, 0);
+        theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public static void openReplyCommentActivityForResult(Activity theActivity, Comment comment) {
@@ -96,6 +101,7 @@ public class Utils {
         bundle.putSerializable("comment", comment);
         Intent intent = IntentUtils.newIntent(theActivity, ReplyCommentActivity.class, bundle);
         theActivity.startActivityForResult(intent, 0);
+        theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public static void openImageViewerActivity(Activity theActivity, String imgOsrc) {
@@ -103,16 +109,19 @@ public class Utils {
         bundle.putString("src", imgOsrc);
         Intent intent = IntentUtils.newIntent(theActivity, ImageViewerActivity.class, bundle);
         theActivity.startActivity(intent);
+        theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public static void openPreferenceActivity(Activity theActivity) {
         Intent intent = IntentUtils.newIntent(theActivity, CnBetaPreferenceActivity.class);
         theActivity.startActivity(intent);
+        theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public static void openAboutActivity(Activity theActivity) {
         Intent intent = IntentUtils.newIntent(theActivity, AboutActivity.class);
         theActivity.startActivity(intent);
+        theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
 }

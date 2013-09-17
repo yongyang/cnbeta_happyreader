@@ -149,8 +149,9 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         contentWebView.getSettings().setDefaultFontSize(15);
         contentWebView.getSettings().setDefaultFixedFontSize(15);
         contentWebView.getSettings().setAllowFileAccess(true);
-        contentWebView.getSettings().setAllowFileAccessFromFileURLs(true);
-        contentWebView.getSettings().setAllowUniversalAccessFromFileURLs(true);
+        // no these two method in 4.0
+//        contentWebView.getSettings().setAllowFileAccessFromFileURLs(true);
+//        contentWebView.getSettings().setAllowUniversalAccessFromFileURLs(true);
         //支持视频，需安装 Flash Player
         contentWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
         contentWebView.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY); // no scroll
