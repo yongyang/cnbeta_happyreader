@@ -9,7 +9,6 @@ import org.jandroid.cnbeta.loader.HistoryArticleListLoader;
 import org.jandroid.common.DateFormatUtils;
 import org.jandroid.common.IntentUtils;
 import org.jandroid.common.ToastUtils;
-import org.json.simple.JSONObject;
 
 import java.util.Date;
 
@@ -92,7 +91,6 @@ public class Utils {
         bundle.putSerializable("sid", sid);
         Intent intent = IntentUtils.newIntent(theActivity, PublishCommentActivity.class, bundle);
         theActivity.startActivityForResult(intent, 0);
-        theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public static void openReplyCommentActivityForResult(Activity theActivity, Comment comment) {
@@ -101,7 +99,6 @@ public class Utils {
         bundle.putSerializable("comment", comment);
         Intent intent = IntentUtils.newIntent(theActivity, ReplyCommentActivity.class, bundle);
         theActivity.startActivityForResult(intent, 0);
-        theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public static void openImageViewerActivity(Activity theActivity, String imgOsrc) {
@@ -109,7 +106,6 @@ public class Utils {
         bundle.putString("src", imgOsrc);
         Intent intent = IntentUtils.newIntent(theActivity, ImageViewerActivity.class, bundle);
         theActivity.startActivity(intent);
-        theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public static void openPreferenceActivity(Activity theActivity) {

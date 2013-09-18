@@ -69,7 +69,5 @@ public class SplashActivity extends BaseActivity {
 
    	private void startMainActivity() {
         Utils.openMainActivity(this);
-        finish();
    	}
-
 }

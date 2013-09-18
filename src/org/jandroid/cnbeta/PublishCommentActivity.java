@@ -213,4 +213,9 @@ public class PublishCommentActivity extends BaseActivity {
         super.onDestroy();
     }
 
+    @Override
+    public void overridePendingTransition(int enterAnim, int exitAnim) {
+        // nothing
+    }
+
 }

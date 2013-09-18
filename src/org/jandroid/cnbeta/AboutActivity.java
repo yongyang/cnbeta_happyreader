@@ -23,5 +23,4 @@ public class AboutActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem mi) {
         return ((CnBetaApplication)getApplicationContext()).onOptionsItemSelected(this, mi);
     }
-
 }

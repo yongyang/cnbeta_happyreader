@@ -29,4 +29,10 @@ public class ReplyCommentActivity extends PublishCommentActivity {
     public long getParentCommentTid() {
         return parentComment.getTid();
     }
+
+    @Override
+    public void overridePendingTransition(int enterAnim, int exitAnim) {
+        // nothing
+    }
+
 }

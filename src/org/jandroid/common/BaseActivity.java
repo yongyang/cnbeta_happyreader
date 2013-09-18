@@ -1,10 +1,10 @@
 package org.jandroid.common;
 
-import android.R;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 
 import java.util.ArrayList;
@@ -118,22 +118,9 @@ public class BaseActivity extends Activity {
         }
    	}
 
-    public void finishWithSlideAnimation() 	{
-    		super.finish();
-    		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-    }
-
-  	public void finish(int enterAnimation, int exitAnimation) 	{
+   	public void finish() {
         super.finish();
-        overridePendingTransition(enterAnimation, exitAnimation);
-    }
-
-   	public void finish()	{
-        finishWithSlideAnimation();
-/*
-   		super.finish();
-        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-*/
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
    	}
 
 }

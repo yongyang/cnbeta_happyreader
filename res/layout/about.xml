@@ -109,7 +109,22 @@
                 android:layout_height="wrap_content"
                 android:maxLines="10"
                 android:textSize="13sp"
-                android:text="1.新闻正文中支持视频播放；\n2.一键离线下载，没有网络也能阅读"/>
+                android:text="1.一键离线下载，没有网络也能阅读"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:text="已知问题："
+                android:paddingTop="4dip"
+                android:id="@+id/textView"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="10"
+                android:textSize="13sp"
+                android:text="1.由于Flash播放器的兼容性问题，少数机型在播放个别优酷视频时偶尔会卡住，并导致无法再打开其它新闻，需要退出程序重启才能解决;\n2.由于cnBeta网站对访问频率的限制，在阅读新闻页面如果点击刷新频率过快，会提示Busy(忙)错误；\n3.在阅读新闻时将缓存清空，然后点击页面中图片，将无法浏览大图"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

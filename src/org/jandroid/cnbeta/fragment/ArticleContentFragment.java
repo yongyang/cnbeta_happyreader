@@ -156,6 +156,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         contentWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
         contentWebView.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY); // no scroll
         contentWebView.getSettings().setBuiltInZoomControls(true);
+        contentWebView.getSettings().setDisplayZoomControls(false); // but won't display the zoom buttons
         contentWebView.getSettings().setLoadWithOverviewMode(true);
         contentWebView.getSettings().setAppCacheEnabled(false);
         contentWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
@@ -163,6 +164,13 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         contentWebView.getSettings().setLoadsImagesAutomatically(true);
         contentWebView.getSettings().setBlockNetworkImage(true);
         contentWebView.getSettings().setDefaultTextEncodingName("UTF-8");
+        contentWebView.getSettings().setLightTouchEnabled(true);
+        contentWebView.getSettings().setPluginsEnabled(true);
+        contentWebView.getSettings().setSavePassword(true);
+        contentWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+//        contentWebView.getSettings().setUserAgentString("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36");
+        contentWebView.requestFocus();
+        contentWebView.requestLayout();
 
         // resize big image to fit screen width
         contentWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
@@ -186,17 +194,26 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
 
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-//                ToastUtils.showShortToast(getActivity(), url);
-                //NOTE!!!! 过滤掉这些 url，来自优酷视频，可能造成 Flash plugin锁死，进而WebView 不再加载
+/*
+                if (!url.contains("image")) {
+                    ToastUtils.showShortToast(getActivity(), url);
+                }
+*/
+                //NOTE!!!! 过滤掉这些 url，来自优酷视频，可以去掉广告
                 if (
                         url.contains("atm.youku.com")
                                 || url.contains("stat.youku.com")
-                                || url.contains("stat.ykimg.com")
+//                                || url.contains("stat.ykimg.com")
                                 || url.contains("log.ykimg.com")
                                 || url.contains("scorecardresearch.com")
                                 || url.contains("irs01.com")
                         ) {
-//                    ToastUtils.showShortToast(getActivity(), "Cancel, " + url);
+
+/*
+                    if (!url.contains("image")) {
+                        ToastUtils.showShortToast(getActivity(), "Cancel, " + url);
+                    }
+*/
                     return new WebResourceResponse("text/plain", "UTF-8", new ByteArrayInputStream("".getBytes()));
                 }
 
