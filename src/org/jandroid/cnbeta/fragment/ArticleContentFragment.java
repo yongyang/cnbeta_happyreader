@@ -29,6 +29,7 @@ import org.jandroid.cnbeta.async.ImageBytesAsyncTask;
 import org.jandroid.cnbeta.async.RateArticleAsyncTask;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.common.BaseFragment;
+import org.jandroid.common.JavaScriptObject;
 import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
 import org.json.simple.JSONObject;
@@ -174,7 +175,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         // resize big image to fit screen width
         contentWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
 
-        contentWebView.addJavascriptInterface(new Object() {
+        contentWebView.addJavascriptInterface(new JavaScriptObject() {
             @JavascriptInterface
             public void openImage(String imgSrc) {
                 //新开一个 Transparent Activity, 使用 WebView 打开大图
