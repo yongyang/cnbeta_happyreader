@@ -165,7 +165,6 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         contentWebView.getSettings().setBlockNetworkImage(true);
         contentWebView.getSettings().setDefaultTextEncodingName("UTF-8");
         contentWebView.getSettings().setLightTouchEnabled(true);
-        contentWebView.getSettings().setPluginsEnabled(true);
         contentWebView.getSettings().setSavePassword(true);
         contentWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 //        contentWebView.getSettings().setUserAgentString("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36");
