@@ -18,3 +18,12 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-libraryjars   /libs/commons-io-2.4.jar
+-libraryjars   /libs/android-support-v13.jar
+-libraryjars   /libs/json-simple-1.1.1.jar
+-libraryjars   /libs/jsoup-1.7.2.jar
+-keep class android.support.** { *; }
+-keep class org.apache.commons.** { *; }
+-keep class org.json.simple.** { *; }
+-keep class org.jsoup.** { *; }
+-keep public class * extends android.**
