@@ -184,6 +184,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
 
             @JavascriptInterface
             public void openTopic(String topicId, String topicName) {
+//                ToastUtils.showShortToast(getActivity(), "openTopic id=" + topicId +", name=" + topicName);
                 Utils.openTopicActivity(getActivity(), Long.parseLong(topicId), topicName);
             }
 
@@ -438,9 +439,6 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
                 timeTextView.setText(content.getTime());
                 whereTextView.setText(content.getWhere());
                 contentWebView.loadDataWithBaseURL("", content.getContent(), "text/html", "UTF-8", "");
-                //reload() again fires onPageFinished but this time with new data
-                contentWebView.reload();
-
             }
         });
     }
