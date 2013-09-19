@@ -44,8 +44,6 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
 
     private Content content;
 
-    List<Comment> comments = new ArrayList<Comment>();
-
     private int page =0;
 
     public ArticleCommentsLoader(Content content, int page) {
@@ -85,8 +83,8 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
         String resultJSONString = new String(Base64.decode(resultBase64String.toString(), Base64.DEFAULT), "UTF-8");
         resultJSONString = UnicodeUtils.unicode2Chinese(resultJSONString.substring(resultJSONString.indexOf('{'), resultJSONString.lastIndexOf('}')+1));
         JSONObject resultJSON = (JSONObject) JSONValue.parse(resultJSONString);
-        parseResultJSON(resultJSON);
-        checkEmptyResult();
+        List<Comment> comments = parseResultJSON(resultJSON);
+        checkEmptyResult(comments);
         writeDisk(baseDir, resultJSONString);
         //返回 updated Content
         return comments;
@@ -96,18 +94,20 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
     public List<Comment> fromDisk(File baseDir) throws Exception {
         String resultJSONString = readDisk(baseDir);
         JSONObject resultJSON = (JSONObject) JSONValue.parse(resultJSONString);
-        parseResultJSON(resultJSON);
-        checkEmptyResult();
+        List<Comment> comments = parseResultJSON(resultJSON);
+        checkEmptyResult(comments);
         return comments;
     }
 
-    private void checkEmptyResult() throws Exception {
-        if(getPage() ==2 && comments.isEmpty()) {
+    protected void checkEmptyResult(List<Comment> result) throws Exception {
+        if(getPage() > 1 && result.isEmpty()) {
             throw new NoDataInfoException("没有数据啦!");
         }
     }
 
-    private void parseResultJSON(JSONObject resultJSON) throws Exception {
+    private List<Comment> parseResultJSON(JSONObject resultJSON) throws Exception {
+        List<Comment> comments = new ArrayList<Comment>();
+
         //阅读和评论次数
         if(getPage() == 1) {//仅第一页有 comment_num
             content.setViewNum(Integer.parseInt(resultJSON.get("view_num").toString()));
@@ -128,6 +128,7 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
             comments.add(new Comment(commentJSONObject));
         }
 
+        return comments;
     }
 
     @Override

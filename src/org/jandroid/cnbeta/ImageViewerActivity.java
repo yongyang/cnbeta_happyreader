@@ -11,6 +11,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import org.jandroid.cnbeta.loader.ImageBytesLoader;
 import org.jandroid.common.BaseActivity;
+import org.jandroid.common.JavaScriptObject;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -48,7 +49,7 @@ public class ImageViewerActivity extends BaseActivity {
         imageWebView.getSettings().setBuiltInZoomControls(true);
         imageWebView.getSettings().setDisplayZoomControls(false); // but won't display the zoom buttons
         imageWebView.getSettings().setJavaScriptEnabled(true);
-        imageWebView.addJavascriptInterface(new Object() {
+        imageWebView.addJavascriptInterface(new JavaScriptObject() {
             @JavascriptInterface
             public void close() {
                 finish();
