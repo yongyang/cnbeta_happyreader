@@ -23,9 +23,7 @@ import java.util.Map;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
-    //NOTE!!!! 过时的 cmt URL
-//    private static String URL_TEMPLATE = "http://www.cnbeta.com/cmt?jsoncallback=okcb{0}&op=info&page=1&sid={1}&sn={2}&op={3}";
-
+    //TODO: 当comments 数目较多有分页时，comment_num 可能与实际的 comment 数目不同，此时怎么确定具体的楼好呢？可能要用到 join_num
 
     // 当前的 cmt URL
     //op 需要编码
