@@ -13,7 +13,9 @@ public class Content implements Serializable {
     private long sid;
     private String title;
     private String time;
-    
+
+    //实际comment的条数
+    private int joinNum;
     //阅读次数
     private int viewNum;
     //评论次数
@@ -127,4 +129,11 @@ public class Content implements Serializable {
         this.where = where;
     }
 
+    public int getJoinNum() {
+        return joinNum;
+    }
+
+    public void setJoinNum(int joinNum) {
+        this.joinNum = joinNum;
+    }
 }

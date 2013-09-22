@@ -27,6 +27,7 @@
 -keep class org.json.simple.** { *; }
 -keep class org.jsoup.** { *; }
 -keep public class * extends android.** { *; }
+-keep public class * extends java.lang.Exception { *; }
 -keep public class org.jandroid.common.** { *; }
 -keep class org.jandroid.cnbeta.fragment.ArticleContentFragment$*
 -keepclassmembers class org.jandroid.cnbeta.fragment.ArticleContentFragment$* {

@@ -110,6 +110,7 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
         if(getPage() == 1) {//仅第一页有 comment_num
             content.setViewNum(Integer.parseInt(resultJSON.get("view_num").toString()));
             content.setCommentNum(Integer.parseInt(resultJSON.get("comment_num").toString()));
+            content.setJoinNum(Integer.parseInt(resultJSON.get("join_num").toString()));
         }
 
         JSONObject commentStoreJSONObject = (JSONObject)resultJSON.get("cmntstore");

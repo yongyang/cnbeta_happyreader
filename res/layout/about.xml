@@ -109,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="10"
                 android:textSize="13sp"
-                android:text="1.一键离线下载，没有网络也能阅读"/>
+                android:text="1.一键离线下载，没有网络也能阅读；\n2.应用自动更新；\n3.定制推送最新咨询；\n4.微博微信人人分享"/>
 
         <TextView
                 android:layout_width="wrap_content"

@@ -35,6 +35,8 @@ import java.util.List;
  */
 public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> {
 
+    //TODO: 如果有评论数目，但是没有取回评论，则显示评论已关闭
+
     private PagingView footerPagingView;
 
     @Override
@@ -74,7 +76,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
     }
 
     private int getCommentCount() {
-        return ((ContentActivity) getActivity()).getContent().getCommentNum();
+        return ((ContentActivity) getActivity()).getContent().getJoinNum();
     }
 
     @Override
@@ -99,13 +101,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                 final Comment comment = (Comment) getItem(position);
                 TextView positionTextView = (TextView) convertView.findViewById(R.id.position);
 
-                //comment一页100条
-                if (getCommentCount() > 100) {
-                    positionTextView.setText("" + (getCommentCount() - position));
-                }
-                else {
-                    positionTextView.setText("" + (getDataSize() - position));
-                }
+                positionTextView.setText("" + (getCommentCount() - position));
 
                 TextView nameTextView = (TextView) convertView.findViewById(R.id.name);
                 nameTextView.setText(comment.getName());
