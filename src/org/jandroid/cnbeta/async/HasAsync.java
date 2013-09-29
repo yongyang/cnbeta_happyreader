@@ -4,7 +4,7 @@ import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.common.async.AsyncResult;
 
 /**
- * TODO: 需要调用 AsyncTask 的 Activity 实现该接口
+ * 需要调用 AsyncTask 的 Activity 实现该接口
  *
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */

@@ -1,14 +1,23 @@
 package org.jandroid.cnbeta;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.HistoryArticle;
 import org.jandroid.cnbeta.loader.HistoryArticleListLoader;
+import org.jandroid.cnbeta.service.CheckVersionService;
 import org.jandroid.common.DateFormatUtils;
 import org.jandroid.common.IntentUtils;
 import org.jandroid.common.ToastUtils;
+import org.jandroid.common.autoupdate.AbstractCheckVersionService;
+import org.jandroid.common.autoupdate.VersionInfo;
 
 import java.util.Date;
 
@@ -26,7 +35,7 @@ public class Utils {
         theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
         // write history
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
                 HistoryArticle historyArticle = new HistoryArticle();
@@ -34,7 +43,7 @@ public class Utils {
                 historyArticle.setTitle(title);
                 historyArticle.setDate(DateFormatUtils.getDefault().format(new Date()));
                 try {
-                    new HistoryArticleListLoader().writeHistory(((CnBetaApplicationContext)theActivity.getApplicationContext()).getBaseDir(), historyArticle);
+                    new HistoryArticleListLoader().writeHistory(((CnBetaApplicationContext) theActivity.getApplicationContext()).getBaseDir(), historyArticle);
                 }
                 catch (final Exception e) {
                     theActivity.runOnUiThread(new Runnable() {
@@ -118,6 +127,76 @@ public class Utils {
         Intent intent = IntentUtils.newIntent(theActivity, AboutActivity.class);
         theActivity.startActivity(intent);
         theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+    public static void startVersionCheckService(Activity theActivity) {
+        Intent intent = IntentUtils.newIntent(theActivity, CheckVersionService.class);
+        theActivity.startService(intent);
+    }
+
+    public static void bindVersionCheckService(Activity theActivity, ServiceConnection serviceConnection) {
+        Intent intent = IntentUtils.newIntent(theActivity, CheckVersionService.class);
+        theActivity.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    public static void openVersionCheckDialog(final Activity theActivity) {
+        new AlertDialog.Builder(theActivity)
+                .setTitle("你要检查新版本吗？")
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Utils.startVersionCheckService(theActivity);
+                        Utils.bindVersionCheckService(theActivity, new ServiceConnection() {
+                            public void onServiceConnected(ComponentName name, IBinder service) {
+                                AbstractCheckVersionService.CheckVersionBinder binder = (AbstractCheckVersionService.CheckVersionBinder) service;
+                                binder.checkVersion(new AbstractCheckVersionService.VersionCheckingCallback() {
+                                    public void onStartChecking(String url) {
+                                        ToastUtils.showShortToast(theActivity, url);
+                                    }
+
+                                    public void onFailure(Exception e) {
+                                        ToastUtils.showShortToast(theActivity, "版本检查失败");
+                                    }
+
+                                    public void onNewVersion(VersionInfo versionInfo) {
+                                        openVersionUpdateDialog(theActivity, versionInfo);
+                                    }
+
+                                    public void onSameVersion(VersionInfo versionInfo) {
+                                        ToastUtils.showShortToast(theActivity, "已经是最新版本");
+                                    }
+
+                                    public void onOldVersion(VersionInfo versionInfo) {
+                                        ToastUtils.showShortToast(theActivity, "你很潮，已经是最新版本");
+                                    }
+                                });
+                            }
+
+                            public void onServiceDisconnected(ComponentName name) {
+
+                            }
+                        });
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create().show();
+    }
+
+    public static void openVersionUpdateDialog(final Activity theActivity, VersionInfo newVersionInfo) {
+        new AlertDialog.Builder(theActivity)
+                .setTitle("发现新版本 " + newVersionInfo.getVersion() + " ，要立即更新吗？")
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create().show();
     }
 
 }

@@ -32,10 +32,12 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.jandroid.cnbeta.async.AsyncContext;
 import org.jandroid.common.Logger;
 import org.jandroid.common.UnicodeUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -164,12 +166,57 @@ public class CnBetaHttpClient {
         return result;
     }
     
-    private String handleRequest(HttpRequestBase request, HttpResponse response) throws Exception {
+    private String handleRequest(HttpRequestBase request, HttpResponse response, AsyncContext asyncContext) throws Exception {
         String encoding = (String)request.getParams().getParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET);
         if(encoding == null) {
             encoding = DEFAULT_ENCODING;
         }
         
+        String result;
+        try {
+            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+                throw new Exception("Server Error: " + response.getStatusLine().toString());
+            }
+            HttpEntity httpEntity = response.getEntity();
+            try {
+                Header contentEncodingHeader = response.getFirstHeader("Content-Encoding");
+                if (contentEncodingHeader != null && contentEncodingHeader.getValue().contains("zip")) {
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    byte[] buffer = new byte[1024];
+                    int readSize  = 0;
+                    while((readSize = IOUtils.read(httpEntity.getContent(), buffer)) > 0 ) {
+                        //TODO: abort request when async task cancelled
+                        if(asyncContext.isCancelled()) {
+                            request.abort();
+                            return null;
+                        }
+                        byteArrayOutputStream.write(buffer, 0, readSize);
+                    }
+                    GZIPInputStream gzipInputStream = new GZIPInputStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+                    result = new String(IOUtils.toByteArray(gzipInputStream), encoding);
+                }
+                else {
+                    result = EntityUtils.toString(httpEntity, encoding);
+                }
+                // convert unicode chars to chinese
+                return UnicodeUtils.unicode2Chinese(result);
+            }
+            finally {
+                httpEntity.consumeContent();
+            }
+        }
+        catch (IOException e) {
+            request.abort();
+            throw e;
+        }
+    }
+
+    private String handleRequest(HttpRequestBase request, HttpResponse response) throws Exception {
+        String encoding = (String)request.getParams().getParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET);
+        if(encoding == null) {
+            encoding = DEFAULT_ENCODING;
+        }
+
         String result;
         try {
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {

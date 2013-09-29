@@ -20,7 +20,7 @@ import java.io.IOException;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class CnBetaApplication extends Application implements CnBetaApplicationContext{
+public class CnBetaApplication extends Application implements CnBetaApplicationContext {
 
     static Logger logger = Logger.getLogger(CnBetaApplication.class);
 
@@ -35,10 +35,10 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     public void onCreate() {
         super.onCreate();
     }
-    
+
     public boolean isNetworkConnected() {
         boolean connected = EnvironmentUtils.checkNetworkConnected(this);
-        if(hasNetwork && !connected) {
+        if (hasNetwork && !connected) {
             handler.post(new Runnable() {
                 public void run() {
                     ToastUtils.showShortToast(CnBetaApplication.this, "网络未连接，仅能加载本地已缓存的数据");
@@ -48,14 +48,14 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         hasNetwork = connected;
         return hasNetwork;
     }
-    
+
     public boolean isSdCardMounted() {
         return EnvironmentUtils.checkSdCardMounted(this);
     }
 
     public File getBaseDir() {
         File baseDir;
-        if(EnvironmentUtils.checkSdCardMounted(this)) {
+        if (EnvironmentUtils.checkSdCardMounted(this)) {
             // SD
             baseDir = new File(Environment.getExternalStorageDirectory(), Constants.BASE_DIR);
         }
@@ -73,7 +73,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     }
 
     // 在这里统一处理标准菜单项目
-    public boolean onOptionsItemSelected(Activity theActivity, MenuItem item) {
+    public boolean onOptionsItemSelected(final Activity theActivity, final MenuItem item) {
         if (item.isCheckable()) {
             item.setChecked(true);
         }
@@ -102,6 +102,9 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
             case R.id.setting_item:
                 Utils.openPreferenceActivity(theActivity);
                 break;
+            case R.id.versionCheck:
+                Utils.openVersionCheckDialog(theActivity);
+                break;
             case R.id.aboutus_item:
                 Utils.openAboutActivity(theActivity);
                 break;
@@ -113,11 +116,11 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     public void onExit() {
         SharedPreferences prefs = getSharedPreferences(getPackageName() + "_preferences", MODE_PRIVATE);
 
-        if(prefs.getBoolean(getString(R.string.pref_key_autoCleanCache), false)) {
+        if (prefs.getBoolean(getString(R.string.pref_key_autoCleanCache), false)) {
             cleanCache();
         }
 
-        if(prefs.getBoolean(getString(R.string.pref_key_autoCleanHistory), false)) {
+        if (prefs.getBoolean(getString(R.string.pref_key_autoCleanHistory), false)) {
             cleanHistory();
         }
 
@@ -133,16 +136,16 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
 */
     }
 
-    public boolean cleanCache(){
+    public boolean cleanCache() {
 
         boolean success = true;
         SharedPreferences prefs = getSharedPreferences(getPackageName() + "_preferences", MODE_PRIVATE);
 
         boolean cleanHistory = prefs.getBoolean(getString(R.string.pref_key_alsoCleanHistory), false);
-        if(!cleanHistory) {
+        if (!cleanHistory) {
             try {
                 File historyArticleFile = new HistoryArticleListLoader().getFile(getBaseDir());
-                if(historyArticleFile.exists()) {
+                if (historyArticleFile.exists()) {
                     FileUtils.moveFileToDirectory(historyArticleFile, getBaseDir().getParentFile(), false);
                 }
             }
@@ -151,7 +154,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
             }
             try {
                 File historyCommentFile = new HistoryCommentListLoader().getFile(getBaseDir());
-                if(historyCommentFile.exists()) {
+                if (historyCommentFile.exists()) {
                     FileUtils.moveFileToDirectory(historyCommentFile, getBaseDir().getParentFile(), false);
                 }
             }
@@ -160,20 +163,20 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
             }
         }
         FileUtils.deleteQuietly(getBaseDir());
-        if(!cleanHistory) {
+        if (!cleanHistory) {
             try {
                 File tempHistoryArticleFile = new HistoryArticleListLoader().getFile(getBaseDir().getParentFile());
-                if(tempHistoryArticleFile.exists()) {
+                if (tempHistoryArticleFile.exists()) {
                     FileUtils.moveFileToDirectory(tempHistoryArticleFile, getBaseDir(), true);
                 }
             }
-            catch (Exception e){
+            catch (Exception e) {
                 success = false;
             }
 
             try {
                 File templHistoryCommentFile = new HistoryCommentListLoader().getFile(getBaseDir().getParentFile());
-                if(templHistoryCommentFile.exists()) {
+                if (templHistoryCommentFile.exists()) {
                     FileUtils.moveFileToDirectory(templHistoryCommentFile, getBaseDir(), true);
                 }
             }

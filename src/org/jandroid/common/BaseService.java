@@ -1,6 +1,8 @@
 package org.jandroid.common;
 
 import android.app.Activity;
+import android.app.Service;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,18 +13,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class BaseActivity extends Activity {
-
-    //用来生成随机数，用于 postDelay，以分散线程创建和执行，提速
-    private static final Random random = new Random();
+public abstract class BaseService extends Service {
 
     protected Handler handler = new Handler();
     
@@ -35,48 +31,24 @@ public class BaseActivity extends Activity {
 
    	/******************************** 【Activity LifeCycle For Debug】 *******************************************/
    	@Override
-   	protected void onCreate(Bundle savedInstanceState) {
+   	public void onCreate() {
         logger.d("onCreate() invoked!!");
-   		super.onCreate(savedInstanceState);
+   		super.onCreate();
    	}
 
    	@Override
-   	protected void onStart() {
+   	public void onStart(Intent intent, int startId) {
    		logger.d(" onStart() invoked!!");
-   		super.onStart();
-/*
-        pendingExecutor.scheduleWithFixedDelay(new Runnable() {
-            public void run() {
-
-            }
-        }, 500, 500, TimeUnit.MILLISECONDS);
-*/
-
+   		super.onStart(intent, startId);
    	}
+
 
    	@Override
-   	protected void onRestart() {
-   		logger.d(" onRestart() invoked!!");
-   		super.onRestart();
+   	public void onRebind(Intent intent) {
+   		logger.d(" onRebind() invoked!!");
+   		super.onRebind(intent);
    	}
 
-   	@Override
-   	protected void onResume() {
-   		logger.d(" onResume() invoked!!");
-   		super.onResume();
-   	}
-
-   	@Override
-   	protected void onPause() {
-   		logger.d(" onPause() invoked!!");
-   		super.onPause();
-   	}
-
-   	@Override
-   	protected void onStop() {
-   		logger.d(" onStop() invoked!!");
-   		super.onStop();
-   	}
 
     public synchronized void executeAsyncTask(final AsyncTask<?, ?, ?> asyncTask, Object... params){
         runningTasks.add(asyncTask);
@@ -91,28 +63,14 @@ public class BaseActivity extends Activity {
                 it.remove();
             }
         }
-
-        //Slow down to avoid rejecting
-//      java.util.concurrent.ThreadPoolExecutor@b11d4808[Running, pool size = 128, active threads = 127, queued tasks = 10, completed tasks = 527]
-//      09-11 18:55:30.566: E/AndroidRuntime(2088): 	at java.util.concurrent.ThreadPoolExecutor$AbortPolicy.rejectedExecution(ThreadPoolExecutor.java:1967)
-        if(runningTasks.size() > MULTI_THREADING_SLOW_DOWN_VALVE) {
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    executeAsyncTaskMultiThreading(asyncTask);
-                }
-            }, random.nextInt(DELAY_TIME_MILLIS));
-            return;
-        }
-
         runningTasks.add(asyncTask);
         asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
     }
 
    	@Override
    	public void onDestroy() {
+        logger.d(" onDestroy() invoked!!");
         handler.removeCallbacksAndMessages(null);
-
-   		logger.d(" onDestroy() invoked!!  Active async task: " + ((ThreadPoolExecutor)AsyncTask.THREAD_POOL_EXECUTOR).getActiveCount());
    		super.onDestroy();
         for(Iterator<AsyncTask> it = runningTasks.iterator(); it.hasNext();){
             AsyncTask runningTask = it.next();
@@ -121,11 +79,6 @@ public class BaseActivity extends Activity {
             }
             it.remove();
         }
-   	}
-
-   	public void finish() {
-        super.finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
    	}
 
 }

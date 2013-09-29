@@ -76,14 +76,14 @@
 
         <activity
                 android:name=".CnBetaPreferenceActivity"
-                android:label="参数设置">
-        </activity>
+                android:label="参数设置"/>
 
         <activity
                 android:name=".AboutActivity"
-                android:label="关于">
-        </activity>
+                android:label="关于"/>
 
+        <service android:name=".service.CheckVersionService"
+                 android:label="版本检测" />
     </application>
 
     <!--for test case-->

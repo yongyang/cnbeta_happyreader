@@ -2,7 +2,12 @@ package org.jandroid.common;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.webkit.MimeTypeMap;
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.File;
 
 /**
  * 返回各种 Intent, 方便调用者去 startActivity startService
@@ -49,5 +54,28 @@ public class IntentUtils {
    		Intent chooserIntent = Intent.createChooser(intent, "分享");
    		return chooserIntent;
    	}
+
+    public static Intent homeIntent(Activity activity) {
+        Intent mHomeIntent = new Intent(Intent.ACTION_MAIN);
+        mHomeIntent.addCategory(Intent.CATEGORY_HOME);
+        mHomeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        return mHomeIntent;
+    }
+
+    public Intent installAPK(String file){
+        return openFile(new File(file));
+    }
+
+    //在手机上打开各种类型的文件
+    public static Intent openFile(File file)  {
+    	Intent intent = new Intent();
+    	intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    	intent.setAction(android.content.Intent.ACTION_VIEW);
+    	// 来取得MimeType
+    	String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(file.toString()));
+    	//设定intent的file与MimeType
+    	intent.setDataAndType(Uri.fromFile(file), type);
+        return intent;
+    }
 
 }
