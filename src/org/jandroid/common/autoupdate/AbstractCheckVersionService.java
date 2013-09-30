@@ -91,9 +91,9 @@ public abstract class AbstractCheckVersionService extends BaseService {
      *
      * @return 1：当前最新版本 0：发现新的版本可更新 -1：检测新版本失败
      */
-    public void checkVersion(final VersionCheckingCallback callback) {
+    public void checkVersion(final CheckingCallback callback) {
 
-        executeAsyncTaskMultiThreading(
+        executeAsyncTask(
                 new BaseAsyncTask<VersionInfo>() {
                     @Override
                     protected void onPreExecute() {
@@ -145,12 +145,12 @@ public abstract class AbstractCheckVersionService extends BaseService {
 
     public class CheckVersionBinder extends Binder {
 
-        public void checkVersion(final VersionCheckingCallback callback) {
+        public void checkVersion(final CheckingCallback callback) {
             AbstractCheckVersionService.this.checkVersion(callback);
         }
     }
 
-    public static interface VersionCheckingCallback {
+    public static interface CheckingCallback {
 
         void onStartChecking(String url);
 

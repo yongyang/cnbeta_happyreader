@@ -13,12 +13,15 @@ import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.HistoryArticle;
 import org.jandroid.cnbeta.loader.HistoryArticleListLoader;
 import org.jandroid.cnbeta.service.CheckVersionService;
+import org.jandroid.cnbeta.service.VersionUpdateService;
 import org.jandroid.common.DateFormatUtils;
 import org.jandroid.common.IntentUtils;
 import org.jandroid.common.ToastUtils;
 import org.jandroid.common.autoupdate.AbstractCheckVersionService;
+import org.jandroid.common.autoupdate.AbstractVersionUpdateService;
 import org.jandroid.common.autoupdate.VersionInfo;
 
+import java.io.File;
 import java.util.Date;
 
 /**
@@ -129,26 +132,31 @@ public class Utils {
         theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
-    public static void startVersionCheckService(Activity theActivity) {
-        Intent intent = IntentUtils.newIntent(theActivity, CheckVersionService.class);
-        theActivity.startService(intent);
-    }
-
     public static void bindVersionCheckService(Activity theActivity, ServiceConnection serviceConnection) {
         Intent intent = IntentUtils.newIntent(theActivity, CheckVersionService.class);
         theActivity.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
+
+    public static void startVersionUpdateService(Activity theActivity) {
+        Intent intent = IntentUtils.newIntent(theActivity, VersionUpdateService.class);
+        theActivity.startService(intent);
+    }
+
+    public static void bindVersionUpdateService(Activity theActivity, ServiceConnection serviceConnection) {
+        Intent intent = IntentUtils.newIntent(theActivity, VersionUpdateService.class);
+        theActivity.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+
 
     public static void openVersionCheckDialog(final Activity theActivity) {
         new AlertDialog.Builder(theActivity)
                 .setTitle("你要检查新版本吗？")
                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Utils.startVersionCheckService(theActivity);
                         Utils.bindVersionCheckService(theActivity, new ServiceConnection() {
                             public void onServiceConnected(ComponentName name, IBinder service) {
                                 AbstractCheckVersionService.CheckVersionBinder binder = (AbstractCheckVersionService.CheckVersionBinder) service;
-                                binder.checkVersion(new AbstractCheckVersionService.VersionCheckingCallback() {
+                                binder.checkVersion(new AbstractCheckVersionService.CheckingCallback() {
                                     public void onStartChecking(String url) {
                                         ToastUtils.showShortToast(theActivity, url);
                                     }
@@ -184,12 +192,37 @@ public class Utils {
                 }).create().show();
     }
 
-    public static void openVersionUpdateDialog(final Activity theActivity, VersionInfo newVersionInfo) {
+    public static void openVersionUpdateDialog(final Activity theActivity, final VersionInfo newVersionInfo) {
         new AlertDialog.Builder(theActivity)
                 .setTitle("发现新版本 " + newVersionInfo.getVersion() + " ，要立即更新吗？")
                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        Utils.startVersionUpdateService(theActivity);
+                        Utils.bindVersionUpdateService(theActivity, new ServiceConnection() {
+                            public void onServiceConnected(ComponentName name, IBinder service) {
+                                AbstractVersionUpdateService.ServiceBinder binder = (AbstractVersionUpdateService.ServiceBinder)service;
+                                binder.startDownload(newVersionInfo, new AbstractVersionUpdateService.UpdatingCallback() {
+                                    @Override
+                                    protected void onProgressUpdate(int progress) {
+//                                        ToastUtils.showShortToast(theActivity, "onProgressUpdate: " + progress);
+                                    }
 
+                                    @Override
+                                    protected void onFailure(Exception e) {
+                                        ToastUtils.showShortToast(theActivity, "onFailure: " + e.toString());
+                                    }
+
+                                    @Override
+                                    protected void onDownloaded(File downloadedFile) {
+                                        ToastUtils.showShortToast(theActivity, "onDownloaded: " + downloadedFile.toString());
+                                    }
+                                });
+                            }
+
+                            public void onServiceDisconnected(ComponentName name) {
+
+                            }
+                        });
                     }
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {

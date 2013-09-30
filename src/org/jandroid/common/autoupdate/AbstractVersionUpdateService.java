@@ -14,6 +14,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 import org.apache.commons.io.FilenameUtils;
+import org.jandroid.cnbeta.MainActivity;
 import org.jandroid.cnbeta.R;
 import org.jandroid.common.BaseService;
 import org.jandroid.common.IntentUtils;
@@ -31,7 +32,7 @@ import java.util.concurrent.Executors;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class AbstractAutoUpdateService extends BaseService {
+public abstract class AbstractVersionUpdateService extends BaseService {
 
     private boolean cancelled;
     private int progress;
@@ -39,8 +40,6 @@ public abstract class AbstractAutoUpdateService extends BaseService {
     private NotificationManager notificationManager;
 
     private Handler handler = new Handler();
-
-    private final static ExecutorService SINGLE_THREAD_EXECUTOR = Executors.newSingleThreadExecutor();
 
     @Override
     public void onCreate() {
@@ -68,39 +67,48 @@ public abstract class AbstractAutoUpdateService extends BaseService {
         return super.onUnbind(intent);
     }
 
-    protected abstract String getURL();
-
-    protected String getCurrentVersion() throws Exception {
-        return getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
+    public NotificationManager getNotificationManager() {
+        return notificationManager;
     }
 
-    protected void startDownload() {
-        //TODO: if(isRunning) return;
+    protected abstract String getURL(VersionInfo newVersionInfo);
+
+    protected void startDownload(VersionInfo newVersionInfo, final UpdatingCallback callback) {
 
         cancelled = false;
-        final String url = getURL();
+        final String url = getURL(newVersionInfo);
         String filename = FilenameUtils.getBaseName(url) + "." + FilenameUtils.getExtension(url);
         final Notification downloadingNotification = createDownloadingNotification(filename);
 
         executeAsyncTask(
-                new AsyncTask<String, Integer, File>() {
+                new AsyncTask<Object, Integer, File>() {
 
                     @Override
                     protected void onProgressUpdate(Integer... values) {
                         super.onProgressUpdate(values);
                         //update progress by notification
                         updateNotificationProgress(values[0], downloadingNotification);
+                        if(!isCancelled()) {
+                            callback.onProgressUpdate(values[0]);
+                        }
                     }
 
                     @Override
                     protected void onPreExecute() {
                         super.onPreExecute();
+                        notificationManager.notify(downloadingNotification.hashCode(), downloadingNotification);
+                        if(!isCancelled()) {
+                            callback.onStartDownloading();
+                        }
                     }
 
                     @Override
                     protected void onPostExecute(File file) {
                         super.onPostExecute(file);
                         if (file != null) {
+                            if(!isCancelled()) {
+                                callback.onDownloaded(file);
+                            }
                             afterDownload(file);
                         }
                         else {
@@ -109,8 +117,11 @@ public abstract class AbstractAutoUpdateService extends BaseService {
                     }
 
                     @Override
-                    protected File doInBackground(String... params) {
-                        String url = params[0];
+                    protected File doInBackground(Object... params) {
+                        String url = params[0].toString();
+
+                        File downFile = null;
+
                         //初始化数据
                         long fileSize = 0;
                         int readSize = 0;
@@ -135,30 +146,37 @@ public abstract class AbstractAutoUpdateService extends BaseService {
                             is = new BufferedInputStream(is);
 
                             //建立临时文件
-                            File downFile = File.createTempFile(Base64.encodeToString(url.getBytes("UTF-8"), Base64.NO_WRAP), MimeTypeMap.getFileExtensionFromUrl(url));
+                            downFile = File.createTempFile(Base64.encodeToString(url.getBytes(), Base64.NO_WRAP), "." + MimeTypeMap.getFileExtensionFromUrl(url));
 
                             //将文件写入临时盘
                             fos = new FileOutputStream(downFile);
-                            byte buf[] = new byte[1024];
+                            byte buf[] = new byte[1024*1024];
                             while (!cancelled && (readSize = is.read(buf)) > 0) {
                                 fos.write(buf, 0, readSize);
                                 downSize += readSize;
                                 int num = (int) ((double) downSize / (double) fileSize * 100);
                                 publishProgress(num);
                             }
+                            publishProgress(100); //100% END
+
                             if (cancelled) { // cancel
                                 downFile.delete();
                                 return null;
                             }
                             return downFile;
                         }
-                        catch (Exception e) {
-                            handler.post(new Runnable() {
-                                public void run() {
-                                    Toast.makeText(AbstractAutoUpdateService.this, "服务器连接失败，请稍后再试！", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                            //TODO: file.delete
+                        catch (final Exception e) {
+                            if(!isCancelled()) {
+                                handler.post(new Runnable() {
+                                    public void run() {
+                                        callback.onFailure(e);
+                                    }
+                                });
+                            }
+                            if(downFile != null) {
+                                // delete temp file
+                                downFile.delete();
+                            }
                             return null;
                         }
                         finally {
@@ -166,12 +184,10 @@ public abstract class AbstractAutoUpdateService extends BaseService {
                                 if (null != fos) fos.close();
                                 if (null != is) is.close();
                             }
-                            catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            catch (IOException e) { }
                         }
                     }
-                });
+                }, getURL(newVersionInfo));
     }
 
     protected Notification createDownloadingNotification(String filename) {
@@ -188,16 +204,24 @@ public abstract class AbstractAutoUpdateService extends BaseService {
         // 指定个性化视图
         mNotification.contentView = contentView;
 
-//TODO:        Intent intent = new Intent(this, MainForm.class);
+        Intent intent = new Intent(this, MainActivity.class);
 //        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, null, PendingIntent.FLAG_UPDATE_CURRENT);
+
+//        PendingIntent contentIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_UPDATE_CURRENT);
         // 指定内容意图
-        mNotification.contentIntent = contentIntent;
+//        mNotification.contentIntent = contentIntent;
         return mNotification;
     }
 
-    protected void updateNotificationProgress(int progress, Notification downloadNotification) {
-        //TODO:
+    protected void updateNotificationProgress(int progress, Notification downloadingNotification) {
+        // 更新进度
+        RemoteViews contentView = downloadingNotification.contentView;
+//        contentView.setTextViewText(R.id.rate, (readSize < 0 ? 0 : readSize) + "b/s   " + msg.arg1 + "%");
+        contentView.setTextViewText(R.id.rate, progress + "%");
+        contentView.setProgressBar(R.id.progress, 100, progress, false);
+
+        // 更新UI
+        notificationManager.notify(downloadingNotification.hashCode(), downloadingNotification);
     }
 
     protected Notification createDownloadedNotification(String url) {
@@ -216,7 +240,7 @@ public abstract class AbstractAutoUpdateService extends BaseService {
         //放置在"通知形"栏目中
         notification.flags = Notification.FLAG_AUTO_CANCEL;
 
-        Toast.makeText(AbstractAutoUpdateService.this, "下载完成", Toast.LENGTH_SHORT).show();
+        Toast.makeText(AbstractVersionUpdateService.this, "下载完成", Toast.LENGTH_SHORT).show();
 
         return notification;
     }
@@ -237,7 +261,7 @@ public abstract class AbstractAutoUpdateService extends BaseService {
         //放置在"通知形"栏目中
         notification.flags = Notification.FLAG_AUTO_CANCEL;
 
-        Toast.makeText(AbstractAutoUpdateService.this, "下载被取消", Toast.LENGTH_SHORT).show();
+        Toast.makeText(AbstractVersionUpdateService.this, "下载被取消", Toast.LENGTH_SHORT).show();
 
         return notification;
     }
@@ -250,24 +274,15 @@ public abstract class AbstractAutoUpdateService extends BaseService {
     }
 
     protected void afterDownload(File downloadedFile) {
-        /*打开文件进行安装*/
+        /*默认打开文件进行安装*/
         this.startActivity(IntentUtils.openFile(downloadedFile));
         stopSelf();//停掉服务自身
     }
 
     public class ServiceBinder extends Binder {
 
-        public void startDownload(String url, AutoUpdateCallback callback) {
-            AbstractAutoUpdateService.this.startDownload();
-        }
-
-        /**
-         * 获取进度
-         *
-         * @return
-         */
-        public int getProgress() {
-            return progress;
+        public void startDownload(VersionInfo versionInfo, UpdatingCallback callback) {
+            AbstractVersionUpdateService.this.startDownload(versionInfo, callback);
         }
 
         /**
@@ -283,12 +298,16 @@ public abstract class AbstractAutoUpdateService extends BaseService {
         }
     }
 
-    public static interface AutoUpdateCallback {
+    public static abstract class UpdatingCallback {
 
-        void onStartDownloading();
+        protected void onStartDownloading() {
 
-        void onProgressUpdate(int progress);
+        }
 
-        void onDownloaded(File downloadedFile);
+        protected abstract void onFailure(Exception e) ;
+
+        protected abstract void onProgressUpdate(int progress);
+
+        protected abstract void onDownloaded(File downloadedFile);
     }
 }

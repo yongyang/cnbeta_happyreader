@@ -72,7 +72,7 @@ public class IntentUtils {
     	intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     	intent.setAction(android.content.Intent.ACTION_VIEW);
     	// 来取得MimeType
-    	String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(file.toString()));
+    	String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(FilenameUtils.getExtension(file.getName()));
     	//设定intent的file与MimeType
     	intent.setDataAndType(Uri.fromFile(file), type);
         return intent;
