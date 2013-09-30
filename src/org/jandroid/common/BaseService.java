@@ -77,7 +77,8 @@ public abstract class BaseService extends Service {
         logger.d(" onDestroy() invoked!!");
         handler.removeCallbacksAndMessages(null);
    		super.onDestroy();
-        cancelAsyncTasks();
+        //  Service don't cancel Async Tasks automatically
+//        cancelAsyncTasks();
    	}
 
 }

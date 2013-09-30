@@ -191,9 +191,12 @@ public abstract class AbstractVersionUpdateService extends BaseService {
 
     protected Notification newDownloadingNotification(VersionInfo newVersionInfo) {
         CharSequence tickerText = "开始下载cnBeta乐读" + newVersionInfo.getVersion();
-        long when = System.currentTimeMillis();
         // call build after api 16
-        Notification mNotification = new Notification.Builder(this).setSmallIcon(R.drawable.ic_launcher).setWhen(when).setTicker(tickerText).getNotification();
+        Notification mNotification = new Notification.Builder(this)
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setWhen(System.currentTimeMillis())
+                .setTicker(tickerText)
+                .getNotification();
         // 放置在"正在运行"栏目中
         mNotification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_ONLY_ALERT_ONCE;
         mNotification.defaults=Notification.DEFAULT_VIBRATE;
@@ -203,13 +206,6 @@ public abstract class AbstractVersionUpdateService extends BaseService {
 
         // 指定个性化视图
         mNotification.contentView = contentView;
-
-        Intent intent = new Intent(this, MainActivity.class);
-//        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-//        PendingIntent contentIntent = PendingIntent.getActivity(this, 0 , intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        // 指定内容意图
-//        mNotification.contentIntent = contentIntent;
         return mNotification;
     }
 
