@@ -9,13 +9,13 @@ import org.jandroid.cnbeta.async.AsyncContext;
  */
 public abstract class BaseAsyncTask<R>  extends AsyncTask<Object, Integer, AsyncResult<R>> implements AsyncContext {
 
-    protected abstract R run() throws Exception;
+    protected abstract R run(Object... params) throws Exception;
 
     @Override
     protected AsyncResult<R> doInBackground(Object... params) {
         if(!isCancelled()) {
             try {
-                R result = run();
+                R result = run(params);
                 return AsyncResult.successResult(result);
             }
             catch (Exception e) {

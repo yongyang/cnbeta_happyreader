@@ -238,12 +238,6 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void onViewStateRestored(Bundle savedInstanceState) {
-        //TODO: 恢复保存的article列表
-        super.onViewStateRestored(savedInstanceState);
-    }
-
     ////////////////////////////////
 
 

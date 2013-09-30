@@ -102,7 +102,7 @@ public abstract class AbstractCheckVersionService extends BaseService {
 
 
                     @Override
-                    protected VersionInfo run() throws Exception {
+                    protected VersionInfo run(Object... params) throws Exception {
                         return getLatestVersionInfo();
                     }
 

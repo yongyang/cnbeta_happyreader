@@ -1,19 +1,14 @@
 package org.jandroid.common;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Handler;
-import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -67,11 +62,7 @@ public abstract class BaseService extends Service {
         asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
     }
 
-   	@Override
-   	public void onDestroy() {
-        logger.d(" onDestroy() invoked!!");
-        handler.removeCallbacksAndMessages(null);
-   		super.onDestroy();
+    public synchronized void cancelAsyncTasks(){
         for(Iterator<AsyncTask> it = runningTasks.iterator(); it.hasNext();){
             AsyncTask runningTask = it.next();
             if(!runningTask.isCancelled() || runningTask.getStatus() != AsyncTask.Status.FINISHED) {
@@ -79,6 +70,14 @@ public abstract class BaseService extends Service {
             }
             it.remove();
         }
+    }
+
+   	@Override
+   	public void onDestroy() {
+        logger.d(" onDestroy() invoked!!");
+        handler.removeCallbacksAndMessages(null);
+   		super.onDestroy();
+        cancelAsyncTasks();
    	}
 
 }

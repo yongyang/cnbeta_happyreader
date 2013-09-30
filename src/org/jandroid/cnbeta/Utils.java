@@ -213,8 +213,13 @@ public class Utils {
                                     }
 
                                     @Override
-                                    protected void onDownloaded(File downloadedFile) {
+                                    protected void onDownloaded(VersionInfo versionInfo, File downloadedFile) {
                                         ToastUtils.showShortToast(theActivity, "onDownloaded: " + downloadedFile.toString());
+                                    }
+
+                                    @Override
+                                    protected void onCancelled(VersionInfo versionInfo) {
+                                        ToastUtils.showShortToast(theActivity, "onCancelled");
                                     }
                                 });
                             }

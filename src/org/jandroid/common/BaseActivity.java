@@ -114,6 +114,9 @@ public class BaseActivity extends Activity {
 
    		logger.d(" onDestroy() invoked!!  Active async task: " + ((ThreadPoolExecutor)AsyncTask.THREAD_POOL_EXECUTOR).getActiveCount());
    		super.onDestroy();
+        cancelAsyncTasks();
+   	}
+    public synchronized void cancelAsyncTasks(){
         for(Iterator<AsyncTask> it = runningTasks.iterator(); it.hasNext();){
             AsyncTask runningTask = it.next();
             if(!runningTask.isCancelled() || runningTask.getStatus() != AsyncTask.Status.FINISHED) {
@@ -121,7 +124,7 @@ public class BaseActivity extends Activity {
             }
             it.remove();
         }
-   	}
+    }
 
    	public void finish() {
         super.finish();

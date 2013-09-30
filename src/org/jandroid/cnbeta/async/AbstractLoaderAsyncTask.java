@@ -20,7 +20,7 @@ public abstract class AbstractLoaderAsyncTask<R> extends BaseAsyncTask<R> {
 
     private final ReentrantLock locker = new ReentrantLock();
 
-    protected Logger logger = Logger.getLogger(this.getClass());
+    protected Logger logger = Logger.getLogger(getClass());
 
     protected boolean isRemoteLoadOnly() {
         return false;
@@ -42,7 +42,7 @@ public abstract class AbstractLoaderAsyncTask<R> extends BaseAsyncTask<R> {
 
 //    public abstract CnBetaApplicationContext getCnBetaApplicationContext();
 
-    protected R run() throws Exception {
+    protected R run(Object... params) throws Exception {
         if(isCancelled()) {
             return null;
         }
