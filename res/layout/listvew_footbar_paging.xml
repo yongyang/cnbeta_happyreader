@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:text="加载中..."
                     android:singleLine="true"
-                    android:paddingLeft="4.0dip"/>
+                    android:paddingLeft="4dip"/>
         </LinearLayout>
 
         <LinearLayout

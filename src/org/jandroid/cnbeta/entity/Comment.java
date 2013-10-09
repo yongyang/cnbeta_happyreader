@@ -28,6 +28,9 @@ public class Comment implements Serializable{
     
     private String token;
 
+    private boolean supported = false;
+    private boolean againsted = false;
+
     public Comment() {
     }
 
@@ -127,5 +130,21 @@ public class Comment implements Serializable{
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean isSupported() {
+        return supported;
+    }
+
+    public void setSupported(boolean supported) {
+        this.supported = supported;
+    }
+
+    public boolean isAgainsted() {
+        return againsted;
+    }
+
+    public void setAgainsted(boolean againsted) {
+        this.againsted = againsted;
     }
 }

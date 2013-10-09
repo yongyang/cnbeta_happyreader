@@ -62,7 +62,8 @@ public class PagingView {
 
     public void resetPage(){
         page = 0;
-        tvPage.setText("" + page);
+        //resetPage cause android.view.ViewRootImpl$CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views.
+//        tvPage.setText("" + page);
     }
 
     public void setPage(int page) {

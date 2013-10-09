@@ -23,7 +23,7 @@
         <LinearLayout
                 android:orientation="horizontal"
                 android:gravity="right"
-                android:paddingRight="2.0dip"
+                android:paddingRight="2dip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="1dp">

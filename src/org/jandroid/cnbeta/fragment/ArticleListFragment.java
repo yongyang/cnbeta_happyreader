@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
+import org.jandroid.cnbeta.CnBetaPreferences;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.ArticleListAsyncTask;
@@ -23,6 +24,7 @@ import org.jandroid.cnbeta.loader.AbstractListLoader;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.BaseActivity;
+import org.jandroid.common.PixelUtils;
 import org.jandroid.common.adapter.AsyncImageAdapter;
 import org.jandroid.common.async.AsyncResult;
 
@@ -217,10 +219,11 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
                         tvScore.setText(""+article.getScore());
         */
 
-
                 ImageView ivLogo = (ImageView) convertView.findViewById(R.id.item_logo);
                 // queue to image load list or set a cached bitmap if has been cached
                 ivLogo.setImageBitmap(queueImageView(position, ivLogo, article.getLogo()));
+
+                Utils.updateTextSize(getActivity(), tvTitleShow, tvHometextShowShort, tvComments, tvCounter, tvTime);
                 return convertView;
             }
         };
@@ -234,7 +237,6 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        //TODO: 保存当前article列表
         super.onSaveInstanceState(outState);
     }
 
@@ -255,7 +257,6 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
 
     @Override
     public void onProgressDismiss() {
-        //TODO: refresh action view only page=1
         super.onProgressDismiss();
         footerPagingView.onProgressDismiss();
     }

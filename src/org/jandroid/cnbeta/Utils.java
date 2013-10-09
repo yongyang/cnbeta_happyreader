@@ -9,6 +9,9 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.TypedValue;
+import android.webkit.WebView;
+import android.widget.TextView;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.HistoryArticle;
 import org.jandroid.cnbeta.loader.HistoryArticleListLoader;
@@ -16,6 +19,7 @@ import org.jandroid.cnbeta.service.CheckVersionService;
 import org.jandroid.cnbeta.service.VersionUpdateService;
 import org.jandroid.common.DateFormatUtils;
 import org.jandroid.common.IntentUtils;
+import org.jandroid.common.PixelUtils;
 import org.jandroid.common.ToastUtils;
 import org.jandroid.common.autoupdate.AbstractCheckVersionService;
 import org.jandroid.common.autoupdate.AbstractVersionUpdateService;
@@ -235,6 +239,20 @@ public class Utils {
 
                     }
                 }).create().show();
+    }
+
+
+    public static void updateTextSize(Activity theActivity, TextView... textViews) {
+        for(TextView textView : textViews) {
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, PixelUtils.pixelsToSp(theActivity, textView.getTextSize()) + ((CnBetaApplicationContext)theActivity.getApplicationContext()).getCnBetaPreferences().getFontSizeIncrement());
+        }
+    }
+
+    public static void updateTextSize(Activity theActivity, WebView... webViews) {
+        for(WebView webView : webViews) {
+            webView.getSettings().setDefaultFontSize(webView.getSettings().getDefaultFontSize() + ((CnBetaApplicationContext)theActivity.getApplicationContext()).getCnBetaPreferences().getFontSizeIncrement());
+            webView.getSettings().setDefaultFontSize(webView.getSettings().getDefaultFixedFontSize() + ((CnBetaApplicationContext)theActivity.getApplicationContext()).getCnBetaPreferences().getFontSizeIncrement());
+        }
     }
 
 }

@@ -55,6 +55,7 @@
     <string name="pref_key_autoCleanHistory">autoCleanHistory</string>
     <string name="pref_key_autoCleanCache">autoCleanCache</string>
     <string name="pref_key_alsoCleanHistory">alsoCleanHistory</string>
+    <string name="pref_key_fontSizeIncrement">fontSizeIncrement</string>
 
 
 </resources>

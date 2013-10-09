@@ -240,10 +240,11 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
                         tvScore.setText(""+article.getScore());
         */
 
-
                 ImageView ivLogo = (ImageView) convertView.findViewById(R.id.item_logo);
                 // queue to image load list or set a cached bitmap if has been cached
                 ivLogo.setImageBitmap(queueImageView(position, ivLogo, article.getLogo()));
+
+                Utils.updateTextSize(getActivity(), tvTitleShow, tvHometextShowShort2, tvComments, tvTime);
                 return convertView;
             }
         };

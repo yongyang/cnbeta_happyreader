@@ -2,7 +2,7 @@
 <LinearLayout
         android:orientation="vertical"
         android:background="@color/cnBeta_comment_dialog_bg_yellow"
-        android:padding="4.0dip"
+        android:padding="4dip"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         xmlns:android="http://schemas.android.com/apk/res/android">
@@ -14,16 +14,16 @@
             android:scrollbars="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10.0dip"
+            android:layout_marginTop="10dip"
             android:hint="请输入评论内容"
             android:lines="4"
             android:maxLength="320"/>
 
     <LinearLayout
-            android:padding="5.0dip"
+            android:padding="5dip"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5.0dip"
+            android:layout_marginBottom="5dip"
             android:gravity="center_vertical">
         <TextView
                 android:textColor="@color/cnBeta_text_blue"
@@ -36,17 +36,17 @@
         <EditText
                 android:textColor="@color/black"
                 android:id="@+id/seccode"
-                android:layout_width="80.0dip"
+                android:layout_width="80dip"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5.0dip"
-                android:layout_marginRight="10.0dip"
+                android:layout_marginLeft="5dip"
+                android:layout_marginRight="10dip"
                 android:maxLength="4"/>
 
         <ImageView
                 android:id="@+id/seccode_image"
                 android:visibility="gone"
-                android:layout_width="60.0dip"
-                android:layout_height="35.0dip"/>
+                android:layout_width="60dip"
+                android:layout_height="35dip"/>
 
         <ProgressBar
                 android:id="@+id/captcha_progessBar"
@@ -56,11 +56,11 @@
     </LinearLayout>
 
     <RelativeLayout
-            android:padding="5.0dip"
+            android:padding="5dip"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:layout_marginTop="10.0dip">
+            android:layout_marginTop="10dip">
 
 
         <TextView
@@ -82,7 +82,7 @@
                 android:id="@+id/send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10.0dip"
+                android:layout_marginRight="10dip"
                 android:layout_toLeftOf="@id/cancel"
                 android:textColor="#FFFFFF"
                 android:textSize="@dimen/listitem_title_text_size"

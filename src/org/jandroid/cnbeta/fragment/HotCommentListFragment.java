@@ -126,6 +126,7 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
                 TextView tvHometextShowShort = (TextView) convertView.findViewById(R.id.hometext_show_short);
                 tvHometextShowShort.setText(article.getHometextShowShort());
 */
+                Utils.updateTextSize(getActivity(), commentTextView, titleShowTextView, dateTextView, hostNameShowTextView, nameTextView, fromTextView, toTextView);
                 return convertView;
             }
         };

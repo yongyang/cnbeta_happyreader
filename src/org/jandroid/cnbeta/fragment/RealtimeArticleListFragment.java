@@ -87,6 +87,7 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
                 TextView tvTimeShow = (TextView) convertView.findViewById(R.id.time_show);
                 tvTimeShow.setText("" + article.getTimeShow());
 
+                Utils.updateTextSize(getActivity(), tvTitle, tvHometextShowShort2, tvTime, tvTimeShow);
                 return convertView;
 
             }

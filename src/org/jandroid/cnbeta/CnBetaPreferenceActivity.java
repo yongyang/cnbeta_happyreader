@@ -96,6 +96,14 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
         }
     }
 
+    public static class PrefsUIFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.prefs_ui);
+        }
+    }
+
     private void cleanCache(){
         new AsyncTask<Object, Integer, Boolean>() {
 

@@ -17,4 +17,6 @@ public interface CnBetaApplicationContext {
     File getBaseDir();
 
     boolean onOptionsItemSelected(Activity theActivity, MenuItem item);
+
+    CnBetaPreferences getCnBetaPreferences();
 }

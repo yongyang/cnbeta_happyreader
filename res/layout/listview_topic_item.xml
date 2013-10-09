@@ -9,7 +9,7 @@
     <ImageView
             android:layout_gravity="center"
             android:id="@+id/logo"
-            android:padding="2.0dip"
+            android:padding="2dip"
             android:layout_width="@dimen/listitem_logo_width"
             android:layout_height="@dimen/listitem_logo_height"
             android:src="@drawable/default_img"/>

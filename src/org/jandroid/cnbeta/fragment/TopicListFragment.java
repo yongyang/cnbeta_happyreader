@@ -15,6 +15,7 @@ import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.TopicActivity;
+import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HasAsyncDelegate;
 import org.jandroid.cnbeta.async.ImageAsyncTask;
@@ -198,6 +199,8 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
                 ImageView ivLogo = (ImageView) convertView.findViewById(R.id.logo);
                 // queue to image load list or set a cached bitmap if has been cached
                 ivLogo.setImageBitmap(queueImageView(position, ivLogo, article.getLogo()));
+
+                Utils.updateTextSize(getActivity(), tvName);
                 return convertView;
             }
         };
@@ -215,15 +218,6 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
         //TODO: 保存当前article列表
         super.onSaveInstanceState(outState);
     }
-
-    @Override
-    public void onViewStateRestored(Bundle savedInstanceState) {
-        //TODO: 恢复保存的article列表
-        super.onViewStateRestored(savedInstanceState);
-    }
-
-    ////////////////////////////////
-
 
     @Override
     public void onSuccess(AsyncResult<List<Topic>> listAsyncResult) {

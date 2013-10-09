@@ -133,6 +133,16 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                 }
                 else {
                     supportAgainstLinearLayout.setVisibility(View.VISIBLE);
+
+                    if (comment.isSupported()) { // 已支持
+                        supportTextView.setText(R.string.supported);
+                        supportLinearLayout.setEnabled(false);
+                    }
+                    if(comment.isAgainsted()) { // 已反对
+                        againstTextView.setText(R.string.againsted);
+                        againstLinearLayout.setEnabled(false);
+                    }
+
                     supportLinearLayout.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             supportComment(supportLinearLayout, supportTextView, scoreTextView, comment, true);
@@ -155,6 +165,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                         });
                     }
                 }
+                Utils.updateTextSize(getActivity(), positionTextView, nameTextView, hostNameTextView, dateTextView, commentTextView, supportTextView, againstTextView, scoreTextView, reasonTextView, toParentTextView);
                 return convertView;
             }
         };
@@ -203,7 +214,17 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                     }
 
                     public void onSuccess(AsyncResult<JSONObject> jsonObjectAsyncResult) {
-                        supportLinearLayout.setClickable(false);
+                        supportLinearLayout.setEnabled(false);
+
+                        if (isSupport) {
+                            // supported
+                            getComment().setSupported(true);
+                            getComment().setScore(getComment().getScore()+1);
+                        }
+                        else {
+                            getComment().setAgainsted(true);
+                            getComment().setReason(getComment().getReason()+1);
+                        }
 
                         ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 1.8f, 1.0f, 1.8f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                         scaleAnimation.setFillAfter(false);
@@ -215,11 +236,11 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                             public void onAnimationEnd(Animation animation) {
                                 if (isSupport) {
                                     supportTextView.setText(R.string.supported);
-                                    scoreTextView.setText("" + (comment.getScore() + 1));
+                                    scoreTextView.setText("" + comment.getScore());
                                 }
                                 else {
                                     supportTextView.setText(R.string.againsted);
-                                    scoreTextView.setText("" + (comment.getReason() + 1));
+                                    scoreTextView.setText("" + comment.getReason());
                                 }
                             }
 

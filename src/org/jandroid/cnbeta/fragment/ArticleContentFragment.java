@@ -3,6 +3,7 @@ package org.jandroid.cnbeta.fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
+import org.jandroid.cnbeta.CnBetaPreferences;
 import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
@@ -30,6 +32,7 @@ import org.jandroid.cnbeta.async.RateArticleAsyncTask;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.common.BaseFragment;
 import org.jandroid.common.JavaScriptObject;
+import org.jandroid.common.PixelUtils;
 import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
 import org.json.simple.JSONObject;
@@ -56,6 +59,8 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     private ProgressBar ratingProgressBar;
 
     private ViewGroup root;
+
+    public static final int DEFAULT_WEBVIEW_FONTSIZE = 16;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -147,8 +152,8 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         contentWebView.getSettings().setJavaScriptEnabled(true);
         contentWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
         //设置嫩参数
-        contentWebView.getSettings().setDefaultFontSize(15);
-        contentWebView.getSettings().setDefaultFixedFontSize(15);
+        contentWebView.getSettings().setDefaultFontSize(DEFAULT_WEBVIEW_FONTSIZE);
+        contentWebView.getSettings().setDefaultFixedFontSize(DEFAULT_WEBVIEW_FONTSIZE);
         contentWebView.getSettings().setAllowFileAccess(true);
         // no these two method in 4.0
 //        contentWebView.getSettings().setAllowFileAccessFromFileURLs(true);
@@ -346,7 +351,11 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     @Override
     public void onResume() {
         super.onResume();
+        // update font size
+        Utils.updateTextSize(getActivity(),titleTextView, timeTextView, viewNumTextView, commentNumTextView, whereTextView);
         if (contentWebView != null) {
+            Utils.updateTextSize(getActivity(), contentWebView);
+
             // Try resumeTimers anyway, flash plugin may case pauseTimers
             contentWebView.resumeTimers();
             contentWebView.onResume();
@@ -374,7 +383,11 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
             contentWebView.freeMemory();
             contentWebView.setWebChromeClient(null);
             contentWebView.setWebViewClient(null);
+            //try release Flash Player plugin
+            contentWebView.getSettings().setPluginState(WebSettings.PluginState.OFF);
             contentWebView.loadData("", "text/html", "utf-8");
+            //try release Flash Player plugin
+            contentWebView.getSettings().setPluginState(WebSettings.PluginState.OFF);
             contentWebView.reload();
             contentWebView.stopLoading();
             contentWebView.clearCache(true);

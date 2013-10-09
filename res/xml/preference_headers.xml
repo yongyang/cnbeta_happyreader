@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <preference-headers
         xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 指定启动指定PreferenceFragment的列表项 -->
+    <header
+            android:fragment=
+                    "org.jandroid.cnbeta.CnBetaPreferenceActivity$PrefsUIFragment"
+            android:title="字体设置 "
+            android:summary="设置字体大小等">
+    </header>
+
     <header
             android:fragment=
                     "org.jandroid.cnbeta.CnBetaPreferenceActivity$PrefsCacheFragment"
             android:title="缓存设置"
             android:summary="设置与缓存相关的选项及手动清理缓存"/>
-    <!-- 指定启动指定PreferenceFragment的列表项 -->
     <header
             android:fragment=
                     "org.jandroid.cnbeta.CnBetaPreferenceActivity$PrefsHistoryFragment"
             android:title="历史设置 "
             android:summary="设置与历史记录相关的选项及手动清理">
-        <extra
-                android:name="site_url"
-                android:value="www.jandroid.org"/>
     </header>
+
 </preference-headers>

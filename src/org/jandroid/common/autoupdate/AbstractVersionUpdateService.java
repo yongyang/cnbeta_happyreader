@@ -191,18 +191,21 @@ public abstract class AbstractVersionUpdateService extends BaseService {
 
     protected Notification newDownloadingNotification(VersionInfo newVersionInfo) {
         CharSequence tickerText = "开始下载cnBeta乐读" + newVersionInfo.getVersion();
+
+        // 个性化视图
+        RemoteViews contentView = new RemoteViews(this.getPackageName(), R.layout.download_notification);
+        contentView.setTextViewText(R.id.fileName, "正在下载cnBeta乐读" + newVersionInfo.getVersion() + "...");
+
         // call build after api 16
         Notification mNotification = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setWhen(System.currentTimeMillis())
                 .setTicker(tickerText)
+                .setDefaults(Notification.DEFAULT_VIBRATE)
+                .setContent(contentView)
                 .getNotification();
         // 放置在"正在运行"栏目中
         mNotification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_ONLY_ALERT_ONCE;
-        mNotification.defaults=Notification.DEFAULT_VIBRATE;
-
-        RemoteViews contentView = new RemoteViews(this.getPackageName(), R.layout.download_notification);
-        contentView.setTextViewText(R.id.fileName, "正在下载cnBeta乐读" + newVersionInfo.getVersion() + "...");
 
         // 指定个性化视图
         mNotification.contentView = contentView;
@@ -257,9 +260,6 @@ public abstract class AbstractVersionUpdateService extends BaseService {
                 .getNotification();
         //放置在"通知形"栏目中
         notification.flags = Notification.FLAG_AUTO_CANCEL;
-
-        Toast.makeText(AbstractVersionUpdateService.this, "下载被取消", Toast.LENGTH_SHORT).show();
-
         return notification;
     }
 

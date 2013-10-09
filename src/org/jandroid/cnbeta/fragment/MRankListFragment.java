@@ -96,6 +96,8 @@ public class MRankListFragment extends AbstractAsyncListFragment<MRankArticle> {
                 tvRank.setText(rank + ". ");
                 TextView tvTitle = (TextView) convertView.findViewById(R.id.title);
                 tvTitle.setText(article.getTitle());
+
+                Utils.updateTextSize(getActivity(), tvRank, tvTitle);
                 return convertView;
             }
         };

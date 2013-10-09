@@ -24,16 +24,17 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
 
     static Logger logger = Logger.getLogger(CnBetaApplication.class);
 
-    Handler handler = new Handler();
-
-    private CnBetaHttpClient httpClient = CnBetaHttpClient.getInstance();
+    private Handler handler = new Handler();
 
     //当网络变化时, 要显示 Toast 提示用户
     private boolean hasNetwork = false;
 
+    private CnBetaPreferences cnBetaPreferences;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        cnBetaPreferences = CnBetaPreferences.getInstance(this);
     }
 
     public boolean isNetworkConnected() {
@@ -114,13 +115,11 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     }
 
     public void onExit() {
-        SharedPreferences prefs = getSharedPreferences(getPackageName() + "_preferences", MODE_PRIVATE);
-
-        if (prefs.getBoolean(getString(R.string.pref_key_autoCleanCache), false)) {
+        if (cnBetaPreferences.isAutoCleanCache()) {
             cleanCache();
         }
 
-        if (prefs.getBoolean(getString(R.string.pref_key_autoCleanHistory), false)) {
+        if (cnBetaPreferences.isAutoCleanHistory()) {
             cleanHistory();
         }
 
@@ -137,12 +136,8 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     }
 
     public boolean cleanCache() {
-
         boolean success = true;
-        SharedPreferences prefs = getSharedPreferences(getPackageName() + "_preferences", MODE_PRIVATE);
-
-        boolean cleanHistory = prefs.getBoolean(getString(R.string.pref_key_alsoCleanHistory), false);
-        if (!cleanHistory) {
+        if (!cnBetaPreferences.isAlsoCleanHistory()) {
             try {
                 File historyArticleFile = new HistoryArticleListLoader().getFile(getBaseDir());
                 if (historyArticleFile.exists()) {
@@ -163,7 +158,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
             }
         }
         FileUtils.deleteQuietly(getBaseDir());
-        if (!cleanHistory) {
+        if (!cnBetaPreferences.isAlsoCleanHistory()) {
             try {
                 File tempHistoryArticleFile = new HistoryArticleListLoader().getFile(getBaseDir().getParentFile());
                 if (tempHistoryArticleFile.exists()) {
@@ -197,6 +192,10 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
             success = false;
         }
         return success;
+    }
+
+    public CnBetaPreferences getCnBetaPreferences(){
+        return cnBetaPreferences;
     }
 
 }

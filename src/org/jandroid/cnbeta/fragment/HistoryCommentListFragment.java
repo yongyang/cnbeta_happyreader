@@ -70,6 +70,8 @@ public class HistoryCommentListFragment extends AbstractAsyncListFragment<Histor
 
                 TextView dateTextView = (TextView) convertView.findViewById(R.id.date);
                 dateTextView.setText(comment.getDate());
+
+                Utils.updateTextSize(getActivity(), toTextView, tvTitle, tvComment, dateTextView);
                 return convertView;
             }
         };
