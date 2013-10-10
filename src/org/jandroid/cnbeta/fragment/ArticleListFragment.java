@@ -223,7 +223,11 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
                 // queue to image load list or set a cached bitmap if has been cached
                 ivLogo.setImageBitmap(queueImageView(position, ivLogo, article.getLogo()));
 
-                Utils.updateTextSize(getActivity(), tvTitleShow, tvHometextShowShort, tvComments, tvCounter, tvTime);
+                Utils.updateTextSize(getActivity(), tvTitleShow, R.dimen.listitem_title_text_size);
+                Utils.updateTextSize(getActivity(), tvHometextShowShort, R.dimen.listitem_description_text_size);
+                Utils.updateTextSize(getActivity(), tvComments, R.dimen.listitem_status_text_size);
+                Utils.updateTextSize(getActivity(), tvCounter, R.dimen.listitem_status_text_size);
+                Utils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size);
                 return convertView;
             }
         };

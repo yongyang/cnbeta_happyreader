@@ -126,7 +126,14 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
                 TextView tvHometextShowShort = (TextView) convertView.findViewById(R.id.hometext_show_short);
                 tvHometextShowShort.setText(article.getHometextShowShort());
 */
-                Utils.updateTextSize(getActivity(), commentTextView, titleShowTextView, dateTextView, hostNameShowTextView, nameTextView, fromTextView, toTextView);
+
+                Utils.updateTextSize(getActivity(), commentTextView, R.dimen.listitem_comment_text_size);
+                Utils.updateTextSize(getActivity(), titleShowTextView, R.dimen.listitem_description_text_size);
+                Utils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size);
+                Utils.updateTextSize(getActivity(), hostNameShowTextView, R.dimen.listitem_status_text_size);
+                Utils.updateTextSize(getActivity(), nameTextView, R.dimen.listitem_status_text_size);
+                Utils.updateTextSize(getActivity(), fromTextView, R.dimen.listitem_status_text_size);
+                Utils.updateTextSize(getActivity(), toTextView, R.dimen.listitem_description_text_size);
                 return convertView;
             }
         };

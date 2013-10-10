@@ -63,7 +63,9 @@ public class HistoryArticleListFragment extends AbstractAsyncListFragment<Histor
                 TextView dateTextView = (TextView) convertView.findViewById(R.id.date);
                 dateTextView.setText(article.getDate());
 
-                Utils.updateTextSize(getActivity(), tvTitle, dateTextView);
+                Utils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size);
+                Utils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size);
+
                 return convertView;
             }
         };

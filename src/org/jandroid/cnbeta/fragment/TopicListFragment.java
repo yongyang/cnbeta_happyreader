@@ -200,7 +200,7 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
                 // queue to image load list or set a cached bitmap if has been cached
                 ivLogo.setImageBitmap(queueImageView(position, ivLogo, article.getLogo()));
 
-                Utils.updateTextSize(getActivity(), tvName);
+                Utils.updateTextSize(getActivity(), tvName, R.dimen.listitem_status_text_size);
                 return convertView;
             }
         };

@@ -167,7 +167,17 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                         });
                     }
                 }
-                Utils.updateTextSize(getActivity(), positionTextView, nameTextView, hostNameTextView, dateTextView, commentTextView, supportTextView, againstTextView, scoreTextView, reasonTextView, toParentTextView);
+
+                Utils.updateTextSize(getActivity(), positionTextView, R.dimen.listitem_description_text_size);
+                Utils.updateTextSize(getActivity(), nameTextView, R.dimen.listitem_description_text_size);
+                Utils.updateTextSize(getActivity(), hostNameTextView, R.dimen.listitem_description_text_size);
+                Utils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size);
+                Utils.updateTextSize(getActivity(), commentTextView, R.dimen.listitem_comment_text_size);
+                Utils.updateTextSize(getActivity(), supportTextView, R.dimen.listitem_comment_text_size);
+                Utils.updateTextSize(getActivity(), againstTextView, R.dimen.listitem_comment_text_size);
+                Utils.updateTextSize(getActivity(), scoreTextView, R.dimen.listitem_comment_text_size);
+                Utils.updateTextSize(getActivity(), reasonTextView, R.dimen.listitem_comment_text_size);
+                Utils.updateTextSize(getActivity(), toParentTextView, R.dimen.listitem_comment_text_size);
                 return convertView;
             }
         };

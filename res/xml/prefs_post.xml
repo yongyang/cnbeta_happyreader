@@ -6,8 +6,8 @@
         <EditTextPreference
                 android:key="@string/pref_key_signature"
                 android:title="设置签名档"
-                android:summary='默认为: @string/default_signature'
-                android:defaultValue="@string/default_signature"
+                android:summary='默认为:---发自"cnBeta乐读"安卓客户端'
+                android:defaultValue='---发自"cnBeta乐读"安卓客户端'
                 />
     </PreferenceCategory>
 </PreferenceScreen>

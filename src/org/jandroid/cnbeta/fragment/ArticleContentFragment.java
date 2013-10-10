@@ -60,8 +60,6 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
 
     private ViewGroup root;
 
-    public static final int DEFAULT_WEBVIEW_FONTSIZE = 16;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = (ViewGroup) inflater.inflate(R.layout.content_article, null);
@@ -152,8 +150,8 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         contentWebView.getSettings().setJavaScriptEnabled(true);
         contentWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
         //设置嫩参数
-        contentWebView.getSettings().setDefaultFontSize(DEFAULT_WEBVIEW_FONTSIZE);
-        contentWebView.getSettings().setDefaultFixedFontSize(DEFAULT_WEBVIEW_FONTSIZE);
+        contentWebView.getSettings().setDefaultFontSize((int)PixelUtils.pixelsToSp(getActivity(),getResources().getDimension(R.dimen.webview_default_text_size)));
+        contentWebView.getSettings().setDefaultFixedFontSize((int)PixelUtils.pixelsToSp(getActivity(),getResources().getDimension(R.dimen.webview_default_text_size)));
         contentWebView.getSettings().setAllowFileAccess(true);
         // no these two method in 4.0
 //        contentWebView.getSettings().setAllowFileAccessFromFileURLs(true);
@@ -352,9 +350,14 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     public void onResume() {
         super.onResume();
         // update font size
-        Utils.updateTextSize(getActivity(),titleTextView, timeTextView, viewNumTextView, commentNumTextView, whereTextView);
+        Utils.updateTextSize(getActivity(), titleTextView, R.dimen.listitem_title_text_size);
+        Utils.updateTextSize(getActivity(), timeTextView, R.dimen.listitem_status_text_size);
+        Utils.updateTextSize(getActivity(), viewNumTextView, R.dimen.listitem_status_text_size);
+        Utils.updateTextSize(getActivity(), commentNumTextView, R.dimen.listitem_status_text_size);
+        Utils.updateTextSize(getActivity(), whereTextView, R.dimen.listitem_status_text_size);
+
         if (contentWebView != null) {
-            Utils.updateTextSize(getActivity(), contentWebView);
+            Utils.updateTextSize(getActivity(), contentWebView, R.dimen.webview_default_text_size);
 
             // Try resumeTimers anyway, flash plugin may case pauseTimers
             contentWebView.resumeTimers();

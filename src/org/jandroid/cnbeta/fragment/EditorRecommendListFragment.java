@@ -54,7 +54,9 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
                 TextView tvTime = (TextView) convertView.findViewById(R.id.time);
                 tvTime.setText(editorRecommend.getTime());
 
-                Utils.updateTextSize(getActivity(), tvTitle, tvHomeText, tvTime);
+                Utils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size);
+                Utils.updateTextSize(getActivity(), tvHomeText, R.dimen.listitem_description_text_size);
+                Utils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size);
                 return convertView;
             }
         };
