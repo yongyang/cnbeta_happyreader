@@ -103,9 +103,11 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
             case R.id.setting_item:
                 Utils.openPreferenceActivity(theActivity);
                 break;
+/*
             case R.id.versionCheck:
                 Utils.openVersionCheckDialog(theActivity);
                 break;
+*/
             case R.id.aboutus_item:
                 Utils.openAboutActivity(theActivity);
                 break;
