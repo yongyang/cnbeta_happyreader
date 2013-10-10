@@ -155,7 +155,9 @@ public class PublishCommentActivity extends BaseActivity {
 
             @Override
             protected String getCommentContent() {
-                return commentTextView.getText().toString();
+                //签名档
+                String signature = ((CnBetaApplicationContext)getApplicationContext()).getCnBetaPreferences().getSignature();
+                return signature.isEmpty() ? commentTextView.getText().toString() : commentTextView.getText().toString() + "   " + signature;
             }
 
             @Override
@@ -186,6 +188,12 @@ public class PublishCommentActivity extends BaseActivity {
                             ToastUtils.showShortToast(PublishCommentActivity.this, message);
                         }
                         else {
+                            if(getPid() == 0) {
+                                ToastUtils.showShortToast(PublishCommentActivity.this, "感谢评论,编辑正在审核中");
+                            }
+                            else {
+                                ToastUtils.showShortToast(PublishCommentActivity.this, "感谢回复,编辑正在审核中");
+                            }
                             Comment newComment = new Comment();
                             newComment.setName("匿名人士");
                             newComment.setComment(getCommentContent());

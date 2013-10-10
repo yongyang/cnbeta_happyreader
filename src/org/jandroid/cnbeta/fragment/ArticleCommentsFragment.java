@@ -129,6 +129,8 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
 
                 if (comment.getTid() == 0) { //新发表的评论，只是暂存，无法支持和反对
                     supportAgainstLinearLayout.setVisibility(View.INVISIBLE);
+                    supportLinearLayout.setEnabled(true);
+                    againstLinearLayout.setEnabled(true);
                     toParentTextView.setVisibility(View.GONE);
                 }
                 else {

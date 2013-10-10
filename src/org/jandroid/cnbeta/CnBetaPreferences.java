@@ -45,4 +45,8 @@ public class CnBetaPreferences {
         String size = prefs.getString(application.getString(R.string.pref_key_fontSizeIncrement), "0");
         return Integer.parseInt(size);
     }
+
+    public String getSignature() {
+        return prefs.getString(application.getString(R.string.pref_key_signature), "");
+    }
 }

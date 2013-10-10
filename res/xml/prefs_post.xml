@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="签名档">
+        <EditTextPreference
+                android:key="@string/pref_key_signature"
+                android:title="设置签名档"
+                android:summary='默认为: @string/default_signature'
+                android:defaultValue="@string/default_signature"
+                />
+    </PreferenceCategory>
+</PreferenceScreen>

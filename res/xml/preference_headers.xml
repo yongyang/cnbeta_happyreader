@@ -10,6 +10,13 @@
 
     <header
             android:fragment=
+                    "org.jandroid.cnbeta.CnBetaPreferenceActivity$PrefsPostFragment"
+            android:title="评论设置 "
+            android:summary="设置评论签名档等">
+    </header>
+
+    <header
+            android:fragment=
                     "org.jandroid.cnbeta.CnBetaPreferenceActivity$PrefsCacheFragment"
             android:title="缓存设置"
             android:summary="设置与缓存相关的选项及手动清理缓存"/>
