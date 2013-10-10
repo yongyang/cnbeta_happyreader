@@ -1,6 +1,7 @@
 package org.jandroid.cnbeta.async;
 
 import android.app.Application;
+import org.jandroid.cnbeta.client.RequestContext;
 import org.jandroid.cnbeta.exception.InfoException;
 import org.jandroid.cnbeta.exception.NoCachedDataException;
 import org.jandroid.cnbeta.loader.AbstractLoader;
@@ -16,11 +17,11 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  * @create 7/30/13 4:15 PM
  */
-public abstract class AbstractLoaderAsyncTask<R> extends BaseAsyncTask<R> {
+public abstract class AbstractLoaderAsyncTask<R> extends BaseAsyncTask<R> implements RequestContext {
+
+    protected Logger logger = Logger.getLogger(this.getClass());
 
     private final ReentrantLock locker = new ReentrantLock();
-
-    protected Logger logger = Logger.getLogger(getClass());
 
     protected boolean isRemoteLoadOnly() {
         return false;
@@ -55,7 +56,7 @@ public abstract class AbstractLoaderAsyncTask<R> extends BaseAsyncTask<R> {
                 return (R) loader.diskLoad(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
             }
             else {
-                return (R) loader.httpLoad(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
+                return (R) loader.httpLoad(getAsyncContext().getCnBetaApplicationContext().getBaseDir(), this);
             }
         }
         else {
@@ -115,4 +116,7 @@ public abstract class AbstractLoaderAsyncTask<R> extends BaseAsyncTask<R> {
         }
     }
 
+    public boolean needAbort() {
+        return isCancelled();
+    }
 }

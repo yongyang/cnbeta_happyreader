@@ -17,6 +17,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
+import org.jandroid.cnbeta.client.RequestContext;
 
 import java.net.URLEncoder;
 import java.text.MessageFormat;
@@ -33,7 +34,11 @@ public class CnBetaTest extends TestCase {
     public void testHttpGet() throws Exception {
         long millis = System.currentTimeMillis();
         String url = "http://www.cnbeta.com/more.htm?jsoncallback=jQuery18008753548712314047_" + millis + "&type=all&page=1&_=" + (millis + 1);
-        String response = CnBetaHttpClient.getInstance().httpGet(url);
+        String response = CnBetaHttpClient.getInstance().httpGet(url, new RequestContext() {
+            public boolean needAbort() {
+                return false;
+            }
+        });
 //        Assert.fail(response);
         Assert.assertTrue(response.length() > 100);
     }
@@ -47,7 +52,11 @@ public class CnBetaTest extends TestCase {
     }
 
     public void testHttpGetImage() throws Exception {
-        byte[] image = CnBetaHttpClient.getInstance().httpGetBytes("http://static.cnbetacdn.com/newsimg/2013/0729/01375107904.jpg_180x132.jpg");
+        byte[] image = CnBetaHttpClient.getInstance().httpGetBytes("http://static.cnbetacdn.com/newsimg/2013/0729/01375107904.jpg_180x132.jpg", new RequestContext() {
+            public boolean needAbort() {
+                return false;
+            }
+        });
 //        Assert.fail(image.toString());
         Assert.assertTrue(image!=null && image.length > 0);
     }
@@ -124,7 +133,11 @@ public class CnBetaTest extends TestCase {
         headers.put("Referer", "http://www.cnbeta.com/articles/" + 250243 + ".htm");
 
         String url = MessageFormat.format(URL_TEMPLATE, "" + System.currentTimeMillis(), generateOP());
-        String response = CnBetaHttpClient.getInstance().httpGet(url, headers);
+        String response = CnBetaHttpClient.getInstance().httpGet(url, headers, new RequestContext() {
+            public boolean needAbort() {
+                return false;
+            }
+        });
 
         //if failed
         if(response.indexOf("error") > 0){

@@ -1,13 +1,13 @@
 package org.jandroid.common.async;
 
 import android.os.AsyncTask;
-import org.jandroid.cnbeta.async.AsyncContext;
+import org.jandroid.cnbeta.client.RequestContext;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>
  * @create 7/30/13 4:15 PM
  */
-public abstract class BaseAsyncTask<R>  extends AsyncTask<Object, Integer, AsyncResult<R>> implements AsyncContext {
+public abstract class BaseAsyncTask<R>  extends AsyncTask<Object, Integer, AsyncResult<R>> {
 
     protected abstract R run(Object... params) throws Exception;
 
@@ -43,4 +43,5 @@ public abstract class BaseAsyncTask<R>  extends AsyncTask<Object, Integer, Async
     protected  abstract void onSuccess(AsyncResult<R> rAsyncResult);
 
     protected  abstract void onFailure(AsyncResult<R> rAsyncResult);
+
 }

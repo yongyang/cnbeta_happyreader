@@ -1,6 +1,7 @@
 package org.jandroid.cnbeta.loader;
 
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
+import org.jandroid.cnbeta.client.RequestContext;
 import org.jandroid.cnbeta.exception.NoDataInfoException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -67,13 +68,13 @@ public abstract class AbstractListLoader<T> extends AbstractLoader<List<T>> {
     }
 
     @Override
-    public List<T> httpLoad(File baseDir) throws Exception {
+    public List<T> httpLoad(File baseDir, RequestContext requestContext) throws Exception {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("X-Requested-With", "XMLHttpRequest");
 
         String url = getURL();
         //user json-simple to parse returned json string
-        String response = CnBetaHttpClient.getInstance().httpGet(url, headers);
+        String response = CnBetaHttpClient.getInstance().httpGet(url, headers, requestContext);
 
         JSONArray articleListJSONArray = getJSONArray(response);
         List<T> articles = parseJSONArray(articleListJSONArray);

@@ -3,6 +3,7 @@ package org.jandroid.cnbeta.loader;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
+import org.jandroid.cnbeta.client.RequestContext;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -33,7 +34,7 @@ public class CaptchaLoader extends AbstractLoader<Bitmap> {
     }
 
     @Override
-    public Bitmap httpLoad(File baseDir) throws Exception {
+    public Bitmap httpLoad(File baseDir, RequestContext requestContext) throws Exception {
         Map<String, String> headers = new HashMap<String, String>();
         //should add this "X-Requested-With" header, so remote return result
         //httpget.addHeader("X-Requested-With", "XMLHttpRequest");
@@ -43,7 +44,7 @@ public class CaptchaLoader extends AbstractLoader<Bitmap> {
         headers.put("Referer", "http://www.cnbeta.com/articles/" + getSid() + ".htm");
 
         String url = MessageFormat.format(URL_TEMPLATE, "" + System.currentTimeMillis());
-        String responseJSONString = CnBetaHttpClient.getInstance().httpGet(url, headers);
+        String responseJSONString = CnBetaHttpClient.getInstance().httpGet(url, headers, requestContext);
 
         JSONObject responseJSONObject = (JSONObject)JSONValue.parse(responseJSONString);
         
@@ -54,7 +55,7 @@ public class CaptchaLoader extends AbstractLoader<Bitmap> {
         //this header is optional, better to add
         //httpget.addHeader("Referer", "http://www.cnbeta.com/articles/250243.htm");
         headers2.put("Referer", "http://www.cnbeta.com/articles/" + getSid() + ".htm");
-        byte[] imageBytes = CnBetaHttpClient.getInstance().httpGetBytes(captchaImageURL, headers2);       
+        byte[] imageBytes = CnBetaHttpClient.getInstance().httpGetBytes(captchaImageURL, headers2, requestContext);
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
     }
 

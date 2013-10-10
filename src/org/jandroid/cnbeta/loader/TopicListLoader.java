@@ -1,5 +1,6 @@
 package org.jandroid.cnbeta.loader;
 
+import org.jandroid.cnbeta.client.RequestContext;
 import org.jandroid.cnbeta.entity.Topic;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -31,13 +32,13 @@ public class TopicListLoader extends AbstractListLoader<Topic> {
     }
 
     @Override
-    public List<Topic> httpLoad(File baseDir) throws Exception {
+    public List<Topic> httpLoad(File baseDir, RequestContext requestContext) throws Exception {
 /*
         if(getPage() > MAX_PAGE){
             return Collections.EMPTY_LIST;
         }
 */
-        return super.httpLoad(baseDir);
+        return super.httpLoad(baseDir, requestContext);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.jandroid.cnbeta.loader;
 
+import org.jandroid.cnbeta.client.RequestContext;
 import org.jandroid.cnbeta.entity.HistoryArticle;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -19,7 +20,7 @@ public class HistoryArticleListLoader extends AbstractLoader<List<HistoryArticle
     private final static Object LOCK = new Object();
 
     @Override
-    public List<HistoryArticle> httpLoad(File baseDir) throws Exception {
+    public List<HistoryArticle> httpLoad(File baseDir, RequestContext requestContext) throws Exception {
         throw new UnsupportedOperationException("load history article list from http.");
     }
 

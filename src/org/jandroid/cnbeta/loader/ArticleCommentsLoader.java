@@ -2,6 +2,7 @@ package org.jandroid.cnbeta.loader;
 
 import android.util.Base64;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
+import org.jandroid.cnbeta.client.RequestContext;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.exception.LoaderException;
@@ -54,7 +55,7 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
     }
 
     @Override
-    public List<Comment> httpLoad(File baseDir) throws Exception {
+    public List<Comment> httpLoad(File baseDir, RequestContext requestContext) throws Exception {
         Map<String, String> headers = new HashMap<String, String>();
         //should add this "X-Requested-With" header, so remote return result
         //httpget.addHeader("X-Requested-With", "XMLHttpRequest");
@@ -69,7 +70,7 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
         Map<String, String> datas = new HashMap<String, String>();
         datas.put("op", generateOP());
 
-        String response = CnBetaHttpClient.getInstance().httpPost(URL_TEMPLATE, headers, datas);
+        String response = CnBetaHttpClient.getInstance().httpPost(URL_TEMPLATE, headers, datas, requestContext);
         
         //if failed
         if(response.indexOf("error") > 0){

@@ -1,6 +1,7 @@
 package org.jandroid.cnbeta.loader;
 
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
+import org.jandroid.cnbeta.client.RequestContext;
 import org.jandroid.common.UnicodeUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -80,7 +81,7 @@ public class PublishCommentPoster extends AbstractLoader<JSONObject> {
     }
 
     @Override
-    public JSONObject httpLoad(File baseDir) throws Exception {
+    public JSONObject httpLoad(File baseDir, RequestContext requestContext) throws Exception {
         Map<String, String> headers = new HashMap<String, String>();
         //should add this "X-Requested-With" header, so remote return result
         //httpget.addHeader("X-Requested-With", "XMLHttpRequest");
@@ -102,7 +103,7 @@ public class PublishCommentPoster extends AbstractLoader<JSONObject> {
         //需要这个 token 来执行 support/against
         datas.put("YII_CSRF_TOKEN", CnBetaHttpClient.getInstance().getCookie("YII_CSRF_TOKEN"));
         
-        String response = CnBetaHttpClient.getInstance().httpPost(URL_TEMPLATE, headers, datas);
+        String response = CnBetaHttpClient.getInstance().httpPost(URL_TEMPLATE, headers, datas, requestContext);
         response = UnicodeUtils.unicode2Chinese(response);
         return (JSONObject) JSONValue.parse(response);
     }

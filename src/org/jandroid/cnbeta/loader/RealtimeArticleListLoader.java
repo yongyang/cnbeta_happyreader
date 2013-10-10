@@ -1,6 +1,7 @@
 package org.jandroid.cnbeta.loader;
 
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
+import org.jandroid.cnbeta.client.RequestContext;
 import org.jandroid.cnbeta.entity.RealtimeArticle;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -20,10 +21,10 @@ public class RealtimeArticleListLoader extends AbstractLoader<List<RealtimeArtic
 
 
     @Override
-    public List<RealtimeArticle> httpLoad(File baseDir) throws Exception {
+    public List<RealtimeArticle> httpLoad(File baseDir, RequestContext requestContext) throws Exception {
         String url = MessageFormat.format(URL_FORMAT, ""+System.currentTimeMillis(), ""+(System.currentTimeMillis() + 1));
         //user json-simple to parse returned json string
-        String response = CnBetaHttpClient.getInstance().httpGet(url);
+        String response = CnBetaHttpClient.getInstance().httpGet(url, requestContext);
         String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
         JSONObject responseJSON = (JSONObject)JSONValue.parse(responseJSONString);
         JSONArray articleListJSONArray = (JSONArray)responseJSON.get("result");

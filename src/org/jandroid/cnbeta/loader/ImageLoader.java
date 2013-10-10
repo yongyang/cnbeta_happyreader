@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import org.apache.commons.io.FileUtils;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
+import org.jandroid.cnbeta.client.RequestContext;
 import org.jandroid.cnbeta.exception.NoCachedImageException;
 
 import java.io.File;
@@ -27,10 +28,10 @@ public class ImageLoader extends AbstractLoader<Bitmap> {
     }
 
     @Override
-    public Bitmap httpLoad(File baseDir) throws Exception {
+    public Bitmap httpLoad(File baseDir, RequestContext requestContext) throws Exception {
         // some url has space char
         String url = imageUrl.replace(" ", "%20");
-        byte[] bytes = CnBetaHttpClient.getInstance().httpGetBytes(url);
+        byte[] bytes = CnBetaHttpClient.getInstance().httpGetBytes(url, requestContext);
         writeDiskByteArray(baseDir, bytes);
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }

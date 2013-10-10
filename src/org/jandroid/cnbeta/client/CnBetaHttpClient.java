@@ -6,9 +6,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpMessage;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -20,11 +18,9 @@ import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.cookie.Cookie;
-import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
@@ -32,17 +28,15 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-import org.jandroid.cnbeta.async.AsyncContext;
 import org.jandroid.common.Logger;
 import org.jandroid.common.UnicodeUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
@@ -119,54 +113,54 @@ public class CnBetaHttpClient {
     }
 
 
-    public String httpGet(String url) throws Exception {
-        return httpGet(url, DEFAULT_ENCODING);
+    public String httpGet(String url, RequestContext requestContext) throws Exception {
+        return httpGet(url, DEFAULT_ENCODING, requestContext);
     }
 
 
-    public String httpGet(String url, Map<String, String> headers) throws Exception {
-        return httpGet(url, DEFAULT_ENCODING, headers);
+    public String httpGet(String url, Map<String, String> headers, RequestContext requestContext) throws Exception {
+        return httpGet(url, DEFAULT_ENCODING, headers, requestContext);
     }
 
     @SuppressWarnings("unchecked")
-    public String httpGet(String url, String encoding) throws Exception {
-        return httpGet(url, encoding, Collections.EMPTY_MAP);
+    public String httpGet(String url, String encoding, RequestContext requestContext) throws Exception {
+        return httpGet(url, encoding, Collections.EMPTY_MAP, requestContext);
     }
 
-    public String httpGet(String url, String encoding, Map<String, String> headers) throws Exception {
+    public String httpGet(String url, String encoding, Map<String, String> headers, RequestContext requestContext) throws Exception {
         long start = System.currentTimeMillis();
         logger.d("GET: " + url);
         HttpGet httpGet = newHttpGet(url, encoding, headers);
         HttpResponse response = httpClient.execute(httpGet);
 
-        String result = handleRequest(httpGet, response);
+        String result = handleRequest(httpGet, response, requestContext);
         logger.d("GET: " + url + ", consume " + ((System.currentTimeMillis() - start)) + "ms");
         return result;
     }
 
 
     @SuppressWarnings("unchecked")
-    public String httpPost(String url, Map<String, String> datas) throws Exception {
-        return httpPost(url, DEFAULT_ENCODING, Collections.EMPTY_MAP, datas);
+    public String httpPost(String url, Map<String, String> datas, RequestContext requestContext) throws Exception {
+        return httpPost(url, DEFAULT_ENCODING, Collections.EMPTY_MAP, datas, requestContext);
     }
     
-    public String httpPost(String url, Map<String, String> headers, Map<String, String> datas) throws Exception {
-        return httpPost(url, DEFAULT_ENCODING, headers, datas);
+    public String httpPost(String url, Map<String, String> headers, Map<String, String> datas, RequestContext requestContext) throws Exception {
+        return httpPost(url, DEFAULT_ENCODING, headers, datas, requestContext);
     }
 
         
-    public String httpPost(String url, String encoding, Map<String, String> headers, Map<String, String> datas) throws Exception {
+    public String httpPost(String url, String encoding, Map<String, String> headers, Map<String, String> datas, RequestContext requestContext) throws Exception {
         long start = System.currentTimeMillis();
         logger.d("POST: " + url);
         HttpPost httpPost = newHttpPost(url, encoding, headers, datas);
 
         HttpResponse response = httpClient.execute(httpPost);
-        String result =  handleRequest(httpPost, response);
+        String result =  handleRequest(httpPost, response, requestContext);
         logger.d("POST: " + url + ", consume " + ((System.currentTimeMillis() - start)) + "ms");
         return result;
     }
     
-    private String handleRequest(HttpRequestBase request, HttpResponse response, AsyncContext asyncContext) throws Exception {
+    private String handleRequest(HttpRequestBase request, HttpResponse response, RequestContext requestContext) throws Exception {
         String encoding = (String)request.getParams().getParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET);
         if(encoding == null) {
             encoding = DEFAULT_ENCODING;
@@ -179,58 +173,27 @@ public class CnBetaHttpClient {
             }
             HttpEntity httpEntity = response.getEntity();
             try {
+                InputStream in = httpEntity.getContent();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int readSize  = 0;
+                while((readSize = IOUtils.read(in, buffer)) > 0 ) {
+                    //abort request when async task cancelled
+                    if(requestContext.needAbort()) {
+                        request.abort();
+                        logger.d("Request aborted, " + request.getURI());
+                        return null;
+                    }
+                    byteArrayOutputStream.write(buffer, 0, readSize);
+                }
+
                 Header contentEncodingHeader = response.getFirstHeader("Content-Encoding");
                 if (contentEncodingHeader != null && contentEncodingHeader.getValue().contains("zip")) {
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    byte[] buffer = new byte[1024];
-                    int readSize  = 0;
-                    while((readSize = IOUtils.read(httpEntity.getContent(), buffer)) > 0 ) {
-                        //TODO: abort request when async task cancelled
-                        if(asyncContext.isCancelled()) {
-                            request.abort();
-                            return null;
-                        }
-                        byteArrayOutputStream.write(buffer, 0, readSize);
-                    }
                     GZIPInputStream gzipInputStream = new GZIPInputStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
                     result = new String(IOUtils.toByteArray(gzipInputStream), encoding);
                 }
                 else {
-                    result = EntityUtils.toString(httpEntity, encoding);
-                }
-                // convert unicode chars to chinese
-                return UnicodeUtils.unicode2Chinese(result);
-            }
-            finally {
-                httpEntity.consumeContent();
-            }
-        }
-        catch (IOException e) {
-            request.abort();
-            throw e;
-        }
-    }
-
-    private String handleRequest(HttpRequestBase request, HttpResponse response) throws Exception {
-        String encoding = (String)request.getParams().getParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET);
-        if(encoding == null) {
-            encoding = DEFAULT_ENCODING;
-        }
-
-        String result;
-        try {
-            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-                throw new Exception("Server Error: " + response.getStatusLine().toString());
-            }
-            HttpEntity httpEntity = response.getEntity();
-            try {
-                Header contentEncodingHeader = response.getFirstHeader("Content-Encoding");
-                if (contentEncodingHeader != null && contentEncodingHeader.getValue().contains("zip")) {
-                    GZIPInputStream gzipInputStream = new GZIPInputStream(new ByteArrayInputStream(EntityUtils.toByteArray(httpEntity)));
-                    result = new String(IOUtils.toByteArray(gzipInputStream), encoding);
-                }
-                else {
-                    result = EntityUtils.toString(httpEntity, encoding);
+                    result = new String(byteArrayOutputStream.toByteArray(), encoding);
                 }
                 // convert unicode chars to chinese
                 return UnicodeUtils.unicode2Chinese(result);
@@ -287,32 +250,45 @@ public class CnBetaHttpClient {
 
 
     @SuppressWarnings("unchecked")
-    public byte[] httpGetBytes(String url) throws Exception {
-        return httpGetBytes(url, Collections.EMPTY_MAP);
+    public byte[] httpGetBytes(String url, RequestContext requestContext) throws Exception {
+        return httpGetBytes(url, Collections.EMPTY_MAP, requestContext);
     }
 
-    public byte[] httpGetBytes(String url, Map<String, String> headers) throws Exception {
+    public byte[] httpGetBytes(String url, Map<String, String> headers, RequestContext requestContext) throws Exception {
         long start = System.currentTimeMillis();
         logger.d("GET: " + url);
         final HttpGet httpGet = newHttpGet(url, DEFAULT_ENCODING, headers);
         HttpResponse response = httpClient.execute(httpGet);
-        byte[] result = handleBytesRequest(httpGet, response);
+        byte[] result = handleBytesRequest(httpGet, response, requestContext);
         logger.d("GET: " + url + ", consume " + ((System.currentTimeMillis() - start)) + "ms");
         return result;
     }
 
-    private byte[] handleBytesRequest(HttpRequestBase request, HttpResponse response) throws Exception {
+    private byte[] handleBytesRequest(HttpRequestBase request, HttpResponse response, RequestContext requestContext) throws Exception {
         try {
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
                 throw new Exception("Server Error: " + response.getStatusLine().toString());
             }
-            final HttpEntity entity = response.getEntity();
+            final HttpEntity httpEntity = response.getEntity();
             try {
                 // Bug on slow connections, fixed in future release.
-                return EntityUtils.toByteArray(entity);
+                InputStream in = httpEntity.getContent();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int readSize  = 0;
+                while((readSize = IOUtils.read(in, buffer)) > 0 ) {
+                    //abort request when async task cancelled
+                    if(requestContext.needAbort()) {
+                        request.abort();
+                        logger.d("Request aborted, " + request.getURI());
+                        return null;
+                    }
+                    byteArrayOutputStream.write(buffer, 0, readSize);
+                }
+                return byteArrayOutputStream.toByteArray();
             }
             finally {
-                entity.consumeContent();
+                httpEntity.consumeContent();
             }
         }
         catch (Exception e) {

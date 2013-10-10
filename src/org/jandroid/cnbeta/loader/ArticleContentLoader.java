@@ -2,6 +2,7 @@ package org.jandroid.cnbeta.loader;
 
 import android.util.Base64;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
+import org.jandroid.cnbeta.client.RequestContext;
 import org.jandroid.cnbeta.entity.Content;
 import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
@@ -31,9 +32,9 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
     }
 
     @Override
-    public Content httpLoad(File baseDir) throws Exception {
+    public Content httpLoad(File baseDir, RequestContext requestContext) throws Exception {
         String url = getURL();
-        String responseHTML = CnBetaHttpClient.getInstance().httpGet(url);
+        String responseHTML = CnBetaHttpClient.getInstance().httpGet(url, requestContext);
 
         Document document = Jsoup.parse(responseHTML, "utf-8");
         Element bodyElement = document.select("div.body").first();

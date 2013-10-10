@@ -1,6 +1,7 @@
 package org.jandroid.cnbeta.loader;
 
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
+import org.jandroid.cnbeta.client.RequestContext;
 import org.jandroid.cnbeta.entity.MRankArticle;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -63,9 +64,9 @@ public class MRankListLoader extends AbstractLoader<List<MRankArticle>>{
     }
 
     @Override
-    public List<MRankArticle> httpLoad(File baseDir) throws Exception {
+    public List<MRankArticle> httpLoad(File baseDir, RequestContext requestContext) throws Exception {
         String url = getURL();
-        String responseHTML = CnBetaHttpClient.getInstance().httpGet(url);
+        String responseHTML = CnBetaHttpClient.getInstance().httpGet(url, requestContext);
         List<MRankArticle>  mRankArticles = parsePage(responseHTML);
 
         JSONArray mRankJSONArray = new JSONArray();

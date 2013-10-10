@@ -1,6 +1,7 @@
 package org.jandroid.cnbeta.loader;
 
 import org.apache.commons.io.FileUtils;
+import org.jandroid.cnbeta.client.RequestContext;
 import org.jandroid.cnbeta.exception.NoCachedDataException;
 import org.jandroid.cnbeta.exception.NoDataInfoException;
 
@@ -17,7 +18,7 @@ public abstract class AbstractLoader<T> {
      * @return
      * @throws Exception
      */
-    public abstract T httpLoad(File baseDir) throws Exception;
+    public abstract T httpLoad(File baseDir, RequestContext requestContext) throws Exception;
 
     /**
      * 

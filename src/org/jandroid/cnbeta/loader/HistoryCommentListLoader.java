@@ -1,5 +1,6 @@
 package org.jandroid.cnbeta.loader;
 
+import org.jandroid.cnbeta.client.RequestContext;
 import org.jandroid.cnbeta.entity.HistoryArticle;
 import org.jandroid.cnbeta.entity.HistoryComment;
 import org.json.simple.JSONArray;
@@ -20,7 +21,7 @@ public class HistoryCommentListLoader extends AbstractLoader<List<HistoryComment
     private final static Object LOCK = new Object();
 
     @Override
-    public List<HistoryComment> httpLoad(File baseDir) throws Exception {
+    public List<HistoryComment> httpLoad(File baseDir, RequestContext requestContext) throws Exception {
         throw new UnsupportedOperationException("load history comment list from http.");
     }
 
