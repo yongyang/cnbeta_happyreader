@@ -157,7 +157,7 @@ public class PublishCommentActivity extends BaseActivity {
             protected String getCommentContent() {
                 //签名档
                 String signature = ((CnBetaApplicationContext)getApplicationContext()).getCnBetaPreferences().getSignature();
-                return signature.isEmpty() ? commentTextView.getText().toString() : commentTextView.getText().toString() + "   " + signature;
+                return signature.isEmpty() ? commentTextView.getText().toString() : commentTextView.getText().toString() + signature;
             }
 
             @Override
@@ -195,11 +195,11 @@ public class PublishCommentActivity extends BaseActivity {
                                 ToastUtils.showShortToast(PublishCommentActivity.this, "感谢回复,编辑正在审核中");
                             }
                             Comment newComment = new Comment();
+                            newComment.setHostName("cnBeta乐读");
                             newComment.setName("匿名人士");
                             newComment.setComment(getCommentContent());
                             newComment.setSid(getSid());
                             newComment.setDate(DateFormatUtils.getDefault().format(new Date()));
-                            newComment.setHostName("");
                             //设置结果给 ContentActivity, 新comment 将添加到 comments list 中，并刷新 List
                             Intent intent = new Intent();
                             intent.putExtra("comment", newComment);

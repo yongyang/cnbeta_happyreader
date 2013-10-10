@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
@@ -109,6 +110,14 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.prefs_post);
+            final EditTextPreference sigPreference = (EditTextPreference)findPreference(getString(R.string.pref_key_signature));
+            sigPreference.setSummary("当前签名档: " + ((CnBetaApplication)getActivity().getApplicationContext()).getCnBetaPreferences().getSignature());
+            sigPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    sigPreference.setSummary("当前签名档: " + newValue);
+                    return true;
+                }
+            });
         }
     }
 

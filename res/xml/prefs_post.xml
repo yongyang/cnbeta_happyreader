@@ -6,8 +6,9 @@
         <EditTextPreference
                 android:key="@string/pref_key_signature"
                 android:title="设置签名档"
-                android:summary='默认为:---发自"cnBeta乐读"安卓客户端'
-                android:defaultValue='---发自"cnBeta乐读"安卓客户端'
+                android:summary='当前签名档: '
+                android:defaultValue=""
+                android:dialogMessage="注意：签名档中含有非文明用语、限制词汇可能导致您的评论无法通过网站评审而被拒绝发表"
                 />
     </PreferenceCategory>
 </PreferenceScreen>
