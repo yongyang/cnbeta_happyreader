@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.jandroid.cnbeta"
-          android:versionCode="6"
+          android:versionCode="7"
           android:versionName="@string/app_version_name">
 
     <uses-sdk
@@ -24,6 +24,7 @@
         <activity
                 android:name=".SplashActivity"
                 android:launchMode="singleTask"
+                android:screenOrientation="portrait"
                 android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -33,58 +34,71 @@
         <activity
                 android:name=".MainActivity"
                 android:label="@string/app_name"
+                android:configChanges="orientation|screenSize|layoutDirection"
                 android:launchMode="singleTask">
         </activity>
         <activity
                 android:name=".TypesActivity"
                 android:label="@string/app_name"
+                android:configChanges="orientation|screenSize|layoutDirection"
                 android:launchMode="singleTask"/>
         <activity
                 android:name=".MRankActivity"
                 android:label="@string/ranks"
+                android:configChanges="orientation|screenSize|layoutDirection"
                 android:launchMode="singleTask"
                 />
         <activity
                 android:name=".TopicActivity"
                 android:label="@string/label_topic"
+                android:configChanges="orientation|screenSize|layoutDirection"
                 android:launchMode="singleTask"
                 />
         <activity
                 android:name=".ContentActivity"
                 android:label="@string/label_article_content"
+                android:configChanges="orientation|screenSize|layoutDirection"
                 android:hardwareAccelerated="true"/>
         <activity
                 android:name=".HistoryActivity"
                 android:label="@string/label_history"
+                android:configChanges="orientation|screenSize|layoutDirection"
                 android:launchMode="singleTask"/>
         <activity
                 android:name=".ImageViewerActivity"
                 android:launchMode="singleTask"
                 android:theme="@style/Dialog.NoTitle"
+                android:configChanges="orientation|screenSize|layoutDirection"
                 android:hardwareAccelerated="true"
                 />
         <!--android:launchMode="singleTask" startActivityForResult不能是 singleTask singleInstance-->
         <activity
                 android:name=".PublishCommentActivity"
                 android:theme="@style/Dialog.NoTitle"
+                android:configChanges="orientation|screenSize|layoutDirection"
                 />
         <!--android:launchMode="singleTask" startActivityForResult不能是 singleTask singleInstance-->
         <activity
                 android:name=".ReplyCommentActivity"
                 android:theme="@style/Dialog.NoTitle"
+                android:configChanges="orientation|screenSize|layoutDirection"
                 />
 
         <activity
                 android:name=".CnBetaPreferenceActivity"
+                android:configChanges="orientation|screenSize|layoutDirection"
                 android:label="参数设置"/>
 
         <activity
                 android:name=".AboutActivity"
+                android:configChanges="orientation|screenSize|layoutDirection"
                 android:label="关于"/>
 
         <service android:name=".service.CheckVersionService"
+                 android:configChanges="orientation|screenSize|layoutDirection"
                  android:label="版本检测" />
         <service android:name=".service.VersionUpdateService"
+                 android:configChanges="orientation|screenSize|layoutDirection"
                  android:label="版本升级" />
     </application>
 

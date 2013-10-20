@@ -142,5 +142,7 @@
         <!--<color name="transparent_background">#80000000</color>-->
     <color name="cnBeta_comment_dialog_bg_yellow">#FFFFEF</color>
     <color name="cnBeta_hotcomment_bg_yellow">#FFFFCE</color>
+
+    <color name="cnBeta_tab_text_default">#444444</color>
 </resources>
 

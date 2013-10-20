@@ -2,7 +2,6 @@ package org.jandroid.cnbeta;
 
 import android.app.ActionBar;
 import android.app.Fragment;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
@@ -71,7 +70,7 @@ public class MainActivity extends BaseActivity {
 
     };
 
-    private ArticleListFragment newArticleListFragment(AbstractListLoader.Type type){
+    private ArticleListFragment newArticleListFragment(AbstractListLoader.Type type) {
         ArticleListFragment fragment = new ArticleListFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("type", type);
@@ -135,7 +134,7 @@ public class MainActivity extends BaseActivity {
                 fragments[getActionBar().getSelectedNavigationIndex()].reloadData();
                 break;
         }
-        return ((CnBetaApplication)getApplicationContext()).onOptionsItemSelected(this, mi);
+        return ((CnBetaApplication) getApplicationContext()).onOptionsItemSelected(this, mi);
 
     }
 
@@ -147,6 +146,7 @@ public class MainActivity extends BaseActivity {
 
 
     private long exitTime = 0;
+
     @Override
     public void onBackPressed() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
@@ -154,14 +154,13 @@ public class MainActivity extends BaseActivity {
             exitTime = System.currentTimeMillis();
         }
         else {
-            new Thread(){
+            new Thread() {
                 @Override
                 public void run() {
-                    ((CnBetaApplication)getApplicationContext()).onExit();
+                    ((CnBetaApplication) getApplicationContext()).onExit();
                 }
             }.start();
             super.onBackPressed();
         }
     }
-
 }

@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -78,6 +79,7 @@ public class ContentActivity extends BaseActivity {
         contentFragment = new ArticleContentFragment();
         actionBar.addTab(actionBar.newTab().setText(R.string.tab_pinglun).setTabListener(pagerAdapter));
         commentsFragment = new ArticleCommentsFragment();
+
         pagerAdapter.notifyDataSetChanged();
     }
 
@@ -133,7 +135,7 @@ public class ContentActivity extends BaseActivity {
         return true;
     }
 
-    public void reload(){
+    public void reload() {
         contentFragment.reloadContent();
     }
 
