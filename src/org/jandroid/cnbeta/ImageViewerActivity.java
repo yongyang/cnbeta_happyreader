@@ -29,7 +29,7 @@ public class ImageViewerActivity extends BaseActivity {
         byte[] _imageData = {};
         String imageSrc = getIntent().getExtras().getString("src");
         try {
-            _imageData = new ImageBytesLoader(imageSrc).diskLoad(((CnBetaApplication) getApplicationContext()).getBaseDir());
+            _imageData = new ImageBytesLoader(imageSrc).diskLoad(((CnBetaApplication) getApplicationContext()).getLocalCacheDir());
         }
         catch (Exception e) {
             logger.e(e.toString());

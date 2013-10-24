@@ -14,7 +14,11 @@ public interface CnBetaApplicationContext {
 
     boolean isSdCardMounted();
 
-    File getBaseDir();
+    File getFontsDir();
+
+    File getLocalCacheDir();
+
+    File getHistoryDir();
 
     boolean onOptionsItemSelected(Activity theActivity, MenuItem item);
 

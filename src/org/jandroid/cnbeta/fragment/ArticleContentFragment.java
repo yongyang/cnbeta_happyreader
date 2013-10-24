@@ -1,6 +1,7 @@
 package org.jandroid.cnbeta.fragment;
 
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.TypedValue;
@@ -29,8 +30,10 @@ import org.jandroid.cnbeta.async.ArticleContentAsyncTask;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.ImageBytesAsyncTask;
 import org.jandroid.cnbeta.async.RateArticleAsyncTask;
+import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.common.BaseFragment;
+import org.jandroid.common.FontUtils;
 import org.jandroid.common.JavaScriptObject;
 import org.jandroid.common.PixelUtils;
 import org.jandroid.common.ToastUtils;
@@ -38,6 +41,7 @@ import org.jandroid.common.async.AsyncResult;
 import org.json.simple.JSONObject;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -157,6 +161,8 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
 //        contentWebView.getSettings().setAllowFileAccessFromFileURLs(true);
 //        contentWebView.getSettings().setAllowUniversalAccessFromFileURLs(true);
         //支持视频，需安装 Flash Player
+        contentWebView.getSettings().setFixedFontFamily("sans");
+        contentWebView.getSettings().setFantasyFontFamily("sans");
         contentWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
         contentWebView.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY); // no scroll
         contentWebView.getSettings().setBuiltInZoomControls(true);
@@ -336,6 +342,19 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         });
     }
 
+    //TODO: 加载之后，根据用户自定义的字体 updateFont
+    private void updateFontFamily(final String fontFamily) {
+        // 在android代码中调用javaScript方法
+        handler.post(new Runnable() {
+            public void run() {
+                contentWebView.loadUrl("javascript:(function(){" +
+                        "var body = document.getElementByTag('body');"
+                        + "body.style.font-family='" + fontFamily + "';" +
+                        "})()");
+            }
+        });
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -355,6 +374,9 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         Utils.updateTextSize(getActivity(), viewNumTextView, R.dimen.listitem_status_text_size);
         Utils.updateTextSize(getActivity(), commentNumTextView, R.dimen.listitem_status_text_size);
         Utils.updateTextSize(getActivity(), whereTextView, R.dimen.listitem_status_text_size);
+
+        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/katong.ttf");
+        FontUtils.changeFonts((ViewGroup)getView(), typeface);
 
         if (contentWebView != null) {
             Utils.updateTextSize(getActivity(), contentWebView, R.dimen.webview_default_text_size);
@@ -455,11 +477,27 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
                 titleTextView.setSelected(true);
                 timeTextView.setText(content.getTime());
                 whereTextView.setText(content.getWhere());
-                contentWebView.loadDataWithBaseURL("", content.getContent(), "text/html", "UTF-8", "");
+                contentWebView.loadDataWithBaseURL("", getStyledHTMLContent(content), "text/html", "UTF-8", "");
             }
         });
     }
 
+    private String getStyledHTMLContent(Content content) {
+        StringBuilder sb = new StringBuilder();
+        //TODO: 根据可用 font 设置 @fontface
+        sb.append("<html><head><style type=\"text/css\">");
+        sb.append("@font-face{ font-family: customFont; src: url(\"file:///android_asset/fonts/wawa.ttf\")" + "}");
+        sb.append("</style></head>");
+        sb.append("<body style='font-family: customFont;'>");
+        sb.append(content.getContent());
+        sb.append("</body></html>");
+        return sb.toString();
+    }
+
+
+    public void newPostedComment(Comment comment) {
+        content.setJoinNum(content.getJoinNum()+1);
+    }
 
     public void onFailure(AsyncResult<Content> contentAsyncResult) {
         progressBarLayout.setVisibility(View.GONE);

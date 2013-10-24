@@ -1,11 +1,14 @@
 package org.jandroid.cnbeta;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import android.app.ActionBar;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
@@ -14,9 +17,8 @@ import android.preference.PreferenceFragment;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
+import org.jandroid.common.FileChooserDialog;
 import org.jandroid.common.ToastUtils;
 
 public class CnBetaPreferenceActivity extends PreferenceActivity {
@@ -47,6 +49,12 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
             // 将该按钮添加到该界面上
             setListFooter(button);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //TODO: install fonts
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public boolean onOptionsItemSelected(MenuItem mi) {
@@ -102,8 +110,33 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.prefs_ui);
+
+            Preference button = findPreference("install_font");
+            button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference preference) {
+                   showFontChooserDialog();
+                    return true;
+                }
+            });
+        }
+        public void showFontChooserDialog()     {
+            FileChooserDialog fileChooserDialog = new FileChooserDialog(Environment.getExternalStorageDirectory(), ".ttf");
+            fileChooserDialog.setOnFileSelectedListener(new FileChooserDialog.OnFileSelectedListener() {
+                public void onFileSelected(File ttfFile) {
+                    // movie ttf file to /mnt/cnBeta_jandroid/fonts/
+                    try {
+                        FileUtils.moveFileToDirectory(ttfFile, ((CnBetaApplication) (getActivity().getApplicationContext())).getFontsDir(), true);
+                        ToastUtils.showShortToast(getActivity(), "字体 " + ttfFile.getName() + " 安装成功");
+                    }
+                    catch (IOException e) {
+                        ToastUtils.showShortToast(getActivity(), "字体 " + ttfFile.getName() + " 安装失败, " + e.getMessage());
+                    }
+                }
+            });
+            fileChooserDialog.showDialog(getActivity());
         }
     }
+
 
     public static class PrefsPostFragment extends PreferenceFragment {
         @Override

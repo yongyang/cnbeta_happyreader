@@ -10,6 +10,7 @@ import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
 import org.jandroid.common.async.BaseAsyncTask;
 
+import java.io.File;
 import java.net.ConnectException;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -43,6 +44,10 @@ public abstract class AbstractLoaderAsyncTask<R> extends BaseAsyncTask<R> implem
 
 //    public abstract CnBetaApplicationContext getCnBetaApplicationContext();
 
+    protected File getLocalCacheDir() {
+        return getAsyncContext().getCnBetaApplicationContext().getLocalCacheDir();
+    }
+
     protected R run(Object... params) throws Exception {
         if(isCancelled()) {
             return null;
@@ -51,12 +56,12 @@ public abstract class AbstractLoaderAsyncTask<R> extends BaseAsyncTask<R> implem
         AbstractLoader loader = getLoader();
 
         if(hasNetwork) {
-            if(isLocalLoadOnly() || (isLocalLoadFirst() && loader.isCached(getAsyncContext().getCnBetaApplicationContext().getBaseDir()))) {
+            if(isLocalLoadOnly() || (isLocalLoadFirst() && loader.isCached(getLocalCacheDir()))) {
                 //优先从Disk装载
-                return (R) loader.diskLoad(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
+                return (R) loader.diskLoad(getLocalCacheDir());
             }
             else {
-                return (R) loader.httpLoad(getAsyncContext().getCnBetaApplicationContext().getBaseDir(), this);
+                return (R) loader.httpLoad(getLocalCacheDir(), this);
             }
         }
         else {
@@ -64,7 +69,7 @@ public abstract class AbstractLoaderAsyncTask<R> extends BaseAsyncTask<R> implem
                 throw new ConnectException("没有网络连接，无法加载数据！");
             }
             else {
-                return (R) loader.diskLoad(getAsyncContext().getCnBetaApplicationContext().getBaseDir());
+                return (R) loader.diskLoad(getLocalCacheDir());
             }
         }
     }

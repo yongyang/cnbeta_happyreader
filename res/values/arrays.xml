@@ -16,4 +16,17 @@
         <item>5</item>
     </string-array>
 
+    <string-array name="fontNames" >
+        <item>系统默认</item>
+        <item>微软雅黑</item>
+        <item>华文细黑</item>
+        <item>楷体</item>
+    </string-array>
+    <string-array name="fontPaths" >
+        <item></item>
+        <item>file:///android_asset/fonts/msyh.ttf</item>
+        <item>file:///android_asset/fonts/simhei.ttf</item>
+        <item>file:///android_asset/fonts/simkai.ttf</item>
+    </string-array>
+
 </resources>

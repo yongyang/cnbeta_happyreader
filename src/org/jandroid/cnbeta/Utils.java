@@ -50,7 +50,7 @@ public class Utils {
                 historyArticle.setTitle(title);
                 historyArticle.setDate(DateFormatUtils.getDefault().format(new Date()));
                 try {
-                    new HistoryArticleListLoader().writeHistory(((CnBetaApplicationContext) theActivity.getApplicationContext()).getBaseDir(), historyArticle);
+                    new HistoryArticleListLoader().writeHistory(((CnBetaApplicationContext) theActivity.getApplicationContext()).getHistoryDir(), historyArticle);
                 }
                 catch (final Exception e) {
                     theActivity.runOnUiThread(new Runnable() {

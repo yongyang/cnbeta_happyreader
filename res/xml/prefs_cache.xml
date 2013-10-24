@@ -8,13 +8,6 @@
                 android:summaryOn="开启(不建议)"
                 android:summaryOff="关闭"
                 android:defaultValue="false"/>
-        <CheckBoxPreference
-                android:key="@string/pref_key_alsoCleanHistory"
-                android:title="同时清除历史记录"
-                android:summaryOn="开启(不建议，可以单独清除历史)"
-                android:summaryOff="关闭"
-                android:defaultValue="false"/>
-
         <Preference
                 android:key="@string/pref_key_cleanCache"
                 android:persistent="false"

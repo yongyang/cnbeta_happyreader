@@ -37,16 +37,22 @@ public class CnBetaPreferences {
         return prefs.getBoolean(application.getString(R.string.pref_key_autoCleanHistory), false);
     }
 
-    public boolean isAlsoCleanHistory() {
-        return prefs.getBoolean(application.getString(R.string.pref_key_alsoCleanHistory), false);
-    }
-
     public int getFontSizeIncrement() {
         String size = prefs.getString(application.getString(R.string.pref_key_fontSizeIncrement), "0");
-        return Integer.parseInt(size);
+        try {
+            return Integer.parseInt(size);
+        }
+        catch (Exception e) {
+            return 0;
+        }
     }
 
     public String getSignature() {
         return prefs.getString(application.getString(R.string.pref_key_signature), "");
+    }
+
+    public String getCustomFont(){
+        //TODO: getCustomFont
+        return "";
     }
 }

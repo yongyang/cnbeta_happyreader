@@ -80,7 +80,7 @@ public class HistoryCommentListLoader extends AbstractLoader<List<HistoryComment
 
     @Override
     public String getFileName() {
-        return "history_comment";
+        return "comments";
     }
 
     @Override

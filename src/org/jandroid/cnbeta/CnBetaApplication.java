@@ -15,6 +15,7 @@ import org.jandroid.common.Logger;
 import org.jandroid.common.ToastUtils;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 
 /**
@@ -54,7 +55,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         return EnvironmentUtils.checkSdCardMounted(this);
     }
 
-    public File getBaseDir() {
+    private File getBaseDir() {
         File baseDir;
         if (EnvironmentUtils.checkSdCardMounted(this)) {
             // SD
@@ -71,6 +72,42 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
             logger.w("Couldn't make base dir", e);
         }
         return baseDir;
+    }
+
+    public File getFontsDir() {
+        File baseDir = getBaseDir();
+        File fontsDir = new File(baseDir, "fonts");
+        try {
+            FileUtils.forceMkdir(fontsDir);
+        }
+        catch (IOException e) {
+            logger.w("Couldn't make fonts dir", e);
+        }
+        return fontsDir;
+    }
+
+    public File getLocalCacheDir() {
+        File baseDir = getBaseDir();
+        File fontsDir = new File(baseDir, "cache");
+        try {
+            FileUtils.forceMkdir(fontsDir);
+        }
+        catch (IOException e) {
+            logger.w("Couldn't make cache dir", e);
+        }
+        return fontsDir;
+    }
+
+    public File getHistoryDir() {
+        File baseDir = getBaseDir();
+        File fontsDir = new File(baseDir, "history");
+        try {
+            FileUtils.forceMkdir(fontsDir);
+        }
+        catch (IOException e) {
+            logger.w("Couldn't make cache dir", e);
+        }
+        return fontsDir;
     }
 
     // 在这里统一处理标准菜单项目
@@ -138,62 +175,21 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     }
 
     public boolean cleanCache() {
-        boolean success = true;
-        if (!cnBetaPreferences.isAlsoCleanHistory()) {
-            try {
-                File historyArticleFile = new HistoryArticleListLoader().getFile(getBaseDir());
-                if (historyArticleFile.exists()) {
-                    FileUtils.moveFileToDirectory(historyArticleFile, getBaseDir().getParentFile(), false);
-                }
+        //为了兼容2.1.1版本，将根目录下的文件也删除
+        for (File file : getBaseDir().listFiles(new FileFilter() {
+            public boolean accept(File pathname) {
+                return !pathname.isDirectory();
             }
-            catch (Exception e) {
-                success = false;
-            }
-            try {
-                File historyCommentFile = new HistoryCommentListLoader().getFile(getBaseDir());
-                if (historyCommentFile.exists()) {
-                    FileUtils.moveFileToDirectory(historyCommentFile, getBaseDir().getParentFile(), false);
-                }
-            }
-            catch (Exception e) {
-                success = false;
-            }
+        })) {
+            FileUtils.deleteQuietly(file);
         }
-        FileUtils.deleteQuietly(getBaseDir());
-        if (!cnBetaPreferences.isAlsoCleanHistory()) {
-            try {
-                File tempHistoryArticleFile = new HistoryArticleListLoader().getFile(getBaseDir().getParentFile());
-                if (tempHistoryArticleFile.exists()) {
-                    FileUtils.moveFileToDirectory(tempHistoryArticleFile, getBaseDir(), true);
-                }
-            }
-            catch (Exception e) {
-                success = false;
-            }
 
-            try {
-                File templHistoryCommentFile = new HistoryCommentListLoader().getFile(getBaseDir().getParentFile());
-                if (templHistoryCommentFile.exists()) {
-                    FileUtils.moveFileToDirectory(templHistoryCommentFile, getBaseDir(), true);
-                }
-            }
-            catch (Exception e) {
-                success = false;
-            }
-        }
-        return success;
+        return FileUtils.deleteQuietly(getLocalCacheDir());
+
     }
 
     public boolean cleanHistory() {
-        boolean success = true;
-        try {
-            FileUtils.deleteQuietly(new HistoryCommentListLoader().getFile(getBaseDir()));
-            FileUtils.deleteQuietly(new HistoryArticleListLoader().getFile(getBaseDir()));
-        }
-        catch (Exception e) {
-            success = false;
-        }
-        return success;
+        return FileUtils.deleteQuietly(getHistoryDir());
     }
 
     public CnBetaPreferences getCnBetaPreferences(){

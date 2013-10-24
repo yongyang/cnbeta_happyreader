@@ -3,9 +3,34 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="字体设置">
+        <Preference
+                android:key="install_font"
+                android:persistent="false"
+                android:title="安装字体"
+                android:summary="安装个性字体"
+                />
+        <Preference
+                android:key="delete_font"
+                android:persistent="false"
+                android:title="删除字体"
+                android:summary="删除所有已安装的个性字体"
+                />
+
+        <ListPreference
+                android:key="@string/pref_key_font"
+                android:title="选择字体"
+                android:summary="选择字体"
+                android:dialogTitle="选择字体"
+                android:entryValues="@array/fontPaths"
+                android:entries="@array/fontNames"
+                android:defaultValue=""
+                android:dialogMessage="注：通过替换修改过的系统字体"
+                />
+
         <ListPreference
                 android:key="@string/pref_key_fontSizeIncrement"
                 android:title="字体大小"
+                android:summary="设置字体大小"
                 android:dialogTitle="选择字体大小"
                 android:entryValues="@array/fontSizeIncrementIntegerArray"
                 android:entries="@array/fontSizeIncrementStringArray"

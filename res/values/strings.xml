@@ -54,7 +54,7 @@
     <string name="pref_key_cleanHistory">cleanHistory</string>
     <string name="pref_key_autoCleanHistory">autoCleanHistory</string>
     <string name="pref_key_autoCleanCache">autoCleanCache</string>
-    <string name="pref_key_alsoCleanHistory">alsoCleanHistory</string>
+    <string name="pref_key_font">font</string>
     <string name="pref_key_fontSizeIncrement">fontSizeIncrement</string>
     <string name="pref_key_signature">signature</string>
 

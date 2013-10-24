@@ -5,7 +5,7 @@
             android:fragment=
                     "org.jandroid.cnbeta.CnBetaPreferenceActivity$PrefsUIFragment"
             android:title="字体设置 "
-            android:summary="设置字体大小等">
+            android:summary="选择字体，设置字体大小等">
     </header>
 
     <header

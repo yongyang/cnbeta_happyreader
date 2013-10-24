@@ -78,7 +78,7 @@ public class HistoryArticleListLoader extends AbstractLoader<List<HistoryArticle
 
     @Override
     public String getFileName() {
-        return "history_article";
+        return "articles";
     }
 
     @Override

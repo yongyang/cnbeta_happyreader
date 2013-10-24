@@ -161,7 +161,7 @@ public class ContentActivity extends BaseActivity {
                         historyComment.setDate(DateFormatUtils.getDefault().format(new Date()));
 
                         try {
-                            new HistoryCommentListLoader().writeHistory(((CnBetaApplicationContext) getApplicationContext()).getBaseDir(), historyComment);
+                            new HistoryCommentListLoader().writeHistory(((CnBetaApplicationContext) getApplicationContext()).getHistoryDir(), historyComment);
                         }
                         catch (final Exception e) {
                             handler.post(new Runnable() {
@@ -179,6 +179,7 @@ public class ContentActivity extends BaseActivity {
 
     // 发布/回复一个新评论时调用该方法即使显示
     private void newPostedComment(Comment comment) {
+        contentFragment.newPostedComment(comment);
         commentsFragment.newPostedComment(comment);
         if (this.getActionBar().getSelectedNavigationIndex() == 0) { // 选中 comment fragment
             this.getActionBar().setSelectedNavigationItem(1);
