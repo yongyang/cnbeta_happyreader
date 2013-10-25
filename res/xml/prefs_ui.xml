@@ -4,27 +4,26 @@
 
     <PreferenceCategory android:title="字体设置">
         <Preference
-                android:key="install_font"
+                android:key="@string/pref_key_installFont"
                 android:persistent="false"
                 android:title="安装字体"
-                android:summary="安装个性字体"
+                android:summary="安装个性字体，名称必须为英文，后缀ttf必须是小写"
                 />
         <Preference
-                android:key="delete_font"
+                android:key="@string/pref_key_deleteFont"
                 android:persistent="false"
                 android:title="删除字体"
                 android:summary="删除所有已安装的个性字体"
                 />
 
         <ListPreference
-                android:key="@string/pref_key_font"
+                android:key="@string/pref_key_customFont"
                 android:title="选择字体"
-                android:summary="选择字体"
+                android:summary="注：如要更改标题栏中的字体, 需替换系统字体"
                 android:dialogTitle="选择字体"
-                android:entryValues="@array/fontPaths"
                 android:entries="@array/fontNames"
-                android:defaultValue=""
-                android:dialogMessage="注：通过替换修改过的系统字体"
+                android:entryValues="@array/fontPaths"
+                android:defaultValue="default"
                 />
 
         <ListPreference
@@ -32,8 +31,8 @@
                 android:title="字体大小"
                 android:summary="设置字体大小"
                 android:dialogTitle="选择字体大小"
-                android:entryValues="@array/fontSizeIncrementIntegerArray"
                 android:entries="@array/fontSizeIncrementStringArray"
+                android:entryValues="@array/fontSizeIncrementIntegerArray"
                 android:defaultValue="0"
                 />
     </PreferenceCategory>

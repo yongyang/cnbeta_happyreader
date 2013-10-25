@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -112,12 +110,9 @@ public class FileChooserDialog {
                 if (chosenFile.isDirectory()) {
                     Log.d(TAG, "open Directory: " + currentPath.getPath());
                     loadFileList(chosenFile);
-                    ((AlertDialog)dialog).getListView().getAdapter();
-/*
                     dialog.cancel();
                     dialog.dismiss();
                     showDialog(theContext);
-*/
                 }
                 else {
                     Log.d(TAG, currentPath.getPath());

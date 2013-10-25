@@ -1,16 +1,21 @@
 package org.jandroid.cnbeta;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.app.ActionBar;
-import android.content.Intent;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
@@ -19,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import org.apache.commons.io.FileUtils;
 import org.jandroid.common.FileChooserDialog;
+import org.jandroid.common.FontUtils;
 import org.jandroid.common.ToastUtils;
 
 public class CnBetaPreferenceActivity extends PreferenceActivity {
@@ -49,12 +55,6 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
             // 将该按钮添加到该界面上
             setListFooter(button);
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //TODO: install fonts
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public boolean onOptionsItemSelected(MenuItem mi) {
@@ -106,27 +106,91 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
     }
 
     public static class PrefsUIFragment extends PreferenceFragment {
+
+        private ListPreference chooseFontListPreference;
+        private CharSequence[] defaultEntries = new String[]{};
+        private CharSequence[] defaultEntryValues = new String[]{};
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.prefs_ui);
 
-            Preference button = findPreference("install_font");
-            button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            chooseFontListPreference = (ListPreference)findPreference(getString(R.string.pref_key_customFont));
+            defaultEntries = chooseFontListPreference.getEntries();
+            defaultEntryValues = chooseFontListPreference.getEntryValues();
+
+            loadInstalledFonts();
+
+            Preference installFontButton = findPreference(getString(R.string.pref_key_installFont));
+            installFontButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
-                   showFontChooserDialog();
+                    showFontChooserDialog();
                     return true;
                 }
             });
+
+            Preference deleteFontsButton = findPreference(getString(R.string.pref_key_deleteFont));
+            deleteFontsButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference preference) {
+
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("删除所有安装的个性化字体?")
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ((CnBetaApplication) (getActivity().getApplicationContext())).cleanFonts();
+                                    chooseFontListPreference.setEntries(defaultEntries);
+                                    chooseFontListPreference.setEntryValues(defaultEntryValues);
+                                    ToastUtils.showShortToast(getActivity(), "字体清除成功");
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).show();
+                    return true;
+                }
+            });
+
         }
-        public void showFontChooserDialog()     {
+
+        private void loadInstalledFonts() {
+            List<CharSequence> entries = new ArrayList<CharSequence>();
+            entries.addAll(Arrays.asList(defaultEntries));
+            List<CharSequence> entryValues = new ArrayList<CharSequence>();
+            entryValues.addAll(Arrays.asList(defaultEntryValues));
+
+            // load installed fonts
+            for(File fontFile : ((CnBetaApplication) (getActivity().getApplicationContext())).getFontsDir().listFiles(new FileFilter() {
+                public boolean accept(File pathname) {
+                    return pathname.getName().endsWith("ttf");
+                }
+            })) {
+                try {
+                    String fontName = FontUtils.parseFontFile(fontFile).getFontName();
+                    if(!entries.contains(fontName)) {
+                        entries.add(fontName);
+                        entryValues.add("file://"+ ((CnBetaApplication)getActivity().getApplication()).getFontsDir().getAbsolutePath() + "/" + fontFile.getName());
+                    }
+                }
+                catch (Exception e) {
+                    ToastUtils.showShortToast(getActivity(), "获取字体列表时发生异常, " + e.getMessage());
+                }
+            }
+            chooseFontListPreference.setEntries(entries.toArray(new CharSequence[entries.size()]));
+            chooseFontListPreference.setEntryValues(entryValues.toArray(new CharSequence[entryValues.size()]));
+        }
+
+        private void showFontChooserDialog()     {
             FileChooserDialog fileChooserDialog = new FileChooserDialog(Environment.getExternalStorageDirectory(), ".ttf");
             fileChooserDialog.setOnFileSelectedListener(new FileChooserDialog.OnFileSelectedListener() {
                 public void onFileSelected(File ttfFile) {
                     // movie ttf file to /mnt/cnBeta_jandroid/fonts/
                     try {
-                        FileUtils.moveFileToDirectory(ttfFile, ((CnBetaApplication) (getActivity().getApplicationContext())).getFontsDir(), true);
+                        FileUtils.copyFileToDirectory(ttfFile, ((CnBetaApplication) (getActivity().getApplicationContext())).getFontsDir(), true);
                         ToastUtils.showShortToast(getActivity(), "字体 " + ttfFile.getName() + " 安装成功");
+                        loadInstalledFonts();
                     }
                     catch (IOException e) {
                         ToastUtils.showShortToast(getActivity(), "字体 " + ttfFile.getName() + " 安装失败, " + e.getMessage());

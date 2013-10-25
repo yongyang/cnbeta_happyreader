@@ -1,15 +1,12 @@
 package org.jandroid.common;
 
-import android.app.Activity;
-import android.content.Context;
 import android.graphics.Typeface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
@@ -21,18 +18,27 @@ import java.util.Map;
  */
 public class FontUtils {
 
-    public static void changeFonts(final ViewGroup root, final Typeface typeface) {
-        for (int i = 0; i < root.getChildCount(); i++) {
-            View v = root.getChildAt(i);
-            if (v instanceof TextView) {
-                ((TextView) v).setTypeface(typeface);
-            }
-            else if (v instanceof ViewGroup) {
-                changeFonts((ViewGroup) v, typeface);
-            }
-            else if (v instanceof WebView) {
-                //TODO:
+    public static TTFParser parseFontFile(File file) throws IOException {
+        TTFParser parser = new TTFParser();
+        parser.parse(file);
+        return parser;
+    }
 
+    public static void changeFont(final View root, final Typeface typeface) {
+        if (root instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup)root).getChildCount(); i++) {
+                View v = ((ViewGroup)root).getChildAt(i);
+                changeFont(v, typeface);
+            }
+        }
+        else {
+            if(root instanceof TextView) {
+                if(!typeface.equals(((TextView) root).getTypeface())) {
+                    ((TextView) root).setTypeface(typeface);
+                }
+            }
+            else if (root instanceof WebView) {
+                //TODO:
             }
         }
     }
@@ -178,23 +184,14 @@ public class FontUtils {
             return fontProperties;
         }
 
-
-        /**
-         * 执行解析
-         *
-         * @param fileName ttf文件名
-         * @throws IOException
-         */
-
-        public void parse(String fileName) throws IOException {
-
+        public void parse(File file) throws IOException {
             fontProperties.clear();
 
             RandomAccessFile f = null;
 
             try {
 
-                f = new RandomAccessFile(fileName, "r");
+                f = new RandomAccessFile(file, "r");
 
                 parseInner(f);
 
@@ -214,6 +211,17 @@ public class FontUtils {
 
             }
 
+        }
+
+        /**
+         * 执行解析
+         *
+         * @param fileName ttf文件名
+         * @throws IOException
+         */
+
+        public void parse(String fileName) throws IOException {
+            parse(new File(fileName));
         }
 
 
@@ -374,9 +382,9 @@ public class FontUtils {
     }
 
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         TTFParser parser = new TTFParser();
-        parser.parse("assets/fonts/yahei.ttf");
+        parser.parse("assets/fonts/katong.ttf");
         System.out.println("font name: " + parser.getFontName());
 
     }

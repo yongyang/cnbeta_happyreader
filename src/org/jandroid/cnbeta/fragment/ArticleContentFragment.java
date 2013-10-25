@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,8 +63,11 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
 
     private ViewGroup root;
 
+    private boolean loaded = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        loaded = false;
         root = (ViewGroup) inflater.inflate(R.layout.content_article, null);
         titleTextView = (TextView) root.findViewById(R.id.tv_articleTitle);
         titleTextView.setText(((ContentActivity) getActivity()).getArticleTitle());
@@ -238,6 +240,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                loaded = true;
                 contentWebView.setVisibility(View.VISIBLE);
                 progressBarLayout.setVisibility(View.GONE);
 
@@ -368,16 +371,6 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     @Override
     public void onResume() {
         super.onResume();
-        // update font size
-        Utils.updateTextSize(getActivity(), titleTextView, R.dimen.listitem_title_text_size);
-        Utils.updateTextSize(getActivity(), timeTextView, R.dimen.listitem_status_text_size);
-        Utils.updateTextSize(getActivity(), viewNumTextView, R.dimen.listitem_status_text_size);
-        Utils.updateTextSize(getActivity(), commentNumTextView, R.dimen.listitem_status_text_size);
-        Utils.updateTextSize(getActivity(), whereTextView, R.dimen.listitem_status_text_size);
-
-        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/katong.ttf");
-        FontUtils.changeFonts((ViewGroup)getView(), typeface);
-
         if (contentWebView != null) {
             Utils.updateTextSize(getActivity(), contentWebView, R.dimen.webview_default_text_size);
 
@@ -385,6 +378,40 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
             contentWebView.resumeTimers();
             contentWebView.onResume();
         }
+
+        // update font size
+        Utils.updateTextSize(getActivity(), titleTextView, R.dimen.listitem_title_text_size);
+        Utils.updateTextSize(getActivity(), timeTextView, R.dimen.listitem_status_text_size);
+        Utils.updateTextSize(getActivity(), viewNumTextView, R.dimen.listitem_status_text_size);
+        Utils.updateTextSize(getActivity(), commentNumTextView, R.dimen.listitem_status_text_size);
+        Utils.updateTextSize(getActivity(), whereTextView, R.dimen.listitem_status_text_size);
+
+        String customFont = CnBetaPreferences.getInstance(getActivity().getApplication()).getCustomFont();
+        if(customFont != null && !customFont.isEmpty() && !customFont.equals("default")) {
+            try {
+                Typeface typeface;
+                if(customFont.contains("/android_asset/")) {
+                    typeface = Typeface.createFromAsset(getActivity().getAssets(), customFont.substring("file:///android_asset/".length()));
+                }
+                else {
+                    typeface= Typeface.createFromFile(new File(customFont.substring("file://".length())));
+                }
+
+                //TODO:  typeface equals doesn't work
+/*
+                if(!typeface.equals(titleTextView.getTypeface()) && loaded) {
+                    contentWebView.loadDataWithBaseURL(null, getStyledHTMLContent(content), "text/html", "UTF-8", "about:blank");
+                }
+*/
+                FontUtils.changeFont(getView(), typeface);
+            }
+            catch (Exception e) {
+                logger.w("failed to load font " + customFont + ", " + e.toString());
+                ToastUtils.showShortToast(getActivity(), "加载个性化字体失败, " + e.toString());
+            }
+        }
+
+
     }
 
     @Override
@@ -477,18 +504,22 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
                 titleTextView.setSelected(true);
                 timeTextView.setText(content.getTime());
                 whereTextView.setText(content.getWhere());
-                contentWebView.loadDataWithBaseURL("", getStyledHTMLContent(content), "text/html", "UTF-8", "");
+                contentWebView.loadDataWithBaseURL(null, getStyledHTMLContent(content), "text/html", "UTF-8", "about:blank");
             }
         });
     }
 
     private String getStyledHTMLContent(Content content) {
         StringBuilder sb = new StringBuilder();
-        //TODO: 根据可用 font 设置 @fontface
         sb.append("<html><head><style type=\"text/css\">");
-        sb.append("@font-face{ font-family: customFont; src: url(\"file:///android_asset/fonts/wawa.ttf\")" + "}");
+        // 设置 custom Font
+        String customFont = CnBetaPreferences.getInstance(getActivity().getApplication()).getCustomFont();
+        if(customFont != null && !customFont.isEmpty() && !customFont.equals("default")) {
+            sb.append("@font-face{ font-family: customFont; src:url('"+ customFont + "');" + "} body {font-family: 'customFont';}");
+        }
+
         sb.append("</style></head>");
-        sb.append("<body style='font-family: customFont;'>");
+        sb.append("<body>");
         sb.append(content.getContent());
         sb.append("</body></html>");
         return sb.toString();

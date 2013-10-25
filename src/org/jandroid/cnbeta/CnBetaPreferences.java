@@ -3,9 +3,6 @@ package org.jandroid.cnbeta;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.webkit.WebView;
-import android.widget.TextView;
-import org.jandroid.common.PixelUtils;
 
 /**
 * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -52,7 +49,6 @@ public class CnBetaPreferences {
     }
 
     public String getCustomFont(){
-        //TODO: getCustomFont
-        return "";
+        return prefs.getString(application.getString(R.string.pref_key_customFont), "default");
     }
 }

@@ -43,7 +43,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         if (hasNetwork && !connected) {
             handler.post(new Runnable() {
                 public void run() {
-                    ToastUtils.showShortToast(CnBetaApplication.this, "网络未连接，仅能加载本地已缓存的数据");
+                    ToastUtils.showShortToast(CnBetaApplication.this, "网络未连接，访问本地缓存数据");
                 }
             });
         }
@@ -75,7 +75,8 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     }
 
     public File getFontsDir() {
-        File baseDir = getBaseDir();
+        //Fonts 只能安装在 Context Dir 才能被访问
+        File baseDir = getFilesDir();
         File fontsDir = new File(baseDir, "fonts");
         try {
             FileUtils.forceMkdir(fontsDir);
@@ -190,6 +191,10 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
 
     public boolean cleanHistory() {
         return FileUtils.deleteQuietly(getHistoryDir());
+    }
+
+    public boolean cleanFonts() {
+        return FileUtils.deleteQuietly(getFontsDir());
     }
 
     public CnBetaPreferences getCnBetaPreferences(){

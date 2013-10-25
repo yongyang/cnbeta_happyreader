@@ -18,15 +18,13 @@
 
     <string-array name="fontNames" >
         <item>系统默认</item>
-        <item>微软雅黑</item>
-        <item>华文细黑</item>
-        <item>楷体</item>
+        <item>卡通体</item>
+        <item>娃娃体</item>
     </string-array>
     <string-array name="fontPaths" >
-        <item></item>
-        <item>file:///android_asset/fonts/msyh.ttf</item>
-        <item>file:///android_asset/fonts/simhei.ttf</item>
-        <item>file:///android_asset/fonts/simkai.ttf</item>
+        <item>default</item>
+        <item>file:///android_asset/fonts/katong.ttf</item>
+        <item>file:///android_asset/fonts/wawa.ttf</item>
     </string-array>
 
 </resources>
