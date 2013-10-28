@@ -29,6 +29,7 @@ import org.jandroid.cnbeta.async.ArticleContentAsyncTask;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.ImageBytesAsyncTask;
 import org.jandroid.cnbeta.async.RateArticleAsyncTask;
+import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.common.BaseFragment;
 import org.jandroid.common.JavaScriptObject;
@@ -460,6 +461,9 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         });
     }
 
+    public void newPostedComment(Comment comment) {
+        content.setJoinNum(content.getJoinNum() + 1);
+    }
 
     public void onFailure(AsyncResult<Content> contentAsyncResult) {
         progressBarLayout.setVisibility(View.GONE);
