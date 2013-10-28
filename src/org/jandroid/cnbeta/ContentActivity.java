@@ -177,7 +177,7 @@ public class ContentActivity extends BaseActivity {
         }
     }
 
-    // 发布/回复一个新评论时调用该方法即使显示
+    // 发布/回复一个新评论时调用该方法及时显示
     private void newPostedComment(Comment comment) {
         contentFragment.newPostedComment(comment);
         commentsFragment.newPostedComment(comment);
