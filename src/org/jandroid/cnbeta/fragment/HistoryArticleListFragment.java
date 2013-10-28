@@ -11,6 +11,7 @@ import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HistoryArticleListAsyncTask;
 import org.jandroid.cnbeta.entity.HistoryArticle;
+import org.jandroid.common.FontUtils;
 import org.jandroid.common.async.AsyncResult;
 
 import java.util.Collections;
@@ -63,8 +64,8 @@ public class HistoryArticleListFragment extends AbstractAsyncListFragment<Histor
                 TextView dateTextView = (TextView) convertView.findViewById(R.id.date);
                 dateTextView.setText(article.getDate());
 
-                Utils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size);
-                Utils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size);
+                FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size);
+                FontUtils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size);
 
                 return convertView;
             }

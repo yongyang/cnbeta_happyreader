@@ -20,7 +20,7 @@ import org.jandroid.cnbeta.async.TopicArticleListAsyncTask;
 import org.jandroid.cnbeta.entity.TopicArticle;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.BaseActivity;
-import org.jandroid.common.ToastUtils;
+import org.jandroid.common.FontUtils;
 import org.jandroid.common.adapter.AsyncImageAdapter;
 import org.jandroid.common.async.AsyncResult;
 
@@ -244,10 +244,10 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
                 // queue to image load list or set a cached bitmap if has been cached
                 ivLogo.setImageBitmap(queueImageView(position, ivLogo, article.getLogo()));
 
-                Utils.updateTextSize(getActivity(), tvTitleShow, R.dimen.listitem_title_text_size);
-                Utils.updateTextSize(getActivity(), tvHometextShowShort2, R.dimen.listitem_description_text_size);
-                Utils.updateTextSize(getActivity(), tvComments, R.dimen.listitem_status_text_size);
-                Utils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size);
+                FontUtils.updateTextSize(getActivity(), tvTitleShow, R.dimen.listitem_title_text_size);
+                FontUtils.updateTextSize(getActivity(), tvHometextShowShort2, R.dimen.listitem_description_text_size);
+                FontUtils.updateTextSize(getActivity(), tvComments, R.dimen.listitem_status_text_size);
+                FontUtils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size);
 
                 return convertView;
             }

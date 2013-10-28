@@ -1,10 +1,13 @@
 package org.jandroid.common;
 
+import android.app.Activity;
 import android.graphics.Typeface;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.TextView;
+import org.jandroid.cnbeta.CnBetaApplicationContext;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +28,7 @@ public class FontUtils {
     }
 
     public static void changeFont(final View root, final Typeface typeface) {
+        if(typeface == null) return;
         if (root instanceof ViewGroup) {
             for (int i = 0; i < ((ViewGroup)root).getChildCount(); i++) {
                 View v = ((ViewGroup)root).getChildAt(i);
@@ -41,6 +45,15 @@ public class FontUtils {
                 //TODO:
             }
         }
+    }
+
+    public static void updateTextSize(Activity theActivity, TextView textView, int dimId) {
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, PixelUtils.pixelsToSp(theActivity, theActivity.getResources().getDimension(dimId)) + ((CnBetaApplicationContext)theActivity.getApplicationContext()).getCnBetaPreferences().getFontSizeIncrement());
+    }
+
+    public static void updateTextSize(Activity theActivity, WebView webView, int dimId) {
+        webView.getSettings().setDefaultFontSize((int)PixelUtils.pixelsToSp(theActivity,theActivity.getResources().getDimension(dimId)) + ((CnBetaApplicationContext)theActivity.getApplicationContext()).getCnBetaPreferences().getFontSizeIncrement());
+        webView.getSettings().setDefaultFixedFontSize((int)PixelUtils.pixelsToSp(theActivity,theActivity.getResources().getDimension(dimId)) + ((CnBetaApplicationContext)theActivity.getApplicationContext()).getCnBetaPreferences().getFontSizeIncrement());
     }
 
     /**

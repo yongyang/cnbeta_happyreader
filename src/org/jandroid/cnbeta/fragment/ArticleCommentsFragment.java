@@ -25,6 +25,7 @@ import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.loader.SupportCommentPoster;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.BaseActivity;
+import org.jandroid.common.FontUtils;
 import org.jandroid.common.async.AsyncResult;
 import org.json.simple.JSONObject;
 
@@ -168,16 +169,16 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                     }
                 }
 
-                Utils.updateTextSize(getActivity(), positionTextView, R.dimen.listitem_description_text_size);
-                Utils.updateTextSize(getActivity(), nameTextView, R.dimen.listitem_description_text_size);
-                Utils.updateTextSize(getActivity(), hostNameTextView, R.dimen.listitem_description_text_size);
-                Utils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size);
-                Utils.updateTextSize(getActivity(), commentTextView, R.dimen.listitem_comment_text_size);
-                Utils.updateTextSize(getActivity(), supportTextView, R.dimen.listitem_comment_text_size);
-                Utils.updateTextSize(getActivity(), againstTextView, R.dimen.listitem_comment_text_size);
-                Utils.updateTextSize(getActivity(), scoreTextView, R.dimen.listitem_comment_text_size);
-                Utils.updateTextSize(getActivity(), reasonTextView, R.dimen.listitem_comment_text_size);
-                Utils.updateTextSize(getActivity(), toParentTextView, R.dimen.listitem_comment_text_size);
+                FontUtils.updateTextSize(getActivity(), positionTextView, R.dimen.listitem_description_text_size);
+                FontUtils.updateTextSize(getActivity(), nameTextView, R.dimen.listitem_description_text_size);
+                FontUtils.updateTextSize(getActivity(), hostNameTextView, R.dimen.listitem_description_text_size);
+                FontUtils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size);
+                FontUtils.updateTextSize(getActivity(), commentTextView, R.dimen.listitem_comment_text_size);
+                FontUtils.updateTextSize(getActivity(), supportTextView, R.dimen.listitem_comment_text_size);
+                FontUtils.updateTextSize(getActivity(), againstTextView, R.dimen.listitem_comment_text_size);
+                FontUtils.updateTextSize(getActivity(), scoreTextView, R.dimen.listitem_comment_text_size);
+                FontUtils.updateTextSize(getActivity(), reasonTextView, R.dimen.listitem_comment_text_size);
+                FontUtils.updateTextSize(getActivity(), toParentTextView, R.dimen.listitem_comment_text_size);
                 return convertView;
             }
         };

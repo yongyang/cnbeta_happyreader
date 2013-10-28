@@ -15,16 +15,14 @@ import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.TopicActivity;
-import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HasAsyncDelegate;
 import org.jandroid.cnbeta.async.ImageAsyncTask;
 import org.jandroid.cnbeta.async.TopicListAsyncTask;
 import org.jandroid.cnbeta.entity.Topic;
-import org.jandroid.cnbeta.loader.TopicListLoader;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.BaseActivity;
-import org.jandroid.common.ToastUtils;
+import org.jandroid.common.FontUtils;
 import org.jandroid.common.adapter.AsyncImageAdapter;
 import org.jandroid.common.async.AsyncResult;
 
@@ -200,7 +198,7 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
                 // queue to image load list or set a cached bitmap if has been cached
                 ivLogo.setImageBitmap(queueImageView(position, ivLogo, article.getLogo()));
 
-                Utils.updateTextSize(getActivity(), tvName, R.dimen.listitem_status_text_size);
+                FontUtils.updateTextSize(getActivity(), tvName, R.dimen.listitem_status_text_size);
                 return convertView;
             }
         };

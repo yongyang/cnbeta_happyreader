@@ -10,8 +10,8 @@ import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HistoryCommentListAsyncTask;
-import org.jandroid.cnbeta.entity.HistoryArticle;
 import org.jandroid.cnbeta.entity.HistoryComment;
+import org.jandroid.common.FontUtils;
 import org.jandroid.common.async.AsyncResult;
 
 import java.util.Collections;
@@ -71,10 +71,10 @@ public class HistoryCommentListFragment extends AbstractAsyncListFragment<Histor
                 TextView dateTextView = (TextView) convertView.findViewById(R.id.date);
                 dateTextView.setText(comment.getDate());
 
-                Utils.updateTextSize(getActivity(), toTextView, R.dimen.listitem_description_text_size);
-                Utils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_description_text_size);
-                Utils.updateTextSize(getActivity(), tvComment, R.dimen.listitem_description_text_size);
-                Utils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size);
+                FontUtils.updateTextSize(getActivity(), toTextView, R.dimen.listitem_description_text_size);
+                FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_description_text_size);
+                FontUtils.updateTextSize(getActivity(), tvComment, R.dimen.listitem_description_text_size);
+                FontUtils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size);
                 return convertView;
             }
         };

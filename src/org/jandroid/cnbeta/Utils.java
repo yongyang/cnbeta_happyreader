@@ -242,15 +242,4 @@ public class Utils {
     }
 
 
-
-    public static void updateTextSize(Activity theActivity, TextView textView, int dimId) {
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, PixelUtils.pixelsToSp(theActivity, theActivity.getResources().getDimension(dimId)) + ((CnBetaApplicationContext)theActivity.getApplicationContext()).getCnBetaPreferences().getFontSizeIncrement());
-    }
-
-    public static void updateTextSize(Activity theActivity, WebView webView, int dimId) {
-        webView.getSettings().setDefaultFontSize((int)PixelUtils.pixelsToSp(theActivity,theActivity.getResources().getDimension(dimId)) + ((CnBetaApplicationContext)theActivity.getApplicationContext()).getCnBetaPreferences().getFontSizeIncrement());
-        webView.getSettings().setDefaultFixedFontSize((int)PixelUtils.pixelsToSp(theActivity,theActivity.getResources().getDimension(dimId)) + ((CnBetaApplicationContext)theActivity.getApplicationContext()).getCnBetaPreferences().getFontSizeIncrement());
-    }
-
-
 }

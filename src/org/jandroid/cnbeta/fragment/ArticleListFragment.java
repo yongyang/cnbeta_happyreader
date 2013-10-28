@@ -24,7 +24,7 @@ import org.jandroid.cnbeta.loader.AbstractListLoader;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.BaseActivity;
-import org.jandroid.common.PixelUtils;
+import org.jandroid.common.FontUtils;
 import org.jandroid.common.adapter.AsyncImageAdapter;
 import org.jandroid.common.async.AsyncResult;
 
@@ -223,11 +223,15 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
                 // queue to image load list or set a cached bitmap if has been cached
                 ivLogo.setImageBitmap(queueImageView(position, ivLogo, article.getLogo()));
 
-                Utils.updateTextSize(getActivity(), tvTitleShow, R.dimen.listitem_title_text_size);
-                Utils.updateTextSize(getActivity(), tvHometextShowShort, R.dimen.listitem_description_text_size);
-                Utils.updateTextSize(getActivity(), tvComments, R.dimen.listitem_status_text_size);
-                Utils.updateTextSize(getActivity(), tvCounter, R.dimen.listitem_status_text_size);
-                Utils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size);
+                FontUtils.updateTextSize(getActivity(), tvTitleShow, R.dimen.listitem_title_text_size);
+                FontUtils.updateTextSize(getActivity(), tvHometextShowShort, R.dimen.listitem_description_text_size);
+                FontUtils.updateTextSize(getActivity(), tvComments, R.dimen.listitem_status_text_size);
+                FontUtils.updateTextSize(getActivity(), tvCounter, R.dimen.listitem_status_text_size);
+                FontUtils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size);
+
+                CnBetaPreferences pref = CnBetaPreferences.getInstance(getActivity().getApplication());
+                FontUtils.changeFont(convertView, pref.getCustomFontTypeface());
+
                 return convertView;
             }
         };

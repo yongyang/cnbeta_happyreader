@@ -151,4 +151,8 @@ public abstract class AbstractAsyncListFragment<T> extends BaseFragment implemen
     protected abstract BaseAdapter newAdapter();
 
     public abstract void onItemClick(AdapterView<?> parent, View view, int position, long id);
+
+    public void redraw() {
+
+    }
 }

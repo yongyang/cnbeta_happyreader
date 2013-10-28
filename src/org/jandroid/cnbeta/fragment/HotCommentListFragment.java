@@ -14,6 +14,7 @@ import org.jandroid.cnbeta.async.HasAsyncDelegate;
 import org.jandroid.cnbeta.async.HotCommentListAsyncTask;
 import org.jandroid.cnbeta.entity.HotComment;
 import org.jandroid.cnbeta.view.PagingView;
+import org.jandroid.common.FontUtils;
 import org.jandroid.common.async.AsyncResult;
 
 import java.util.List;
@@ -127,13 +128,13 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
                 tvHometextShowShort.setText(article.getHometextShowShort());
 */
 
-                Utils.updateTextSize(getActivity(), commentTextView, R.dimen.listitem_comment_text_size);
-                Utils.updateTextSize(getActivity(), titleShowTextView, R.dimen.listitem_description_text_size);
-                Utils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size);
-                Utils.updateTextSize(getActivity(), hostNameShowTextView, R.dimen.listitem_status_text_size);
-                Utils.updateTextSize(getActivity(), nameTextView, R.dimen.listitem_status_text_size);
-                Utils.updateTextSize(getActivity(), fromTextView, R.dimen.listitem_status_text_size);
-                Utils.updateTextSize(getActivity(), toTextView, R.dimen.listitem_description_text_size);
+                FontUtils.updateTextSize(getActivity(), commentTextView, R.dimen.listitem_comment_text_size);
+                FontUtils.updateTextSize(getActivity(), titleShowTextView, R.dimen.listitem_description_text_size);
+                FontUtils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size);
+                FontUtils.updateTextSize(getActivity(), hostNameShowTextView, R.dimen.listitem_status_text_size);
+                FontUtils.updateTextSize(getActivity(), nameTextView, R.dimen.listitem_status_text_size);
+                FontUtils.updateTextSize(getActivity(), fromTextView, R.dimen.listitem_status_text_size);
+                FontUtils.updateTextSize(getActivity(), toTextView, R.dimen.listitem_description_text_size);
                 return convertView;
             }
         };

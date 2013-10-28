@@ -1,5 +1,6 @@
 package org.jandroid.cnbeta.fragment;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import org.jandroid.cnbeta.CnBetaPreferences;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
@@ -14,6 +16,7 @@ import org.jandroid.cnbeta.async.HasAsyncDelegate;
 import org.jandroid.cnbeta.async.RealtimeArticleListAsyncTask;
 import org.jandroid.cnbeta.entity.RealtimeArticle;
 import org.jandroid.cnbeta.view.RefreshView;
+import org.jandroid.common.FontUtils;
 import org.jandroid.common.async.AsyncResult;
 
 import java.util.List;
@@ -87,10 +90,13 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
                 TextView tvTimeShow = (TextView) convertView.findViewById(R.id.time_show);
                 tvTimeShow.setText("" + article.getTimeShow());
 
-                Utils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size);
-                Utils.updateTextSize(getActivity(), tvHometextShowShort2, R.dimen.listitem_description_text_size);
-                Utils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size);
-                Utils.updateTextSize(getActivity(), tvTimeShow, R.dimen.listitem_status_text_size);
+                FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size);
+                FontUtils.updateTextSize(getActivity(), tvHometextShowShort2, R.dimen.listitem_description_text_size);
+                FontUtils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size);
+                FontUtils.updateTextSize(getActivity(), tvTimeShow, R.dimen.listitem_status_text_size);
+
+                CnBetaPreferences pref = CnBetaPreferences.getInstance(getActivity().getApplication());
+                FontUtils.changeFont(convertView, pref.getCustomFontTypeface());
 
                 return convertView;
 

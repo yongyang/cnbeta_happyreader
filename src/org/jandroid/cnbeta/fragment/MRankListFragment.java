@@ -14,6 +14,7 @@ import org.jandroid.cnbeta.async.MRankArticleListAsyncTask;
 import org.jandroid.cnbeta.entity.MRankArticle;
 import org.jandroid.cnbeta.loader.MRankListLoader;
 import org.jandroid.cnbeta.view.RefreshView;
+import org.jandroid.common.FontUtils;
 import org.jandroid.common.async.AsyncResult;
 
 import java.util.List;
@@ -97,8 +98,8 @@ public class MRankListFragment extends AbstractAsyncListFragment<MRankArticle> {
                 TextView tvTitle = (TextView) convertView.findViewById(R.id.title);
                 tvTitle.setText(article.getTitle());
 
-                Utils.updateTextSize(getActivity(), tvRank, R.dimen.listitem_rank_no_text_size);
-                Utils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size);
+                FontUtils.updateTextSize(getActivity(), tvRank, R.dimen.listitem_rank_no_text_size);
+                FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size);
 
                 return convertView;
             }

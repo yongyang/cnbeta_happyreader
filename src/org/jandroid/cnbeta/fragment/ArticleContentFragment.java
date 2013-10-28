@@ -1,7 +1,6 @@
 package org.jandroid.cnbeta.fragment;
 
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.KeyEvent;
@@ -40,7 +39,6 @@ import org.jandroid.common.async.AsyncResult;
 import org.json.simple.JSONObject;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -156,8 +154,8 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         contentWebView.getSettings().setJavaScriptEnabled(true);
         contentWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
         //设置嫩参数
-        contentWebView.getSettings().setDefaultFontSize((int)PixelUtils.pixelsToSp(getActivity(),getResources().getDimension(R.dimen.webview_default_text_size)));
-        contentWebView.getSettings().setDefaultFixedFontSize((int)PixelUtils.pixelsToSp(getActivity(),getResources().getDimension(R.dimen.webview_default_text_size)));
+        contentWebView.getSettings().setDefaultFontSize((int) PixelUtils.pixelsToSp(getActivity(), getResources().getDimension(R.dimen.webview_default_text_size)));
+        contentWebView.getSettings().setDefaultFixedFontSize((int) PixelUtils.pixelsToSp(getActivity(), getResources().getDimension(R.dimen.webview_default_text_size)));
         contentWebView.getSettings().setAllowFileAccess(true);
         // no these two method in 4.0
 //        contentWebView.getSettings().setAllowFileAccessFromFileURLs(true);
@@ -372,7 +370,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     public void onResume() {
         super.onResume();
         if (contentWebView != null) {
-            Utils.updateTextSize(getActivity(), contentWebView, R.dimen.webview_default_text_size);
+            FontUtils.updateTextSize(getActivity(), contentWebView, R.dimen.webview_default_text_size);
 
             // Try resumeTimers anyway, flash plugin may case pauseTimers
             contentWebView.resumeTimers();
@@ -380,38 +378,17 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         }
 
         // update font size
-        Utils.updateTextSize(getActivity(), titleTextView, R.dimen.listitem_title_text_size);
-        Utils.updateTextSize(getActivity(), timeTextView, R.dimen.listitem_status_text_size);
-        Utils.updateTextSize(getActivity(), viewNumTextView, R.dimen.listitem_status_text_size);
-        Utils.updateTextSize(getActivity(), commentNumTextView, R.dimen.listitem_status_text_size);
-        Utils.updateTextSize(getActivity(), whereTextView, R.dimen.listitem_status_text_size);
+        FontUtils.updateTextSize(getActivity(), titleTextView, R.dimen.listitem_title_text_size);
+        FontUtils.updateTextSize(getActivity(), timeTextView, R.dimen.listitem_status_text_size);
+        FontUtils.updateTextSize(getActivity(), viewNumTextView, R.dimen.listitem_status_text_size);
+        FontUtils.updateTextSize(getActivity(), commentNumTextView, R.dimen.listitem_status_text_size);
+        FontUtils.updateTextSize(getActivity(), whereTextView, R.dimen.listitem_status_text_size);
 
-        String customFont = CnBetaPreferences.getInstance(getActivity().getApplication()).getCustomFont();
-        if(customFont != null && !customFont.isEmpty() && !customFont.equals("default")) {
-            try {
-                Typeface typeface;
-                if(customFont.contains("/android_asset/")) {
-                    typeface = Typeface.createFromAsset(getActivity().getAssets(), customFont.substring("file:///android_asset/".length()));
-                }
-                else {
-                    typeface= Typeface.createFromFile(new File(customFont.substring("file://".length())));
-                }
-
-                //TODO:  typeface equals doesn't work
-/*
-                if(!typeface.equals(titleTextView.getTypeface()) && loaded) {
-                    contentWebView.loadDataWithBaseURL(null, getStyledHTMLContent(content), "text/html", "UTF-8", "about:blank");
-                }
-*/
-                FontUtils.changeFont(getView(), typeface);
-            }
-            catch (Exception e) {
-                logger.w("failed to load font " + customFont + ", " + e.toString());
-                ToastUtils.showShortToast(getActivity(), "加载个性化字体失败, " + e.toString());
-            }
+        CnBetaPreferences pref = CnBetaPreferences.getInstance(getActivity().getApplication());
+        FontUtils.changeFont(getView(), pref.getCustomFontTypeface());
+        if (loaded) { // reload
+            contentWebView.loadDataWithBaseURL(null, getStyledHTMLContent(content), "text/html", "UTF-8", "about:blank");
         }
-
-
     }
 
     @Override
@@ -514,8 +491,8 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         sb.append("<html><head><style type=\"text/css\">");
         // 设置 custom Font
         String customFont = CnBetaPreferences.getInstance(getActivity().getApplication()).getCustomFont();
-        if(customFont != null && !customFont.isEmpty() && !customFont.equals("default")) {
-            sb.append("@font-face{ font-family: customFont; src:url('"+ customFont + "');" + "} body {font-family: 'customFont';}");
+        if (customFont != null && !customFont.isEmpty() && !customFont.equals("default")) {
+            sb.append("@font-face{ font-family: customFont; src:url('" + customFont + "');" + "} body {font-family: 'customFont';}");
         }
 
         sb.append("</style></head>");
@@ -527,7 +504,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
 
 
     public void newPostedComment(Comment comment) {
-        content.setJoinNum(content.getJoinNum()+1);
+        content.setJoinNum(content.getJoinNum() + 1);
     }
 
     public void onFailure(AsyncResult<Content> contentAsyncResult) {
