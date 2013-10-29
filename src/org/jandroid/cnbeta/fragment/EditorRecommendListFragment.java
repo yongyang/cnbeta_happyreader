@@ -8,6 +8,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import org.jandroid.cnbeta.CnBetaApplicationContext;
+import org.jandroid.cnbeta.CnBetaPreferences;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.EditorRecommendListAsyncTask;
@@ -55,9 +57,14 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
                 TextView tvTime = (TextView) convertView.findViewById(R.id.time);
                 tvTime.setText(editorRecommend.getTime());
 
-                FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size);
-                FontUtils.updateTextSize(getActivity(), tvHomeText, R.dimen.listitem_description_text_size);
-                FontUtils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size);
+                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+                FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), tvHomeText, R.dimen.listitem_description_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size, fontSizeOffset);
+
+                CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+                FontUtils.changeFont(convertView, pref.getCustomFontTypeface());
+
                 return convertView;
             }
         };
@@ -143,6 +150,13 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
     public void onProgressDismiss() {
         super.onProgressDismiss();
         footerPagingView.onProgressDismiss();
+    }
+
+    @Override
+    public void onResume() {
+        CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+        FontUtils.changeFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
+        super.onResume();
     }
 
 }

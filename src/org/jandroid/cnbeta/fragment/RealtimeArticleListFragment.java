@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.CnBetaPreferences;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
@@ -90,12 +91,13 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
                 TextView tvTimeShow = (TextView) convertView.findViewById(R.id.time_show);
                 tvTimeShow.setText("" + article.getTimeShow());
 
-                FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size);
-                FontUtils.updateTextSize(getActivity(), tvHometextShowShort2, R.dimen.listitem_description_text_size);
-                FontUtils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size);
-                FontUtils.updateTextSize(getActivity(), tvTimeShow, R.dimen.listitem_status_text_size);
+                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+                FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), tvHometextShowShort2, R.dimen.listitem_description_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), tvTimeShow, R.dimen.listitem_status_text_size, fontSizeOffset);
 
-                CnBetaPreferences pref = CnBetaPreferences.getInstance(getActivity().getApplication());
+                CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
                 FontUtils.changeFont(convertView, pref.getCustomFontTypeface());
 
                 return convertView;
@@ -139,4 +141,12 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
         super.onProgressDismiss();
         footerRefreshView.onProgressDismiss();
     }
+
+    @Override
+    public void onResume() {
+        CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+        FontUtils.changeFont(footerRefreshView.getRootView(), pref.getCustomFontTypeface());
+        super.onResume();
+    }
+
 }

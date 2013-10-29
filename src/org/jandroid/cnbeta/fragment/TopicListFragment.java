@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
+import org.jandroid.cnbeta.CnBetaPreferences;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.TopicActivity;
 import org.jandroid.cnbeta.async.HasAsync;
@@ -198,7 +199,12 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
                 // queue to image load list or set a cached bitmap if has been cached
                 ivLogo.setImageBitmap(queueImageView(position, ivLogo, article.getLogo()));
 
-                FontUtils.updateTextSize(getActivity(), tvName, R.dimen.listitem_status_text_size);
+                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+                FontUtils.updateTextSize(getActivity(), tvName, R.dimen.listitem_status_text_size, fontSizeOffset);
+
+                CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+                FontUtils.changeFont(convertView, pref.getCustomFontTypeface());
+
                 return convertView;
             }
         };
@@ -240,4 +246,12 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
         super.onProgressDismiss();
         footerPagingView.onProgressDismiss();
     }
+
+    @Override
+    public void onResume() {
+        CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+        FontUtils.changeFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
+        super.onResume();
+    }
+
 }

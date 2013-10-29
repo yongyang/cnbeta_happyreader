@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import org.jandroid.cnbeta.CnBetaApplicationContext;
+import org.jandroid.cnbeta.CnBetaPreferences;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
@@ -64,8 +66,12 @@ public class HistoryArticleListFragment extends AbstractAsyncListFragment<Histor
                 TextView dateTextView = (TextView) convertView.findViewById(R.id.date);
                 dateTextView.setText(article.getDate());
 
-                FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size);
-                FontUtils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size);
+                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+                FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
+                CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+
+                FontUtils.changeFont(convertView, pref.getCustomFontTypeface());
 
                 return convertView;
             }

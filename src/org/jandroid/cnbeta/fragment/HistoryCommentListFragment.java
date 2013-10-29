@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import org.jandroid.cnbeta.CnBetaApplicationContext;
+import org.jandroid.cnbeta.CnBetaPreferences;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
@@ -71,10 +73,15 @@ public class HistoryCommentListFragment extends AbstractAsyncListFragment<Histor
                 TextView dateTextView = (TextView) convertView.findViewById(R.id.date);
                 dateTextView.setText(comment.getDate());
 
-                FontUtils.updateTextSize(getActivity(), toTextView, R.dimen.listitem_description_text_size);
-                FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_description_text_size);
-                FontUtils.updateTextSize(getActivity(), tvComment, R.dimen.listitem_description_text_size);
-                FontUtils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size);
+                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+                FontUtils.updateTextSize(getActivity(), toTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_description_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), tvComment, R.dimen.listitem_description_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
+
+                CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+                FontUtils.changeFont(convertView, pref.getCustomFontTypeface());
+
                 return convertView;
             }
         };
@@ -104,4 +111,5 @@ public class HistoryCommentListFragment extends AbstractAsyncListFragment<Histor
         loadData();
         mListView.setSelection(0);
     }
+
 }

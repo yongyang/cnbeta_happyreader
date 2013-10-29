@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.CnBetaPreferences;
 import org.jandroid.cnbeta.ContentActivity;
@@ -343,19 +344,6 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         });
     }
 
-    //TODO: 加载之后，根据用户自定义的字体 updateFont
-    private void updateFontFamily(final String fontFamily) {
-        // 在android代码中调用javaScript方法
-        handler.post(new Runnable() {
-            public void run() {
-                contentWebView.loadUrl("javascript:(function(){" +
-                        "var body = document.getElementByTag('body');"
-                        + "body.style.font-family='" + fontFamily + "';" +
-                        "})()");
-            }
-        });
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -369,8 +357,9 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     @Override
     public void onResume() {
         super.onResume();
+        int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
         if (contentWebView != null) {
-            FontUtils.updateTextSize(getActivity(), contentWebView, R.dimen.webview_default_text_size);
+            FontUtils.updateTextSize(getActivity(), contentWebView, R.dimen.webview_default_text_size, fontSizeOffset);
 
             // Try resumeTimers anyway, flash plugin may case pauseTimers
             contentWebView.resumeTimers();
@@ -378,13 +367,13 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         }
 
         // update font size
-        FontUtils.updateTextSize(getActivity(), titleTextView, R.dimen.listitem_title_text_size);
-        FontUtils.updateTextSize(getActivity(), timeTextView, R.dimen.listitem_status_text_size);
-        FontUtils.updateTextSize(getActivity(), viewNumTextView, R.dimen.listitem_status_text_size);
-        FontUtils.updateTextSize(getActivity(), commentNumTextView, R.dimen.listitem_status_text_size);
-        FontUtils.updateTextSize(getActivity(), whereTextView, R.dimen.listitem_status_text_size);
+        FontUtils.updateTextSize(getActivity(), titleTextView, R.dimen.listitem_title_text_size, fontSizeOffset);
+        FontUtils.updateTextSize(getActivity(), timeTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
+        FontUtils.updateTextSize(getActivity(), viewNumTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
+        FontUtils.updateTextSize(getActivity(), commentNumTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
+        FontUtils.updateTextSize(getActivity(), whereTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
 
-        CnBetaPreferences pref = CnBetaPreferences.getInstance(getActivity().getApplication());
+        CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
         FontUtils.changeFont(getView(), pref.getCustomFontTypeface());
         if (loaded) { // reload
             contentWebView.loadDataWithBaseURL(null, getStyledHTMLContent(content), "text/html", "UTF-8", "about:blank");
@@ -490,7 +479,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         StringBuilder sb = new StringBuilder();
         sb.append("<html><head><style type=\"text/css\">");
         // 设置 custom Font
-        String customFont = CnBetaPreferences.getInstance(getActivity().getApplication()).getCustomFont();
+        String customFont = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getCustomFont();
         if (customFont != null && !customFont.isEmpty() && !customFont.equals("default")) {
             sb.append("@font-face{ font-family: customFont; src:url('" + customFont + "');" + "} body {font-family: 'customFont';}");
         }

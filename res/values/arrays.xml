@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="fontSizeIncrementStringArray" >
+    <string-array name="fontSizeOffsetNameArray" >
         <item>小</item>
         <item>中</item>
         <item>大</item>
@@ -8,7 +8,7 @@
         <item>超大</item>
     </string-array>
 
-    <string-array name="fontSizeIncrementIntegerArray" >
+    <string-array name="fontSizeOffsetValueArray" >
         <item>-1</item>
         <item>0</item>
         <item>1</item>
@@ -16,12 +16,12 @@
         <item>5</item>
     </string-array>
 
-    <string-array name="fontNames" >
+    <string-array name="fontNameArray" >
         <item>系统默认</item>
         <item>卡通体</item>
         <item>娃娃体</item>
     </string-array>
-    <string-array name="fontPaths" >
+    <string-array name="fontPathArray" >
         <item>default</item>
         <item>file:///android_asset/fonts/katong.ttf</item>
         <item>file:///android_asset/fonts/wawa.ttf</item>

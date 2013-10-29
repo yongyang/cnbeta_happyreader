@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
+import org.jandroid.cnbeta.CnBetaPreferences;
 import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
@@ -169,16 +170,21 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                     }
                 }
 
-                FontUtils.updateTextSize(getActivity(), positionTextView, R.dimen.listitem_description_text_size);
-                FontUtils.updateTextSize(getActivity(), nameTextView, R.dimen.listitem_description_text_size);
-                FontUtils.updateTextSize(getActivity(), hostNameTextView, R.dimen.listitem_description_text_size);
-                FontUtils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size);
-                FontUtils.updateTextSize(getActivity(), commentTextView, R.dimen.listitem_comment_text_size);
-                FontUtils.updateTextSize(getActivity(), supportTextView, R.dimen.listitem_comment_text_size);
-                FontUtils.updateTextSize(getActivity(), againstTextView, R.dimen.listitem_comment_text_size);
-                FontUtils.updateTextSize(getActivity(), scoreTextView, R.dimen.listitem_comment_text_size);
-                FontUtils.updateTextSize(getActivity(), reasonTextView, R.dimen.listitem_comment_text_size);
-                FontUtils.updateTextSize(getActivity(), toParentTextView, R.dimen.listitem_comment_text_size);
+                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+                FontUtils.updateTextSize(getActivity(), positionTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), nameTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), hostNameTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), commentTextView, R.dimen.listitem_comment_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), supportTextView, R.dimen.listitem_comment_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), againstTextView, R.dimen.listitem_comment_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), scoreTextView, R.dimen.listitem_comment_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), reasonTextView, R.dimen.listitem_comment_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), toParentTextView, R.dimen.listitem_comment_text_size, fontSizeOffset);
+
+                CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+                FontUtils.changeFont(convertView, pref.getCustomFontTypeface());
+
                 return convertView;
             }
         };
@@ -364,6 +370,13 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
     public void onProgressDismiss() {
         super.onProgressDismiss();
         footerPagingView.onProgressDismiss();
+    }
+
+    @Override
+    public void onResume() {
+        CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+        FontUtils.changeFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
+        super.onResume();
     }
 
 }

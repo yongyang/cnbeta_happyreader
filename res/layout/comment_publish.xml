@@ -9,6 +9,7 @@
 
     <EditText
             android:textColor="@color/cnBeta_text_blue"
+            android:textSize="@dimen/listitem_comment_text_size"
             android:gravity="top"
             android:id="@+id/comment"
             android:scrollbars="vertical"

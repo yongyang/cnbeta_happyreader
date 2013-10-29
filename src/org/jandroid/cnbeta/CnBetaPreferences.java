@@ -26,7 +26,7 @@ public class CnBetaPreferences {
         prefs = application.getSharedPreferences(application.getPackageName() + "_preferences", Context.MODE_PRIVATE);
     }
 
-    public synchronized static CnBetaPreferences getInstance(Application application) {
+    synchronized static CnBetaPreferences getInstance(Application application) {
         if (instance == null) {
             instance = new CnBetaPreferences(application);
         }
@@ -41,8 +41,8 @@ public class CnBetaPreferences {
         return prefs.getBoolean(application.getString(R.string.pref_key_autoCleanHistory), false);
     }
 
-    public int getFontSizeIncrement() {
-        String size = prefs.getString(application.getString(R.string.pref_key_fontSizeIncrement), "0");
+    public int getFontSizeOffset() {
+        String size = prefs.getString(application.getString(R.string.pref_key_fontSizeOffset), "0");
         try {
             return Integer.parseInt(size);
         }
@@ -61,8 +61,11 @@ public class CnBetaPreferences {
 
     public Typeface getCustomFontTypeface() {
         String customFont = getCustomFont();
-        //TODO: 需要处理 系统默认时
-        if (customFont != null && !customFont.isEmpty() && !customFont.equals("default")) {
+        //默认字体
+        if(customFont == null || customFont.isEmpty() || customFont.equals("default")){
+            return Typeface.DEFAULT;
+        }
+        else {
             try {
                 if (!customFont.equals(lastFont)) {
                     Typeface typeface;
@@ -83,6 +86,5 @@ public class CnBetaPreferences {
                 return null;
             }
         }
-        return null;
     }
 }

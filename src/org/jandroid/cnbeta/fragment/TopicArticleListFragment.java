@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
+import org.jandroid.cnbeta.CnBetaPreferences;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
@@ -244,10 +245,14 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
                 // queue to image load list or set a cached bitmap if has been cached
                 ivLogo.setImageBitmap(queueImageView(position, ivLogo, article.getLogo()));
 
-                FontUtils.updateTextSize(getActivity(), tvTitleShow, R.dimen.listitem_title_text_size);
-                FontUtils.updateTextSize(getActivity(), tvHometextShowShort2, R.dimen.listitem_description_text_size);
-                FontUtils.updateTextSize(getActivity(), tvComments, R.dimen.listitem_status_text_size);
-                FontUtils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size);
+                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+                FontUtils.updateTextSize(getActivity(), tvTitleShow, R.dimen.listitem_title_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), tvHometextShowShort2, R.dimen.listitem_description_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), tvComments, R.dimen.listitem_status_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size, fontSizeOffset);
+
+                CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+                FontUtils.changeFont(convertView, pref.getCustomFontTypeface());
 
                 return convertView;
             }
@@ -301,5 +306,11 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
         footerPagingView.onProgressDismiss();
     }
 
+    @Override
+    public void onResume() {
+        CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+        FontUtils.changeFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
+        super.onResume();
+    }
 
 }

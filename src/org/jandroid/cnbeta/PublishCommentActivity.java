@@ -13,6 +13,7 @@ import org.jandroid.cnbeta.async.PublishCommentAsyncTask;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.DateFormatUtils;
+import org.jandroid.common.FontUtils;
 import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
 import org.json.simple.JSONObject;
@@ -31,6 +32,8 @@ public class PublishCommentActivity extends BaseActivity {
     protected TextView commentTextView;
     protected TextView captchaTextView;
 
+    TextView cancelTextView;
+    TextView sendTextView;
 
     protected long sid;
 
@@ -54,14 +57,14 @@ public class PublishCommentActivity extends BaseActivity {
         commentTextView = (TextView)findViewById(R.id.comment);
         captchaTextView = (TextView)findViewById(R.id.seccode);
 
-        TextView cancelTextView = (TextView)findViewById(R.id.cancel);
+        cancelTextView = (TextView)findViewById(R.id.cancel);
         cancelTextView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 finish();
             }
         });
 
-        TextView sendTextView = (TextView)findViewById(R.id.send);
+        sendTextView = (TextView)findViewById(R.id.send);
         sendTextView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 post();
@@ -70,6 +73,8 @@ public class PublishCommentActivity extends BaseActivity {
 
         postProgressBar = (ProgressBar)findViewById(R.id.post_progessBar);
     }
+
+
 
     protected int getLayoutResourceId(){
         return R.layout.comment_publish;
@@ -93,6 +98,15 @@ public class PublishCommentActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        CnBetaPreferences pref = ((CnBetaApplicationContext)getApplicationContext()).getCnBetaPreferences();
+        FontUtils.updateTextSize(this, commentTextView, R.dimen.listitem_comment_text_size, pref.getFontSizeOffset());
+        FontUtils.updateTextSize(this, captchaTextView, R.dimen.listitem_comment_text_size, pref.getFontSizeOffset());
+        FontUtils.updateTextSize(this, cancelTextView, R.dimen.listitem_title_text_size, pref.getFontSizeOffset());
+        FontUtils.updateTextSize(this, sendTextView, R.dimen.listitem_title_text_size, pref.getFontSizeOffset());
+
+        FontUtils.changeFont(getWindow().getDecorView().getRootView(), pref.getCustomFontTypeface());
+
         initCaptcha();
     }
 

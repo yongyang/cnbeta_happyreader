@@ -7,6 +7,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import org.jandroid.cnbeta.CnBetaApplicationContext;
+import org.jandroid.cnbeta.CnBetaPreferences;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
@@ -98,8 +100,12 @@ public class MRankListFragment extends AbstractAsyncListFragment<MRankArticle> {
                 TextView tvTitle = (TextView) convertView.findViewById(R.id.title);
                 tvTitle.setText(article.getTitle());
 
-                FontUtils.updateTextSize(getActivity(), tvRank, R.dimen.listitem_rank_no_text_size);
-                FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size);
+                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+                FontUtils.updateTextSize(getActivity(), tvRank, R.dimen.listitem_rank_no_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size, fontSizeOffset);
+
+                CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+                FontUtils.changeFont(convertView, pref.getCustomFontTypeface());
 
                 return convertView;
             }
@@ -144,6 +150,13 @@ public class MRankListFragment extends AbstractAsyncListFragment<MRankArticle> {
     public void onProgressDismiss() {
         super.onProgressDismiss();
         footerRefreshView.onProgressDismiss();
+    }
+
+    @Override
+    public void onResume() {
+        CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+        FontUtils.changeFont(footerRefreshView.getRootView(), pref.getCustomFontTypeface());
+        super.onResume();
     }
 
 }

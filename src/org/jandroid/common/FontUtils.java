@@ -1,6 +1,7 @@
 package org.jandroid.common;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.view.View;
@@ -42,19 +43,25 @@ public class FontUtils {
                 }
             }
             else if (root instanceof WebView) {
-                //TODO:
+                //TODO: Has to update font of webview in a separate way by CSS/JS
             }
         }
     }
 
-    public static void updateTextSize(Activity theActivity, TextView textView, int dimId) {
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, PixelUtils.pixelsToSp(theActivity, theActivity.getResources().getDimension(dimId)) + ((CnBetaApplicationContext)theActivity.getApplicationContext()).getCnBetaPreferences().getFontSizeIncrement());
+    public static void updateTextSize(Context theContext, TextView textView, int dimResourceId, int spOffsetSize) {
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, PixelUtils.pixelsToSp(theContext, theContext.getResources().getDimension(dimResourceId)) + spOffsetSize);
     }
 
-    public static void updateTextSize(Activity theActivity, WebView webView, int dimId) {
-        webView.getSettings().setDefaultFontSize((int)PixelUtils.pixelsToSp(theActivity,theActivity.getResources().getDimension(dimId)) + ((CnBetaApplicationContext)theActivity.getApplicationContext()).getCnBetaPreferences().getFontSizeIncrement());
-        webView.getSettings().setDefaultFixedFontSize((int)PixelUtils.pixelsToSp(theActivity,theActivity.getResources().getDimension(dimId)) + ((CnBetaApplicationContext)theActivity.getApplicationContext()).getCnBetaPreferences().getFontSizeIncrement());
+    public static void updateTextSize(Context theContext, WebView webView, int dimResourceId, int spOffsetSize) {
+        webView.getSettings().setDefaultFontSize((int)PixelUtils.pixelsToSp(theContext,theContext.getResources().getDimension(dimResourceId)) + spOffsetSize);
+        webView.getSettings().setDefaultFixedFontSize((int)PixelUtils.pixelsToSp(theContext,theContext.getResources().getDimension(dimResourceId)) + spOffsetSize);
     }
+
+    public static void updateText(Context theContext, TextView textView, int dimResourceId, int spOffsetSize, Typeface typeface) {
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, PixelUtils.pixelsToSp(theContext, theContext.getResources().getDimension(dimResourceId)) + spOffsetSize);
+        changeFont(textView, typeface);
+    }
+
 
     /**
      * TTF Font file parser

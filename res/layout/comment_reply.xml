@@ -22,6 +22,7 @@
 
         <TextView
                 android:textColor="@color/cnBeta_text_description_gray"
+                android:textSize="@dimen/listitem_comment_text_size"
                 android:id="@+id/re_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -32,6 +33,7 @@
 
     <EditText
             android:textColor="@color/cnBeta_text_blue"
+            android:textSize="@dimen/listitem_comment_text_size"
             android:gravity="top"
             android:id="@+id/comment"
             android:scrollbars="vertical"

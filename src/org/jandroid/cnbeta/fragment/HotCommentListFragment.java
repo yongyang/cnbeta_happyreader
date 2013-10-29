@@ -7,6 +7,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import org.jandroid.cnbeta.CnBetaApplicationContext;
+import org.jandroid.cnbeta.CnBetaPreferences;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
@@ -128,13 +130,18 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
                 tvHometextShowShort.setText(article.getHometextShowShort());
 */
 
-                FontUtils.updateTextSize(getActivity(), commentTextView, R.dimen.listitem_comment_text_size);
-                FontUtils.updateTextSize(getActivity(), titleShowTextView, R.dimen.listitem_description_text_size);
-                FontUtils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size);
-                FontUtils.updateTextSize(getActivity(), hostNameShowTextView, R.dimen.listitem_status_text_size);
-                FontUtils.updateTextSize(getActivity(), nameTextView, R.dimen.listitem_status_text_size);
-                FontUtils.updateTextSize(getActivity(), fromTextView, R.dimen.listitem_status_text_size);
-                FontUtils.updateTextSize(getActivity(), toTextView, R.dimen.listitem_description_text_size);
+                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+                FontUtils.updateTextSize(getActivity(), commentTextView, R.dimen.listitem_comment_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), titleShowTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), hostNameShowTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), nameTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), fromTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
+                FontUtils.updateTextSize(getActivity(), toTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
+
+                CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+                FontUtils.changeFont(convertView, pref.getCustomFontTypeface());
+
                 return convertView;
             }
         };
@@ -164,4 +171,12 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
         super.onProgressDismiss();
         footerPagingView.onProgressDismiss();
     }
+
+    @Override
+    public void onResume() {
+        CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+        FontUtils.changeFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
+        super.onResume();
+    }
+
 }

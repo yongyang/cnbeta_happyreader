@@ -21,18 +21,18 @@
                 android:title="选择字体"
                 android:summary="注：如要更改标题栏中的字体, 需替换系统字体"
                 android:dialogTitle="选择字体"
-                android:entries="@array/fontNames"
-                android:entryValues="@array/fontPaths"
+                android:entries="@array/fontNameArray"
+                android:entryValues="@array/fontPathArray"
                 android:defaultValue="default"
                 />
 
         <ListPreference
-                android:key="@string/pref_key_fontSizeIncrement"
+                android:key="@string/pref_key_fontSizeOffset"
                 android:title="字体大小"
                 android:summary="设置字体大小"
                 android:dialogTitle="选择字体大小"
-                android:entries="@array/fontSizeIncrementStringArray"
-                android:entryValues="@array/fontSizeIncrementIntegerArray"
+                android:entries="@array/fontSizeOffsetNameArray"
+                android:entryValues="@array/fontSizeOffsetValueArray"
                 android:defaultValue="0"
                 />
     </PreferenceCategory>

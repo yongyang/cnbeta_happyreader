@@ -57,7 +57,7 @@
     <string name="pref_key_installFont">installFont</string>
     <string name="pref_key_deleteFont">deleteFont</string>
     <string name="pref_key_customFont">customFont</string>
-    <string name="pref_key_fontSizeIncrement">fontSizeIncrement</string>
+    <string name="pref_key_fontSizeOffset">fontSizeOffset</string>
     <string name="pref_key_signature">signature</string>
 
 </resources>
