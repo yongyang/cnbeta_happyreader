@@ -4,7 +4,6 @@ import org.jandroid.cnbeta.entity.RealtimeArticle;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.RealtimeArticleListLoader;
 
-import java.util.Collections;
 import java.util.List;
 
 /**

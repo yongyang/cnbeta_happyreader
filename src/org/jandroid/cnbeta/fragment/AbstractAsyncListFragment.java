@@ -1,25 +1,19 @@
 package org.jandroid.cnbeta.fragment;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
-import org.jandroid.cnbeta.CnBetaPreferences;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.exception.InfoException;
 import org.jandroid.common.BaseFragment;
-import org.jandroid.common.PixelUtils;
 import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
 

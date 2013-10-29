@@ -1,6 +1,5 @@
 package org.jandroid.common;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.TypedValue;
@@ -8,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.TextView;
-import org.jandroid.cnbeta.CnBetaApplicationContext;
 
 import java.io.File;
 import java.io.IOException;

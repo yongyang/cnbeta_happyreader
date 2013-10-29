@@ -4,7 +4,6 @@ import org.jandroid.cnbeta.entity.MRankArticle;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.MRankListLoader;
 
-import java.util.Collections;
 import java.util.List;
 
 /**

@@ -3,7 +3,6 @@ package org.jandroid.cnbeta.async;
 import android.app.Application;
 import org.jandroid.cnbeta.client.RequestContext;
 import org.jandroid.cnbeta.exception.InfoException;
-import org.jandroid.cnbeta.exception.NoCachedDataException;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.common.Logger;
 import org.jandroid.common.ToastUtils;

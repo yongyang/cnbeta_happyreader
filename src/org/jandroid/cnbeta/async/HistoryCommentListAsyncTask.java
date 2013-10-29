@@ -5,7 +5,6 @@ import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.HistoryCommentListLoader;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
 
 /**

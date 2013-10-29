@@ -10,7 +10,6 @@ import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.RemoteViews;
 import android.widget.Toast;
-import org.jandroid.cnbeta.MainActivity;
 import org.jandroid.cnbeta.R;
 import org.jandroid.common.BaseService;
 import org.jandroid.common.IntentUtils;

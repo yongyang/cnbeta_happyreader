@@ -4,7 +4,6 @@ import org.jandroid.cnbeta.entity.EditorRecommend;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.EditorRecommendListLoader;
 
-import java.util.Collections;
 import java.util.List;
 
 /**

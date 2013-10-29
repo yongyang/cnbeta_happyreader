@@ -2,14 +2,10 @@ package org.jandroid.cnbeta;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.SharedPreferences;
 import android.os.Environment;
 import android.os.Handler;
 import android.view.MenuItem;
 import org.apache.commons.io.FileUtils;
-import org.jandroid.cnbeta.client.CnBetaHttpClient;
-import org.jandroid.cnbeta.loader.HistoryArticleListLoader;
-import org.jandroid.cnbeta.loader.HistoryCommentListLoader;
 import org.jandroid.common.EnvironmentUtils;
 import org.jandroid.common.Logger;
 import org.jandroid.common.ToastUtils;

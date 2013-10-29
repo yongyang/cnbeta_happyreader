@@ -1,7 +1,6 @@
 package org.jandroid.common.async;
 
 import android.os.AsyncTask;
-import org.jandroid.cnbeta.client.RequestContext;
 
 /**
  * @author <a href="mailto:yyang@redhat.com">Yong Yang</a>

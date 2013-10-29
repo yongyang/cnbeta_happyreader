@@ -1,13 +1,10 @@
 package org.jandroid.cnbeta;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.EnvironmentUtils;
-import org.jandroid.common.IntentUtils;
 import org.jandroid.common.ToastUtils;
 
 /**

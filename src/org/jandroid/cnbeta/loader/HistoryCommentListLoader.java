@@ -1,7 +1,6 @@
 package org.jandroid.cnbeta.loader;
 
 import org.jandroid.cnbeta.client.RequestContext;
-import org.jandroid.cnbeta.entity.HistoryArticle;
 import org.jandroid.cnbeta.entity.HistoryComment;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

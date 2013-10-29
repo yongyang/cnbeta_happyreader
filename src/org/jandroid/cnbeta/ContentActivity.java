@@ -1,31 +1,34 @@
 package org.jandroid.cnbeta;
 
-import android.app.ActionBar;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v13.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.entity.HistoryComment;
 import org.jandroid.cnbeta.fragment.ArticleCommentsFragment;
 import org.jandroid.cnbeta.fragment.ArticleContentFragment;
 import org.jandroid.cnbeta.loader.HistoryCommentListLoader;
-import org.jandroid.common.BaseActivity;
 import org.jandroid.common.DateFormatUtils;
 import org.jandroid.common.ToastUtils;
-import org.jandroid.common.adapter.ActionTabFragmentPagerAdapter;
 
 import java.util.Date;
 
-public class ContentActivity extends BaseActivity {
+public class ContentActivity extends AbstractActionTabFragmentActivity {
+
+    private final static int[] tabs = new int[]{R.string.tab_zhengwen, R.string.tab_pinglun};
+
+    @Override
+    protected Fragment getTabFragmentByItem(int position) {
+        return position == 0 ? contentFragment : commentsFragment;
+    }
+
+    @Override
+    protected int[] getTabResourceIds() {
+        return tabs;
+    }
 
     private ArticleContentFragment contentFragment;
     private ArticleCommentsFragment commentsFragment;
@@ -33,54 +36,18 @@ public class ContentActivity extends BaseActivity {
     private long sid;
     private String title;
 
-    private ViewPager mViewPager;
-    private ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
-
-        @Override
-        protected ActionBar getActionBar() {
-            return ContentActivity.this.getActionBar();
-        }
-
-        @Override
-        protected ViewPager getViewPager() {
-            return mViewPager;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return position == 0 ? contentFragment : commentsFragment;
-        }
-
-    };
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_PROGRESS);
-        this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        this.setProgressBarIndeterminate(true);
-
         sid = getIntent().getExtras().getLong("sid");
         title = getIntent().getExtras().getString("title");
 
-        setContentView(R.layout.content);
-        setupViewPager();
-        setupActionBar();
-    }
-
-    private void setupActionBar() {
-        final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        actionBar.addTab(actionBar.newTab().setText(R.string.tab_zhengwen).setTabListener(pagerAdapter));
         contentFragment = new ArticleContentFragment();
-        actionBar.addTab(actionBar.newTab().setText(R.string.tab_pinglun).setTabListener(pagerAdapter));
         commentsFragment = new ArticleCommentsFragment();
 
-        pagerAdapter.notifyDataSetChanged();
+        super.onCreate(savedInstanceState);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public long getArticleSid() {
@@ -95,23 +62,10 @@ public class ContentActivity extends BaseActivity {
         return contentFragment.getContent() != null;
     }
 
-    private void setupViewPager() {
-        mViewPager = (ViewPager) findViewById(R.id.content_viewpager);
-        mViewPager.setAdapter(pagerAdapter);
-        mViewPager.setOnPageChangeListener(pagerAdapter);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        getMenuInflater().inflate(R.menu.content_menu, menu);
         //add  refresh actionitem
-        getMenuInflater().inflate(R.menu.default_action_menu, menu);
+        getMenuInflater().inflate(R.menu.content_action_item, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

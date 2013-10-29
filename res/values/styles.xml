@@ -25,7 +25,7 @@
 
     <style name="TabText.CnBeta" parent="@android:style/Widget.ActionBar.TabText">
         <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
-        <item name="android:textSize">15dp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/tab_text_color_selector_cnbeta</item>
         <!--<item name="android:textStyle">italic|bold</item>  -->
     </style>

@@ -3,7 +3,6 @@ package org.jandroid.cnbeta.loader;
 import org.apache.commons.io.FileUtils;
 import org.jandroid.cnbeta.client.RequestContext;
 import org.jandroid.cnbeta.exception.NoCachedDataException;
-import org.jandroid.cnbeta.exception.NoDataInfoException;
 
 import java.io.File;
 

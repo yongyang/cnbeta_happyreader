@@ -1,12 +1,5 @@
 package org.jandroid.cnbeta;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -26,6 +19,13 @@ import org.apache.commons.io.FileUtils;
 import org.jandroid.common.FileChooserDialog;
 import org.jandroid.common.FontUtils;
 import org.jandroid.common.ToastUtils;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CnBetaPreferenceActivity extends PreferenceActivity {
     private Handler handler = new Handler();

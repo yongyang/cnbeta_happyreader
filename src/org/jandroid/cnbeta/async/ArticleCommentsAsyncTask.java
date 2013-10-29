@@ -5,7 +5,6 @@ import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.ArticleCommentsLoader;
 
-import java.util.Collections;
 import java.util.List;
 
 /**

@@ -4,7 +4,6 @@ import org.jandroid.cnbeta.entity.HotComment;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.HotCommentListLoader;
 
-import java.util.Collections;
 import java.util.List;
 
 /**

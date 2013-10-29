@@ -3,7 +3,6 @@ package org.jandroid.cnbeta.loader;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
-import org.apache.commons.io.FileUtils;
 import org.jandroid.cnbeta.client.CnBetaHttpClient;
 import org.jandroid.cnbeta.client.RequestContext;
 import org.jandroid.cnbeta.exception.NoCachedImageException;
