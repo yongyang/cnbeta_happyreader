@@ -55,8 +55,11 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
     }
 
     private String fixResponseHTML(String origResponseHTML){
+        // incorrect ;"">
         String responseHTML = origResponseHTML.replaceAll(";\"\">", ";\">");
-        return responseHTML.replaceAll("<center>", "");
+        // incorrect <center>
+        responseHTML = responseHTML.replaceAll("<center>", "");
+        return responseHTML;
     }
 
     private void cleanBodyElement(Element bodyElement) {
@@ -115,7 +118,11 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         Element contentElement = bodyElement.select("section.article_content").first();
         Element dateElement = bodyElement.select("span.date").first();
         Element introductionElement = bodyElement.select("div.introduction").first();
+        // set style for introduction
         introductionElement.attr("style", "background-color: #fbfbfb; color: #43434; border: 1px solid #e5e5e5; border-left: 0px; border-right: 0px; padding-left: 10px; padding-right: 10px; margin-bottom: 10px");
+        // fix position of logo div
+        Element logoDiv = introductionElement.select("div").get(1); // first one is introduction itself
+        logoDiv.attr("style", "float:right;margin-left:5px;margin-top:20px;margin-bottom:5px;margin-right:0px;");
 
         Element whereElement = bodyElement.select("span.where").first();
 
@@ -134,7 +141,7 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         List<String> images = new ArrayList<String>();
 
         //content img 处理
-        for(Element imgElement : contentElement.select("div.content").first().getElementsByTag("img")) {
+        for(Element imgElement : contentElement.select("section.article_content").first().getElementsByTag("img")) {
 
             // 取出原始的 img src, 交给 ImageLoader去异步加载
             String imgSrc = imgElement.attr("src");
