@@ -257,7 +257,9 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
                 if(reloadComment) { // don't reload comment onResume
                     handler.postDelayed(new Runnable() {
                         public void run() {
-                            ((ContentActivity) getActivity()).reloadComments();
+                            if( getActivity() != null) { // in case activity finished
+                                ((ContentActivity) getActivity()).reloadComments();
+                            }
                         }
                     }, 500);
                 }

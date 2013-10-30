@@ -53,7 +53,7 @@ public class FontUtils {
     public static void updateTextSize(Context theContext, WebView webView, int dimResourceId, int spOffsetSize) {
 //        webView.getSettings().setDefaultFontSize((int)theContext.getResources().getDimension(dimResourceId) + (int)theContext.getResources().getDisplayMetrics().scaledDensity * spOffsetSize);
 //        webView.getSettings().setDefaultFixedFontSize((int)theContext.getResources().getDimension(dimResourceId) + (int)theContext.getResources().getDisplayMetrics().scaledDensity * spOffsetSize);
-        webView.getSettings().setTextZoom(100 + (spOffsetSize*5));
+        webView.getSettings().setTextZoom(100 + (spOffsetSize*10));
     }
 
     public static void updateText(Context theContext, TextView textView, int dimResourceId, int spOffsetSize, Typeface typeface) {

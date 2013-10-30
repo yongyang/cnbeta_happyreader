@@ -113,7 +113,7 @@
                             android:layout_height="wrap_content"
                             android:singleLine="true"
                             android:paddingLeft="4dip"
-                            android:text="发于:"/>
+                            android:text="发:"/>
 
                     <TextView
                             android:textSize="@dimen/listitem_status_text_size"
