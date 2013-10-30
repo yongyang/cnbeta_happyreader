@@ -142,7 +142,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                         supportTextView.setText(R.string.supported);
                         supportLinearLayout.setEnabled(false);
                     }
-                    if(comment.isAgainsted()) { // 已反对
+                    if (comment.isAgainsted()) { // 已反对
                         againstTextView.setText(R.string.againsted);
                         againstLinearLayout.setEnabled(false);
                     }
@@ -170,7 +170,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                     }
                 }
 
-                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+                int fontSizeOffset = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
                 FontUtils.updateTextSize(getActivity(), positionTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), nameTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), hostNameTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
@@ -182,7 +182,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                 FontUtils.updateTextSize(getActivity(), reasonTextView, R.dimen.listitem_comment_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), toParentTextView, R.dimen.listitem_comment_text_size, fontSizeOffset);
 
-                CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+                CnBetaPreferences pref = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getCnBetaPreferences();
                 FontUtils.updateFont(convertView, pref.getCustomFontTypeface());
 
                 return convertView;
@@ -238,11 +238,11 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                         if (isSupport) {
                             // supported
                             getComment().setSupported(true);
-                            getComment().setScore(getComment().getScore()+1);
+                            getComment().setScore(getComment().getScore() + 1);
                         }
                         else {
                             getComment().setAgainsted(true);
-                            getComment().setReason(getComment().getReason()+1);
+                            getComment().setReason(getComment().getReason() + 1);
                         }
 
                         ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 1.8f, 1.0f, 1.8f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
@@ -275,56 +275,60 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
 
     @Override
     public void loadData() {
-        if (((ContentActivity) getActivity()).isPageLoaded()) {
-            executeAsyncTaskMultiThreading(new ArticleCommentsAsyncTask() {
-                @Override
-                protected Content getArticleContent() {
-                    return ((ContentActivity) getActivity()).getContent();
-                }
+        if (getActivity() != null) {
+            if (((ContentActivity) getActivity()).isPageLoaded()) {
+                executeAsyncTaskMultiThreading(new ArticleCommentsAsyncTask() {
+                    @Override
+                    protected Content getArticleContent() {
+                        return ((ContentActivity) getActivity()).getContent();
+                    }
 
-                @Override
-                protected int getPage() {
-                    return footerPagingView.getNextPage();
-                }
+                    @Override
+                    protected int getPage() {
+                        return footerPagingView.getNextPage();
+                    }
 
-                @Override
-                public HasAsync<List<Comment>> getAsyncContext() {
-                    return new HasAsyncDelegate<List<Comment>>(ArticleCommentsFragment.this);
+                    @Override
+                    public HasAsync<List<Comment>> getAsyncContext() {
+                        return new HasAsyncDelegate<List<Comment>>(ArticleCommentsFragment.this);
+                    }
                 }
+                );
             }
-            );
         }
     }
 
     @Override
     public void reloadData() {
-        if (((ContentActivity) getActivity()).isPageLoaded()) {
-            executeAsyncTaskMultiThreading(new ArticleCommentsAsyncTask() {
-                @Override
-                protected Content getArticleContent() {
-                    return ((ContentActivity) getActivity()).getContent();
-                }
+        if (getActivity() != null) {
+            if (((ContentActivity) getActivity()).isPageLoaded()) {
+                executeAsyncTaskMultiThreading(new ArticleCommentsAsyncTask() {
+                    @Override
+                    protected Content getArticleContent() {
+                        return ((ContentActivity) getActivity()).getContent();
+                    }
 
-                @Override
-                protected int getPage() {
-                    footerPagingView.resetPage();
-                    return footerPagingView.getNextPage();
-                }
+                    @Override
+                    protected int getPage() {
+                        footerPagingView.resetPage();
+                        return footerPagingView.getNextPage();
+                    }
 
-                @Override
-                public HasAsync<List<Comment>> getAsyncContext() {
-                    return new HasAsyncDelegate<List<Comment>>(ArticleCommentsFragment.this) {
-                        @Override
-                        public void onSuccess(AsyncResult<List<Comment>> listAsyncResult) {
-                            clearData();
-                            super.onSuccess(listAsyncResult);
-                            // scroll to top
-                            mListView.setSelection(0);
-                        }
-                    };
+                    @Override
+                    public HasAsync<List<Comment>> getAsyncContext() {
+                        return new HasAsyncDelegate<List<Comment>>(ArticleCommentsFragment.this) {
+                            @Override
+                            public void onSuccess(AsyncResult<List<Comment>> listAsyncResult) {
+                                clearData();
+                                super.onSuccess(listAsyncResult);
+                                // scroll to top
+                                mListView.setSelection(0);
+                            }
+                        };
+                    }
                 }
+                );
             }
-            );
         }
     }
 
@@ -356,7 +360,9 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
         footerPagingView.increasePage();
         // update comment count in ContentFragment
         if (footerPagingView.getPage() == 1) { // 仅第一页需要 update comment numbers
-            ((ContentActivity) getActivity()).updateCommentNumbers();
+            if(getActivity() != null) {
+                ((ContentActivity) getActivity()).updateCommentNumbers();
+            }
         }
     }
 
@@ -374,7 +380,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
 
     @Override
     public void onResume() {
-        CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+        CnBetaPreferences pref = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getCnBetaPreferences();
         FontUtils.updateFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
         super.onResume();
     }

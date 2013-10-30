@@ -243,8 +243,19 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
                 contentWebView.setVisibility(View.VISIBLE);
                 progressBarLayout.setVisibility(View.GONE);
 
-                //Delay loading images comments to give the contentWebView high priority to paint
+                                //Stat to load comments and view_num, comment_num etc
+                //!!!NOTE: this is the best point to start to load comments, after content page loaded
+                if(reloadComment) { // don't reload comment onResume's loadDataUrl
+                    handler.post(new Runnable() {
+                        public void run() {
+                            if( getActivity() != null) { // in case activity finished
+                                ((ContentActivity) getActivity()).reloadComments();
+                            }
+                        }
+                    });
+                }
 
+                //Delay loading images comments to give the contentWebView high priority to paint
                 //load images here, after Page Loaded
                 handler.postDelayed(new Runnable() {
                     public void run() {
@@ -252,17 +263,6 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
                     }
                 }, 100);
 
-                //Stat to load comments and view_num, comment_num etc
-                //!!!NOTE: this is the best point to start to load comments, after content page loaded
-                if(reloadComment) { // don't reload comment onResume
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            if( getActivity() != null) { // in case activity finished
-                                ((ContentActivity) getActivity()).reloadComments();
-                            }
-                        }
-                    }, 500);
-                }
                 // 延迟显示，以免早于显示 WebView paint完成之前显示
                 handler.postDelayed(new Runnable() {
                     public void run() {
