@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="listitem_logo_width">72dip</dimen>
-    <dimen name="listitem_logo_height">72dip</dimen>
+    <dimen name="listitem_logo_width">70dip</dimen>
+    <dimen name="listitem_logo_height">70dip</dimen>
     <dimen name="listitem_default_text_size">16sp</dimen>
     <dimen name="listitem_title_text_size">17sp</dimen>
     <dimen name="listitem_comment_text_size">16sp</dimen>

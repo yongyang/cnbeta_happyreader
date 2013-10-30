@@ -204,7 +204,7 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
                     convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_article_item, null);
                 }
                 Article article = getData(position);
-                TextView tvTitleShow = (TextView) convertView.findViewById(R.id.tile_show);
+                TextView tvTitleShow = (TextView) convertView.findViewById(R.id.title_show);
                 tvTitleShow.setText(article.getTitleShow());
                 TextView tvHometextShowShort = (TextView) convertView.findViewById(R.id.hometext);
                 tvHometextShowShort.setText(article.getHometextShowShort());
@@ -231,7 +231,7 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
                 FontUtils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size, fontSizeOffset);
 
                 CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-                FontUtils.changeFont(convertView, pref.getCustomFontTypeface());
+                FontUtils.updateFont(convertView, pref.getCustomFontTypeface());
 
                 return convertView;
             }
@@ -273,7 +273,7 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
     @Override
     public void onResume() {
         CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-        FontUtils.changeFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
+        FontUtils.updateFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
         super.onResume();
     }
 }

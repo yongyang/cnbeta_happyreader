@@ -140,7 +140,7 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
                 FontUtils.updateTextSize(getActivity(), toTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
 
                 CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-                FontUtils.changeFont(convertView, pref.getCustomFontTypeface());
+                FontUtils.updateFont(convertView, pref.getCustomFontTypeface());
 
                 return convertView;
             }
@@ -175,7 +175,7 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
     @Override
     public void onResume() {
         CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-        FontUtils.changeFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
+        FontUtils.updateFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
         super.onResume();
     }
 

@@ -228,7 +228,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
                     convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_topic_article_item, null);
                 }
                 TopicArticle article = getData(position);
-                TextView tvTitleShow = (TextView) convertView.findViewById(R.id.tile_show);
+                TextView tvTitleShow = (TextView) convertView.findViewById(R.id.title_show);
                 tvTitleShow.setText(article.getTitleShow());
                 TextView tvHometextShowShort2 = (TextView) convertView.findViewById(R.id.hometext_show_short2);
                 tvHometextShowShort2.setText(article.getHometextShowShort2());
@@ -252,7 +252,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
                 FontUtils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size, fontSizeOffset);
 
                 CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-                FontUtils.changeFont(convertView, pref.getCustomFontTypeface());
+                FontUtils.updateFont(convertView, pref.getCustomFontTypeface());
 
                 return convertView;
             }
@@ -309,7 +309,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
     @Override
     public void onResume() {
         CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-        FontUtils.changeFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
+        FontUtils.updateFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
         super.onResume();
     }
 

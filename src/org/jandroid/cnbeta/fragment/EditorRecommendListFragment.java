@@ -63,7 +63,7 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
                 FontUtils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size, fontSizeOffset);
 
                 CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-                FontUtils.changeFont(convertView, pref.getCustomFontTypeface());
+                FontUtils.updateFont(convertView, pref.getCustomFontTypeface());
 
                 return convertView;
             }
@@ -155,7 +155,7 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
     @Override
     public void onResume() {
         CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-        FontUtils.changeFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
+        FontUtils.updateFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
         super.onResume();
     }
 

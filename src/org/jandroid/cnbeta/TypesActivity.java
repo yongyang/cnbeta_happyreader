@@ -63,11 +63,6 @@ public class TypesActivity extends AbstractActionTabFragmentActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
         switch (mi.getItemId()) {
             case R.id.refresh_item:

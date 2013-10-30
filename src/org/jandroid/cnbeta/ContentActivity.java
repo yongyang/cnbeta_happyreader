@@ -89,7 +89,7 @@ public class ContentActivity extends AbstractActionTabFragmentActivity {
         return true;
     }
 
-    public void reload() {
+    private void reload() {
         contentFragment.reloadContent();
     }
 

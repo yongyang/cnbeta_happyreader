@@ -26,12 +26,12 @@ public class FontUtils {
         return parser;
     }
 
-    public static void changeFont(final View root, final Typeface typeface) {
+    public static void updateFont(final View root, final Typeface typeface) {
         if(typeface == null) return;
         if (root instanceof ViewGroup) {
             for (int i = 0; i < ((ViewGroup)root).getChildCount(); i++) {
                 View v = ((ViewGroup)root).getChildAt(i);
-                changeFont(v, typeface);
+                updateFont(v, typeface);
             }
         }
         else {
@@ -51,13 +51,14 @@ public class FontUtils {
     }
 
     public static void updateTextSize(Context theContext, WebView webView, int dimResourceId, int spOffsetSize) {
-        webView.getSettings().setDefaultFontSize((int)PixelUtils.pixelsToSp(theContext,theContext.getResources().getDimension(dimResourceId)) + spOffsetSize);
-        webView.getSettings().setDefaultFixedFontSize((int)PixelUtils.pixelsToSp(theContext,theContext.getResources().getDimension(dimResourceId)) + spOffsetSize);
+//        webView.getSettings().setDefaultFontSize((int)theContext.getResources().getDimension(dimResourceId) + (int)theContext.getResources().getDisplayMetrics().scaledDensity * spOffsetSize);
+//        webView.getSettings().setDefaultFixedFontSize((int)theContext.getResources().getDimension(dimResourceId) + (int)theContext.getResources().getDisplayMetrics().scaledDensity * spOffsetSize);
+        webView.getSettings().setTextZoom(100 + (spOffsetSize*5));
     }
 
     public static void updateText(Context theContext, TextView textView, int dimResourceId, int spOffsetSize, Typeface typeface) {
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, PixelUtils.pixelsToSp(theContext, theContext.getResources().getDimension(dimResourceId)) + spOffsetSize);
-        changeFont(textView, typeface);
+        updateFont(textView, typeface);
     }
 
 

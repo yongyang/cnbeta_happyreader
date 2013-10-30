@@ -52,7 +52,7 @@ public class TopicActivity extends AbstractActionTabFragmentActivity {
         super.onCreate(savedInstanceState);
 
         final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         if(getIntent().hasExtra("id")) { // 由阅读文章中点击topic图片打开
             getActionBar().setSelectedNavigationItem(1);

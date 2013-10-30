@@ -62,6 +62,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     private ViewGroup root;
 
     private boolean loaded = false;
+    private boolean reloadComment = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -253,12 +254,13 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
 
                 //Stat to load comments and view_num, comment_num etc
                 //!!!NOTE: this is the best point to start to load comments, after content page loaded
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        ((ContentActivity) getActivity()).reloadComments();
-                    }
-                }, 500);
-
+                if(reloadComment) { // don't reload comment onResume
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            ((ContentActivity) getActivity()).reloadComments();
+                        }
+                    }, 500);
+                }
                 // 延迟显示，以免早于显示 WebView paint完成之前显示
                 handler.postDelayed(new Runnable() {
                     public void run() {
@@ -359,14 +361,6 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     public void onResume() {
         super.onResume();
         int fontSizeOffset = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
-        if (contentWebView != null) {
-            FontUtils.updateTextSize(getActivity(), contentWebView, R.dimen.webview_default_text_size, fontSizeOffset);
-
-            // Try resumeTimers anyway, flash plugin may case pauseTimers
-            contentWebView.resumeTimers();
-            contentWebView.onResume();
-        }
-
         // update font size
         FontUtils.updateTextSize(getActivity(), titleTextView, R.dimen.listitem_title_text_size, fontSizeOffset);
         FontUtils.updateTextSize(getActivity(), timeTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
@@ -375,9 +369,15 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         FontUtils.updateTextSize(getActivity(), whereTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
 
         CnBetaPreferences pref = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getCnBetaPreferences();
-        FontUtils.changeFont(getView(), pref.getCustomFontTypeface());
-        if (loaded) { // reload
-            contentWebView.loadDataWithBaseURL(null, getStyledHTMLContent(content), "text/html", "UTF-8", "about:blank");
+        FontUtils.updateFont(getView(), pref.getCustomFontTypeface());
+        if (contentWebView != null) {
+            contentWebView.resumeTimers();
+            contentWebView.onResume();
+            FontUtils.updateTextSize(getActivity(), contentWebView, R.dimen.webview_default_text_size, fontSizeOffset);
+            if(loaded) { // reload to update font if change
+                this.reloadComment = false;
+                contentWebView.loadDataWithBaseURL(null, getStyledHTMLContent(content), "text/html", "UTF-8", "about:blank");
+            }
         }
     }
 
@@ -424,6 +424,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     }
 
     public void reloadContent() {
+        reloadComment = true;
         executeAsyncTaskMultiThreading(new ArticleContentAsyncTask() {
 
             @Override
@@ -482,16 +483,14 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         // 设置 custom Font
         String customFont = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getCnBetaPreferences().getCustomFont();
         if (customFont != null && !customFont.isEmpty() && !customFont.equals("default")) {
-            sb.append("@font-face{ font-family: customFont; src:url('" + customFont + "');" + "} body {font-family: 'customFont';}");
+            sb.append("@font-face{ font-family: customFont; src:url('" + customFont + "');" + "} body {font-family: customFont, serif;}");
         }
-
         sb.append("</style></head>");
         sb.append("<body>");
         sb.append(content.getContent());
         sb.append("</body></html>");
         return sb.toString();
     }
-
 
     public void newPostedComment(Comment comment) {
         content.setJoinNum(content.getJoinNum() + 1);
@@ -544,4 +543,27 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         }
         );
     }
+
+/*
+Javascript fail
+
+    private void updateWebViewFontFace() {
+        // 设置 custom Font
+        final String customFont = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getCnBetaPreferences().getCustomFont();
+        if (customFont != null && !customFont.isEmpty() && !customFont.equals("default")) {
+//            sb.append("@font-face{ font-family: customFont; src:url('" + customFont + "');" + "} body {font-family: 'customFont';}");
+            //TODO: change to default
+            if (contentWebView != null) {
+                contentWebView.loadUrl("javascript:(function(){" +
+                        "document.removeChild('style');" +
+                        "var newStyle = document.createElement('style');" +
+                        "newStyle.appendChild(document.createTextNode(" +
+                        "\"@font-face{ font-family: customFont; src:url('" + customFont + "');" + "} body {font-family: 'customFont';} \"};" +
+                        "document.head.appendChild(newStyle);" +
+                        "document.getElementByTag('body').style.fontStyle='customFont';" +
+                        "})()");
+            }
+        }
+    }
+*/
 }

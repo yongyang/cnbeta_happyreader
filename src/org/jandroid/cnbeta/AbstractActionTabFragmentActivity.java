@@ -24,7 +24,7 @@ public abstract class AbstractActionTabFragmentActivity extends ActionTabFragmen
         super.onResume();
         // update action tab text font
         for(int i=0; i<getActionBar().getTabCount(); i++){
-            FontUtils.changeFont(getActionBar().getTabAt(i).getCustomView(), ((CnBetaApplicationContext) getApplicationContext()).getCnBetaPreferences().getCustomFontTypeface());
+            FontUtils.updateFont(getActionBar().getTabAt(i).getCustomView(), ((CnBetaApplicationContext) getApplicationContext()).getCnBetaPreferences().getCustomFontTypeface());
         }
     }
 

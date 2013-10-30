@@ -183,7 +183,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                 FontUtils.updateTextSize(getActivity(), toParentTextView, R.dimen.listitem_comment_text_size, fontSizeOffset);
 
                 CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-                FontUtils.changeFont(convertView, pref.getCustomFontTypeface());
+                FontUtils.updateFont(convertView, pref.getCustomFontTypeface());
 
                 return convertView;
             }
@@ -375,7 +375,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
     @Override
     public void onResume() {
         CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-        FontUtils.changeFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
+        FontUtils.updateFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
         super.onResume();
     }
 

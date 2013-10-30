@@ -105,7 +105,7 @@ public class PublishCommentActivity extends BaseActivity {
         FontUtils.updateTextSize(this, cancelTextView, R.dimen.listitem_title_text_size, pref.getFontSizeOffset());
         FontUtils.updateTextSize(this, sendTextView, R.dimen.listitem_title_text_size, pref.getFontSizeOffset());
 
-        FontUtils.changeFont(getWindow().getDecorView().getRootView(), pref.getCustomFontTypeface());
+        FontUtils.updateFont(getWindow().getDecorView().getRootView(), pref.getCustomFontTypeface());
 
         initCaptcha();
     }
