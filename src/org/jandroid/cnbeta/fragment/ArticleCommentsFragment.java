@@ -55,7 +55,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.listview_comments, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.comments, container, false);
         mListView = (ListView) rootView.findViewById(R.id.comments_listview);
         // so button in Item can click
         ((ListView) mListView).setItemsCanFocus(true);
@@ -116,6 +116,8 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                 TextView commentTextView = (TextView) convertView.findViewById(R.id.comment);
                 commentTextView.setText(comment.getComment());
 
+                TextView parentCommentTextView = (TextView) convertView.findViewById(R.id.parentComment);
+
                 LinearLayout supportAgainstLinearLayout = (LinearLayout) convertView.findViewById(R.id.support_against_lineLayout);
                 final TextView supportTextView = (TextView) convertView.findViewById(R.id.supportText);
                 final TextView againstTextView = (TextView) convertView.findViewById(R.id.againstText);
@@ -127,16 +129,18 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                 reasonTextView.setText("" + comment.getReason());
                 final LinearLayout supportLinearLayout = (LinearLayout) convertView.findViewById(R.id.supportLinearLayout);
                 final LinearLayout againstLinearLayout = (LinearLayout) convertView.findViewById(R.id.againstLinearLayout);
-                final TextView toParentTextView = (TextView) convertView.findViewById(R.id.toParent);
 
                 if (comment.getTid() == 0) { //新发表的评论，只是暂存，无法支持和反对
                     supportAgainstLinearLayout.setVisibility(View.INVISIBLE);
-                    supportLinearLayout.setEnabled(true);
-                    againstLinearLayout.setEnabled(true);
-                    toParentTextView.setVisibility(View.GONE);
+                    supportLinearLayout.setEnabled(false);
+                    againstLinearLayout.setEnabled(false);
+                    parentCommentTextView.setText("");
+                    parentCommentTextView.setVisibility(View.GONE);
                 }
                 else {
                     supportAgainstLinearLayout.setVisibility(View.VISIBLE);
+                    supportLinearLayout.setEnabled(true);
+                    againstLinearLayout.setEnabled(true);
 
                     if (comment.isSupported()) { // 已支持
                         supportTextView.setText(R.string.supported);
@@ -158,15 +162,21 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                         }
                     });
                     if (comment.getPid() == 0) { // 没有父评论
-                        toParentTextView.setVisibility(View.GONE);
+                        parentCommentTextView.setVisibility(View.GONE);
+                        parentCommentTextView.setText("");
                     }
                     else { // 有父评论
-                        toParentTextView.setVisibility(View.VISIBLE);
-                        toParentTextView.setOnClickListener(new View.OnClickListener() {
-                            public void onClick(View v) {
-                                jumpToParentComment(position, comment.getPid());
-                            }
-                        });
+                        final int parentPos = getParentPosition(position, comment.getPid());
+                        if(parentPos != position && parentPos < getDataSize()) { //多页时，避免调至还未加载的评论
+                            parentCommentTextView.setText(getData(parentPos).getComment());
+                            parentCommentTextView.setVisibility(View.VISIBLE);
+                            parentCommentTextView.setOnClickListener(new View.OnClickListener() {
+                                public void onClick(View v) {
+                                    mListView.setItemChecked(parentPos, true);
+                                    mListView.setSelection(parentPos);
+                                }
+                            });
+                        }
                     }
                 }
 
@@ -180,7 +190,6 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                 FontUtils.updateTextSize(getActivity(), againstTextView, R.dimen.listitem_comment_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), scoreTextView, R.dimen.listitem_comment_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), reasonTextView, R.dimen.listitem_comment_text_size, fontSizeOffset);
-                FontUtils.updateTextSize(getActivity(), toParentTextView, R.dimen.listitem_comment_text_size, fontSizeOffset);
 
                 CnBetaPreferences pref = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getCnBetaPreferences();
                 FontUtils.updateFont(convertView, pref.getCustomFontTypeface());
@@ -333,7 +342,8 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
     }
 
 
-    private void jumpToParentComment(int position, long parentId) {
+    // return parent position or self position
+    private int getParentPosition(int position, long parentId) {
         int parentPos = position;
         int index = position;
         while (index < getDataSize()) {
@@ -343,8 +353,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
             }
             index++;
         }
-        mListView.setItemChecked(parentPos, true);
-        mListView.setSelection(parentPos);
+        return index;
     }
 
 
