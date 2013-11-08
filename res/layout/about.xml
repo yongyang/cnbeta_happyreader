@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="13sp"
                 android:maxLines="10"
-                android:text="1.多线程异步加载列表、内容、图片，提供最流畅体验；\n2.压缩传输所有网络数据，节省流量；\n3.支持视频播放（需安装有Flash播放器）；\n4.支持文章评分，新评论，回复评论，支持/反对评论；\n5.支持板块、热评、排行榜以及主题等；\n6.浏览过的数据及时缓存，避免无必要的重复网络加载"/>
+                android:text="1.无任何广告，且仅需最少的权限；\n2.多线程异步加载列表、内容、图片，提供最流畅体验；\n3.压缩传输所有网络数据，节省流量；\n4.支持视频播放（需安装有Flash播放器）；\n5.支持文章评分，新评论，回复评论，支持/反对评论；\n6.支持按板块阅读、按主题阅读、排行榜以及精彩评论等；\n7.浏览过的数据及时缓存，避免无必要的重复网络加载；\n8.支持自定义字体"/>
 
         <TextView
                 android:layout_width="wrap_content"
@@ -124,7 +124,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="10"
                 android:textSize="13sp"
-                android:text="1.由于Flash播放器的兼容性问题，少数机型在播放个别优酷视频时偶尔会卡住，并导致无法再打开其它新闻，需要退出程序重启才能解决;\n2.由于cnBeta网站对访问频率的限制，在阅读新闻页面如果点击刷新频率过快，会提示Busy(忙)错误；\n3.在阅读新闻时将缓存清空，然后点击页面中图片，将无法浏览大图"/>
+                android:text="1.由于Flash播放器的兼容性问题，极少数机型在播放个别优酷视频时偶尔会卡住，并导致无法再打开其它新闻，需要退出程序重启才能解决;\n2.由于cnBeta网站对访问频率的限制，在阅读新闻页面如果点击刷新频率过快，会提示Busy(忙)错误；\n3.在阅读新闻时将缓存清空，然后点击页面中图片，将无法浏览大图"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
