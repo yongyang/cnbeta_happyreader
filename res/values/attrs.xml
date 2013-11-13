@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- custom item for tabtext textview -->
+	<attr name="actionTabCustomTextViewStyle" format="reference|string" />
+</resources>
+

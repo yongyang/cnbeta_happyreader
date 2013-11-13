@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.common.adapter.ActionTabFragmentPagerAdapter;
 
@@ -14,9 +15,9 @@ import org.jandroid.common.adapter.ActionTabFragmentPagerAdapter;
  */
 public abstract class ActionTabFragmentActivity extends BaseActivity {
 
-    private ViewPager mViewPager;
+    protected ViewPager mViewPager;
 
-    private ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
+    protected ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
 
         @Override
         protected ActionBar getActionBar() {
@@ -37,7 +38,7 @@ public abstract class ActionTabFragmentActivity extends BaseActivity {
 
     protected abstract Fragment getTabFragmentByItem(int position);
     protected abstract int[] getTabResourceIds();
-
+    protected abstract void initActionBar();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,23 +58,9 @@ public abstract class ActionTabFragmentActivity extends BaseActivity {
         mViewPager.setOnPageChangeListener(pagerAdapter);
     }
 
-    protected void initActionBar() {
-        final ActionBar actionBar = getActionBar();
-        for (int resourceId : getTabResourceIds()) {
-/*
-            ViewGroup tabContainer = (ViewGroup)getLayoutInflater().inflate(R.layout.textview_tabtext, null);
-            TextView tabTextView = (TextView)tabContainer.findViewById(R.id.tabTextView);
-            tabTextView.setText(resourceId);
-            actionBar.addTab(actionBar.newTab().setCustomView(tabContainer).setTabListener(pagerAdapter));
-*/
-
-            actionBar.addTab(actionBar.newTab().setText(resourceId).setTabListener(pagerAdapter));
-        }
-        pagerAdapter.notifyDataSetChanged();
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
     }
+
 }
