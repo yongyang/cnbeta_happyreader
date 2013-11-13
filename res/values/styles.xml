@@ -1,48 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.CnBeta" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+    <style name="Theme_cnBeta_Light" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:actionBarStyle">@style/ActionBar.Solid.CnBeta</item>
-        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.CnBeta</item>
-        <item name="android:actionBarTabTextStyle">@style/TabText.CnBeta</item>
-        <item name="android:actionBarWidgetTheme">@style/Theme.CnBeta.Widget</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:actionBarStyle">@style/Style_ActionBar_cnBeta</item>
+        <item name="android:actionBarTabStyle">@style/Style_ActionBarTab_cnBeta</item>
+        <item name="android:actionBarTabTextStyle">@style/Style_ActionBar_TabText_cnBeta</item>
+        <item name="android:actionBarWidgetTheme">@style/Style_PopupMenu_cnBeta</item>
         <item name="android:actionBarDivider">@color/light_gray</item>
+        <item name="android:absListViewStyle">@style/Style_AbsListView_cnBeta</item>
     </style>
 
-    <style name="ActionBar.Solid.CnBeta" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+    <style name="Style_AbsListView_cnBeta" parent="@android:style/Widget.AbsListView">
+        <item name="android:background">@color/cnBeta_default_bg</item>
+    </style>
+
+    <style name="Style_ActionBar_cnBeta" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/cnBeta_bg_blue</item>
         <item name="android:backgroundStacked">@color/white</item>
     </style>
 
     <!-- this style is only referenced in a Light.DarkActionBar based theme -->
-    <style name="Theme.CnBeta.Widget" parent="@android:style/Theme.Holo">
-        <item name="android:popupMenuStyle">@style/PopupMenu.CnBeta</item>
+    <style name="Style_PopupMenu_cnBeta" parent="@android:style/Theme.Holo">
+        <item name="android:popupMenuStyle">@style/Style_ListPopupWindow_cnBeta</item>
     </style>
 
-    <style name="PopupMenu.CnBeta" parent="@android:style/Widget.Holo.ListPopupWindow">
+    <style name="Style_ListPopupWindow_cnBeta" parent="@android:style/Widget.Holo.ListPopupWindow">
         <item name="android:popupBackground">@color/cnBeta_bg_middle_blue</item>
     </style>
 
-    <style name="TabText.CnBeta" parent="@android:style/Widget.ActionBar.TabText">
+    <style name="Style_ActionBar_TabText_cnBeta" parent="@android:style/Widget.ActionBar.TabText">
         <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/tab_text_color_selector_cnbeta</item>
         <!--<item name="android:textStyle">italic|bold</item>  -->
     </style>
 
-    <style name="ActionBarTabStyle.CnBeta" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
+    <style name="Style_ActionBarTab_cnBeta" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator_ab_cnbeta</item>
         <item name="android:paddingLeft">4dp</item>
         <item name="android:paddingRight">4dp</item>
     </style>
 
-
-    <!-- -->
-    <style name="Dialog.NoTitle" parent="@android:style/Theme.Dialog">
+    <!-- Dialog with no Title -->
+    <style name="Theme_Dialog_NoTitle" parent="@android:style/Theme.Dialog">
         <!--<item name="android:windowBackground">@color/transparent_background</item>-->
         <item name="android:windowNoTitle">true</item>
         <!--<item name="android:windowIsTranslucent">true</item>-->
         <!--<item name="android:windowAnimationStyle">@+android:style/Animation.Translucent</item>-->
+    </style>
+
+
+    <!-- Style for night mode -->
+    <style name="Theme_cnBeta_Dark" parent="@android:style/Theme.Holo">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:actionBarStyle">@style/Style_ActionBar_cnBeta_Dark</item>
+        <item name="android:actionBarTabStyle">@style/Style_ActionBarTab_cnBeta</item>
+        <item name="android:actionBarTabTextStyle">@style/Style_ActionBar_TabText</item>
+        <item name="android:actionBarWidgetTheme">@style/Style_PopupMenu_cnBeta</item>
+        <item name="android:actionBarDivider">@color/light_gray</item>
+        <!--<item name="android:absListViewStyle">@style/Style_AbsListView_cnBeta</item>-->
+    </style>
+
+    <style name="Style_ActionBar_cnBeta_Dark" parent="@android:style/Widget.Holo.ActionBar">
+        <item name="android:background">@color/cnBeta_bg_blue</item>
+        <!--<item name="android:backgroundStacked">@color/gray</item>-->
+    </style>
+
+    <style name="Style_ActionBar_TabText" parent="@android:style/Widget.ActionBar.TabText">
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/tab_text_color_selector_dark</item>
+        <!--<item name="android:textStyle">italic|bold</item>  -->
     </style>
 
 </resources>

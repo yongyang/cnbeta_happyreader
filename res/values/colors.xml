@@ -145,5 +145,6 @@
     <color name="cnBeta_hotcomment_bg_yellow">#FFFFCE</color>
 
     <color name="cnBeta_tab_text_default">#111111</color>
+    <color name="cnBeta_tab_text_default_dark">#fffcfcfc</color>
 </resources>
 

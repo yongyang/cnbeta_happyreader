@@ -11,6 +11,7 @@ import org.jandroid.cnbeta.fragment.EditorRecommendListFragment;
 import org.jandroid.cnbeta.fragment.HotCommentListFragment;
 import org.jandroid.cnbeta.fragment.RealtimeArticleListFragment;
 import org.jandroid.cnbeta.loader.AbstractListLoader;
+import org.jandroid.common.WindowUtils;
 
 public class MainActivity extends AbstractActionTabFragmentActivity{
 
@@ -84,6 +85,10 @@ public class MainActivity extends AbstractActionTabFragmentActivity{
 
     @Override
     public void onBackPressed() {
+
+
+        WindowUtils.nightMode(this);
+
         if ((System.currentTimeMillis() - exitTime) > 2000) {
             Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
             exitTime = System.currentTimeMillis();

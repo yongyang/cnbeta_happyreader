@@ -21,7 +21,7 @@
                         android:title="人气 | 争议 | 推荐"/>
                 <item
                         android:id="@+id/topics"
-                        android:title="按主题阅读"/>
+                        android:title="主题分类浏览"/>
                 <item
                         android:id="@+id/history"
                         android:title="@string/label_history"/>
@@ -41,6 +41,11 @@
                         android:id="@+id/versionCheck"
                         android:title="@string/versionCheck"/>
 -->
+                <item
+                        android:id="@+id/night_mode_menu"
+                        android:checkable="true"
+                        android:checked="false"
+                        android:title="夜间模式"/>
 
                 <item
                         android:id="@+id/aboutus_item"

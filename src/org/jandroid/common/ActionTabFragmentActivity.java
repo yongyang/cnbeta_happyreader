@@ -60,11 +60,14 @@ public abstract class ActionTabFragmentActivity extends BaseActivity {
     protected void initActionBar() {
         final ActionBar actionBar = getActionBar();
         for (int resourceId : getTabResourceIds()) {
-            //全部资讯, 实时更新, 阅读历史
+/*
             ViewGroup tabContainer = (ViewGroup)getLayoutInflater().inflate(R.layout.textview_tabtext, null);
             TextView tabTextView = (TextView)tabContainer.findViewById(R.id.tabTextView);
             tabTextView.setText(resourceId);
             actionBar.addTab(actionBar.newTab().setCustomView(tabContainer).setTabListener(pagerAdapter));
+*/
+
+            actionBar.addTab(actionBar.newTab().setText(resourceId).setTabListener(pagerAdapter));
         }
         pagerAdapter.notifyDataSetChanged();
     }

@@ -6,7 +6,7 @@
 
     <TextView
             android:id="@+id/tabTextView"
-            style="@style/TabText.CnBeta"
+            style="@style/Style_ActionBar_TabText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
