@@ -6,6 +6,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpMessage;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -17,6 +18,7 @@ import org.apache.http.conn.params.ConnPerRouteBean;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -34,6 +36,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,16 +53,15 @@ public class CnBetaHttpClient {
     public static final int MAX_TOTAL_CONNECTIONS = 30;
     public static final int MAX_CONNECTIONS_PER_ROUTE = 30;
     public static final int TIMEOUT_CONNECT = 10000;
-    public static final int TIMEOUT_READ = 30000;
+    public static final int SO_TIMEOUT_READ = 30000;
 
-    
-    private final static CnBetaHttpClient client = new CnBetaHttpClient();
+    private final static CnBetaHttpClient INSTANCE = new CnBetaHttpClient();
 
-    private HttpClient httpClient;
-    
     public static String DEFAULT_ENCODING = HTTP.UTF_8;
     private static final Map<String, String> DEFAULT_HEADERS = new HashMap<String, String>();
-    
+
+    private SoftReference<HttpClient> httpClientSoftReference = new SoftReference<HttpClient>(initHttpClient());
+
     static {
         DEFAULT_HEADERS.put("Accept-Encoding", "gzip, deflate");
         DEFAULT_HEADERS.put("Accept", "*/*");
@@ -70,23 +73,35 @@ public class CnBetaHttpClient {
     }
     
     private CnBetaHttpClient() {
+
+    }
+
+    public static CnBetaHttpClient getInstance() {
+        return INSTANCE;
+    }
+
+    private static HttpClient initHttpClient () {
         HttpParams httpParams = new BasicHttpParams();
         ConnManagerParams.setMaxTotalConnections(httpParams, MAX_TOTAL_CONNECTIONS);
         ConnManagerParams.setMaxConnectionsPerRoute(httpParams, new ConnPerRouteBean(MAX_CONNECTIONS_PER_ROUTE));
-        ConnManagerParams.setTimeout(httpParams, TIMEOUT_READ);
+        ConnManagerParams.setTimeout(httpParams, SO_TIMEOUT_READ);
         HttpConnectionParams.setConnectionTimeout(httpParams, TIMEOUT_CONNECT);
-        HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_READ);
+        HttpConnectionParams.setSoTimeout(httpParams, SO_TIMEOUT_READ);
         HttpConnectionParams.setTcpNoDelay(httpParams, true);
+        HttpConnectionParams.setSocketBufferSize(httpParams, 8192);
+        HttpProtocolParams.setVersion(httpParams, HttpVersion.HTTP_1_1);
         HttpProtocolParams.setContentCharset(httpParams, DEFAULT_ENCODING);
         HttpProtocolParams.setHttpElementCharset(httpParams, DEFAULT_ENCODING);
 
         SchemeRegistry schemeRegistry = new SchemeRegistry();
         schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+        schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
 
         ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager(httpParams, schemeRegistry);
-        httpClient = new DefaultHttpClient(cm, httpParams);
+        HttpClient httpClient = new DefaultHttpClient(cm, httpParams);
         // 设置 cookie 策略
         httpClient.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BROWSER_COMPATIBILITY);
+
         // 是否需要设置cookie store
         // Create a local instance of cookie store
 /*
@@ -97,20 +112,28 @@ public class CnBetaHttpClient {
         cookie.setDomain(".mycompany.com");
         cookie.setPath("/");
         cookieStore.addCookie(cookie);
-        // Set the store 
+        // Set the store
         httpclient.setCookieStore(cookieStore);
 */
-        
+        return httpClient;
     }
 
-    public static CnBetaHttpClient getInstance() {
-        return client;
+    public synchronized HttpClient getHttpClient() {
+        HttpClient httpClient = httpClientSoftReference.get();
+        if(httpClient == null) {
+            httpClient = initHttpClient();
+            httpClientSoftReference = new SoftReference<HttpClient>(httpClient);
+        }
+        return  httpClient;
     }
 
-    public void shutdown() {
-        httpClient.getConnectionManager().shutdown();
+    public synchronized void shutdown() {
+        HttpClient httpClient = httpClientSoftReference.get();
+        if(httpClient != null) {
+            httpClient.getConnectionManager().shutdown();
+        }
+        httpClientSoftReference.clear();
     }
-
 
     public String httpGet(String url, RequestContext requestContext) throws Exception {
         return httpGet(url, DEFAULT_ENCODING, requestContext);
@@ -130,7 +153,7 @@ public class CnBetaHttpClient {
         long start = System.currentTimeMillis();
         logger.d("GET: " + url);
         HttpGet httpGet = newHttpGet(url, encoding, headers);
-        HttpResponse response = httpClient.execute(httpGet);
+        HttpResponse response = getHttpClient().execute(httpGet);
 
         String result = handleRequest(httpGet, response, requestContext);
         logger.d("GET: " + url + ", consume " + ((System.currentTimeMillis() - start)) + "ms");
@@ -153,7 +176,7 @@ public class CnBetaHttpClient {
         logger.d("POST: " + url);
         HttpPost httpPost = newHttpPost(url, encoding, headers, datas);
 
-        HttpResponse response = httpClient.execute(httpPost);
+        HttpResponse response = getHttpClient().execute(httpPost);
         String result =  handleRequest(httpPost, response, requestContext);
         logger.d("POST: " + url + ", consume " + ((System.currentTimeMillis() - start)) + "ms");
         return result;
@@ -257,7 +280,7 @@ public class CnBetaHttpClient {
         long start = System.currentTimeMillis();
         logger.d("GET: " + url);
         final HttpGet httpGet = newHttpGet(url, DEFAULT_ENCODING, headers);
-        HttpResponse response = httpClient.execute(httpGet);
+        HttpResponse response = getHttpClient().execute(httpGet);
         byte[] result = handleBytesRequest(httpGet, response, requestContext);
         logger.d("GET: " + url + ", consume " + ((System.currentTimeMillis() - start)) + "ms");
         return result;
@@ -297,7 +320,7 @@ public class CnBetaHttpClient {
     }
 
     public String getCookie(String key) {
-        for(Cookie cookie : ((DefaultHttpClient)httpClient).getCookieStore().getCookies() ) {
+        for(Cookie cookie : ((DefaultHttpClient)getHttpClient()).getCookieStore().getCookies() ) {
             if(cookie.getName().equals(key)) {
                 return cookie.getValue();
             }

@@ -15,7 +15,7 @@
 
     <application
             android:name="CnBetaApplication"
-            android:theme="@style/Theme_cnBeta_Dark"
+            android:theme="@style/Theme_cnBeta_Light"
             android:label="@string/app_name"
             android:icon="@drawable/ic_launcher">
         <!--for test case -->

@@ -185,6 +185,8 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         // resize big image to fit screen width
         contentWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
 
+//        contentWebView.setBackgroundColor(0xeeeeeeee);
+
         contentWebView.addJavascriptInterface(new JavaScriptObject() {
             @JavascriptInterface
             public void openImage(String imgSrc) {
@@ -243,12 +245,12 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
                 contentWebView.setVisibility(View.VISIBLE);
                 progressBarLayout.setVisibility(View.GONE);
 
-                                //Stat to load comments and view_num, comment_num etc
+                //Stat to load comments and view_num, comment_num etc
                 //!!!NOTE: this is the best point to start to load comments, after content page loaded
-                if(reloadComment) { // don't reload comment onResume's loadDataUrl
+                if (reloadComment) { // don't reload comment onResume's loadDataUrl
                     handler.post(new Runnable() {
                         public void run() {
-                            if( getActivity() != null) { // in case activity finished
+                            if (getActivity() != null) { // in case activity finished
                                 ((ContentActivity) getActivity()).reloadComments();
                             }
                         }
@@ -376,7 +378,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
             contentWebView.resumeTimers();
             contentWebView.onResume();
             FontUtils.updateTextSize(getActivity(), contentWebView, R.dimen.webview_default_text_size, fontSizeOffset);
-            if(loaded) { // reload to update font if change
+            if (loaded) { // reload to update font if change
                 this.reloadComment = false;
                 contentWebView.loadDataWithBaseURL(null, getStyledHTMLContent(content), "text/html", "UTF-8", "about:blank");
             }
@@ -457,7 +459,9 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     }
 
     public void onProgressDismiss() {
-        getActivity().setProgressBarVisibility(false);
+        if(getActivity() != null) {
+            getActivity().setProgressBarVisibility(false);
+        }
     }
 
     public void onSuccess(AsyncResult<Content> contentAsyncResult) {
@@ -482,6 +486,15 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     private String getStyledHTMLContent(Content content) {
         StringBuilder sb = new StringBuilder();
         sb.append("<html><head><style type=\"text/css\">");
+
+//        设置 introduction 前景 背景色
+        if(!((CnBetaApplicationContext)getActivity().getApplicationContext()).isNightModeEnabled()) {
+            sb.append(".introduction {background-color: #fbfbfb; color: #434343; }");
+        }
+        else { // night mode
+            sb.append("body {background-color: #000000; color: #ffffff; }");
+            sb.append(".introduction {background-color: #000000; color: #aaaaaa; }");
+        }
         // 设置 custom Font
         String customFont = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getCnBetaPreferences().getCustomFont();
         if (customFont != null && !customFont.isEmpty() && !customFont.equals("default")) {
@@ -544,6 +557,14 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
             }
         }
         );
+    }
+
+    //TODO: 或者直接通过 getStyledHTMLContent 写到 html 里
+    private void updateColor() {
+        //TODO: update color according to theme
+        contentWebView.loadUrl("javascript:(function() { " +
+                "document.getElementsByTagName('body')[0].style.color = 'red'; " +
+                "})()");
     }
 
 /*

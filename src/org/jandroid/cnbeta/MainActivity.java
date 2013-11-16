@@ -13,7 +13,7 @@ import org.jandroid.cnbeta.fragment.RealtimeArticleListFragment;
 import org.jandroid.cnbeta.loader.AbstractListLoader;
 import org.jandroid.common.WindowUtils;
 
-public class MainActivity extends AbstractActionTabFragmentActivity{
+public class MainActivity extends AbstractActionTabFragmentActivity {
 
     private final static int[] tabs = new int[]{R.string.tab_quanbuzixun, R.string.tab_shishigengxin, R.string.tab_bianjituijian, R.string.tab_jingcaipinglun};
     private final AbstractAsyncListFragment[] fragments = new AbstractAsyncListFragment[tabs.length];
@@ -65,30 +65,21 @@ public class MainActivity extends AbstractActionTabFragmentActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
-        switch (mi.getItemId()) {
-            case R.id.refresh_item:
-                fragments[getActionBar().getSelectedNavigationIndex()].reloadData();
-                break;
+        if (!super.onOptionsItemSelected(mi) && !((CnBetaApplicationContext) getApplicationContext()).onOptionsItemSelected(this, mi)) {
+            switch (mi.getItemId()) {
+                case R.id.refresh_item:
+                    fragments[getActionBar().getSelectedNavigationIndex()].reloadData();
+                    break;
+            }
         }
-        return ((CnBetaApplication) getApplicationContext()).onOptionsItemSelected(this, mi);
+        return true;
 
     }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // 每次都会调用该方法, 可以动态改变 menu
-        return super.onPrepareOptionsMenu(menu);
-    }
-
 
     private long exitTime = 0;
 
     @Override
     public void onBackPressed() {
-
-
-        WindowUtils.nightMode(this);
-
         if ((System.currentTimeMillis() - exitTime) > 2000) {
             Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
             exitTime = System.currentTimeMillis();

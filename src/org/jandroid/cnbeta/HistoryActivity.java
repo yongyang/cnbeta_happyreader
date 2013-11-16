@@ -53,12 +53,14 @@ public class HistoryActivity extends AbstractActionTabFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
-        switch (mi.getItemId()) {
-            case R.id.refresh_item:
-                fragments[getActionBar().getSelectedNavigationIndex()].reloadData();
-                break;
+        if (!super.onOptionsItemSelected(mi) && !((CnBetaApplicationContext) getApplicationContext()).onOptionsItemSelected(this, mi)) {
+            switch (mi.getItemId()) {
+                case R.id.refresh_item:
+                    fragments[getActionBar().getSelectedNavigationIndex()].reloadData();
+                    break;
+            }
         }
-        return ((CnBetaApplicationContext)getApplicationContext()).onOptionsItemSelected(this, mi);
+        return true;
     }
 
 }

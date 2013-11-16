@@ -5,10 +5,13 @@ import android.app.Application;
 import android.os.Environment;
 import android.os.Handler;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import org.apache.commons.io.FileUtils;
 import org.jandroid.common.EnvironmentUtils;
 import org.jandroid.common.Logger;
 import org.jandroid.common.ToastUtils;
+import org.jandroid.common.WindowUtils;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -28,10 +31,19 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
 
     private CnBetaPreferences cnBetaPreferences;
 
+    private boolean isNightModeEnabled = false;
+    private boolean isEyeFriendlyModeEnabled = false;
+
+    private TextView maskView;
+
     @Override
     public void onCreate() {
         super.onCreate();
         cnBetaPreferences = CnBetaPreferences.getInstance(this);
+        if(maskView == null) {
+            maskView = new TextView(this);
+            maskView.setBackgroundColor(0x60000000);
+        }
     }
 
     public boolean isNetworkConnected() {
@@ -107,47 +119,49 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         return fontsDir;
     }
 
-    // 在这里统一处理标准菜单项目
+    /**
+     * 在这里统一处理标准菜单项目
+     * @param theActivity
+     * @param item
+     * @return true consumed, false not
+     */
     public boolean onOptionsItemSelected(final Activity theActivity, final MenuItem item) {
-        if (item.isCheckable()) {
-            item.setChecked(true);
-        }
-
         switch (item.getItemId()) {
             case android.R.id.home:
                 Utils.openMainActivity(theActivity);
-                break;
+                return true;
             case R.id.main:
                 Utils.openMainActivity(theActivity);
-                break;
+                return true;
             case R.id.topics:
                 Utils.openTopicActivity(theActivity);
-                break;
+                return true;
             case R.id.dig_soft_industry_interact:
                 Utils.openTypesActivity(theActivity);
-                break;
+                return true;
             case R.id.rank:
                 Utils.openMRankActivity(theActivity);
-                break;
+                return true;
             case R.id.more_item:
-                break;
+                return true;
             case R.id.history:
                 Utils.openHistoryActivity(theActivity);
-                break;
+                return true;
             case R.id.setting_item:
                 Utils.openPreferenceActivity(theActivity);
-                break;
+                return true;
 /*
             case R.id.versionCheck:
                 Utils.openVersionCheckDialog(theActivity);
                 break;
 */
+
             case R.id.aboutus_item:
                 Utils.openAboutActivity(theActivity);
-                break;
+                return true;
         }
 
-        return true;
+        return false;
     }
 
     public void onExit() {
@@ -193,8 +207,27 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         return FileUtils.deleteQuietly(getFontsDir());
     }
 
-    public CnBetaPreferences getCnBetaPreferences(){
+    public CnBetaPreferences getCnBetaPreferences() {
         return cnBetaPreferences;
     }
 
+    public View getMaskView() {
+        return maskView;
+    }
+
+    public boolean isNightModeEnabled() {
+        return isNightModeEnabled;
+    }
+
+    public boolean isEyeFriendlyModeEnabled() {
+        return isEyeFriendlyModeEnabled;
+    }
+
+    public void setNightModeEnabled(boolean enable) {
+        isNightModeEnabled = enable;
+    }
+
+    public void setEyeFriendlyModeEnabled(boolean enable) {
+        isEyeFriendlyModeEnabled = enable;
+    }
 }

@@ -70,22 +70,17 @@ public class ContentActivity extends AbstractActionTabFragmentActivity {
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
-        ((CnBetaApplication) getApplicationContext()).onOptionsItemSelected(this, mi);
-        switch (mi.getItemId()) {
-            case R.id.refresh_item:
-                reload(); // will reload comments, and update comment Numbers
-                break;
-            case R.id.comment_item:
-                Utils.openPublishCommentActivityForResult(this, getContent().getSid());
-                break;
+        if (!super.onOptionsItemSelected(mi) && !((CnBetaApplicationContext) getApplicationContext()).onOptionsItemSelected(this, mi)) {
+            switch (mi.getItemId()) {
+                case R.id.refresh_item:
+                    reload(); // will reload comments, and update comment Numbers
+                    break;
+                case R.id.comment_item:
+                    Utils.openPublishCommentActivityForResult(this, getContent().getSid());
+                    break;
+            }
         }
-
         return true;
     }
 

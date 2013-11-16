@@ -18,22 +18,22 @@ public class TypesActivity extends AbstractActionTabFragmentActivity {
     protected Fragment getTabFragmentByItem(int position) {
         switch (position) {
             case 0:
-                if(fragments[0] == null) {
+                if (fragments[0] == null) {
                     fragments[0] = newArticleListFragment(ArticleListLoader.Type.DIG);
                 }
                 return fragments[0];
             case 1:
-                if(fragments[1] == null) {
+                if (fragments[1] == null) {
                     fragments[1] = newArticleListFragment(ArticleListLoader.Type.SOFT);
                 }
                 return fragments[1];
             case 2:
-                if(fragments[2] == null) {
+                if (fragments[2] == null) {
                     fragments[2] = newArticleListFragment(ArticleListLoader.Type.INDUSTRY);
                 }
                 return fragments[2];
             case 3:
-                if(fragments[3] == null) {
+                if (fragments[3] == null) {
                     fragments[3] = newArticleListFragment(ArticleListLoader.Type.INTERACT);
                 }
                 return fragments[3];
@@ -48,7 +48,7 @@ public class TypesActivity extends AbstractActionTabFragmentActivity {
         return tabs;
     }
 
-    private ArticleListFragment newArticleListFragment(AbstractListLoader.Type type){
+    private ArticleListFragment newArticleListFragment(AbstractListLoader.Type type) {
         ArticleListFragment fragment = new ArticleListFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("type", type);
@@ -64,18 +64,14 @@ public class TypesActivity extends AbstractActionTabFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
-        switch (mi.getItemId()) {
-            case R.id.refresh_item:
-                fragments[getActionBar().getSelectedNavigationIndex()].reloadData();
-                break;
+        if (!super.onOptionsItemSelected(mi) && !((CnBetaApplicationContext) getApplicationContext()).onOptionsItemSelected(this, mi)) {
+            switch (mi.getItemId()) {
+                case R.id.refresh_item:
+                    fragments[getActionBar().getSelectedNavigationIndex()].reloadData();
+                    break;
+            }
         }
-        return ((CnBetaApplication)getApplicationContext()).onOptionsItemSelected(this, mi);
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // 每次都会调用该方法, 可以动态改变 menu
-        return super.onPrepareOptionsMenu(menu);
+        return true;
     }
 
 }

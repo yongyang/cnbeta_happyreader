@@ -46,7 +46,7 @@ public class TopicActivity extends AbstractActionTabFragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         topicId = getIntent().getLongExtra("id", 9); // 9 is apple
         topicName = getIntent().getStringExtra("name");
-        if(topicName == null) {
+        if (topicName == null) {
             topicName = "Apple 苹果";
         }
         super.onCreate(savedInstanceState);
@@ -54,7 +54,7 @@ public class TopicActivity extends AbstractActionTabFragmentActivity {
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        if(getIntent().hasExtra("id")) { // 由阅读文章中点击topic图片打开
+        if (getIntent().hasExtra("id")) { // 由阅读文章中点击topic图片打开
             getActionBar().setSelectedNavigationItem(1);
         }
     }
@@ -78,7 +78,7 @@ public class TopicActivity extends AbstractActionTabFragmentActivity {
     public void openTopic(long topicId, String topicName) {
         setTopicId(topicId);
         setTopicName(topicName);
-        TopicArticleListFragment fragment = (TopicArticleListFragment)fragments[1];
+        TopicArticleListFragment fragment = (TopicArticleListFragment) fragments[1];
         fragment.updateTopicId(getTopicId());
         getActionBar().setSelectedNavigationItem(1);
     }
@@ -94,18 +94,14 @@ public class TopicActivity extends AbstractActionTabFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
-        switch (mi.getItemId()) {
-            case R.id.refresh_item:
-                fragments[getActionBar().getSelectedNavigationIndex()].reloadData();
-                break;
+        if (!super.onOptionsItemSelected(mi) && !((CnBetaApplicationContext) getApplicationContext()).onOptionsItemSelected(this, mi)) {
+            switch (mi.getItemId()) {
+                case R.id.refresh_item:
+                    fragments[getActionBar().getSelectedNavigationIndex()].reloadData();
+                    break;
+            }
         }
-        return ((CnBetaApplication)getApplicationContext()).onOptionsItemSelected(this, mi);
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // 每次都会调用该方法, 可以动态改变 menu
-        return super.onPrepareOptionsMenu(menu);
+        return true;
     }
 
 }

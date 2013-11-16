@@ -119,7 +119,7 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         Element dateElement = bodyElement.select("span.date").first();
         Element introductionElement = bodyElement.select("div.introduction").first();
         // set style for introduction
-        introductionElement.attr("style", "background-color: #fbfbfb; color: #43434; border: 1px solid #e5e5e5; border-left: 0px; border-right: 0px; padding-left: 10px; padding-right: 10px; margin-bottom: 10px");
+        introductionElement.attr("style", "border: 1px solid #e5e5e5; border-left: 0px; border-right: 0px; padding-left: 10px; padding-right: 10px; margin-bottom: 10px");
         // fix position of logo div
         Element logoDiv = introductionElement.select("div").get(1); // first one is introduction itself
         logoDiv.attr("style", "float:right;margin-left:5px;margin-top:20px;margin-bottom:5px;margin-right:0px;");

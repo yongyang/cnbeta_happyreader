@@ -1,5 +1,5 @@
 1. 一键离线下载
-2. HttpClient增加 abort，在 httpGet中传入 RequestContext，提供 isCacelled 进行判断是否 AsyncTask cancel了
+2. HttpClient增加 abort，在 httpGet中传入 RequestContext，提供 isCancelled 进行判断是否 AsyncTask cancel了
 3. ListView 过滤
 4. 自动更新
 5. 自动推送最新咨询

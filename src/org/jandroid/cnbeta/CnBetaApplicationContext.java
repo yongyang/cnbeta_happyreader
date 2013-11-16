@@ -2,6 +2,7 @@ package org.jandroid.cnbeta;
 
 import android.app.Activity;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.io.File;
 
@@ -23,4 +24,14 @@ public interface CnBetaApplicationContext {
     boolean onOptionsItemSelected(Activity theActivity, MenuItem item);
 
     CnBetaPreferences getCnBetaPreferences();
+
+    boolean isNightModeEnabled();
+
+    boolean isEyeFriendlyModeEnabled();
+
+    void setNightModeEnabled(boolean enable);
+
+    void setEyeFriendlyModeEnabled(boolean enable);
+
+    View getMaskView();
 }
