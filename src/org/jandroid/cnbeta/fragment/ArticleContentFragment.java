@@ -11,7 +11,6 @@ import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -38,8 +37,6 @@ import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
 import org.json.simple.JSONObject;
 
-import java.io.ByteArrayInputStream;
-
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
@@ -62,7 +59,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     private ViewGroup root;
 
     private boolean loaded = false;
-    private boolean reloadComment = true;
+    private boolean reloadComments = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -205,33 +202,22 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
 
         contentWebView.setWebViewClient(new WebViewClient() {
 
+/*
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-/*
-                if (!url.contains("image")) {
-                    ToastUtils.showShortToast(getActivity(), url);
-                }
-*/
                 //NOTE!!!! 过滤掉这些 url，来自优酷视频，可以去掉广告
-                if (
-                        url.contains("atm.youku.com")
-                                || url.contains("stat.youku.com")
-//                                || url.contains("stat.ykimg.com")
-                                || url.contains("log.ykimg.com")
-                                || url.contains("scorecardresearch.com")
-                                || url.contains("irs01.com")
+                if (url.contains("atm.youku.com")
+                        || url.contains("stat.youku.com")
+                        || url.contains("log.ykimg.com")
+                        || url.contains("scorecardresearch.com")
+                        || url.contains("irs01.com")
                         ) {
-
-/*
-                    if (!url.contains("image")) {
-                        ToastUtils.showShortToast(getActivity(), "Cancel, " + url);
-                    }
-*/
                     return new WebResourceResponse("text/plain", "UTF-8", new ByteArrayInputStream("".getBytes()));
                 }
 
                 return super.shouldInterceptRequest(view, url);
             }
+*/
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -247,7 +233,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
 
                 //Stat to load comments and view_num, comment_num etc
                 //!!!NOTE: this is the best point to start to load comments, after content page loaded
-                if (reloadComment) { // don't reload comment onResume's loadDataUrl
+                if (reloadComments) { // don't reload comment onResume's loadDataUrl
                     handler.post(new Runnable() {
                         public void run() {
                             if (getActivity() != null) { // in case activity finished
@@ -363,24 +349,30 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
 
     @Override
     public void onResume() {
-        super.onResume();
-        int fontSizeOffset = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
-        // update font size
-        FontUtils.updateTextSize(getActivity(), titleTextView, R.dimen.listitem_title_text_size, fontSizeOffset);
-        FontUtils.updateTextSize(getActivity(), timeTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
-        FontUtils.updateTextSize(getActivity(), viewNumTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
-        FontUtils.updateTextSize(getActivity(), commentNumTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
-        FontUtils.updateTextSize(getActivity(), whereTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
+        ContentActivity contentActivity = ((ContentActivity) getActivity());
+        if (contentActivity != null) {
+            super.onResume();
+            int fontSizeOffset = ((CnBetaApplicationContext) contentActivity.getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+            //TODO: update font size if changed
+            FontUtils.updateTextSize(contentActivity, titleTextView, R.dimen.listitem_title_text_size, fontSizeOffset);
+            FontUtils.updateTextSize(contentActivity, timeTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
+            FontUtils.updateTextSize(contentActivity, viewNumTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
+            FontUtils.updateTextSize(contentActivity, commentNumTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
+            FontUtils.updateTextSize(contentActivity, whereTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
 
-        CnBetaPreferences pref = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getCnBetaPreferences();
-        FontUtils.updateFont(getView(), pref.getCustomFontTypeface());
-        if (contentWebView != null) {
-            contentWebView.resumeTimers();
-            contentWebView.onResume();
-            FontUtils.updateTextSize(getActivity(), contentWebView, R.dimen.webview_default_text_size, fontSizeOffset);
-            if (loaded) { // reload to update font if change
-                this.reloadComment = false;
-                contentWebView.loadDataWithBaseURL(null, getStyledHTMLContent(content), "text/html", "UTF-8", "about:blank");
+            if (contentWebView != null) {
+                contentWebView.resumeTimers();
+                contentWebView.onResume();
+                FontUtils.updateTextSize(contentActivity, contentWebView, R.dimen.webview_default_text_size, fontSizeOffset);
+                CnBetaPreferences pref = ((CnBetaApplicationContext) contentActivity.getApplicationContext()).getCnBetaPreferences();
+                if (contentActivity.isFontChanged()) {
+                    FontUtils.updateFont(getView(), pref.getCustomFontTypeface());
+                }
+                //判断字体是否有变动，才重新加载 webview
+                if (loaded && (contentActivity.isFontChanged() || contentActivity.isThemeChanged())) { // reload to update font if change
+                    this.reloadComments = false;
+                    contentWebView.loadDataWithBaseURL(null, getStyledHTMLContent(content), "text/html", "UTF-8", "about:blank");
+                }
             }
         }
     }
@@ -428,7 +420,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     }
 
     public void reloadContent() {
-        reloadComment = true;
+        reloadComments = true;
         executeAsyncTaskMultiThreading(new ArticleContentAsyncTask() {
 
             @Override
@@ -459,7 +451,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
     }
 
     public void onProgressDismiss() {
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             getActivity().setProgressBarVisibility(false);
         }
     }
@@ -488,13 +480,17 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         sb.append("<html><head><style type=\"text/css\">");
 
 //        设置 introduction 前景 背景色
-        if(!((CnBetaApplicationContext)getActivity().getApplicationContext()).isNightModeEnabled()) {
-            sb.append(".introduction {background-color: #fbfbfb; color: #434343; }");
+        ContentActivity contentActivity = ((ContentActivity) getActivity());
+        if (contentActivity != null) {
+            if (contentActivity.isDarkTheme()) { // night mode
+                sb.append("body {background-color: #000000; color: #ffffff; }");
+                sb.append(".introduction {background-color: #000000; color: #aaaaaa; }");
+            }
+            else {
+                sb.append(".introduction {background-color: #fbfbfb; color: #434343; }");
+            }
         }
-        else { // night mode
-            sb.append("body {background-color: #000000; color: #ffffff; }");
-            sb.append(".introduction {background-color: #000000; color: #aaaaaa; }");
-        }
+
         // 设置 custom Font
         String customFont = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getCnBetaPreferences().getCustomFont();
         if (customFont != null && !customFont.isEmpty() && !customFont.equals("default")) {

@@ -25,13 +25,13 @@ public interface CnBetaApplicationContext {
 
     CnBetaPreferences getCnBetaPreferences();
 
-    boolean isNightModeEnabled();
-
     boolean isEyeFriendlyModeEnabled();
-
-    void setNightModeEnabled(boolean enable);
 
     void setEyeFriendlyModeEnabled(boolean enable);
 
     View getMaskView();
+
+    void setThemeId(int themeId);
+
+    int getThemeId();
 }

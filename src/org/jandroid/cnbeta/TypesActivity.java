@@ -2,14 +2,13 @@ package org.jandroid.cnbeta;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import org.jandroid.cnbeta.fragment.AbstractAsyncListFragment;
 import org.jandroid.cnbeta.fragment.ArticleListFragment;
 import org.jandroid.cnbeta.loader.AbstractListLoader;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 
-public class TypesActivity extends AbstractActionTabFragmentActivity {
+public class TypesActivity extends CnBetaActionTabFragmentActivity {
 
     public final static int[] tabs = new int[]{R.string.tab_dig, R.string.tab_software, R.string.tab_industry, R.string.tab_interact};
     private final AbstractAsyncListFragment[] fragments = new AbstractAsyncListFragment[tabs.length];

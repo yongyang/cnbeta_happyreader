@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import org.jandroid.cnbeta.CnBetaActivity;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.common.adapter.ActionTabFragmentPagerAdapter;
@@ -13,7 +14,7 @@ import org.jandroid.common.adapter.ActionTabFragmentPagerAdapter;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class ActionTabFragmentActivity extends BaseActivity {
+public abstract class ActionTabFragmentActivity extends CnBetaActivity {
 
     protected ViewPager mViewPager;
 

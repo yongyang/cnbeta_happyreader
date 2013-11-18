@@ -16,7 +16,7 @@ import org.jandroid.common.ToastUtils;
 
 import java.util.Date;
 
-public class ContentActivity extends AbstractActionTabFragmentActivity {
+public class ContentActivity extends CnBetaActionTabFragmentActivity {
 
     private final static int[] tabs = new int[]{R.string.tab_zhengwen, R.string.tab_pinglun};
 

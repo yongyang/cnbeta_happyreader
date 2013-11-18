@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class BaseActivity extends Activity {
+public abstract class BaseActivity extends Activity {
 
     //用来生成随机数，用于 postDelay，以分散线程创建和执行，提速
     private static final Random random = new Random();
@@ -128,10 +128,5 @@ public class BaseActivity extends Activity {
         super.finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
    	}
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
 
 }

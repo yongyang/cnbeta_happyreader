@@ -3,13 +3,12 @@ package org.jandroid.cnbeta;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import org.jandroid.cnbeta.fragment.AbstractAsyncListFragment;
 import org.jandroid.cnbeta.fragment.TopicArticleListFragment;
 import org.jandroid.cnbeta.fragment.TopicListFragment;
 
-public class TopicActivity extends AbstractActionTabFragmentActivity {
+public class TopicActivity extends CnBetaActionTabFragmentActivity {
 
     public final static int[] tabs = new int[]{R.string.tab_topics, R.string.tab_topic_articles};
     private final AbstractAsyncListFragment[] fragments = new AbstractAsyncListFragment[tabs.length];

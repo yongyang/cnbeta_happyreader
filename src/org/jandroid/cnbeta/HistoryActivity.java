@@ -7,7 +7,7 @@ import org.jandroid.cnbeta.fragment.AbstractAsyncListFragment;
 import org.jandroid.cnbeta.fragment.HistoryArticleListFragment;
 import org.jandroid.cnbeta.fragment.HistoryCommentListFragment;
 
-public class HistoryActivity extends AbstractActionTabFragmentActivity {
+public class HistoryActivity extends CnBetaActionTabFragmentActivity {
 
     private final static int[] tabs = new int[]{R.string.tab_history_article, R.string.tab_history_comment};
     private final AbstractAsyncListFragment[] fragments = new AbstractAsyncListFragment[tabs.length];

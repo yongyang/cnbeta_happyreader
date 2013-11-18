@@ -2,7 +2,6 @@ package org.jandroid.cnbeta;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import org.jandroid.cnbeta.fragment.AbstractAsyncListFragment;
@@ -11,9 +10,8 @@ import org.jandroid.cnbeta.fragment.EditorRecommendListFragment;
 import org.jandroid.cnbeta.fragment.HotCommentListFragment;
 import org.jandroid.cnbeta.fragment.RealtimeArticleListFragment;
 import org.jandroid.cnbeta.loader.AbstractListLoader;
-import org.jandroid.common.WindowUtils;
 
-public class MainActivity extends AbstractActionTabFragmentActivity {
+public class MainActivity extends CnBetaActionTabFragmentActivity {
 
     private final static int[] tabs = new int[]{R.string.tab_quanbuzixun, R.string.tab_shishigengxin, R.string.tab_bianjituijian, R.string.tab_jingcaipinglun};
     private final AbstractAsyncListFragment[] fragments = new AbstractAsyncListFragment[tabs.length];

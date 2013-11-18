@@ -31,7 +31,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
 
     private CnBetaPreferences cnBetaPreferences;
 
-    private boolean isNightModeEnabled = false;
+    private int themeId = R.style.Theme_cnBeta_Light; // default light
     private boolean isEyeFriendlyModeEnabled = false;
 
     private TextView maskView;
@@ -215,19 +215,19 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         return maskView;
     }
 
-    public boolean isNightModeEnabled() {
-        return isNightModeEnabled;
-    }
-
     public boolean isEyeFriendlyModeEnabled() {
         return isEyeFriendlyModeEnabled;
     }
 
-    public void setNightModeEnabled(boolean enable) {
-        isNightModeEnabled = enable;
-    }
-
     public void setEyeFriendlyModeEnabled(boolean enable) {
         isEyeFriendlyModeEnabled = enable;
+    }
+
+    public int getThemeId() {
+        return themeId;
+    }
+
+    public void setThemeId(int themeId) {
+        this.themeId = themeId;
     }
 }

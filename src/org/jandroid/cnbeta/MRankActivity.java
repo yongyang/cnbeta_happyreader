@@ -6,7 +6,7 @@ import android.view.MenuItem;
 import org.jandroid.cnbeta.fragment.MRankListFragment;
 import org.jandroid.cnbeta.loader.MRankListLoader;
 
-public class MRankActivity extends AbstractActionTabFragmentActivity {
+public class MRankActivity extends CnBetaActionTabFragmentActivity {
 
     private final static int[] tabs = new int[]{R.string.tab_hot, R.string.tab_argue, R.string.tab_recommend};
 

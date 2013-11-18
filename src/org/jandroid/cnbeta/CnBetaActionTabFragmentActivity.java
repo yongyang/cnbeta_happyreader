@@ -16,23 +16,9 @@ import org.jandroid.common.WindowUtils;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class AbstractActionTabFragmentActivity extends ActionTabFragmentActivity {
+public abstract class CnBetaActionTabFragmentActivity extends ActionTabFragmentActivity {
 
     private Menu optionsMenu;
-
-    private View maskView;
-
-    private boolean isNightMode = false;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        updateTheme();
-
-        this.requestWindowFeature(Window.FEATURE_PROGRESS);
-        this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        this.setProgressBarIndeterminate(true);
-        super.onCreate(savedInstanceState);
-    }
 
     protected void initActionBar() {
         final ActionBar actionBar = getActionBar();
@@ -52,47 +38,15 @@ public abstract class AbstractActionTabFragmentActivity extends ActionTabFragmen
     @Override
     protected void onResume() {
         super.onResume();
+
         // update action tab text font
         for (int i = 0; i < getActionBar().getTabCount(); i++) {
             FontUtils.updateFont(getActionBar().getTabAt(i).getCustomView(), ((CnBetaApplicationContext) getApplicationContext()).getCnBetaPreferences().getCustomFontTypeface());
         }
 
-        // nightmode
-        updateTheme();
-
-        // 护眼 模式
-        updateMaskView();
-
         //update menu status
         if (optionsMenu != null) {
             updateOptionsMenu();
-        }
-    }
-
-    protected void updateMaskView() {
-        // if isEyeFriendlyModeEnable
-        if (((CnBetaApplicationContext) getApplicationContext()).isEyeFriendlyModeEnabled()) {
-            if(this.maskView == null) {
-                // 还没有加上上 maskView
-                this.maskView = WindowUtils.addMaskView(this);
-            }
-        }
-        else {
-            if (maskView != null) {
-                WindowUtils.removeMaskView(this, maskView);
-                maskView = null;
-            }
-        }
-    }
-
-    protected void updateTheme() {
-        // if isEyeFriendlyModeEnable
-
-        if (((CnBetaApplicationContext) getApplicationContext()).isNightModeEnabled()) {
-            this.setTheme(R.style.Theme_cnBeta_Dark);
-        }
-        else {
-            this.setTheme(R.style.Theme_cnBeta_Light);
         }
     }
 
@@ -102,6 +56,7 @@ public abstract class AbstractActionTabFragmentActivity extends ActionTabFragmen
         //add  refresh actionitem
         getMenuInflater().inflate(R.menu.default_action_item, menu);
         this.optionsMenu = menu;
+        // call updateOptionsMenu to make sure menu updated after menu created
         updateOptionsMenu();
         return super.onCreateOptionsMenu(menu);
     }
@@ -109,7 +64,7 @@ public abstract class AbstractActionTabFragmentActivity extends ActionTabFragmen
     protected void updateOptionsMenu() {
         if (optionsMenu != null) {
             optionsMenu.findItem(R.id.eye_friendly_mode_menu).setChecked(((CnBetaApplicationContext) getApplicationContext()).isEyeFriendlyModeEnabled());
-            optionsMenu.findItem(R.id.night_mode_menu).setChecked(((CnBetaApplicationContext) getApplicationContext()).isNightModeEnabled());
+            optionsMenu.findItem(R.id.night_mode_menu).setChecked(isDarkTheme());
         }
     }
 
@@ -130,15 +85,14 @@ public abstract class AbstractActionTabFragmentActivity extends ActionTabFragmen
                 updateMaskView();
                 return true;
             case R.id.night_mode_menu:
-                if (!application.isNightModeEnabled()) {
-                    item.setChecked(true);
-                    application.setNightModeEnabled(true);
+                if(item.isChecked()) {
+                    item.setChecked(false);
+                    application.setThemeId(getLightThemeId());
                 }
                 else {
-                    item.setChecked(false);
-                    application.setNightModeEnabled(false);
+                    item.setChecked(true);
+                    application.setThemeId(getDarkThemeId());
                 }
-//                updateTheme();
                 recreate();
                 return true;
         }
