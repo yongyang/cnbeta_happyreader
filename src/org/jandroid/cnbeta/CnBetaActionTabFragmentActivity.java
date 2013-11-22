@@ -1,24 +1,70 @@
 package org.jandroid.cnbeta;
 
 import android.app.ActionBar;
+import android.app.Fragment;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.TextView;
 import org.jandroid.common.ActionTabFragmentActivity;
 import org.jandroid.common.FontUtils;
-import org.jandroid.common.IntentUtils;
-import org.jandroid.common.WindowUtils;
+import org.jandroid.common.adapter.ActionTabFragmentPagerAdapter;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public abstract class CnBetaActionTabFragmentActivity extends ActionTabFragmentActivity {
+public abstract class CnBetaActionTabFragmentActivity extends CnBetaThemeActivity {
 
-    private Menu optionsMenu;
+    protected ViewPager mViewPager;
+
+    protected ActionTabFragmentPagerAdapter pagerAdapter = new ActionTabFragmentPagerAdapter(this.getFragmentManager()) {
+
+        @Override
+        protected ActionBar getActionBar() {
+            return CnBetaActionTabFragmentActivity.this.getActionBar();
+        }
+
+        @Override
+        protected ViewPager getViewPager() {
+            return mViewPager;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return getTabFragmentByItem(position);
+        }
+
+    };
+
+    protected abstract Fragment getTabFragmentByItem(int position);
+    protected abstract int[] getTabResourceIds();
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        setContentView(R.layout.viewpager_activity);
+
+        initViewPager();
+        initActionBar();
+    }
+
+    protected void initViewPager() {
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        mViewPager.setAdapter(pagerAdapter);
+        mViewPager.setOnPageChangeListener(pagerAdapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
 
     protected void initActionBar() {
         final ActionBar actionBar = getActionBar();
@@ -29,7 +75,6 @@ public abstract class CnBetaActionTabFragmentActivity extends ActionTabFragmentA
             TextView tabTextView = (TextView) tabContainer.findViewById(R.id.tabTextView);
             tabTextView.setText(resourceId);
             actionBar.addTab(actionBar.newTab().setCustomView(tabContainer).setTabListener(pagerAdapter));
-
 //            actionBar.addTab(actionBar.newTab().setText(resourceId).setTabListener(pagerAdapter));
         }
         pagerAdapter.notifyDataSetChanged();
@@ -40,66 +85,10 @@ public abstract class CnBetaActionTabFragmentActivity extends ActionTabFragmentA
         super.onResume();
 
         // update action tab text font
+        Typeface typeface = FontUtils.loadTypeface(this, ((CnBetaApplicationContext) getApplicationContext()).getCnBetaPreferences().getCustomFont());
         for (int i = 0; i < getActionBar().getTabCount(); i++) {
-            FontUtils.updateFont(getActionBar().getTabAt(i).getCustomView(), ((CnBetaApplicationContext) getApplicationContext()).getCnBetaPreferences().getCustomFontTypeface());
-        }
-
-        //update menu status
-        if (optionsMenu != null) {
-            updateOptionsMenu();
+            FontUtils.updateFont(getActionBar().getTabAt(i).getCustomView(), typeface);
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        //add  refresh actionitem
-        getMenuInflater().inflate(R.menu.default_action_item, menu);
-        this.optionsMenu = menu;
-        // call updateOptionsMenu to make sure menu updated after menu created
-        updateOptionsMenu();
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    protected void updateOptionsMenu() {
-        if (optionsMenu != null) {
-            optionsMenu.findItem(R.id.eye_friendly_mode_menu).setChecked(((CnBetaApplicationContext) getApplicationContext()).isEyeFriendlyModeEnabled());
-            optionsMenu.findItem(R.id.night_mode_menu).setChecked(isDarkTheme());
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-        CnBetaApplicationContext application = getCnBetaApplicationContext();
-        switch (item.getItemId()) {
-            case R.id.eye_friendly_mode_menu:
-                if (!application.isEyeFriendlyModeEnabled()) {
-                    item.setChecked(true);
-                    application.setEyeFriendlyModeEnabled(true);
-                }
-                else {
-                    item.setChecked(false);
-                    application.setEyeFriendlyModeEnabled(false);
-                }
-                updateMaskView();
-                return true;
-            case R.id.night_mode_menu:
-                if(item.isChecked()) {
-                    item.setChecked(false);
-                    application.setThemeId(getLightThemeId());
-                }
-                else {
-                    item.setChecked(true);
-                    application.setThemeId(getDarkThemeId());
-                }
-                recreate();
-                return true;
-        }
-        return false;
-    }
-
-    public CnBetaApplicationContext getCnBetaApplicationContext() {
-        return (CnBetaApplicationContext) getApplication();
-    }
 }

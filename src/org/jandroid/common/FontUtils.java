@@ -1,5 +1,6 @@
 package org.jandroid.common;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.TypedValue;
@@ -20,11 +21,43 @@ import java.util.Map;
  */
 public class FontUtils {
 
+    private static String lastFont = "default";
+    private static Typeface lastTypeface;
+
     public static TTFParser parseFontFile(File file) throws IOException {
         TTFParser parser = new TTFParser();
         parser.parse(file);
         return parser;
     }
+
+    public static Typeface loadTypeface(Activity activity, String fontPath) {
+        //默认字体
+        if(fontPath == null || fontPath.isEmpty() || fontPath.equals("default")){
+            return Typeface.DEFAULT;
+        }
+        else {
+            try {
+                if (!fontPath.equals(lastFont)) {
+                    Typeface typeface;
+                    if (fontPath.contains("/android_asset/")) {
+                        typeface = Typeface.createFromAsset(activity.getAssets(), fontPath.substring("file:///android_asset/".length()));
+                    }
+                    else {
+                        typeface = Typeface.createFromFile(new File(fontPath.substring("file://".length())));
+                    }
+                    lastFont = fontPath;
+                    lastTypeface = typeface;
+
+                }
+                return lastTypeface;
+            }
+            catch (Exception e) {
+                ToastUtils.showShortToast(activity, "加载个性化字体失败, " + e.toString());
+                return null;
+            }
+        }
+    }
+
 
     public static void updateFont(final View root, final Typeface typeface) {
         if(typeface == null) return;

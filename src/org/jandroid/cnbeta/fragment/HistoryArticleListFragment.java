@@ -71,8 +71,7 @@ public class HistoryArticleListFragment extends AbstractAsyncListFragment<Histor
                 FontUtils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
                 CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
 
-                FontUtils.updateFont(convertView, pref.getCustomFontTypeface());
-
+                updateTypeFace(convertView);
                 return convertView;
             }
         };

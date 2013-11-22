@@ -8,8 +8,8 @@
         android:paddingLeft="4dip"
         android:paddingRight="4dip"
         android:paddingTop="2dip"
-        android:paddingBottom="2dip"
-        android:background="@drawable/listitem_bg_comment_selector">
+        android:paddingBottom="2dip">
+    <!--android:background="@drawable/listitem_bg_comment_selector"-->
 
     <LinearLayout
             android:orientation="horizontal"

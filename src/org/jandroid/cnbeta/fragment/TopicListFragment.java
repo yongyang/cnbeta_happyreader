@@ -202,9 +202,7 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
                 int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
                 FontUtils.updateTextSize(getActivity(), tvName, R.dimen.listitem_status_text_size, fontSizeOffset);
 
-                CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-                FontUtils.updateFont(convertView, pref.getCustomFontTypeface());
-
+                updateTypeFace(convertView);
                 return convertView;
             }
         };
@@ -249,8 +247,7 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
 
     @Override
     public void onResume() {
-        CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-        FontUtils.updateFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
+        updateTypeFace(footerPagingView.getRootView());
         super.onResume();
     }
 

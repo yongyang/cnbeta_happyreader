@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import org.jandroid.common.FontUtils;
 import org.jandroid.common.ToastUtils;
 
 import java.io.File;
@@ -16,8 +17,6 @@ public class CnBetaPreferences {
     private Application application;
     private SharedPreferences prefs;
 
-    private String lastFont = "default";
-    private Typeface lastTypeface;
 
     private static CnBetaPreferences instance;
 
@@ -26,7 +25,7 @@ public class CnBetaPreferences {
         prefs = application.getSharedPreferences(application.getPackageName() + "_preferences", Context.MODE_PRIVATE);
     }
 
-    synchronized static CnBetaPreferences getInstance(Application application) {
+    public synchronized static CnBetaPreferences getInstance(Application application) {
         if (instance == null) {
             instance = new CnBetaPreferences(application);
         }
@@ -59,32 +58,4 @@ public class CnBetaPreferences {
         return prefs.getString(application.getString(R.string.pref_key_customFont), "default");
     }
 
-    public Typeface getCustomFontTypeface() {
-        String customFont = getCustomFont();
-        //默认字体
-        if(customFont == null || customFont.isEmpty() || customFont.equals("default")){
-            return Typeface.DEFAULT;
-        }
-        else {
-            try {
-                if (!customFont.equals(lastFont)) {
-                    Typeface typeface;
-                    if (customFont.contains("/android_asset/")) {
-                        typeface = Typeface.createFromAsset(application.getAssets(), customFont.substring("file:///android_asset/".length()));
-                    }
-                    else {
-                        typeface = Typeface.createFromFile(new File(customFont.substring("file://".length())));
-                    }
-                    lastFont = customFont;
-                    lastTypeface = typeface;
-
-                }
-                return lastTypeface;
-            }
-            catch (Exception e) {
-                ToastUtils.showShortToast(application, "加载个性化字体失败, " + e.toString());
-                return null;
-            }
-        }
-    }
 }

@@ -55,8 +55,8 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.comments, container, false);
-        mListView = (ListView) rootView.findViewById(R.id.comments_listview);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.listview_default, container, false);
+        mListView = (ListView) rootView.findViewById(R.id.article_listview);
         // so button in Item can click
         ((ListView) mListView).setItemsCanFocus(true);
         return rootView;
@@ -191,9 +191,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                 FontUtils.updateTextSize(getActivity(), scoreTextView, R.dimen.listitem_comment_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), reasonTextView, R.dimen.listitem_comment_text_size, fontSizeOffset);
 
-                CnBetaPreferences pref = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getCnBetaPreferences();
-                FontUtils.updateFont(convertView, pref.getCustomFontTypeface());
-
+                updateTypeFace(convertView);
                 return convertView;
             }
         };
@@ -389,8 +387,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
 
     @Override
     public void onResume() {
-        CnBetaPreferences pref = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getCnBetaPreferences();
-        FontUtils.updateFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
+        updateTypeFace(footerPagingView.getRootView());
         super.onResume();
     }
 

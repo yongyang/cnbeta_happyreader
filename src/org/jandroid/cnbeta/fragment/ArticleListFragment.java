@@ -223,16 +223,22 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
                 // queue to image load list or set a cached bitmap if has been cached
                 ivLogo.setImageBitmap(queueImageView(position, ivLogo, article.getLogo()));
 
-                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
-                FontUtils.updateTextSize(getActivity(), tvTitleShow, R.dimen.listitem_title_text_size, fontSizeOffset);
-                FontUtils.updateTextSize(getActivity(), tvHometextShowShort, R.dimen.listitem_description_text_size, fontSizeOffset);
-                FontUtils.updateTextSize(getActivity(), tvComments, R.dimen.listitem_status_text_size, fontSizeOffset);
-                FontUtils.updateTextSize(getActivity(), tvCounter, R.dimen.listitem_status_text_size, fontSizeOffset);
-                FontUtils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size, fontSizeOffset);
+                updateTextSize(
+                        new TextView[]{
+                                tvTitleShow,
+                                tvHometextShowShort,
+                                tvComments,
+                                tvCounter,
+                                tvTime},
+                        new int[]{
+                                R.dimen.listitem_title_text_size,
+                                R.dimen.listitem_description_text_size,
+                                R.dimen.listitem_status_text_size,
+                                R.dimen.listitem_status_text_size,
+                                R.dimen.listitem_status_text_size}
+                        );
 
-                CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-                FontUtils.updateFont(convertView, pref.getCustomFontTypeface());
-
+                updateTypeFace(convertView);
                 return convertView;
             }
         };
@@ -272,8 +278,7 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
 
     @Override
     public void onResume() {
-        CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-        FontUtils.updateFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
+        updateTypeFace(footerPagingView.getRootView());
         super.onResume();
     }
 }

@@ -11,7 +11,6 @@ import org.jandroid.cnbeta.async.CaptchaAsyncTask;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.PublishCommentAsyncTask;
 import org.jandroid.cnbeta.entity.Comment;
-import org.jandroid.common.BaseActivity;
 import org.jandroid.common.DateFormatUtils;
 import org.jandroid.common.FontUtils;
 import org.jandroid.common.ToastUtils;
@@ -23,7 +22,7 @@ import java.util.Date;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class PublishCommentActivity extends BaseActivity {
+public class PublishCommentActivity extends CnBetaThemeActivity {
     protected ProgressBar captchaProgressBar;
     protected ProgressBar postProgressBar;
 
@@ -105,8 +104,7 @@ public class PublishCommentActivity extends BaseActivity {
         FontUtils.updateTextSize(this, cancelTextView, R.dimen.listitem_title_text_size, pref.getFontSizeOffset());
         FontUtils.updateTextSize(this, sendTextView, R.dimen.listitem_title_text_size, pref.getFontSizeOffset());
 
-        FontUtils.updateFont(getWindow().getDecorView().getRootView(), pref.getCustomFontTypeface());
-
+        updateTypeFace(getWindow().getDecorView().getRootView());
         initCaptcha();
     }
 
@@ -240,4 +238,19 @@ public class PublishCommentActivity extends BaseActivity {
         // nothing
     }
 
+
+    @Override
+    public int getDarkThemeId() {
+        return R.style.Theme_Dialog_cnBeta_Light;
+    }
+
+    @Override
+    public int getLightThemeId() {
+        return R.style.Theme_Dialog_cnBeta_Light;
+    }
+
+    @Override
+    protected boolean isThemeChanged() {
+        return super.isThemeChanged();
+    }
 }

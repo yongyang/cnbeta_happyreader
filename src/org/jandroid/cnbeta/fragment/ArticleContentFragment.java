@@ -29,10 +29,10 @@ import org.jandroid.cnbeta.async.ImageBytesAsyncTask;
 import org.jandroid.cnbeta.async.RateArticleAsyncTask;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
-import org.jandroid.common.BaseFragment;
 import org.jandroid.common.FontUtils;
 import org.jandroid.common.JavaScriptObject;
 import org.jandroid.common.PixelUtils;
+import org.jandroid.common.ThemeFragment;
 import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
 import org.json.simple.JSONObject;
@@ -40,7 +40,7 @@ import org.json.simple.JSONObject;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class ArticleContentFragment extends BaseFragment implements HasAsync<Content> {
+public class ArticleContentFragment extends ThemeFragment implements HasAsync<Content> {
 
     private Content content;
 
@@ -366,10 +366,10 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
                 FontUtils.updateTextSize(contentActivity, contentWebView, R.dimen.webview_default_text_size, fontSizeOffset);
                 CnBetaPreferences pref = ((CnBetaApplicationContext) contentActivity.getApplicationContext()).getCnBetaPreferences();
                 if (contentActivity.isFontChanged()) {
-                    FontUtils.updateFont(getView(), pref.getCustomFontTypeface());
+                    updateTypeFace(getView());
                 }
                 //判断字体是否有变动，才重新加载 webview
-                if (loaded && (contentActivity.isFontChanged() || contentActivity.isThemeChanged())) { // reload to update font if change
+                if (loaded && contentActivity.isFontChanged()) { // reload to update font if change
                     this.reloadComments = false;
                     contentWebView.loadDataWithBaseURL(null, getStyledHTMLContent(content), "text/html", "UTF-8", "about:blank");
                 }
@@ -482,7 +482,7 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
 //        设置 introduction 前景 背景色
         ContentActivity contentActivity = ((ContentActivity) getActivity());
         if (contentActivity != null) {
-            if (contentActivity.isDarkTheme()) { // night mode
+            if (contentActivity.isDarkThemeEnabled()) { // night mode
                 sb.append("body {background-color: #000000; color: #ffffff; }");
                 sb.append(".introduction {background-color: #000000; color: #aaaaaa; }");
             }
@@ -555,13 +555,6 @@ public class ArticleContentFragment extends BaseFragment implements HasAsync<Con
         );
     }
 
-    //TODO: 或者直接通过 getStyledHTMLContent 写到 html 里
-    private void updateColor() {
-        //TODO: update color according to theme
-        contentWebView.loadUrl("javascript:(function() { " +
-                "document.getElementsByTagName('body')[0].style.color = 'red'; " +
-                "})()");
-    }
 
 /*
 Javascript fail

@@ -1,5 +1,6 @@
 package org.jandroid.common;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -72,6 +73,9 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public synchronized void executeAsyncTaskMultiThreading(AsyncTask asyncTask){
-        ((BaseActivity) getActivity()).executeAsyncTaskMultiThreading(asyncTask);
+        Activity activity = getActivity();
+        if(activity != null) {
+            ((BaseActivity) activity).executeAsyncTaskMultiThreading(asyncTask);
+        }
     }
 }

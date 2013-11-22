@@ -31,19 +31,13 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
 
     private CnBetaPreferences cnBetaPreferences;
 
-    private int themeId = R.style.Theme_cnBeta_Light; // default light
     private boolean isEyeFriendlyModeEnabled = false;
-
-    private TextView maskView;
+    private boolean isDarkThemeEnabled = false;
 
     @Override
     public void onCreate() {
         super.onCreate();
         cnBetaPreferences = CnBetaPreferences.getInstance(this);
-        if(maskView == null) {
-            maskView = new TextView(this);
-            maskView.setBackgroundColor(0x60000000);
-        }
     }
 
     public boolean isNetworkConnected() {
@@ -211,10 +205,6 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         return cnBetaPreferences;
     }
 
-    public View getMaskView() {
-        return maskView;
-    }
-
     public boolean isEyeFriendlyModeEnabled() {
         return isEyeFriendlyModeEnabled;
     }
@@ -223,11 +213,11 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         isEyeFriendlyModeEnabled = enable;
     }
 
-    public int getThemeId() {
-        return themeId;
+    public boolean isDarkThemeEnabled() {
+        return isDarkThemeEnabled;
     }
 
-    public void setThemeId(int themeId) {
-        this.themeId = themeId;
+    public void setDarkThemeEnabled(boolean isDarkThemeEnabled) {
+        this.isDarkThemeEnabled = isDarkThemeEnabled;
     }
 }

@@ -96,9 +96,7 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
                 FontUtils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), tvTimeShow, R.dimen.listitem_status_text_size, fontSizeOffset);
 
-                CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-                FontUtils.updateFont(convertView, pref.getCustomFontTypeface());
-
+                updateTypeFace(convertView);
                 return convertView;
 
             }
@@ -143,8 +141,7 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
 
     @Override
     public void onResume() {
-        CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-        FontUtils.updateFont(footerRefreshView.getRootView(), pref.getCustomFontTypeface());
+        updateTypeFace(footerRefreshView.getRootView());
         super.onResume();
     }
 

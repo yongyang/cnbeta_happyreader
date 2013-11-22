@@ -9,7 +9,7 @@ import org.jandroid.common.BaseActivity;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 
-public class AboutActivity extends BaseActivity {
+public class AboutActivity extends CnBetaThemeActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about);

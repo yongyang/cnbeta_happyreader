@@ -104,8 +104,7 @@ public class MRankListFragment extends AbstractAsyncListFragment<MRankArticle> {
                 FontUtils.updateTextSize(getActivity(), tvRank, R.dimen.listitem_rank_no_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size, fontSizeOffset);
 
-                CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-                FontUtils.updateFont(convertView, pref.getCustomFontTypeface());
+                updateTypeFace(convertView);
 
                 return convertView;
             }
@@ -154,8 +153,7 @@ public class MRankListFragment extends AbstractAsyncListFragment<MRankArticle> {
 
     @Override
     public void onResume() {
-        CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-        FontUtils.updateFont(footerRefreshView.getRootView(), pref.getCustomFontTypeface());
+        updateTypeFace(footerRefreshView.getRootView());
         super.onResume();
     }
 

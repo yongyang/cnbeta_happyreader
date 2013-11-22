@@ -29,9 +29,8 @@ public interface CnBetaApplicationContext {
 
     void setEyeFriendlyModeEnabled(boolean enable);
 
-    View getMaskView();
+    boolean isDarkThemeEnabled();
 
-    void setThemeId(int themeId);
+    void setDarkThemeEnabled(boolean enable);
 
-    int getThemeId();
 }

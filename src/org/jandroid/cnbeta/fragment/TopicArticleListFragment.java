@@ -251,9 +251,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
                 FontUtils.updateTextSize(getActivity(), tvComments, R.dimen.listitem_status_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size, fontSizeOffset);
 
-                CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-                FontUtils.updateFont(convertView, pref.getCustomFontTypeface());
-
+                updateTypeFace(convertView);
                 return convertView;
             }
         };
@@ -308,8 +306,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 
     @Override
     public void onResume() {
-        CnBetaPreferences pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
-        FontUtils.updateFont(footerPagingView.getRootView(), pref.getCustomFontTypeface());
+        updateTypeFace(footerPagingView.getRootView());
         super.onResume();
     }
 

@@ -14,6 +14,7 @@ import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.exception.InfoException;
 import org.jandroid.common.BaseFragment;
+import org.jandroid.common.ThemeFragment;
 import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
 
@@ -26,7 +27,7 @@ import java.util.List;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 
-public abstract class AbstractAsyncListFragment<T> extends BaseFragment implements HasAsync<List<T>>, AdapterView.OnItemClickListener {
+public abstract class AbstractAsyncListFragment<T> extends ThemeFragment implements HasAsync<List<T>>, AdapterView.OnItemClickListener {
 
     public final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
