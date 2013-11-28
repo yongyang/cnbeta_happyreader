@@ -19,6 +19,7 @@ import org.apache.commons.io.FileUtils;
 import org.jandroid.common.FileChooserDialog;
 import org.jandroid.common.FontUtils;
 import org.jandroid.common.ToastUtils;
+import org.jandroid.common.WindowUtils;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -30,8 +31,12 @@ import java.util.List;
 public class CnBetaPreferenceActivity extends PreferenceActivity {
     private Handler handler = new Handler();
 
+    private View maskView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setupTheme();
+
         super.onCreate(savedInstanceState);
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
@@ -54,6 +59,20 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
             });
             // 将该按钮添加到该界面上
             setListFooter(button);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateMaskView();
+    }
+
+    protected void onStop() {
+        super.onStop();
+        if (maskView != null) {
+            WindowUtils.removeMaskView(this, maskView);
+            maskView = null;
         }
     }
 
@@ -102,6 +121,29 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
                 }
             });
 
+        }
+    }
+
+    public static class PrefsNightModeFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.prefs_nightmode);
+
+            Preference brightPref = findPreference(getString(R.string.pref_key_nightmode_brightness));
+            brightPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    CnBetaPreferenceActivity prefsActivity = ((CnBetaPreferenceActivity)getActivity());
+                    CnBetaApplicationContext applicationContext = prefsActivity.getCnBetaApplicationContext();
+                    if(applicationContext.isDarkThemeEnabled()) {
+                        if (prefsActivity.maskView != null) {
+                            WindowUtils.removeMaskView(prefsActivity, prefsActivity.maskView);
+                        }
+                        prefsActivity.maskView = WindowUtils.addMaskView(prefsActivity, Integer.parseInt(newValue.toString().substring(2), 16));
+                    }
+                    return true;
+                }
+            });
         }
     }
 
@@ -277,4 +319,50 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
         super.finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
+
+
+    protected void setupTheme(){
+        //setTheme
+        CnBetaApplicationContext applicationContext = getCnBetaApplicationContext();
+        if(applicationContext.isDarkThemeEnabled()) {
+            this.setTheme(R.style.Theme_cnBeta_Dark);
+        }
+        else {
+            this.setTheme(R.style.Theme_cnBeta_Light);
+        }
+        updateMaskView();
+    }
+
+    protected void updateMaskView() {
+        CnBetaApplicationContext applicationContext = getCnBetaApplicationContext();
+        if(applicationContext.isDarkThemeEnabled()) {
+            if (this.maskView != null) {
+                WindowUtils.removeMaskView(this, maskView);
+                maskView = null;
+            }
+           // 可能亮度有变化，所以每次都重新 add
+             this.maskView = WindowUtils.addMaskView(this, getMaskViewBackgroundColor());
+        }
+        else {
+            if (maskView != null) {
+                WindowUtils.removeMaskView(this, maskView);
+                maskView = null;
+            }
+        }
+
+    }
+
+    protected int getMaskViewBackgroundColor() {
+        try {
+            return getCnBetaApplicationContext().getCnBetaPreferences().getNightModeBrightnessInteger();
+        }
+        catch (Exception e) {
+            return 0x70000000;
+        }
+    }
+
+    public CnBetaApplicationContext getCnBetaApplicationContext() {
+        return (CnBetaApplicationContext) getApplication();
+    }
+
 }

@@ -78,8 +78,10 @@ public abstract class CnBetaActionTabFragmentActivity extends CnBetaThemeActivit
 
         // update action tab text font
         Typeface typeface = FontUtils.loadTypeface(this, ((CnBetaApplicationContext) getApplicationContext()).getCnBetaPreferences().getCustomFont());
-        for (int i = 0; i < getActionBar().getTabCount(); i++) {
-            FontUtils.updateFont(getActionBar().getTabAt(i).getCustomView(), typeface);
+        if(typeface != null) {
+            for (int i = 0; i < getActionBar().getTabCount(); i++) {
+                FontUtils.updateFont(getActionBar().getTabAt(i).getCustomView(), typeface);
+            }
         }
     }
 

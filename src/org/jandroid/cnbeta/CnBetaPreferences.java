@@ -58,4 +58,12 @@ public class CnBetaPreferences {
         return prefs.getString(application.getString(R.string.pref_key_customFont), "default");
     }
 
+    public String getNightModeBrightness() {
+        return prefs.getString(application.getString(R.string.pref_key_nightmode_brightness), "0x70000000");
+    }
+
+    public int getNightModeBrightnessInteger() {
+        return Integer.parseInt(getNightModeBrightness().substring(2), 16);
+    }
+
 }

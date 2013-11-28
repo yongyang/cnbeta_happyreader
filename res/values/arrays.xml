@@ -27,4 +27,15 @@
         <item>file:///android_asset/fonts/wawa.ttf</item>
     </string-array>
 
+    <string-array name="brightNameArray" >
+        <item>较暗</item>
+        <item>中等</item>
+        <item>较亮</item>
+    </string-array>
+    <string-array  name="brightValueArray" >
+        <item>0x70000000</item>
+        <item>0x50000000</item>
+        <item>0x30000000</item>
+    </string-array>
+
 </resources>

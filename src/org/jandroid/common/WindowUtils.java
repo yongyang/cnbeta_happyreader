@@ -21,6 +21,10 @@ import static android.view.WindowManager.LayoutParams;
 public class WindowUtils {
 
     public static View addMaskView(Activity activity) {
+        return addMaskView(activity, 0x70000000);
+    }
+
+    public static View addMaskView(Activity activity, int bgColor) {
         WindowManager mWindowManager = SystemUtils.getWindowManager(activity);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT,
@@ -32,10 +36,11 @@ public class WindowUtils {
         lp.y = 10;// 距离底部的距离是10像素 如果是 top 就是距离top是10像素
 
         View maskView = new TextView(activity);
-        maskView.setBackgroundColor(0x60000000);
+        maskView.setBackgroundColor(bgColor);
         mWindowManager.addView(maskView, lp);
         return maskView;
     }
+
 
     public static void removeMaskView(Activity activity, View maskView) {
         WindowManager mWindowManager = SystemUtils.getWindowManager(activity);

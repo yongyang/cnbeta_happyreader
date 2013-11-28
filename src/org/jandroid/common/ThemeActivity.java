@@ -1,6 +1,7 @@
 package org.jandroid.common;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -28,6 +29,9 @@ public abstract class ThemeActivity extends BaseActivity {
 
     protected abstract boolean isMaskViewEnabled();
 
+    protected int getMaskViewBackgroundColor() {
+        return 0x70000000;
+    }
 
     protected void onThemeChanged() {
         logger.d("onThemeChanged");
@@ -47,6 +51,7 @@ public abstract class ThemeActivity extends BaseActivity {
 
         syncThemeId();
         // update theme
+        this.getApplication().setTheme(getThemeId());
         this.setTheme(getThemeId());
 
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
@@ -104,10 +109,12 @@ public abstract class ThemeActivity extends BaseActivity {
     public void updateMaskView() {
         // if isEyeFriendlyModeEnable
         if (isMaskViewEnabled()) {
-            if (this.maskView == null) {
-                // 还没有加上上 maskView
-                this.maskView = WindowUtils.addMaskView(this);
+            if (this.maskView != null) {
+                WindowUtils.removeMaskView(this, maskView);
+                maskView = null;
             }
+           // 可能亮度有变化，所以每次都重新 add
+             this.maskView = WindowUtils.addMaskView(this, getMaskViewBackgroundColor());
         }
         else {
             if (maskView != null) {
@@ -144,7 +151,10 @@ public abstract class ThemeActivity extends BaseActivity {
     }
 
     public void updateTypeFace(View rootView) {
-        FontUtils.updateFont(rootView, FontUtils.loadTypeface(this, this.getPrefsFontPath()));
+        Typeface typeface = FontUtils.loadTypeface(this, this.getPrefsFontPath());
+        if(typeface != null) {
+            FontUtils.updateFont(rootView, typeface);
+        }
     }
 
 }

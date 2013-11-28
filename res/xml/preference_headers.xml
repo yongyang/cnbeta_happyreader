@@ -23,8 +23,15 @@
     <header
             android:fragment=
                     "org.jandroid.cnbeta.CnBetaPreferenceActivity$PrefsHistoryFragment"
-            android:title="历史设置 "
+            android:title="历史设置"
             android:summary="设置与历史记录相关的选项及手动清理">
+    </header>
+
+    <header
+            android:fragment=
+                    "org.jandroid.cnbeta.CnBetaPreferenceActivity$PrefsNightModeFragment"
+            android:title="夜间模式"
+            android:summary="设置夜间模式亮度等">
     </header>
 
 </preference-headers>

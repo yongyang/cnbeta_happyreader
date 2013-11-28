@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="夜间模式">
+        <ListPreference
+                android:key="@string/pref_key_nightmode_brightness"
+                android:title="亮度设置"
+                android:summary="设置夜间模式下的屏幕亮度"
+                android:dialogTitle="选择亮度级别"
+                android:entries="@array/brightNameArray"
+                android:entryValues="@array/brightValueArray"
+                android:defaultValue="default"
+                />
+    </PreferenceCategory>
+</PreferenceScreen>

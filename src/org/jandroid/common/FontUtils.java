@@ -52,7 +52,7 @@ public class FontUtils {
                 return lastTypeface;
             }
             catch (Exception e) {
-                ToastUtils.showShortToast(activity, "加载个性化字体失败, " + e.toString());
+                ToastUtils.showShortToast(activity, "读取字体时发生异常, " + e.toString());
                 return null;
             }
         }

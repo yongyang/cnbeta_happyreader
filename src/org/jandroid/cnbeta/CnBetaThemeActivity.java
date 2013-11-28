@@ -100,4 +100,14 @@ public abstract class CnBetaThemeActivity extends ThemeActivity {
     protected boolean isMaskViewEnabled() {
         return getCnBetaApplicationContext().isDarkThemeEnabled();
     }
+
+    @Override
+    protected int getMaskViewBackgroundColor() {
+        try {
+            return getCnBetaApplicationContext().getCnBetaPreferences().getNightModeBrightnessInteger();
+        }
+        catch (Exception e) {
+            return super.getMaskViewBackgroundColor();
+        }
+    }
 }
