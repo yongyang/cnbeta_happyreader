@@ -141,8 +141,8 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
 
     @Override
     public void onResume() {
-        updateTypeFace(footerRefreshView.getRootView());
         super.onResume();
+        updateTypeFace(footerRefreshView.getRootView());
     }
 
 }

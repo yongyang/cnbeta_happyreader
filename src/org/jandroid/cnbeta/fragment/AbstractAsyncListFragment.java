@@ -42,11 +42,6 @@ public abstract class AbstractAsyncListFragment<T> extends ThemeFragment impleme
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(false);
@@ -63,6 +58,12 @@ public abstract class AbstractAsyncListFragment<T> extends ThemeFragment impleme
     public void onResume() {
         super.onResume();
         // repaint in case font changed
+        getAdapter().notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onThemeChanged() {
+        super.onThemeChanged();
         getAdapter().notifyDataSetChanged();
     }
 

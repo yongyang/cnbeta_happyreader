@@ -66,7 +66,12 @@ public class MainActivity extends CnBetaActionTabFragmentActivity {
         if (!super.onOptionsItemSelected(mi) && !((CnBetaApplicationContext) getApplicationContext()).onOptionsItemSelected(this, mi)) {
             switch (mi.getItemId()) {
                 case R.id.refresh_item:
-                    fragments[getActionBar().getSelectedNavigationIndex()].reloadData();
+                    if(!isFinishing()){
+                        AbstractAsyncListFragment currentFragment = fragments[getActionBar().getSelectedNavigationIndex()];
+                        if(currentFragment != null) {
+                            currentFragment.reloadData();
+                        }
+                    }
                     break;
             }
         }

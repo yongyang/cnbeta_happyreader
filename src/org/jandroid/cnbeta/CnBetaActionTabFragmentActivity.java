@@ -2,14 +2,12 @@ package org.jandroid.cnbeta;
 
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import org.jandroid.common.ActionTabFragmentActivity;
 import org.jandroid.common.FontUtils;
 import org.jandroid.common.adapter.ActionTabFragmentPagerAdapter;
 
@@ -50,23 +48,17 @@ public abstract class CnBetaActionTabFragmentActivity extends CnBetaThemeActivit
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         setContentView(R.layout.viewpager_activity);
 
-        initViewPager();
-        initActionBar();
+        createViewPager();
+        createActionBar();
     }
 
-    protected void initViewPager() {
+    protected void createViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setOnPageChangeListener(pagerAdapter);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-
-    protected void initActionBar() {
+    protected void createActionBar() {
         final ActionBar actionBar = getActionBar();
         for (int resourceId : getTabResourceIds()) {
 

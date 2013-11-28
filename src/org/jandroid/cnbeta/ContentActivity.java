@@ -50,6 +50,11 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    @Override
+    protected void onThemeChanged() {
+        super.onThemeChanged();
+    }
+
     public long getArticleSid() {
         return sid;
     }

@@ -387,8 +387,8 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
 
     @Override
     public void onResume() {
-        updateTypeFace(footerPagingView.getRootView());
         super.onResume();
+        updateTypeFace(footerPagingView.getRootView());
     }
 
 }

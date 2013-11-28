@@ -126,6 +126,7 @@ public abstract class BaseActivity extends Activity {
 
    	public void finish() {
         super.finish();
+        //default transition
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
    	}
 

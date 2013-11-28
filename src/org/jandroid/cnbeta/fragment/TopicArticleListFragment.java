@@ -306,8 +306,8 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
 
     @Override
     public void onResume() {
-        updateTypeFace(footerPagingView.getRootView());
         super.onResume();
+        updateTypeFace(footerPagingView.getRootView());
     }
 
 }

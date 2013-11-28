@@ -35,7 +35,7 @@ public abstract class ActionTabFragmentActivity extends ThemeActivity {
 
     protected abstract Fragment getTabFragmentByItem(int position);
     protected abstract int[] getTabResourceIds();
-    protected abstract void initActionBar();
+    protected abstract void createActionBar();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,11 +45,11 @@ public abstract class ActionTabFragmentActivity extends ThemeActivity {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         setContentView(R.layout.viewpager_activity);
 
-        initViewPager();
-        initActionBar();
+        createViewPager();
+        createActionBar();
     }
 
-    protected void initViewPager() {
+    protected void createViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setOnPageChangeListener(pagerAdapter);

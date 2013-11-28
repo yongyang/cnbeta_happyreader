@@ -25,10 +25,6 @@ public interface CnBetaApplicationContext {
 
     CnBetaPreferences getCnBetaPreferences();
 
-    boolean isEyeFriendlyModeEnabled();
-
-    void setEyeFriendlyModeEnabled(boolean enable);
-
     boolean isDarkThemeEnabled();
 
     void setDarkThemeEnabled(boolean enable);

@@ -152,8 +152,8 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
 
     @Override
     public void onResume() {
-        updateTypeFace(footerPagingView.getRootView());
         super.onResume();
+        updateTypeFace(footerPagingView.getRootView());
     }
 
 }

@@ -40,4 +40,7 @@ public class ThemeFragment extends BaseFragment {
         themeActivity.updateTypeFace(rootView);
     }
 
+    protected void onThemeChanged() {
+
+    }
 }

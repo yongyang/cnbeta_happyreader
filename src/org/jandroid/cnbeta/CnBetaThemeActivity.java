@@ -35,7 +35,6 @@ public abstract class CnBetaThemeActivity extends ThemeActivity {
 
     protected void updateOptionsMenu() {
         if (optionsMenu != null) {
-            optionsMenu.findItem(R.id.eye_friendly_mode_menu).setChecked(((CnBetaApplicationContext) getApplicationContext()).isEyeFriendlyModeEnabled());
             optionsMenu.findItem(R.id.night_mode_menu).setChecked(isDarkThemeEnabled());
         }
     }
@@ -45,27 +44,17 @@ public abstract class CnBetaThemeActivity extends ThemeActivity {
         super.onOptionsItemSelected(item);
         CnBetaApplicationContext application = getCnBetaApplicationContext();
         switch (item.getItemId()) {
-            case R.id.eye_friendly_mode_menu:
-                if (!application.isEyeFriendlyModeEnabled()) {
-                    item.setChecked(true);
-                    application.setEyeFriendlyModeEnabled(true);
-                }
-                else {
-                    item.setChecked(false);
-                    application.setEyeFriendlyModeEnabled(false);
-                }
-                updateMaskView();
-                return true;
             case R.id.night_mode_menu:
                 if(item.isChecked()) {
                     item.setChecked(false);
                     application.setDarkThemeEnabled(false);
+
                 }
                 else {
                     item.setChecked(true);
                     application.setDarkThemeEnabled(true);
                 }
-                recreate();
+                onThemeChanged();
                 return true;
         }
         return false;
@@ -109,6 +98,6 @@ public abstract class CnBetaThemeActivity extends ThemeActivity {
 
     @Override
     protected boolean isMaskViewEnabled() {
-        return getCnBetaApplicationContext().isEyeFriendlyModeEnabled();
+        return getCnBetaApplicationContext().isDarkThemeEnabled();
     }
 }

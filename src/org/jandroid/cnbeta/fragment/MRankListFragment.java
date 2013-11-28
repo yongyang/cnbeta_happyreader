@@ -153,8 +153,8 @@ public class MRankListFragment extends AbstractAsyncListFragment<MRankArticle> {
 
     @Override
     public void onResume() {
-        updateTypeFace(footerRefreshView.getRootView());
         super.onResume();
+        updateTypeFace(footerRefreshView.getRootView());
     }
 
 }

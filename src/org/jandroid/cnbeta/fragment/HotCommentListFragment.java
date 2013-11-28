@@ -172,8 +172,8 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
 
     @Override
     public void onResume() {
-        updateTypeFace(footerPagingView.getRootView());
         super.onResume();
+        updateTypeFace(footerPagingView.getRootView());
     }
 
 }

@@ -349,9 +349,9 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
 
     @Override
     public void onResume() {
+        super.onResume();
         ContentActivity contentActivity = ((ContentActivity) getActivity());
         if (contentActivity != null) {
-            super.onResume();
             int fontSizeOffset = ((CnBetaApplicationContext) contentActivity.getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
             //TODO: update font size if changed
             FontUtils.updateTextSize(contentActivity, titleTextView, R.dimen.listitem_title_text_size, fontSizeOffset);
@@ -360,16 +360,17 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
             FontUtils.updateTextSize(contentActivity, commentNumTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
             FontUtils.updateTextSize(contentActivity, whereTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
 
+            if (contentActivity.isFontChanged()) {
+                updateTypeFace(getView());
+            }
+
             if (contentWebView != null) {
                 contentWebView.resumeTimers();
                 contentWebView.onResume();
                 FontUtils.updateTextSize(contentActivity, contentWebView, R.dimen.webview_default_text_size, fontSizeOffset);
-                CnBetaPreferences pref = ((CnBetaApplicationContext) contentActivity.getApplicationContext()).getCnBetaPreferences();
-                if (contentActivity.isFontChanged()) {
-                    updateTypeFace(getView());
-                }
+
                 //判断字体是否有变动，才重新加载 webview
-                if (loaded && contentActivity.isFontChanged()) { // reload to update font if change
+                if (contentActivity.isFontChanged() && loaded) {
                     this.reloadComments = false;
                     contentWebView.loadDataWithBaseURL(null, getStyledHTMLContent(content), "text/html", "UTF-8", "about:blank");
                 }

@@ -31,7 +31,6 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
 
     private CnBetaPreferences cnBetaPreferences;
 
-    private boolean isEyeFriendlyModeEnabled = false;
     private boolean isDarkThemeEnabled = false;
 
     @Override
@@ -203,14 +202,6 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
 
     public CnBetaPreferences getCnBetaPreferences() {
         return cnBetaPreferences;
-    }
-
-    public boolean isEyeFriendlyModeEnabled() {
-        return isEyeFriendlyModeEnabled;
-    }
-
-    public void setEyeFriendlyModeEnabled(boolean enable) {
-        isEyeFriendlyModeEnabled = enable;
     }
 
     public boolean isDarkThemeEnabled() {
