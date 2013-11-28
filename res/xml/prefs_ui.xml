@@ -3,19 +3,6 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="字体设置">
-        <Preference
-                android:key="@string/pref_key_installFont"
-                android:persistent="false"
-                android:title="安装字体"
-                android:summary="安装个性字体，名称必须为英文，后缀ttf必须是小写"
-                />
-        <Preference
-                android:key="@string/pref_key_deleteFont"
-                android:persistent="false"
-                android:title="删除字体"
-                android:summary="删除所有已安装的个性字体"
-                />
-
         <ListPreference
                 android:key="@string/pref_key_customFont"
                 android:title="选择字体"
@@ -34,6 +21,18 @@
                 android:entries="@array/fontSizeOffsetNameArray"
                 android:entryValues="@array/fontSizeOffsetValueArray"
                 android:defaultValue="0"
+                />
+        <Preference
+                android:key="@string/pref_key_installFont"
+                android:persistent="false"
+                android:title="安装字体"
+                android:summary="安装个性字体，名称必须为英文，后缀ttf必须是小写"
+                />
+        <Preference
+                android:key="@string/pref_key_deleteFont"
+                android:persistent="false"
+                android:title="删除字体"
+                android:summary="删除所有已安装的个性字体"
                 />
     </PreferenceCategory>
 </PreferenceScreen>

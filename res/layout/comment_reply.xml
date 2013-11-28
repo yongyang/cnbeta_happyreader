@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
         android:orientation="vertical"
-        android:background="@color/cnBeta_comment_dialog_bg_yellow"
+        android:background="?attr/cnBeta_comment_dialog_bg_yellow"
         android:padding="4dip"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -14,14 +14,14 @@
             android:layout_marginTop="10dip">
 
         <TextView
-                android:textColor="@color/cnBeta_text_blue"
+                android:textColor="?attr/cnBeta_text_color"
                 android:text="RE: "
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"/>
 
         <TextView
-                android:textColor="@color/cnBeta_text_description_gray"
+                android:textColor="?attr/cnBeta_text_description_gray"
                 android:textSize="@dimen/listitem_comment_text_size"
                 android:id="@+id/re_comment"
                 android:layout_width="wrap_content"
@@ -32,7 +32,7 @@
     </LinearLayout>
 
     <EditText
-            android:textColor="@color/cnBeta_text_blue"
+            android:textColor="?attr/cnBeta_text_color"
             android:textSize="@dimen/listitem_comment_text_size"
             android:gravity="top"
             android:id="@+id/comment"
@@ -51,7 +51,7 @@
             android:layout_marginBottom="5dip"
             android:gravity="center_vertical">
         <TextView
-                android:textColor="@color/cnBeta_text_blue"
+                android:textColor="?attr/cnBeta_text_color"
                 android:textSize="@dimen/listitem_description_text_size"
                 android:text="验证码: "
                 android:layout_width="wrap_content"
@@ -59,7 +59,6 @@
                 android:singleLine="true"/>
 
         <EditText
-                android:textColor="@color/black"
                 android:id="@+id/seccode"
                 android:layout_width="80dip"
                 android:layout_height="wrap_content"

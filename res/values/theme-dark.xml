@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ====================== Dark theme, night mode ========================================== -->
+    <style name="Theme_cnBeta_Dark" parent="@android:style/Theme.Holo">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:actionBarStyle">@style/Style_ActionBar_cnBeta_Dark</item>
+        <item name="android:actionBarTabStyle">@style/Style_ActionBarTab_cnBeta</item>
+        <item name="android:actionBarTabTextStyle">@style/Style_ActionBar_TabText_Dark</item>
+        <item name="android:actionBarWidgetTheme">@style/Style_PopupMenu_cnBeta</item>
+        <item name="android:actionBarDivider">@color/light_gray</item>
+        <!--<item name="android:absListViewStyle">@style/Style_AbsListView_cnBeta</item>-->
+
+        <!-- custom item for actionTab custom TextView -->
+        <item name="actionTabCustomTextViewStyle">@style/Style_ActionBar_TabText_Dark</item>
+        <item name="cnBeta_text_color">@color/cnBeta_text_blue_dark</item>
+        <item name="cnBeta_footBar_text">@color/cnBeta_text_blue_dark</item>
+        <item name="cnBeta_comment_text_color">@color/cnBeta_text_blue_dark</item>
+        <item name="cnBeta_parent_comment_bg">@color/black</item>
+        <item name="cnBeta_default_bg">@color/black</item>
+        <item name="cnBeta_text_description_gray">@color/cnBeta_text_description_gray_dark</item>
+        <item name="cnBeta_text_status_gray">@color/cnBeta_text_status_gray_dark</item>
+        <item name="cnBeta_text_status_realtime_green">@color/cnBeta_text_blue_dark</item>
+        <item name="cnBeta_bg_blue">@color/black</item>
+        <item name="cnBeta_bg_middle_blue">@color/black</item>
+        <item name="cnBeta_bg_light_blue">@color/black</item>
+        <item name="cnBeta_text_light_blue">@color/black</item>
+        <item name="cnBeta_text_introduction_black">@color/cnBeta_text_blue_dark</item>
+        <item name="cnBeta_bg_introduction">@color/black</item>
+        <item name="cnBeta_orange">@color/cnBeta_orange</item>
+        <item name="cnBeta_comment_dialog_bg_yellow">@color/black</item>
+        <item name="cnBeta_hotcomment_bg_yellow">@color/black</item>
+        <item name="cnBeta_tab_text_default">@color/cnBeta_text_blue_dark</item>
+        <item name="cnBeta_tab_text_default_dark">@color/cnBeta_text_blue_dark</item>
+
+    </style>
+
+    <style name="Style_ActionBar_cnBeta_Dark" parent="@android:style/Widget.Holo.ActionBar">
+        <item name="android:background">@color/cnBeta_bg_blue</item>
+        <!--<item name="android:backgroundStacked">@color/gray</item>-->
+    </style>
+
+    <style name="Style_ActionBar_TabText_Dark" parent="@android:style/Widget.ActionBar.TabText">
+        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/tab_text_color_selector_dark</item>
+        <!--<item name="android:textStyle">italic|bold</item>  -->
+    </style>
+</resources>

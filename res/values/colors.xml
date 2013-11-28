@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
+    <color name="black">#ff000000</color>
+    <color name="white">#ffffffff</color>
+    <color name="red">#ffff0000</color>
+    <color name="light_gray">#ffd7d7d7</color>
+
+    <color name="cnBeta_footBar_text">#ff606466</color>
+    <color name="cnBeta_comment_text_color">#ff000000</color>
+    <color name="cnBeta_parent_comment_bg">#ffffdf</color>
+    <color name="cnBeta_default_bg">#fffcfcfc</color>
+    <color name="cnBeta_text_description_gray">#666666</color>
+    <color name="cnBeta_text_status_gray">#999999</color>
+    <color name="cnBeta_text_status_realtime_green">#009900</color>
+    <color name="cnBeta_bg_blue">#214d7b</color>
+    <color name="cnBeta_bg_middle_blue">#31699c</color>
+    <color name="cnBeta_bg_light_blue">#528ac6</color>
+    <color name="cnBeta_text_blue">#003366</color>
+    <color name="cnBeta_text_light_blue">#319ace</color>
+    <color name="cnBeta_text_introduction_black">#434343</color>
+    <color name="cnBeta_bg_introduction">#ffeb620e</color>
+    <color name="cnBeta_orange">#FF6131</color>
+    <color name="cnBeta_comment_dialog_bg_yellow">#FFFFEF</color>
+    <color name="cnBeta_hotcomment_bg_yellow">#FFFFCE</color>
+    <color name="cnBeta_tab_text_default">#111111</color>
+    <color name="cnBeta_tab_text_default_dark">#fffcfcfc</color>
+
+<!-- ========================================================================= -->
+    <!-- color for dark theme -->
+    <color name="cnBeta_text_blue_dark">#ffffff</color>
+    <color name="cnBeta_text_status_gray_dark">#aaaaaa</color>
+    <color name="cnBeta_text_description_gray_dark">#cccccc</color>
+
+    <!--
     <color name="vpi__background_holo_dark">#ff000000</color>
     <color name="vpi__background_holo_light">#fff3f3f3</color>
     <item type="color" name="vpi__bright_foreground_holo_dark">@color/vpi__background_holo_light</item>
@@ -65,7 +99,6 @@
     <color name="light_gray2">#ff5a5959</color>
     <color name="light_gray3">#fffff7da</color>
     <color name="light_graye4">#ffe4e4e4</color>
-    <color name="white">#ffffffff</color>
     <color name="gray">#ff666666</color>
     <color name="gray_light">#ffeeeeee</color>
     <color name="graya">#ff606060</color>
@@ -118,33 +151,6 @@
     <color name="dim_foreground_orange">#ffeb620e</color>
     <color name="dim_foreground_orange_disabled">#80ff9100</color>
     <color name="bright_foreground_orange">#ffff6400</color>
-
-
-
-
-
-
-    <color name="foot_bar_text">#ff606466</color>
-    <color name="cnBeta_comment_text_color">#ff000000</color>
-    <color name="cnBeta_parent_comment_bg">#ffffdf</color>
-    <color name="cnBeta_default_bg">#fffcfcfc</color>
-    <color name="cnBeta_text_description_gray">#666666</color>
-    <color name="cnBeta_text_status_gray">#999999</color>
-    <color name="cnBeta_text_status_realtime_green">#009900</color>
-    <color name="cnBeta_bg_blue">#214d7b</color>
-    <color name="cnBeta_bg_middle_blue">#31699c</color>
-    <color name="cnBeta_bg_light_blue">#528ac6</color>
-    <color name="cnBeta_text_blue">#003366</color>
-    <color name="cnBeta_text_light_blue">#319ace</color>
-    <color name="cnBeta_text_introduction_black">#434343</color>
-    <color name="cnBeta_bg_introduction">#ffeb620e</color>
-
-    <color name="cnBeta_orange">#FF6131</color>
-        <!--<color name="transparent_background">#80000000</color>-->
-    <color name="cnBeta_comment_dialog_bg_yellow">#FFFFEF</color>
-    <color name="cnBeta_hotcomment_bg_yellow">#FFFFCE</color>
-
-    <color name="cnBeta_tab_text_default">#111111</color>
-    <color name="cnBeta_tab_text_default_dark">#fffcfcfc</color>
+-->
 </resources>
 

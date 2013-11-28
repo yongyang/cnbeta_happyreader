@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- =========================================== Light theme =============================== -->
     <style name="Theme_cnBeta_Light" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:windowContentOverlay">@null</item>
@@ -14,6 +13,26 @@
 
         <!-- custom item for actionTab custom TextView -->
         <item name="actionTabCustomTextViewStyle">@style/Style_ActionBar_TabText_cnBeta</item>
+        <item name="cnBeta_text_color">@color/cnBeta_text_blue</item>
+        <item name="cnBeta_footBar_text">@color/cnBeta_footBar_text</item>
+        <item name="cnBeta_comment_text_color">@color/cnBeta_comment_text_color</item>
+        <item name="cnBeta_parent_comment_bg">@color/cnBeta_parent_comment_bg</item>
+        <item name="cnBeta_default_bg">@color/cnBeta_default_bg</item>
+        <item name="cnBeta_text_description_gray">@color/cnBeta_text_description_gray</item>
+        <item name="cnBeta_text_status_gray">@color/cnBeta_text_status_gray</item>
+        <item name="cnBeta_text_status_realtime_green">@color/cnBeta_text_status_realtime_green</item>
+        <item name="cnBeta_bg_blue">@color/cnBeta_bg_blue</item>
+        <item name="cnBeta_bg_middle_blue">@color/cnBeta_bg_middle_blue</item>
+        <item name="cnBeta_bg_light_blue">@color/cnBeta_bg_light_blue</item>
+        <item name="cnBeta_text_light_blue">@color/cnBeta_text_light_blue</item>
+        <item name="cnBeta_text_introduction_black">@color/cnBeta_text_introduction_black</item>
+        <item name="cnBeta_bg_introduction">@color/cnBeta_bg_introduction</item>
+        <item name="cnBeta_orange">@color/cnBeta_orange</item>
+        <item name="cnBeta_comment_dialog_bg_yellow">@color/cnBeta_comment_dialog_bg_yellow</item>
+        <item name="cnBeta_hotcomment_bg_yellow">@color/cnBeta_hotcomment_bg_yellow</item>
+        <item name="cnBeta_tab_text_default">@color/cnBeta_tab_text_default</item>
+        <item name="cnBeta_tab_text_default_dark">@color/cnBeta_tab_text_default_dark</item>
+
     </style>
 
     <style name="Style_AbsListView_cnBeta" parent="@android:style/Widget.AbsListView">
@@ -47,40 +66,5 @@
         <item name="android:paddingRight">4dp</item>
     </style>
 
-    <!-- ====================== Dark theme, night mode ========================================== -->
-    <style name="Theme_cnBeta_Dark" parent="@android:style/Theme.Holo">
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:actionBarStyle">@style/Style_ActionBar_cnBeta_Dark</item>
-        <item name="android:actionBarTabStyle">@style/Style_ActionBarTab_cnBeta</item>
-        <item name="android:actionBarTabTextStyle">@style/Style_ActionBar_TabText_Dark</item>
-        <item name="android:actionBarWidgetTheme">@style/Style_PopupMenu_cnBeta</item>
-        <item name="android:actionBarDivider">@color/light_gray</item>
-        <!--<item name="android:absListViewStyle">@style/Style_AbsListView_cnBeta</item>-->
-
-        <!-- custom item for actionTab custom TextView -->
-        <item name="actionTabCustomTextViewStyle">@style/Style_ActionBar_TabText_Dark</item>
-    </style>
-
-    <style name="Style_ActionBar_cnBeta_Dark" parent="@android:style/Widget.Holo.ActionBar">
-        <item name="android:background">@color/cnBeta_bg_blue</item>
-        <!--<item name="android:backgroundStacked">@color/gray</item>-->
-    </style>
-
-    <style name="Style_ActionBar_TabText_Dark" parent="@android:style/Widget.ActionBar.TabText">
-        <item name="android:textAppearance">@android:style/TextAppearance.Small</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:textColor">@color/tab_text_color_selector_dark</item>
-        <!--<item name="android:textStyle">italic|bold</item>  -->
-    </style>
-
-    <!-- =============================================== Dialog with no Title ====================================== -->
-
-    <style name="Theme_Dialog_cnBeta_Light" parent="@android:style/Theme.Dialog">
-        <!--<item name="android:windowBackground">@color/transparent_background</item>-->
-        <item name="android:windowNoTitle">true</item>
-        <!--<item name="android:windowIsTranslucent">true</item>-->
-        <!--<item name="android:windowAnimationStyle">@+android:style/Animation.Translucent</item>-->
-    </style>
 
 </resources>

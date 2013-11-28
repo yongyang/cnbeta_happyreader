@@ -118,7 +118,7 @@ public abstract class ThemeActivity extends BaseActivity {
     }
 
     public boolean isFontChanged() {
-        return this.font.equals(getPrefsFontPath());
+        return !this.font.equals(getPrefsFontPath());
     }
 
     public int getThemeId() {

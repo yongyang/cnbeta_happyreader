@@ -3,14 +3,14 @@
              android:id="@+id/comments_listview_container"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
-    <!--android:background="@color/cnBeta_default_bg"-->
+    <!--android:background="?attr/cnBeta_default_bg"-->
 
     <ListView android:id="@+id/comments_listview"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:drawSelectorOnTop="false"
               android:choiceMode="singleChoice"
-              android:background="@color/cnBeta_default_bg"
+              android:background="?attr/cnBeta_default_bg"
             />
 
     <TextView android:id="@+id/empty_textview"

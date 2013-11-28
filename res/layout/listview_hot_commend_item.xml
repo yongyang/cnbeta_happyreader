@@ -17,7 +17,7 @@
                 android:id="@+id/to"
                 android:textStyle="bold"
                 android:text="评论: "
-                android:textColor="@color/cnBeta_text_blue"
+                android:textColor="?attr/cnBeta_text_color"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="2dip"
@@ -25,7 +25,7 @@
 
         <TextView
                 android:textSize="@dimen/listitem_description_text_size"
-                android:textColor="@color/cnBeta_text_blue"
+                android:textColor="?attr/cnBeta_text_color"
                 android:id="@+id/titleShow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
 
         <TextView
                 android:textSize="@dimen/listitem_status_text_size"
-                android:textColor="@color/cnBeta_text_description_gray"
+                android:textColor="?attr/cnBeta_text_description_gray"
                 android:id="@+id/from"
                 android:text="来自"
                 android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
 
         <TextView
                 android:textSize="@dimen/listitem_status_text_size"
-                android:textColor="@color/cnBeta_text_description_gray"
+                android:textColor="?attr/cnBeta_text_description_gray"
                 android:id="@+id/hostNameShow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
 
         <TextView
                 android:textSize="@dimen/listitem_status_text_size"
-                android:textColor="@color/cnBeta_text_description_gray"
+                android:textColor="?attr/cnBeta_text_description_gray"
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
     </LinearLayout>
     <TextView
             android:textSize="@dimen/listitem_status_text_size"
-            android:textColor="@color/cnBeta_text_description_gray"
+            android:textColor="?attr/cnBeta_text_description_gray"
             android:paddingRight="2dip"
             android:id="@+id/date"
             android:textStyle="italic"

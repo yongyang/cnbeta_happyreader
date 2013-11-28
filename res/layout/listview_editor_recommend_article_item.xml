@@ -18,7 +18,7 @@
 
             <TextView
                     android:textSize="@dimen/listitem_title_text_size"
-                    android:textColor="@color/cnBeta_orange"
+                    android:textColor="?attr/cnBeta_orange"
                     android:textStyle="bold"
                     android:text="•"
                     android:paddingRight="2dip"
@@ -28,7 +28,7 @@
 
             <TextView
                     android:textSize="@dimen/listitem_title_text_size"
-                    android:textColor="@color/cnBeta_text_blue"
+                    android:textColor="?attr/cnBeta_text_color"
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
 
         <TextView
                 android:textSize="@dimen/listitem_description_text_size"
-                android:textColor="@color/cnBeta_text_description_gray"
+                android:textColor="?attr/cnBeta_text_description_gray"
                 android:id="@+id/hometext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
 
             <TextView
                     android:textSize="@dimen/listitem_status_text_size"
-                    android:textColor="@color/cnBeta_text_status_gray"
+                    android:textColor="?attr/cnBeta_text_status_gray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
@@ -65,7 +65,7 @@
 
             <TextView
                     android:textSize="@dimen/listitem_status_text_size"
-                    android:textColor="@color/cnBeta_text_status_gray"
+                    android:textColor="?attr/cnBeta_text_status_gray"
                     android:id="@+id/time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

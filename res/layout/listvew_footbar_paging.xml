@@ -33,7 +33,7 @@
 
             <TextView
                     android:textSize="@dimen/footer_bar_time_text_size"
-                    android:textColor="@color/foot_bar_text"
+                    android:textColor="?attr/cnBeta_footBar_text"
                     android:layout_gravity="center"
                     android:id="@+id/waiting"
                     android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
 
                 <TextView
                         android:textSize="@dimen/footer_bar_text_size"
-                        android:textColor="@color/foot_bar_text"
+                        android:textColor="?attr/cnBeta_footBar_text"
                         android:gravity="center"
                         android:layout_gravity="center_vertical"
                         android:layout_width="wrap_content"
@@ -69,7 +69,7 @@
 
                 <TextView
                         android:textSize="@dimen/footer_bar_text_size"
-                        android:textColor="@color/foot_bar_text"
+                        android:textColor="?attr/cnBeta_footBar_text"
                         android:gravity="center"
                         android:layout_gravity="center_vertical"
                         android:id="@+id/tv_page"
@@ -82,7 +82,7 @@
 
                 <TextView
                         android:textSize="@dimen/footer_bar_text_size"
-                        android:textColor="@color/foot_bar_text"
+                        android:textColor="?attr/cnBeta_footBar_text"
                         android:gravity="center"
                         android:layout_gravity="center_vertical"
                         android:layout_width="wrap_content"
@@ -93,7 +93,7 @@
 
             <TextView
                     android:textSize="@dimen/footer_bar_time_text_size"
-                    android:textColor="@color/foot_bar_text"
+                    android:textColor="?attr/cnBeta_footBar_text"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:id="@+id/refresh_last_time"

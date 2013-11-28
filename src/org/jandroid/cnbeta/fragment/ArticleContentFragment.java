@@ -485,7 +485,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
         if (contentActivity != null) {
             if (contentActivity.isDarkThemeEnabled()) { // night mode
                 sb.append("body {background-color: #000000; color: #ffffff; }");
-                sb.append(".introduction {background-color: #000000; color: #aaaaaa; }");
+                sb.append(".introduction {background-color: #000000; color: #cccccc; }");
             }
             else {
                 sb.append(".introduction {background-color: #fbfbfb; color: #434343; }");

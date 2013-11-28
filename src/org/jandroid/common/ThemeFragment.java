@@ -40,6 +40,7 @@ public class ThemeFragment extends BaseFragment {
         themeActivity.updateTypeFace(rootView);
     }
 
+    // if call recreate() after theme changed, don't need to do anything here
     protected void onThemeChanged() {
 
     }
