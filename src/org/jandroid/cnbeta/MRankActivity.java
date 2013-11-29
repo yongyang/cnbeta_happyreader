@@ -57,15 +57,6 @@ public class MRankActivity extends CnBetaActionTabFragmentActivity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem mi) {
         if (!super.onOptionsItemSelected(mi) && !((CnBetaApplicationContext) getApplicationContext()).onOptionsItemSelected(this, mi)) {

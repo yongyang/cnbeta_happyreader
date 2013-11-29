@@ -16,7 +16,6 @@
         <item name="cnBeta_text_color">@color/cnBeta_text_blue</item>
         <item name="cnBeta_footBar_text">@color/cnBeta_footBar_text</item>
         <item name="cnBeta_comment_text_color">@color/cnBeta_comment_text_color</item>
-        <item name="cnBeta_parent_comment_bg">@color/cnBeta_parent_comment_bg</item>
         <item name="cnBeta_default_bg">@color/cnBeta_default_bg</item>
         <item name="cnBeta_text_description_gray">@color/cnBeta_text_description_gray</item>
         <item name="cnBeta_text_status_gray">@color/cnBeta_text_status_gray</item>
@@ -29,10 +28,13 @@
         <item name="cnBeta_bg_introduction">@color/cnBeta_bg_introduction</item>
         <item name="cnBeta_orange">@color/cnBeta_orange</item>
         <item name="cnBeta_comment_dialog_bg_yellow">@color/cnBeta_comment_dialog_bg_yellow</item>
-        <item name="cnBeta_hotcomment_bg_yellow">@color/cnBeta_hotcomment_bg_yellow</item>
+        <item name="cnBeta_comment_bg_yellow">@color/cnBeta_comment_bg_yellow</item>
         <item name="cnBeta_tab_text_default">@color/cnBeta_tab_text_default</item>
         <item name="cnBeta_tab_text_default_dark">@color/cnBeta_tab_text_default_dark</item>
 
+        <item name="cnBeta_parentComment_bg">@drawable/parent_comment_bg</item>
+        <item name="cnBeta_hotComment_bg">@drawable/hotcomment_bg</item>
+        <item name="cnBeta_btn_bg">@drawable/btn_bg_selector</item>
     </style>
 
     <style name="Style_AbsListView_cnBeta" parent="@android:style/Widget.AbsListView">
@@ -66,5 +68,19 @@
         <item name="android:paddingRight">4dp</item>
     </style>
 
+
+
+
+    <!-- ================== Dialog ===================== -->
+        <!-- =============================================== Dialog with no Title ====================================== -->
+    <style name="Theme_Dialog_cnBeta_Light" parent="@android:style/Theme.Dialog">
+        <!--<item name="android:windowBackground">@color/transparent_background</item>-->
+        <item name="android:windowNoTitle">true</item>
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <!--<item name="android:windowAnimationStyle">@+android:style/Animation.Translucent</item>-->
+
+        <item name="cnBeta_comment_dialog_bg_yellow">@color/cnBeta_comment_dialog_bg_yellow</item>
+        <item name="cnBeta_text_color">@color/cnBeta_text_blue</item>
+    </style>
 
 </resources>

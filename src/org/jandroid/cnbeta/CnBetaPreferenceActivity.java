@@ -3,6 +3,7 @@ package org.jandroid.cnbeta;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -337,11 +338,16 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
         CnBetaApplicationContext applicationContext = getCnBetaApplicationContext();
         if(applicationContext.isDarkThemeEnabled()) {
             if (this.maskView != null) {
-                WindowUtils.removeMaskView(this, maskView);
-                maskView = null;
+                if(((ColorDrawable)maskView.getBackground()).getColor() != getMaskViewBackgroundColor()) {
+                // maskView bg color changed, re-add
+                    WindowUtils.removeMaskView(this, maskView);
+                    maskView = null;
+                    this.maskView = WindowUtils.addMaskView(this, getMaskViewBackgroundColor());
+                }
             }
-           // 可能亮度有变化，所以每次都重新 add
-             this.maskView = WindowUtils.addMaskView(this, getMaskViewBackgroundColor());
+           else {
+                this.maskView = WindowUtils.addMaskView(this, getMaskViewBackgroundColor());
+            }
         }
         else {
             if (maskView != null) {

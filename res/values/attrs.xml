@@ -6,7 +6,6 @@
     <attr name="cnBeta_text_color" format="reference|color" />
     <attr name="cnBeta_footBar_text" format="reference|color" />
     <attr name="cnBeta_comment_text_color" format="reference|color" />
-    <attr name="cnBeta_parent_comment_bg" format="reference|color" />
     <attr name="cnBeta_default_bg" format="reference|color" />
     <attr name="cnBeta_text_description_gray" format="reference|color" />
     <attr name="cnBeta_text_status_gray" format="reference|color" />
@@ -19,9 +18,15 @@
     <attr name="cnBeta_bg_introduction" format="reference|color" />
     <attr name="cnBeta_orange" format="reference|color" />
     <attr name="cnBeta_comment_dialog_bg_yellow" format="reference|color" />
-    <attr name="cnBeta_hotcomment_bg_yellow" format="reference|color" />
+    <attr name="cnBeta_comment_bg_yellow" format="reference|color" />
     <attr name="cnBeta_tab_text_default" format="reference|color" />
     <attr name="cnBeta_tab_text_default_dark" format="reference|color" />
+
+
+    <attr name="cnBeta_parentComment_bg" format="reference|color" />
+    <attr name="cnBeta_hotComment_bg" format="reference|color" />
+
+    <attr name="cnBeta_btn_bg" format="reference|color" />
 
 </resources>
 

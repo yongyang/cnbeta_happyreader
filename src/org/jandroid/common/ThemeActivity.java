@@ -2,6 +2,7 @@ package org.jandroid.common;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -53,10 +54,6 @@ public abstract class ThemeActivity extends BaseActivity {
         // update theme
         this.getApplication().setTheme(getThemeId());
         this.setTheme(getThemeId());
-
-        this.requestWindowFeature(Window.FEATURE_PROGRESS);
-        this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        this.setProgressBarIndeterminate(true);
 
         super.onCreate(savedInstanceState);
     }
@@ -110,11 +107,16 @@ public abstract class ThemeActivity extends BaseActivity {
         // if isEyeFriendlyModeEnable
         if (isMaskViewEnabled()) {
             if (this.maskView != null) {
-                WindowUtils.removeMaskView(this, maskView);
-                maskView = null;
+                if(((ColorDrawable)maskView.getBackground()).getColor() != getMaskViewBackgroundColor()) {
+                // maskView bg color changed, re-add
+                    WindowUtils.removeMaskView(this, maskView);
+                    maskView = null;
+                    this.maskView = WindowUtils.addMaskView(this, getMaskViewBackgroundColor());
+                }
             }
-           // 可能亮度有变化，所以每次都重新 add
-             this.maskView = WindowUtils.addMaskView(this, getMaskViewBackgroundColor());
+           else {
+                this.maskView = WindowUtils.addMaskView(this, getMaskViewBackgroundColor());
+            }
         }
         else {
             if (maskView != null) {

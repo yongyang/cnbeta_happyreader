@@ -16,7 +16,6 @@
         <item name="cnBeta_text_color">@color/cnBeta_text_blue_dark</item>
         <item name="cnBeta_footBar_text">@color/cnBeta_text_blue_dark</item>
         <item name="cnBeta_comment_text_color">@color/cnBeta_text_blue_dark</item>
-        <item name="cnBeta_parent_comment_bg">@color/black</item>
         <item name="cnBeta_default_bg">@color/black</item>
         <item name="cnBeta_text_description_gray">@color/cnBeta_text_description_gray_dark</item>
         <item name="cnBeta_text_status_gray">@color/cnBeta_text_status_gray_dark</item>
@@ -29,10 +28,12 @@
         <item name="cnBeta_bg_introduction">@color/black</item>
         <item name="cnBeta_orange">@color/cnBeta_orange</item>
         <item name="cnBeta_comment_dialog_bg_yellow">@color/black</item>
-        <item name="cnBeta_hotcomment_bg_yellow">@color/black</item>
+        <item name="cnBeta_comment_bg_yellow">@color/black</item>
         <item name="cnBeta_tab_text_default">@color/cnBeta_text_blue_dark</item>
         <item name="cnBeta_tab_text_default_dark">@color/cnBeta_text_blue_dark</item>
-
+        <item name="cnBeta_parentComment_bg">@drawable/parent_comment_bg_dark</item>
+        <item name="cnBeta_hotComment_bg">@drawable/hotcomment_bg_dark</item>
+        <item name="cnBeta_btn_bg">@drawable/btn_bg_selector_dark</item>
     </style>
 
     <style name="Style_ActionBar_cnBeta_Dark" parent="@android:style/Widget.Holo.ActionBar">
@@ -46,4 +47,17 @@
         <item name="android:textColor">@color/tab_text_color_selector_dark</item>
         <!--<item name="android:textStyle">italic|bold</item>  -->
     </style>
+
+
+
+
+    <!-- ================== Dialog ===================== -->
+        <!-- =============================================== Dialog with no Title ====================================== -->
+    <style name="Theme_Dialog_cnBeta_Dark" parent="@style/Theme_Dialog_cnBeta_Light">
+        <item name="cnBeta_comment_dialog_bg_yellow">#222222</item>
+        <item name="cnBeta_text_color">@color/white</item>
+    </style>
+
+
+
 </resources>

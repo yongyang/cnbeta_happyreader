@@ -34,14 +34,8 @@ public class ReplyCommentActivity extends PublishCommentActivity {
 
     @Override
     protected void onResume() {
+        super.onResume();
         CnBetaPreferences pref = ((CnBetaApplicationContext)getApplicationContext()).getCnBetaPreferences();
         FontUtils.updateTextSize(this, replyCommentTitleTextView, R.dimen.listitem_comment_text_size, pref.getFontSizeOffset());
-        super.onResume();
     }
-
-    @Override
-    public void overridePendingTransition(int enterAnim, int exitAnim) {
-        // nothing
-    }
-
 }

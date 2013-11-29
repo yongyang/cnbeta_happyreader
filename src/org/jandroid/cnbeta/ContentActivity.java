@@ -1,6 +1,7 @@
 package org.jandroid.cnbeta;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,6 +21,13 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
 
     private final static int[] tabs = new int[]{R.string.tab_zhengwen, R.string.tab_pinglun};
 
+    private ArticleContentFragment contentFragment;
+    private ArticleCommentsFragment commentsFragment;
+
+    private long sid;
+    private String title;
+
+
     @Override
     protected Fragment getTabFragmentByItem(int position) {
         return position == 0 ? contentFragment : commentsFragment;
@@ -29,14 +37,6 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
     protected int[] getTabResourceIds() {
         return tabs;
     }
-
-    private ArticleContentFragment contentFragment;
-    private ArticleCommentsFragment commentsFragment;
-
-    private long sid;
-    private String title;
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         sid = getIntent().getExtras().getLong("sid");
@@ -151,5 +151,10 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }

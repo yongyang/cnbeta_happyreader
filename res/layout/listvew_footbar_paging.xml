@@ -7,7 +7,7 @@
 
 
     <RelativeLayout
-            android:background="@drawable/btn_bg_selector"
+            android:background="?attr/cnBeta_btn_bg"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="@dimen/footer_bar_height"

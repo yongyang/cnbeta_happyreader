@@ -70,7 +70,7 @@ public class PublishCommentActivity extends CnBetaThemeActivity {
             }
         });
 
-        postProgressBar = (ProgressBar)findViewById(R.id.post_progessBar);
+        postProgressBar = (ProgressBar)findViewById(R.id.post_progressBar);
     }
 
 
@@ -86,7 +86,6 @@ public class PublishCommentActivity extends CnBetaThemeActivity {
     public long getParentCommentTid() {
         return 0;
     }
-
 
     @Override
     protected void onStart() {
@@ -241,7 +240,7 @@ public class PublishCommentActivity extends CnBetaThemeActivity {
 
     @Override
     public int getDarkThemeId() {
-        return R.style.Theme_Dialog_cnBeta_Light;
+        return R.style.Theme_Dialog_cnBeta_Dark;
     }
 
     @Override
@@ -249,8 +248,4 @@ public class PublishCommentActivity extends CnBetaThemeActivity {
         return R.style.Theme_Dialog_cnBeta_Light;
     }
 
-    @Override
-    protected boolean isThemeChanged() {
-        return super.isThemeChanged();
-    }
 }

@@ -3,16 +3,16 @@
         android:shape="rectangle"
         xmlns:android="http://schemas.android.com/apk/res/android">
     <stroke
-            android:color="@color/cnBeta_hotComment_bg_stroke"
+            android:color="@color/cnBeta_parentComment_bg_stroke_dark"
             android:width="1px"/>
     <corners
-            android:topLeftRadius="5dip"
-            android:topRightRadius="5dip"
-            android:bottomLeftRadius="5dip"
-            android:bottomRightRadius="5dip"/>
+            android:topLeftRadius="3dip"
+            android:topRightRadius="3dip"
+            android:bottomLeftRadius="3dip"
+            android:bottomRightRadius="3dip"/>
     <gradient
-            android:startColor="@color/cnBeta_hotComment_bg_gradient_startColor"
-            android:endColor="@color/cnBeta_hotComment_bg_gradient_endColor"
+            android:startColor="@color/cnBeta_parentComment_bg_gradient_startColor_dark"
+            android:endColor="@color/cnBeta_parentComment_bg_gradient_endColor_dark"
             android:type="linear"
             android:angle="90"
             android:centerX="0.5"

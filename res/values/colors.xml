@@ -5,11 +5,11 @@
     <color name="black">#ff000000</color>
     <color name="white">#ffffffff</color>
     <color name="red">#ffff0000</color>
+    <color name="red2">#ffcf261d</color>
     <color name="light_gray">#ffd7d7d7</color>
 
     <color name="cnBeta_footBar_text">#ff606466</color>
     <color name="cnBeta_comment_text_color">#ff000000</color>
-    <color name="cnBeta_parent_comment_bg">#ffffdf</color>
     <color name="cnBeta_default_bg">#fffcfcfc</color>
     <color name="cnBeta_text_description_gray">#666666</color>
     <color name="cnBeta_text_status_gray">#999999</color>
@@ -23,17 +23,39 @@
     <color name="cnBeta_bg_introduction">#ffeb620e</color>
     <color name="cnBeta_orange">#FF6131</color>
     <color name="cnBeta_comment_dialog_bg_yellow">#FFFFEF</color>
-    <color name="cnBeta_hotcomment_bg_yellow">#FFFFCE</color>
+    <color name="cnBeta_comment_bg_yellow">#FFFFCE</color>
     <color name="cnBeta_tab_text_default">#111111</color>
     <color name="cnBeta_tab_text_default_dark">#fffcfcfc</color>
+
+    <!-- color for parentComment -->
+    <color name="cnBeta_parentComment_bg_stroke">#9C9A9C</color>
+    <color name="cnBeta_parentComment_bg_gradient_startColor">#FFFFEF</color>
+    <color name="cnBeta_parentComment_bg_gradient_endColor">#FFFFEF</color>
+
+    <!-- color for hotComment -->
+    <color name="cnBeta_hotComment_bg_stroke">#FFCF63</color>
+    <color name="cnBeta_hotComment_bg_gradient_startColor">#FFFFCE</color>
+    <color name="cnBeta_hotComment_bg_gradient_endColor">#FFFFCE</color>
+
 
 <!-- ========================================================================= -->
     <!-- color for dark theme -->
     <color name="cnBeta_text_blue_dark">#ffffff</color>
-    <color name="cnBeta_text_status_gray_dark">#aaaaaa</color>
-    <color name="cnBeta_text_description_gray_dark">#cccccc</color>
+    <color name="cnBeta_text_status_gray_dark">#dddddd</color>
+    <color name="cnBeta_text_description_gray_dark">#eeeeee</color>
 
-    <!--
+    <!-- color for parentComment -->
+    <color name="cnBeta_parentComment_bg_stroke_dark">#cccccc</color>
+    <color name="cnBeta_parentComment_bg_gradient_startColor_dark">#000000</color>
+    <color name="cnBeta_parentComment_bg_gradient_endColor_dark">#000000</color>
+
+    <!-- color for hotComment -->
+    <color name="cnBeta_hotComment_bg_stroke_dark">#cccccc</color>
+    <color name="cnBeta_hotComment_bg_gradient_startColor_dark">#000000</color>
+    <color name="cnBeta_hotComment_bg_gradient_endColor_dark">#000000</color>
+
+
+<!--
     <color name="vpi__background_holo_dark">#ff000000</color>
     <color name="vpi__background_holo_light">#fff3f3f3</color>
     <item type="color" name="vpi__bright_foreground_holo_dark">@color/vpi__background_holo_light</item>

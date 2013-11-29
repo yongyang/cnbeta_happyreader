@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 import org.jandroid.common.FontUtils;
 import org.jandroid.common.adapter.ActionTabFragmentPagerAdapter;
@@ -42,6 +43,10 @@ public abstract class CnBetaActionTabFragmentActivity extends CnBetaThemeActivit
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        this.requestWindowFeature(Window.FEATURE_PROGRESS);
+        this.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        this.setProgressBarIndeterminate(true);
+
         super.onCreate(savedInstanceState);
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
@@ -83,6 +88,12 @@ public abstract class CnBetaActionTabFragmentActivity extends CnBetaThemeActivit
                 FontUtils.updateFont(getActionBar().getTabAt(i).getCustomView(), typeface);
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //don't save fragment state
+        //否则 recreate 的时候，会仍然引用保存的 fragment，造成混乱
     }
 
 }
