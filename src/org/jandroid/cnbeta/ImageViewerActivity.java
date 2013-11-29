@@ -2,6 +2,7 @@ package org.jandroid.cnbeta;
 
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
@@ -12,11 +13,12 @@ import android.widget.Button;
 import org.jandroid.cnbeta.loader.ImageBytesLoader;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.JavaScriptObject;
+import org.jandroid.common.ThemeActivity;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class ImageViewerActivity extends BaseActivity {
+public class ImageViewerActivity extends CnBetaThemeActivity {
 
     private ViewGroup rootContainer;
     private WebView imageWebView;
@@ -116,5 +118,11 @@ public class ImageViewerActivity extends BaseActivity {
     @Override
     public void overridePendingTransition(int enterAnim, int exitAnim) {
         // nothing
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true; // no optionsMenu
+//        return super.onCreateOptionsMenu(menu);
     }
 }
