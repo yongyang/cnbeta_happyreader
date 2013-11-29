@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
         android:orientation="vertical"
+        android:padding="4dip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
-            android:padding="4dip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -14,7 +14,7 @@
                 android:textSize="@dimen/listitem_description_text_size"
                 android:id="@+id/to"
                 android:textStyle="bold"
-                android:text="评论: "
+                android:text="评论:"
                 android:textColor="?attr/cnBeta_text_color"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -34,12 +34,13 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/hotcomment_bg"
-            android:layout_marginLeft="2dip"
+            android:background="?attr/cnBeta_hotComment_bg"
+            android:layout_marginLeft="35dip"
             android:layout_marginRight="2dip">
 
         <TextView
                 android:textSize="@dimen/listitem_description_text_size"
+                android:textColor="?attr/cnBeta_comment_text_color"
                 android:id="@+id/comment"
                 android:padding="4dip"
                 android:layout_width="wrap_content"
