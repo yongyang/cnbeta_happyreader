@@ -6,7 +6,7 @@
         <ListPreference
                 android:key="@string/pref_key_nightmode_brightness"
                 android:title="亮度设置"
-                android:summary="设置夜间模式下的屏幕亮度"
+                android:summary="设置屏幕亮度，仅在夜间模式下有效"
                 android:dialogTitle="选择亮度级别"
                 android:entries="@array/brightNameArray"
                 android:entryValues="@array/brightValueArray"
