@@ -2,6 +2,7 @@
 <resources>
     <!-- =========================================== Light theme =============================== -->
     <style name="Theme_cnBeta_Light" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+        <item name="android:windowBackground">@color/cnBeta_default_bg</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:actionBarStyle">@style/Style_ActionBar_cnBeta</item>

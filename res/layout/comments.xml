@@ -9,9 +9,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:drawSelectorOnTop="false"
-              android:choiceMode="singleChoice"
-              android:background="?attr/cnBeta_default_bg"
-            />
+              android:choiceMode="singleChoice"/>
 
     <TextView android:id="@+id/empty_textview"
               android:visibility="gone"

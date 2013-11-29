@@ -10,7 +10,7 @@
 
     <color name="cnBeta_footBar_text">#ff606466</color>
     <color name="cnBeta_comment_text_color">#ff000000</color>
-    <color name="cnBeta_default_bg">#fffcfcfc</color>
+    <color name="cnBeta_default_bg">#fffefefe</color>
     <color name="cnBeta_text_description_gray">#666666</color>
     <color name="cnBeta_text_status_gray">#999999</color>
     <color name="cnBeta_text_status_realtime_green">#009900</color>
