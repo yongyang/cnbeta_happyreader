@@ -45,12 +45,12 @@
     <color name="cnBeta_text_description_gray_dark">#eeeeee</color>
 
     <!-- color for parentComment -->
-    <color name="cnBeta_parentComment_bg_stroke_dark">#cccccc</color>
+    <color name="cnBeta_parentComment_bg_stroke_dark">#aaaaaa</color>
     <color name="cnBeta_parentComment_bg_gradient_startColor_dark">#000000</color>
     <color name="cnBeta_parentComment_bg_gradient_endColor_dark">#000000</color>
 
     <!-- color for hotComment -->
-    <color name="cnBeta_hotComment_bg_stroke_dark">#cccccc</color>
+    <color name="cnBeta_hotComment_bg_stroke_dark">#aaaaaa</color>
     <color name="cnBeta_hotComment_bg_gradient_startColor_dark">#000000</color>
     <color name="cnBeta_hotComment_bg_gradient_endColor_dark">#000000</color>
 
