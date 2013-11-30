@@ -140,7 +140,7 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
                         if (prefsActivity.maskView != null) {
                             WindowUtils.removeMaskView(prefsActivity, prefsActivity.maskView);
                         }
-                        prefsActivity.maskView = WindowUtils.addMaskView(prefsActivity, Integer.parseInt(newValue.toString().substring(2), 16));
+                        prefsActivity.maskView = WindowUtils.addMaskView(prefsActivity, newValue.toString());
                     }
                     return true;
                 }
@@ -359,12 +359,7 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
     }
 
     protected int getMaskViewBackgroundColor() {
-        try {
-            return getCnBetaApplicationContext().getCnBetaPreferences().getNightModeBrightnessInteger();
-        }
-        catch (Exception e) {
-            return 0x70000000;
-        }
+        return getCnBetaApplicationContext().getCnBetaPreferences().getNightModeBrightnessInteger();
     }
 
     public CnBetaApplicationContext getCnBetaApplicationContext() {

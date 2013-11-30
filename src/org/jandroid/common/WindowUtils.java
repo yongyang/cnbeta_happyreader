@@ -24,6 +24,11 @@ public class WindowUtils {
         return addMaskView(activity, 0x70000000);
     }
 
+    // 0x70000000
+    public static View addMaskView(Activity activity, String hexBgColor) {
+        return addMaskView(activity, NumberUtils.hexColor2Int(hexBgColor));
+    }
+
     public static View addMaskView(Activity activity, int bgColor) {
         WindowManager mWindowManager = SystemUtils.getWindowManager(activity);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
@@ -40,7 +45,6 @@ public class WindowUtils {
         mWindowManager.addView(maskView, lp);
         return maskView;
     }
-
 
     public static void removeMaskView(Activity activity, View maskView) {
         WindowManager mWindowManager = SystemUtils.getWindowManager(activity);

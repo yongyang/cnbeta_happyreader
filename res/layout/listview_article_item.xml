@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/item_logo"
                 android:layout_alignBaseline="@+id/item_logo"
-                android:paddingLeft="4dip">
+                android:paddingLeft="6dip">
 
             <TextView
                     android:textSize="@dimen/listitem_description_text_size"
@@ -63,7 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="false"
-                    android:maxLines="4"
+                    android:maxLines="3"
                     android:ellipsize="end"/>
 
                 <LinearLayout

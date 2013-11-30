@@ -26,14 +26,18 @@
     </string-array>
 
     <string-array name="brightNameArray" >
+        <item>暗</item>
         <item>较暗</item>
         <item>中等</item>
         <item>较亮</item>
+        <item>亮</item>
     </string-array>
     <string-array  name="brightValueArray" >
+        <item>0x90000000</item>
         <item>0x70000000</item>
         <item>0x50000000</item>
-        <item>0x30000000</item>
+        <item>0x3000000</item>
+        <item>0x10000000</item>
     </string-array>
 
 </resources>

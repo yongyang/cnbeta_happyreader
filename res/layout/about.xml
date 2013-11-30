@@ -19,12 +19,10 @@
                 android:orientation="vertical"
                 android:layout_marginBottom="10dip"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip">
+                android:layout_height="wrap_content">
 
             <ImageView
                     android:src="@drawable/banner"
-                    android:layout_marginRight="10dip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 

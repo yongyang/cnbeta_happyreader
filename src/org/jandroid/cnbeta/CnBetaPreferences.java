@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import org.jandroid.common.FontUtils;
+import org.jandroid.common.NumberUtils;
 import org.jandroid.common.ToastUtils;
 
 import java.io.File;
@@ -63,7 +64,7 @@ public class CnBetaPreferences {
     }
 
     public int getNightModeBrightnessInteger() {
-        return Integer.parseInt(getNightModeBrightness().substring(2), 16);
+        return NumberUtils.hexColor2Int(getNightModeBrightness());
     }
 
 }

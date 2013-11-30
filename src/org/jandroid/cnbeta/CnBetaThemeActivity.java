@@ -103,11 +103,6 @@ public abstract class CnBetaThemeActivity extends ThemeActivity {
 
     @Override
     protected int getMaskViewBackgroundColor() {
-        try {
-            return getCnBetaApplicationContext().getCnBetaPreferences().getNightModeBrightnessInteger();
-        }
-        catch (Exception e) {
-            return super.getMaskViewBackgroundColor();
-        }
+        return getCnBetaApplicationContext().getCnBetaPreferences().getNightModeBrightnessInteger();
     }
 }
