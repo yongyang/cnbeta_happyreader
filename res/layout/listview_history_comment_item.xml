@@ -14,7 +14,7 @@
                 android:textSize="@dimen/listitem_description_text_size"
                 android:id="@+id/to"
                 android:textStyle="bold"
-                android:text="评论:"
+                android:text="评: "
                 android:textColor="?attr/cnBeta_text_color"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/cnBeta_hotComment_bg"
-            android:layout_marginLeft="35dip"
+            android:layout_marginLeft="20dip"
             android:layout_marginRight="2dip">
 
         <TextView
