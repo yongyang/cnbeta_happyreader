@@ -23,6 +23,10 @@ public class Comment implements Serializable{
     private String comment;
     // support
     private int score;
+
+    // hot
+    private boolean hot = false;
+
     //against
     private int reason;
     
@@ -49,6 +53,7 @@ public class Comment implements Serializable{
         this.setScore(Integer.parseInt(jSONObject.get("score").toString()));
         this.setReason(Integer.parseInt(jSONObject.get("reason").toString()));
         this.setToken(jSONObject.get("token").toString());
+        this.setHot((Boolean)jSONObject.get("hot"));
     }
 
 
@@ -114,6 +119,14 @@ public class Comment implements Serializable{
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public boolean isHot() {
+        return hot;
+    }
+
+    public void setHot(boolean hot) {
+        this.hot = hot;
     }
 
     public int getReason() {

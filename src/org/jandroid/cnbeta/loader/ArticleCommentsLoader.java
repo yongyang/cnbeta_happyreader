@@ -22,6 +22,9 @@ import java.util.Map;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
+
+//TODO: 显示热评！！！，数据可取自 hotlist 字段
+
 public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
     //当comments 数目较多有分页时，comment_num 可能与实际的 comment 数目不同，此时怎么确定具体的楼好呢？可能要用到 join_num
 
@@ -113,12 +116,24 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
             content.setJoinNum(Integer.parseInt(resultJSON.get("join_num").toString()));
         }
 
+        List<String> hotCommentTids = new ArrayList<String>();
+        JSONArray hotListJSONArray = (JSONArray)resultJSON.get("hotlist");
+        for(Object hotCommentJSONObject : hotListJSONArray){
+            hotCommentTids.add(((JSONObject)hotCommentJSONObject).get("tid").toString());
+        }
+
         JSONObject commentStoreJSONObject = (JSONObject)resultJSON.get("cmntstore");
 
         for(Object scommentObject : (JSONArray)resultJSON.get("cmntlist")){
             JSONObject scommentJSONObject = (JSONObject)scommentObject;
             String tid = scommentJSONObject.get("tid").toString();
             JSONObject commentJSONObject = (JSONObject)commentStoreJSONObject.get(tid);
+            if(hotCommentTids.contains(tid)) {
+                commentJSONObject.put("hot", true); // 最热评论
+            }
+            else {
+                commentJSONObject.put("hot", false);
+            }
             // unicode to Chinese
             commentJSONObject.put("name", commentJSONObject.get("name").toString());
             commentJSONObject.put("host_name", commentJSONObject.get("host_name").toString());

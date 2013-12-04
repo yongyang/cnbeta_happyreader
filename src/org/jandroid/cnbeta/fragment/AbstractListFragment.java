@@ -11,6 +11,7 @@ import android.widget.ListView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.common.BaseFragment;
+import org.jandroid.common.ThemeFragment;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,7 +22,7 @@ import java.util.List;
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 
-public abstract class AbstractListFragment<T> extends BaseFragment implements AdapterView.OnItemClickListener {
+public abstract class AbstractListFragment<T> extends ThemeFragment implements AdapterView.OnItemClickListener {
 
     public final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -72,9 +73,25 @@ public abstract class AbstractListFragment<T> extends BaseFragment implements Ad
     }
 
 
-    protected void appendDatas(List<T> datas){
+    public void appendDatas(List<T> datas){
         loadedDatas.addAll(datas);
         getAdapter().notifyDataSetChanged();
+    }
+
+    public synchronized void clearData() {
+        loadedDatas.clear();
+    }
+
+    public synchronized T getData(int index) {
+        return loadedDatas.get(index);
+    }
+
+    public int getDataSize() {
+        return loadedDatas.size();
+    }
+
+    public void addData(int location, T data) {
+        loadedDatas.add(location, data);
     }
 
     protected abstract BaseAdapter newAdapter();

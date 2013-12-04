@@ -11,26 +11,40 @@ import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.entity.HistoryComment;
 import org.jandroid.cnbeta.fragment.ArticleCommentsFragment;
 import org.jandroid.cnbeta.fragment.ArticleContentFragment;
+import org.jandroid.cnbeta.fragment.ArticleHotCommentsFragment;
 import org.jandroid.cnbeta.loader.HistoryCommentListLoader;
 import org.jandroid.common.DateFormatUtils;
 import org.jandroid.common.ToastUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ContentActivity extends CnBetaActionTabFragmentActivity {
 
-    private final static int[] tabs = new int[]{R.string.tab_zhengwen, R.string.tab_pinglun};
+    private final static int[] tabs = new int[]{R.string.tab_zhengwen, R.string.tab_zuirepinglun, R.string.tab_pinglun};
 
     private ArticleContentFragment contentFragment;
+    private ArticleHotCommentsFragment hotCommentsFragment;
     private ArticleCommentsFragment commentsFragment;
 
     private long sid;
     private String title;
 
-
     @Override
     protected Fragment getTabFragmentByItem(int position) {
-        return position == 0 ? contentFragment : commentsFragment;
+        if(position == 0) {
+            return contentFragment;
+        }
+        else if(position == 1) {
+            return hotCommentsFragment;
+        }
+        else if(position == 2) {
+            return commentsFragment;
+        }
+        else {
+            return null;
+        }
     }
 
     @Override
@@ -44,10 +58,14 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
 
         contentFragment = new ArticleContentFragment();
         commentsFragment = new ArticleCommentsFragment();
+        hotCommentsFragment = new ArticleHotCommentsFragment();
 
         super.onCreate(savedInstanceState);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // set limit to 2 so comments(tab index 2) can be loaded automaticaly
+        mViewPager.setOffscreenPageLimit(2);
     }
 
     @Override
@@ -142,6 +160,19 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
 
     public void updateCommentNumbers() {
         contentFragment.updateCommentNumbers();
+    }
+
+    public void updateHotComments(List<Comment> comments) {
+        List<Comment> hotComments = new ArrayList<Comment>();
+        for(Comment comment : comments){
+            if(comment.isHot()) {
+                hotComments.add(comment);
+            }
+        }
+        if(!hotComments.isEmpty()) {
+            hotCommentsFragment.clearData();
+            hotCommentsFragment.appendDatas(hotComments);
+        }
     }
 
     public Content getContent() {

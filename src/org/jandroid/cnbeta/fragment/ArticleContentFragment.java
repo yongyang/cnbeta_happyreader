@@ -1,6 +1,7 @@
 package org.jandroid.cnbeta.fragment;
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.KeyEvent;
@@ -328,10 +329,19 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
                 final String image64 = Base64.encodeToString(imageData, Base64.NO_WRAP);
                 //        imageData = "file://" + ((CnBetaApplication)getActivity().getApplicationContext()).getBaseDir().getAbsolutePath()+"/" + imageData;
                 if (contentWebView != null) {
-                    contentWebView.loadUrl("javascript:(function(){" +
-                            "var img = document.getElementById('" + id + "');"
-                            + "img.src='data:image/*;base64," + image64 + "';" +
-                            "})()");
+                    if(Build.VERSION.SDK_INT < 19) { // 19之前用loadUrl调用 javascript
+                        contentWebView.loadUrl("javascript:(function(){" +
+                                "var img = document.getElementById('" + id + "');"
+                                + "img.src='data:image/*;base64," + image64 + "';" +
+                                "})()");
+                    }
+                    else {
+                        contentWebView.evaluateJavascript("function(){" +
+                                "var img = document.getElementById('" + id + "');"
+                                + "img.src='data:image/*;base64," + image64 + "';" +
+                                "}", null);
+                    }
+
                 }
             }
         });
