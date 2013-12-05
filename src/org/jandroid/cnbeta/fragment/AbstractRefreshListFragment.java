@@ -25,11 +25,6 @@ public abstract class AbstractRefreshListFragment<T> extends AbstractAsyncListFr
     private LinearLayout footbarRefresh;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         footbarRefresh = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.listview_footbar_refresh, mListView, false);

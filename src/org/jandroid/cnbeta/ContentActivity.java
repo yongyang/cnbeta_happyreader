@@ -1,7 +1,6 @@
 package org.jandroid.cnbeta;
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -169,10 +168,8 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
                 hotComments.add(comment);
             }
         }
-        if(!hotComments.isEmpty()) {
-            hotCommentsFragment.clearData();
-            hotCommentsFragment.appendDatas(hotComments);
-        }
+        // update hot comments
+        hotCommentsFragment.setDatas(hotComments);
     }
 
     public Content getContent() {

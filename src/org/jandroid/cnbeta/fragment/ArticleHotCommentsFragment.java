@@ -49,9 +49,7 @@ public class ArticleHotCommentsFragment extends AbstractListFragment<Comment> {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.listview_default, container, false);
-        mListView = (ListView) rootView.findViewById(R.id.article_listview);
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
         // so button in Item can click
         ((ListView) mListView).setItemsCanFocus(true);
         return rootView;

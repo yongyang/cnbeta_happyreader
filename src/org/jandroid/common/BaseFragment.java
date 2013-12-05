@@ -17,6 +17,8 @@ public abstract class BaseFragment extends Fragment {
 
     protected Handler handler = new Handler();
 
+    protected Activity theActivity;
+
     @Override
    	public void onCreate(Bundle savedInstanceState) {
         logger.d("onCreate() invoked!!");
@@ -33,6 +35,12 @@ public abstract class BaseFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         logger.d("onActivityCreated() invoked!!");
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        theActivity = activity;
     }
 
     @Override
@@ -59,6 +67,11 @@ public abstract class BaseFragment extends Fragment {
    		super.onStop();
    	}
 
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
 
     @Override
     public void onDestroy() {

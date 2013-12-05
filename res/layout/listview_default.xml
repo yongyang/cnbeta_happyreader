@@ -4,18 +4,21 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <ListView android:id="@+id/article_listview"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:drawSelectorOnTop="false"
+    <ListView
+            android:id="@+id/article_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawSelectorOnTop="false"
             />
 
-    <TextView android:id="@+id/empty_textview"
-              android:visibility="gone"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center"
-              android:textAppearance="?android:attr/textAppearanceLarge"
-              android:text="no data"
-            />
+    <TextView
+            android:text="没有数据"
+            android:textColor="?attr/cnBeta_text_description_gray"
+            android:id="@+id/lv_emptyTextView"
+            android:visibility="gone"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="100dp"/>
 </FrameLayout>

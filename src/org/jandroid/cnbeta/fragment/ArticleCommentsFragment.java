@@ -54,10 +54,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.listview_default, container, false);
-        mListView = (ListView) rootView.findViewById(R.id.article_listview);
-        // so button in Item can click
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
         ((ListView) mListView).setItemsCanFocus(true);
         return rootView;
     }
