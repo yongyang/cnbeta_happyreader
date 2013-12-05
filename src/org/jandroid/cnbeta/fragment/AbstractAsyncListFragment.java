@@ -72,7 +72,7 @@ public abstract class AbstractAsyncListFragment<T> extends AbstractListFragment<
     }
 
     public synchronized void onSuccess(AsyncResult<List<T>> listAsyncResult) {
-        setDatas(listAsyncResult.getResult());
+        appendDatas(listAsyncResult.getResult());
     }
 
     public abstract void loadData();

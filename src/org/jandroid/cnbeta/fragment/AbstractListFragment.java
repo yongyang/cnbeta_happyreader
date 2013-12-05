@@ -103,6 +103,18 @@ public abstract class AbstractListFragment<T> extends ThemeFragment implements A
         getAdapter().notifyDataSetChanged();
     }
 
+    public void appendDatas(List<T> datas){
+        loadedDatas.addAll(datas);
+        if(getAdapter().isEmpty()) { // add empty view if no data
+            emptyView.setVisibility(View.VISIBLE);
+            mListView.setEmptyView(emptyView);
+        }
+        else {
+            emptyView.setVisibility(View.GONE);
+        }
+        getAdapter().notifyDataSetChanged();
+    }
+
     public synchronized void clearData() {
         loadedDatas.clear();
         if(getAdapter().isEmpty()) { // add empty view if no data
