@@ -118,6 +118,7 @@
                     android:id="@+id/progressBarLayout"
                     android:gravity="center"
                     android:layout_marginTop="40dip"
+                    android:layout_marginBottom="40dip"
                     >
 
                 <ProgressBar
@@ -159,6 +160,7 @@
                     android:stepSize="0.5"
                     android:numStars="5"
                     android:visibility="gone"/>
+
             <ProgressBar
                     android:id="@+id/rating_progressBar"
                     android:layout_width="wrap_content"
@@ -168,6 +170,7 @@
                     android:layout_gravity="center_horizontal"
                     style="?android:progressBarStyle"
                     android:layout_marginBottom="8dip"/>
+
             <RatingBar
                     android:id="@+id/result_ratingBar"
                     android:layout_width="wrap_content"
@@ -178,5 +181,83 @@
                     android:isIndicator="true"
                     android:visibility="gone"/>
         </FrameLayout>
+
+        <LinearLayout
+                android:id="@+id/navigationBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dip"
+                android:paddingBottom="5dip"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:id="@+id/leftArrow"
+                        android:paddingLeft="2dp"
+                        android:textColor="?attr/cnBeta_text_color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:text="&lt;"
+                        android:lines="2"
+                        android:gravity="left|center_vertical"
+                        />
+
+                <Button
+                        android:padding="0dp"
+                        android:id="@+id/previousArticleButton"
+                        android:textColor="?attr/cnBeta_text_color"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="到列表顶端了\n点击关闭"
+                        android:gravity="left|center_vertical"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:lines="2"
+                        android:ellipsize="end"
+                        android:layout_toRightOf="@id/leftArrow"/>
+
+            </RelativeLayout>
+            <!-- 定义滚动到下一屏的按钮 -->
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:id="@+id/rightArrow"
+                        android:paddingRight="2dp"
+                        android:textColor="?attr/cnBeta_text_color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="&gt;"
+                        android:lines="2"
+                        android:gravity="right|center_vertical"
+                        android:layout_alignParentRight="true"/>
+                <Button
+                        android:layout_toLeftOf="@+id/rightArrow"
+                        android:padding="0dp"
+                        android:id="@+id/nextArticleButton"
+                        android:textColor="?attr/cnBeta_text_color"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="到列表末尾了\n点击关闭"
+                        android:gravity="right|center_vertical"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:lines="2"
+                        android:ellipsize="end"
+                        />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
+
 </ScrollView>

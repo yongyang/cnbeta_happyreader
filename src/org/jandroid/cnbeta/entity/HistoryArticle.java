@@ -6,10 +6,8 @@ import java.util.Map;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class HistoryArticle implements Serializable {
+public class HistoryArticle extends BaseArticle {
 
-    private long sid;
-    private String title;
     private String date;
 
     public HistoryArticle() {
@@ -26,22 +24,6 @@ public class HistoryArticle implements Serializable {
     }
 
 
-    public long getSid() {
-        return sid;
-    }
-
-    public void setSid(long sid) {
-        this.sid = sid;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDate() {
         return date;
     }
@@ -50,30 +32,6 @@ public class HistoryArticle implements Serializable {
         this.date = date;
     }
 
-    @Override
-    public String toString() {
-        return "RealtimeArticle{" +
-                "sid=" + sid +
-                ", title='" + title + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        HistoryArticle that = (HistoryArticle) o;
-
-        if (sid != that.sid) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return (int) (sid ^ (sid >>> 32));
-    }
 }
 
 /*

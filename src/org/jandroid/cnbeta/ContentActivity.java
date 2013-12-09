@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import org.jandroid.cnbeta.entity.Article;
+import org.jandroid.cnbeta.entity.BaseArticle;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.entity.HistoryComment;
@@ -16,6 +18,9 @@ import org.jandroid.common.DateFormatUtils;
 import org.jandroid.common.ToastUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -27,8 +32,9 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
     private ArticleHotCommentsFragment hotCommentsFragment;
     private ArticleCommentsFragment commentsFragment;
 
-    private long sid;
-    private String title;
+    private BaseArticle article;
+
+    private List<BaseArticle> articleList = new ArrayList<BaseArticle>();
 
     @Override
     protected Fragment getTabFragmentByItem(int position) {
@@ -52,8 +58,9 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        sid = getIntent().getExtras().getLong("sid");
-        title = getIntent().getExtras().getString("title");
+        article = (BaseArticle)getIntent().getExtras().getSerializable("article");
+        Object[] baseArticleObjectArray = (Object[])getIntent().getExtras().getSerializable("articles");
+        articleList.addAll(Arrays.asList(Arrays.copyOf(baseArticleObjectArray, baseArticleObjectArray.length, BaseArticle[].class)));
 
         contentFragment = new ArticleContentFragment();
         commentsFragment = new ArticleCommentsFragment();
@@ -73,11 +80,11 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
     }
 
     public long getArticleSid() {
-        return sid;
+        return article.getSid();
     }
 
     public String getArticleTitle() {
-        return title;
+        return article.getTitle();
     }
 
     public boolean isPageLoaded() {
@@ -185,4 +192,27 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
     protected void onStop() {
         super.onStop();
     }
+
+    public BaseArticle getPreviousArticle() {
+        int i = articleList.indexOf(article);
+        if(i>0) {
+            return articleList.get(i-1);
+        }
+        return null;
+    }
+
+    public BaseArticle getNextArticle() {
+        int i = articleList.indexOf(article);
+        if(i>=0 && i+1 < articleList.size()) {
+            return articleList.get(i+1);
+        }
+        return null;
+    }
+
+    public void goArticle(BaseArticle article){
+        Utils.openContentActivity(this, article, articleList);
+        this.finish();
+        this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
 }

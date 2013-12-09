@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import org.jandroid.cnbeta.entity.BaseArticle;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.HistoryArticle;
 import org.jandroid.cnbeta.loader.HistoryArticleListLoader;
@@ -22,12 +23,46 @@ import org.jandroid.common.autoupdate.AbstractVersionUpdateService;
 import org.jandroid.common.autoupdate.VersionInfo;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 public class Utils {
+
+
+    public static void openContentActivity(final Activity theActivity, final BaseArticle article, final List<? extends BaseArticle> datas) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("article", article);
+        BaseArticle[] articles = datas.toArray(new BaseArticle[datas.size()]);
+        bundle.putSerializable("articles", articles);
+        Intent intent = IntentUtils.newIntent(theActivity, ContentActivity.class, bundle);
+        theActivity.startActivity(intent);
+        theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+        // write history
+        new Thread() {
+            @Override
+            public void run() {
+                HistoryArticle historyArticle = new HistoryArticle();
+                historyArticle.setSid(article.getSid());
+                historyArticle.setTitle(article.getTitle());
+                historyArticle.setDate(DateFormatUtils.getDefault().format(new Date()));
+                try {
+                    new HistoryArticleListLoader().writeHistory(((CnBetaApplicationContext) theActivity.getApplicationContext()).getHistoryDir(), historyArticle);
+                }
+                catch (final Exception e) {
+                    theActivity.runOnUiThread(new Runnable() {
+                        public void run() {
+                            ToastUtils.showShortToast(theActivity.getApplicationContext(), e.toString());
+                        }
+                    });
+                }
+            }
+        }.start();
+    }
 
     public static void openContentActivity(final Activity theActivity, final long sid, final String title) {
         Bundle bundle = new Bundle();

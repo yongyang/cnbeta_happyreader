@@ -15,6 +15,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
@@ -28,6 +29,7 @@ import org.jandroid.cnbeta.async.ArticleContentAsyncTask;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.ImageBytesAsyncTask;
 import org.jandroid.cnbeta.async.RateArticleAsyncTask;
+import org.jandroid.cnbeta.entity.BaseArticle;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.common.FontUtils;
@@ -57,6 +59,10 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
     private RatingBar resultRatingBar;
     private ProgressBar ratingProgressBar;
 
+    private ViewGroup navigationBar;
+    private Button previousArticleButton;
+    private Button nextArticleButton;
+
     private ViewGroup root;
 
     private boolean loaded = false;
@@ -67,7 +73,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
         loaded = false;
         root = (ViewGroup) inflater.inflate(R.layout.content_article, null);
         titleTextView = (TextView) root.findViewById(R.id.tv_articleTitle);
-        titleTextView.setText(((ContentActivity) getActivity()).getArticleTitle());
+        titleTextView.setText(((ContentActivity) theActivity).getArticleTitle());
         titleTextView.setSelected(true); // select to enable marque
         timeTextView = (TextView) root.findViewById(R.id.tv_date);
         viewNumTextView = (TextView) root.findViewById(R.id.tv_viewNum);
@@ -79,10 +85,53 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
         ratingProgressBar = (ProgressBar) root.findViewById(R.id.rating_progressBar);
         setupRatingBar();
 
+        navigationBar = (ViewGroup)root.findViewById(R.id.navigationBar);
+        previousArticleButton = (Button)root.findViewById(R.id.previousArticleButton);
+        nextArticleButton = (Button)root.findViewById(R.id.nextArticleButton);
+        setupNavigationBar();
+
         progressBarLayout = (LinearLayout) root.findViewById(R.id.progressBarLayout);
         contentWebView = (WebView) root.findViewById(R.id.wv_articleContent);
         setupWebView();
+
         return root;
+    }
+
+    private void setupNavigationBar() {
+        final BaseArticle prevArticle = ((ContentActivity) theActivity).getPreviousArticle();
+        final BaseArticle nextArticle = ((ContentActivity) theActivity).getNextArticle();
+        if(prevArticle != null) {
+            previousArticleButton.setText(prevArticle.getTitle());
+            previousArticleButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    ((ContentActivity) theActivity).goArticle(prevArticle);
+                }
+            });
+
+        }
+        else {
+            previousArticleButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    theActivity.finish();
+                }
+            });
+        }
+        if(nextArticle != null) {
+            nextArticleButton.setText(nextArticle.getTitle());
+            nextArticleButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    ((ContentActivity) theActivity).goArticle(nextArticle);
+                }
+            });
+
+        }
+        else {
+            nextArticleButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    theActivity.finish();
+                }
+            });
+        }
     }
 
     private void setupRatingBar() {
@@ -90,11 +139,11 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 ArticleContentFragment.this.rateRatingBar.setIsIndicator(true);
                 final int score = (int) (2 * ArticleContentFragment.this.rateRatingBar.getRating() - 5);
-                ToastUtils.showShortToast(getActivity(), "您的评分: " + score);
+                ToastUtils.showShortToast(theActivity, "您的评分: " + score);
                 executeAsyncTaskMultiThreading(new RateArticleAsyncTask() {
                     @Override
                     protected long getSid() {
-                        return ((ContentActivity) getActivity()).getArticleSid();
+                        return ((ContentActivity) theActivity).getArticleSid();
                     }
 
                     @Override
@@ -106,7 +155,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
                     public HasAsync<JSONObject> getAsyncContext() {
                         return new HasAsync<JSONObject>() {
                             public CnBetaApplicationContext getCnBetaApplicationContext() {
-                                return (CnBetaApplicationContext) (getActivity().getApplicationContext());
+                                return (CnBetaApplicationContext) (theActivity.getApplicationContext());
                             }
 
                             public void onProgressShow() {
@@ -127,12 +176,12 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
                                 if (resultJSON.get("status").toString().equals("success")) {
                                     String average = ((JSONObject) resultJSON.get("result")).get("average").toString();
                                     String count = ((JSONObject) resultJSON.get("result")).get("count").toString();
-                                    ToastUtils.showLongToast(getActivity(), "当前平均分: " + average + " (共 " + count + " 次打分)");
+                                    ToastUtils.showLongToast(theActivity, "当前平均分: " + average + " (共 " + count + " 次打分)");
                                     ArticleContentFragment.this.resultRatingBar.setRating((5.0f + Float.parseFloat(average)) / 2);
                                 }
                                 else {
                                     String message = ((JSONObject) resultJSON.get("result")).get("message").toString();
-                                    ToastUtils.showShortToast(getActivity(), message);
+                                    ToastUtils.showShortToast(theActivity, message);
                                 }
                             }
 
@@ -153,8 +202,8 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
         contentWebView.getSettings().setJavaScriptEnabled(true);
         contentWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
         //设置嫩参数
-        contentWebView.getSettings().setDefaultFontSize((int) PixelUtils.pixelsToSp(getActivity(), getResources().getDimension(R.dimen.webview_default_text_size)));
-        contentWebView.getSettings().setDefaultFixedFontSize((int) PixelUtils.pixelsToSp(getActivity(), getResources().getDimension(R.dimen.webview_default_text_size)));
+        contentWebView.getSettings().setDefaultFontSize((int) PixelUtils.pixelsToSp(theActivity, getResources().getDimension(R.dimen.webview_default_text_size)));
+        contentWebView.getSettings().setDefaultFixedFontSize((int) PixelUtils.pixelsToSp(theActivity, getResources().getDimension(R.dimen.webview_default_text_size)));
         contentWebView.getSettings().setAllowFileAccess(true);
         // no these two method in 4.0
 //        contentWebView.getSettings().setAllowFileAccessFromFileURLs(true);
@@ -189,14 +238,14 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
             @JavascriptInterface
             public void openImage(String imgSrc) {
                 //新开一个 Transparent Activity, 使用 WebView 打开大图
-                Utils.openImageViewerActivity(getActivity(), imgSrc);
+                Utils.openImageViewerActivity(theActivity, imgSrc);
                 //TODO: try to save image first, in case cache cleared, WONT_FIX
             }
 
             @JavascriptInterface
             public void openTopic(String topicId, String topicName) {
-//                ToastUtils.showShortToast(getActivity(), "openTopic id=" + topicId +", name=" + topicName);
-                Utils.openTopicActivity(getActivity(), Long.parseLong(topicId), topicName);
+//                ToastUtils.showShortToast(theActivity, "openTopic id=" + topicId +", name=" + topicName);
+                Utils.openTopicActivity(theActivity, Long.parseLong(topicId), topicName);
             }
 
         }, "JS");
@@ -229,6 +278,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 loaded = true;
+                navigationBar.setVisibility(View.VISIBLE);
                 contentWebView.setVisibility(View.VISIBLE);
                 progressBarLayout.setVisibility(View.GONE);
 
@@ -237,8 +287,8 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
                 if (reloadComments) { // don't reload comment onResume's loadDataUrl
                     handler.post(new Runnable() {
                         public void run() {
-                            if (getActivity() != null) { // in case activity finished
-                                ((ContentActivity) getActivity()).reloadComments();
+                            if (theActivity != null) { // in case activity finished
+                                ((ContentActivity) theActivity).reloadComments();
                             }
                         }
                     });
@@ -274,7 +324,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 logger.e("ERROR: " + errorCode + ", " + description + ", " + failingUrl);
-//                ToastUtils.showShortToast(getActivity(), "ERROR: " + errorCode + ", " + description + ", " + failingUrl);
+//                ToastUtils.showShortToast(theActivity, "ERROR: " + errorCode + ", " + description + ", " + failingUrl);
             }
         });
 
@@ -327,7 +377,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
         handler.post(new Runnable() {
             public void run() {
                 final String image64 = Base64.encodeToString(imageData, Base64.NO_WRAP);
-                //        imageData = "file://" + ((CnBetaApplication)getActivity().getApplicationContext()).getBaseDir().getAbsolutePath()+"/" + imageData;
+                //        imageData = "file://" + ((CnBetaApplication)theActivity.getApplicationContext()).getBaseDir().getAbsolutePath()+"/" + imageData;
                 if (contentWebView != null) {
                     if(Build.VERSION.SDK_INT < 19) { // 19之前用loadUrl调用 javascript
                         contentWebView.loadUrl("javascript:(function(){" +
@@ -360,7 +410,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
     @Override
     public void onResume() {
         super.onResume();
-        ContentActivity contentActivity = ((ContentActivity) getActivity());
+        ContentActivity contentActivity = ((ContentActivity) theActivity);
         if (contentActivity != null) {
             int fontSizeOffset = ((CnBetaApplicationContext) contentActivity.getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
             //TODO: update font size if changed
@@ -436,7 +486,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
 
             @Override
             protected long getSid() {
-                return ((ContentActivity) getActivity()).getArticleSid();
+                return ((ContentActivity) theActivity).getArticleSid();
             }
 
             @Override
@@ -448,22 +498,23 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
     }
 
     public CnBetaApplicationContext getCnBetaApplicationContext() {
-        return (CnBetaApplicationContext) getActivity().getApplicationContext();
+        return (CnBetaApplicationContext) theActivity.getApplicationContext();
     }
 
     public void onProgressShow() {
-        getActivity().setProgressBarIndeterminate(true);
-        getActivity().setProgressBarVisibility(true);
+        theActivity.setProgressBarIndeterminate(true);
+        theActivity.setProgressBarVisibility(true);
 
         //由 WebView.onPageFishi 负责切换显示
         contentWebView.setVisibility(View.GONE);
         rateRatingBar.setVisibility(View.GONE);
+        navigationBar.setVisibility(View.GONE);
         progressBarLayout.setVisibility(View.VISIBLE);
     }
 
     public void onProgressDismiss() {
-        if (getActivity() != null) {
-            getActivity().setProgressBarVisibility(false);
+        if (theActivity != null) {
+            theActivity.setProgressBarVisibility(false);
         }
     }
 
@@ -491,7 +542,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
         sb.append("<html><head><style type=\"text/css\">");
 
 //        设置 introduction 前景 背景色
-        ContentActivity contentActivity = ((ContentActivity) getActivity());
+        ContentActivity contentActivity = ((ContentActivity) theActivity);
         if (contentActivity != null) {
             if (contentActivity.isDarkThemeEnabled()) { // night mode
                 sb.append("body {background-color: #000000; color: #ffffff; }");
@@ -503,7 +554,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
         }
 
         // 设置 custom Font
-        String customFont = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getCnBetaPreferences().getCustomFont();
+        String customFont = getCnBetaApplicationContext().getCnBetaPreferences().getCustomFont();
         if (customFont != null && !customFont.isEmpty() && !customFont.equals("default")) {
             sb.append("@font-face{ font-family: customFont; src:url('" + customFont + "');" + "} body {font-family: customFont, serif;}");
         }
@@ -540,7 +591,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
             public HasAsync<byte[]> getAsyncContext() {
                 return new HasAsync<byte[]>() {
                     public CnBetaApplicationContext getCnBetaApplicationContext() {
-                        return (CnBetaApplicationContext) getActivity().getApplicationContext();
+                        return ((ContentActivity)theActivity).getCnBetaApplicationContext();
                     }
 
                     public void onProgressShow() {

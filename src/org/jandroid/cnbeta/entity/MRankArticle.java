@@ -6,16 +6,10 @@ import java.util.Map;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class MRankArticle implements Serializable {
-
-    private long sid;
-    private String title;
-
-    private Map<String, Object> jSONObject;
+public class MRankArticle extends BaseArticle {
 
     public MRankArticle(Map<String, Object> jSONObject) {
         parse(jSONObject);
-        this.jSONObject = jSONObject;
     }
 
     private void parse(Map<String, Object> jSONObject) {
@@ -23,50 +17,6 @@ public class MRankArticle implements Serializable {
         this.setTitle(jSONObject.get("title").toString());
     }
 
-    public long getSid() {
-        return sid;
-    }
-
-    public void setSid(long sid) {
-        this.sid = sid;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Map<String, Object> getJSONObject() {
-        return jSONObject;
-    }
-
-    @Override
-    public String toString() {
-        return "RealtimeArticle{" +
-                "sid=" + sid +
-                ", title='" + title + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        MRankArticle that = (MRankArticle) o;
-
-        if (sid != that.sid) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return (int) (sid ^ (sid >>> 32));
-    }
 }
 
 /*

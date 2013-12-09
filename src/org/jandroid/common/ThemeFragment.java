@@ -11,15 +11,12 @@ import android.widget.TextView;
  */
 public class ThemeFragment extends BaseFragment {
 
-    protected ThemeActivity themeActivity;
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         if(!(activity instanceof  ThemeActivity)) {
             throw new IllegalArgumentException("Activity must instanceof " + ThemeActivity.class.getName() + " for Fragment " + this.getClass().getName());
         }
-        themeActivity = (ThemeActivity)activity;
     }
 
     @Override
@@ -29,15 +26,15 @@ public class ThemeFragment extends BaseFragment {
     }
 
     public void updateTextSize(TextView textView, int dimResourceId) {
-        themeActivity.updateTextSize(textView, dimResourceId);
+        ((ThemeActivity)theActivity).updateTextSize(textView, dimResourceId);
     }
 
     public void updateTextSize(TextView[] textViews, int[] dimResourceIds) {
-        themeActivity.updateTextSize(textViews, dimResourceIds);
+        ((ThemeActivity)theActivity).updateTextSize(textViews, dimResourceIds);
     }
 
     public void updateTypeFace(View rootView) {
-        themeActivity.updateTypeFace(rootView);
+        ((ThemeActivity)theActivity).updateTypeFace(rootView);
     }
 
     // if call recreate() after theme changed, don't need to do anything here

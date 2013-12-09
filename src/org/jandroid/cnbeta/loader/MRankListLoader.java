@@ -67,13 +67,13 @@ public class MRankListLoader extends AbstractLoader<List<MRankArticle>>{
     public List<MRankArticle> httpLoad(File baseDir, RequestContext requestContext) throws Exception {
         String url = getURL();
         String responseHTML = CnBetaHttpClient.getInstance().httpGet(url, requestContext);
-        List<MRankArticle>  mRankArticles = parsePage(responseHTML);
+        JSONArray  mRankArticleJSONArray = parsePage(responseHTML);
 
-        JSONArray mRankJSONArray = new JSONArray();
-        for(MRankArticle mRankArticle : mRankArticles){
-            mRankJSONArray.add(mRankArticle.getJSONObject());
+        List<MRankArticle> mRankArticles = new ArrayList<MRankArticle>();
+        for(Object jSONObject : mRankArticleJSONArray){
+            mRankArticles.add(new MRankArticle((JSONObject)jSONObject));
         }
-        writeDisk(baseDir, mRankJSONArray.toJSONString());
+        writeDisk(baseDir, mRankArticleJSONArray.toJSONString());
         return mRankArticles;
     }
 
@@ -81,20 +81,20 @@ public class MRankListLoader extends AbstractLoader<List<MRankArticle>>{
         return MessageFormat.format(URL_FORMAT, "" + getType().getTypeString());
     }
 
-    private List<MRankArticle> parsePage(String responseHTML){
-        List<MRankArticle> rankArticles = new ArrayList<MRankArticle>();
+    private JSONArray parsePage(String responseHTML){
+        JSONArray rankArticlesJSONArray = new JSONArray();
 
         Document document = Jsoup.parse(responseHTML, "UTF-8");
         // select all div elements with class=list
         Elements elements = document.select("div.list");
 
         for(Element element : elements){
-            rankArticles.add(parseRankArticleElement(element));
+            rankArticlesJSONArray.add(parseRankArticleElement(element));
         }
-        return rankArticles;
+        return rankArticlesJSONArray;
     }
 
-    private MRankArticle parseRankArticleElement(Element rankElement){
+    private JSONObject parseRankArticleElement(Element rankElement){
 
         Element hrefElement = rankElement.getElementsByTag("a").first();
         JSONObject jSONObject = new JSONObject();
@@ -103,7 +103,7 @@ public class MRankListLoader extends AbstractLoader<List<MRankArticle>>{
         long sid = Long.parseLong(href.substring(href.indexOf("id=") + 3, href.length()));
         jSONObject.put("sid", sid);
 
-        return new MRankArticle(jSONObject);
+        return jSONObject;
     }
 
     @Override

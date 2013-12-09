@@ -1,6 +1,5 @@
 package org.jandroid.cnbeta.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +8,8 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
-import org.jandroid.common.BaseFragment;
 import org.jandroid.common.ThemeFragment;
 
 import java.text.DateFormat;
@@ -32,7 +29,7 @@ public abstract class AbstractListFragment<T> extends ThemeFragment implements A
 
     protected View emptyView;
 
-    protected final List<T> loadedDatas = new ArrayList<T>();
+    protected final List<T> datas = new ArrayList<T>();
 
     protected BaseAdapter adapter;
 
@@ -91,8 +88,8 @@ public abstract class AbstractListFragment<T> extends ThemeFragment implements A
     }
 
     public void setDatas(List<T> datas){
-        loadedDatas.clear();
-        loadedDatas.addAll(datas);
+        this.datas.clear();
+        this.datas.addAll(datas);
         if(getAdapter().isEmpty()) { // add empty view if no data
             emptyView.setVisibility(View.VISIBLE);
             mListView.setEmptyView(emptyView);
@@ -104,7 +101,7 @@ public abstract class AbstractListFragment<T> extends ThemeFragment implements A
     }
 
     public void appendDatas(List<T> datas){
-        loadedDatas.addAll(datas);
+        this.datas.addAll(datas);
         if(getAdapter().isEmpty()) { // add empty view if no data
             emptyView.setVisibility(View.VISIBLE);
             mListView.setEmptyView(emptyView);
@@ -116,7 +113,7 @@ public abstract class AbstractListFragment<T> extends ThemeFragment implements A
     }
 
     public synchronized void clearData() {
-        loadedDatas.clear();
+        datas.clear();
         if(getAdapter().isEmpty()) { // add empty view if no data
             emptyView.setVisibility(View.VISIBLE);
             mListView.setEmptyView(emptyView);
@@ -128,15 +125,19 @@ public abstract class AbstractListFragment<T> extends ThemeFragment implements A
     }
 
     public synchronized T getData(int index) {
-        return loadedDatas.get(index);
+        return datas.get(index);
     }
 
     public int getDataSize() {
-        return loadedDatas.size();
+        return datas.size();
+    }
+
+    public List<T> getAllDatas() {
+        return new ArrayList<T>(datas);
     }
 
     public void addData(int location, T data) {
-        loadedDatas.add(location, data);
+        datas.add(location, data);
         getAdapter().notifyDataSetChanged();
     }
 

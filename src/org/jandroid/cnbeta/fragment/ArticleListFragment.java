@@ -242,7 +242,8 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Article article = (Article) getAdapter().getItem(position);
-        Utils.openContentActivity(getActivity(), article.getSid(), article.getTitleShow());
+//        Utils.openContentActivity(getActivity(), article.getSid(), article.getTitleShow());
+        Utils.openContentActivity(getActivity(), article, getAllDatas());
     }
 
     @Override

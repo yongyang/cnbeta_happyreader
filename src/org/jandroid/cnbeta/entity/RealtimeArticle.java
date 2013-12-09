@@ -6,10 +6,8 @@ import java.util.Map;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class RealtimeArticle implements Serializable {
+public class RealtimeArticle extends BaseArticle{
 
-    private long sid;
-    private String title;
     private String hometext;
     private String hometextShowShort2;
     private String urlShow;
@@ -29,15 +27,6 @@ public class RealtimeArticle implements Serializable {
         this.setTime(jSONObject.get("time").toString());
         this.setTimeShow(jSONObject.get("time_show").toString());
     }
-
-    public long getSid() {
-        return sid;
-    }
-
-    public void setSid(long sid) {
-        this.sid = sid;
-    }
-
 
     public String getUrlShow() {
         return urlShow;
@@ -71,14 +60,6 @@ public class RealtimeArticle implements Serializable {
         this.timeShow = timeShow;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getTime() {
         return time;
     }
@@ -87,30 +68,6 @@ public class RealtimeArticle implements Serializable {
         this.time = time;
     }
 
-    @Override
-    public String toString() {
-        return "RealtimeArticle{" +
-                "sid=" + sid +
-                ", title='" + title + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        RealtimeArticle that = (RealtimeArticle) o;
-
-        if (sid != that.sid) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return (int) (sid ^ (sid >>> 32));
-    }
 }
 
 /*

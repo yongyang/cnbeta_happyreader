@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class Article implements Serializable{
+public class Article extends BaseArticle{
 // {"sid":"245736",
 // "title_show":"金色iPhone5S与廉价iPhone、iPhone5对比照曝光",
 // "hometext_show_short":"感谢T客在线的投递前几天微博用户@C科技为我们带来了两张金色iPhone5S的谍照，今天他又放出了一组iPhone5S谍照，其中包括廉价iPhone、iPhone5、金色iPhone5S后...",
@@ -17,8 +17,6 @@ public class Article implements Serializable{
 // "score":"-20",
 // "time":"2013-07-23 21:38:27"}
 
-    private long sid;
-    private String titleShow;
     private String hometextShowShort;
     private String logo;
     private String urlShow;
@@ -42,20 +40,12 @@ public class Article implements Serializable{
         this.setTime(jSONObject.get("time").toString());        
     }
 
-    public long getSid() {
-        return sid;
-    }
-
-    public void setSid(long sid) {
-        this.sid = sid;
-    }
-
     public String getTitleShow() {
-        return titleShow;
+        return getTitle();
     }
 
     public void setTitleShow(String titleShow) {
-        this.titleShow = titleShow;
+        setTitle(titleShow);
     }
 
     public String getLogo() {
@@ -114,28 +104,4 @@ public class Article implements Serializable{
         this.time = time;
     }
 
-    @Override
-    public String toString() {
-        return "Article{" +
-                "sid=" + sid +
-                ", titleShow='" + titleShow + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Article article = (Article) o;
-
-        if (sid != article.sid) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return (int) (sid ^ (sid >>> 32));
-    }
 }
