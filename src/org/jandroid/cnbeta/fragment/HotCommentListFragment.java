@@ -19,6 +19,7 @@ import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.FontUtils;
 import org.jandroid.common.async.AsyncResult;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -148,7 +149,7 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         HotComment hotComment = getData(position);
-        Utils.openContentActivity(getActivity(), hotComment.getSid(), hotComment.getTitleShow());
+        Utils.openContentActivity(getActivity(), hotComment, getAllDatas());
     }
 
 

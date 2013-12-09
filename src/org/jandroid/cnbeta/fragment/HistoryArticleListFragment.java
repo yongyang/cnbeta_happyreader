@@ -38,7 +38,7 @@ public class HistoryArticleListFragment extends AbstractAsyncListFragment<Histor
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         HistoryArticle article = (HistoryArticle) getAdapter().getItem(position);
-        Utils.openContentActivity(getActivity(), article.getSid(), article.getTitle());
+        Utils.openContentActivity(getActivity(), article, getAllDatas());
     }
 
     @Override

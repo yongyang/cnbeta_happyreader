@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class HistoryComment implements Serializable {
+public class HistoryComment extends BaseArticle{
 
     private long sid;
     private String title;
@@ -27,23 +27,6 @@ public class HistoryComment implements Serializable {
         this.setComment(jSONObject.get("comment").toString());
     }
 
-
-    public long getSid() {
-        return sid;
-    }
-
-    public void setSid(long sid) {
-        this.sid = sid;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDate() {
         return date;
     }
@@ -58,31 +41,6 @@ public class HistoryComment implements Serializable {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    @Override
-    public String toString() {
-        return "RealtimeArticle{" +
-                "sid=" + sid +
-                ", title='" + title + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        HistoryComment that = (HistoryComment) o;
-
-        if (sid != that.sid) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return (int) (sid ^ (sid >>> 32));
     }
 }
 

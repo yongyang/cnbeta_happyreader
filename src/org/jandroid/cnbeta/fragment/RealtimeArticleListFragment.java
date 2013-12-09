@@ -57,7 +57,7 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         RealtimeArticle article = (RealtimeArticle) getAdapter().getItem(position);
-        Utils.openContentActivity(getActivity(), article.getSid(), article.getTitle());
+        Utils.openContentActivity(getActivity(), article, getAllDatas());
     }
 
     @Override

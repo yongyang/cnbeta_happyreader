@@ -64,6 +64,7 @@ public class Utils {
         }.start();
     }
 
+/*
     public static void openContentActivity(final Activity theActivity, final long sid, final String title) {
         Bundle bundle = new Bundle();
         bundle.putLong("sid", sid);
@@ -93,6 +94,7 @@ public class Utils {
             }
         }.start();
     }
+*/
 
     public static void openMainActivity(Activity theActivity) {
         Intent intent = IntentUtils.newIntent(theActivity, MainActivity.class);

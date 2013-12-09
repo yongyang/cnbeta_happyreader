@@ -68,7 +68,7 @@ public class MRankListFragment extends AbstractAsyncListFragment<MRankArticle> {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         MRankArticle article = (MRankArticle) getAdapter().getItem(position);
-        Utils.openContentActivity(getActivity(), article.getSid(), article.getTitle());
+        Utils.openContentActivity(getActivity(), article, getAllDatas());
     }
 
     @Override

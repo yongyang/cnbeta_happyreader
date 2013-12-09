@@ -108,7 +108,7 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         EditorRecommend article = getData(position);
-        Utils.openContentActivity(getActivity(), article.getSid(), article.getTitle());
+        Utils.openContentActivity(getActivity(), article, getAllDatas());
     }
 
     @Override

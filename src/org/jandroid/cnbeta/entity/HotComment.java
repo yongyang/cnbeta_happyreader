@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class HotComment implements Serializable {
+public class HotComment extends BaseArticle {
 /*
 {"type": "comment", "id": "7839426", "time": "2013-09-13 08:03:21", "comment_show": {
     "sid": "252390",
@@ -32,8 +32,6 @@ public class HotComment implements Serializable {
 }}
 */
     private long tid;
-    private long sid;
-    private String titleShow;
     private String comment;
     private String hostNameShow;
     private String urlShow;
@@ -68,20 +66,12 @@ public class HotComment implements Serializable {
         this.tid = tid;
     }
 
-    public long getSid() {
-        return sid;
-    }
-
-    public void setSid(long sid) {
-        this.sid = sid;
-    }
-
     public String getTitleShow() {
-        return titleShow;
+        return getTitle();
     }
 
     public void setTitleShow(String titleShow) {
-        this.titleShow = titleShow;
+        setTitle(titleShow);
     }
 
     public String getUrlShow() {

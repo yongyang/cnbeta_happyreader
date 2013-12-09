@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class EditorRecommend implements Serializable {
+public class EditorRecommend extends BaseArticle {
 /*
 {"news_show": {
     "sid": "252369",
@@ -20,8 +20,6 @@ public class EditorRecommend implements Serializable {
     "comments": "23"
 }, "type": "news", "id": "252369", "time": "2013-09-12 09:55:11"}
 */
-    private long sid;
-    private String title;
     private String hometextShowShort;
     private String time;
 
@@ -36,22 +34,6 @@ public class EditorRecommend implements Serializable {
         this.setTitle(newsJSNObject.get("title").toString());
         this.setTime(newsJSNObject.get("time").toString());
         this.setHometextShowShort(newsJSNObject.get("hometext").toString());
-    }
-
-    public long getSid() {
-        return sid;
-    }
-
-    public void setSid(long sid) {
-        this.sid = sid;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getTime() {

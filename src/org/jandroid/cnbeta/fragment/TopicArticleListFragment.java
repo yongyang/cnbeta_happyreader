@@ -260,7 +260,7 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         TopicArticle article = (TopicArticle) getAdapter().getItem(position);
-        Utils.openContentActivity(getActivity(), article.getSid(), article.getTitleShow());
+        Utils.openContentActivity(getActivity(), article, getAllDatas());
     }
 
     @Override

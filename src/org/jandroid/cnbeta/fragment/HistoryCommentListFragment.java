@@ -38,7 +38,7 @@ public class HistoryCommentListFragment extends AbstractAsyncListFragment<Histor
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         HistoryComment comment = (HistoryComment) getAdapter().getItem(position);
-        Utils.openContentActivity(getActivity(), comment.getSid(), comment.getTitle());
+        Utils.openContentActivity(getActivity(), comment, getAllDatas());
     }
 
     @Override
