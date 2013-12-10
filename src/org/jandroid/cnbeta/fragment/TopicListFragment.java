@@ -96,6 +96,7 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.topics, container, false);
         mListView = (GridView) rootView.findViewById(R.id.gridview_topics);
+        emptyView = (TextView)rootView.findViewById(R.id.lv_emptyTextView);
         footerContainer = (LinearLayout) rootView.findViewById(R.id.footer_container);
         return rootView;
     }

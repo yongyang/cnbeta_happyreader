@@ -30,6 +30,7 @@ import org.jandroid.common.FontUtils;
 import org.jandroid.common.async.AsyncResult;
 import org.json.simple.JSONObject;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -391,7 +392,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
 
     public void setCommentClosed() {
         emptyView.setText("评论功能已关闭");
-        clearData();
+        setDatas(Collections.EMPTY_LIST);
     }
 
 }

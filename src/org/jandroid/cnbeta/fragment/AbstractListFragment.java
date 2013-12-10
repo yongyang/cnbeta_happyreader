@@ -115,9 +115,7 @@ public abstract class AbstractListFragment<T> extends ThemeFragment implements A
 
     public synchronized void clearData() {
         datas.clear();
-        emptyView.setVisibility(View.VISIBLE);
-        mListView.setEmptyView(emptyView);
-        getAdapter().notifyDataSetChanged();
+        // just clear data, not notify UI, notify UI after setDatas or appendDatas
     }
 
     public synchronized T getData(int index) {
