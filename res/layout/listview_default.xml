@@ -12,9 +12,9 @@
             />
 
     <TextView
+            android:id="@+id/lv_emptyTextView"
             android:text="没有数据"
             android:textColor="?attr/cnBeta_text_description_gray"
-            android:id="@+id/lv_emptyTextView"
             android:visibility="gone"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:gravity="center"

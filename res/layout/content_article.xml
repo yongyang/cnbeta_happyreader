@@ -206,7 +206,7 @@
                         android:layout_alignParentLeft="true"
                         android:text="&lt;"
                         android:lines="2"
-                        android:gravity="left|center_vertical"
+                        android:gravity="center"
                         />
 
                 <Button
@@ -223,6 +223,15 @@
                         android:layout_toRightOf="@id/leftArrow"/>
 
             </RelativeLayout>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="0dip"
+                    android:textColor="?attr/cnBeta_text_status_gray"
+                    android:text="|"
+                    android:lines="2"
+                    android:gravity="center"/>
+
             <!-- 定义滚动到下一屏的按钮 -->
             <RelativeLayout
                     android:layout_width="match_parent"
@@ -248,7 +257,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="到列表末尾了\n点击关闭"
-                        android:gravity="right|center_vertical"
+                        android:gravity="center"
                         style="?android:attr/buttonBarButtonStyle"
                         android:lines="2"
                         android:ellipsize="end"

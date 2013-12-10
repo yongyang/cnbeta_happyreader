@@ -8,6 +8,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.common.ThemeFragment;
@@ -27,7 +28,7 @@ public abstract class AbstractListFragment<T> extends ThemeFragment implements A
 
     protected AbsListView mListView;
 
-    protected View emptyView;
+    protected TextView emptyView;
 
     protected final List<T> datas = new ArrayList<T>();
 
@@ -61,7 +62,7 @@ public abstract class AbstractListFragment<T> extends ThemeFragment implements A
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.listview_default, container, false);
         mListView = (ListView) rootView.findViewById(R.id.article_listview);
-        emptyView = rootView.findViewById(R.id.lv_emptyTextView);
+        emptyView = (TextView)rootView.findViewById(R.id.lv_emptyTextView);
         return rootView;
     }
 
@@ -114,13 +115,8 @@ public abstract class AbstractListFragment<T> extends ThemeFragment implements A
 
     public synchronized void clearData() {
         datas.clear();
-        if(getAdapter().isEmpty()) { // add empty view if no data
-            emptyView.setVisibility(View.VISIBLE);
-            mListView.setEmptyView(emptyView);
-        }
-        else {
-            emptyView.setVisibility(View.GONE);
-        }
+        emptyView.setVisibility(View.VISIBLE);
+        mListView.setEmptyView(emptyView);
         getAdapter().notifyDataSetChanged();
     }
 

@@ -8,6 +8,7 @@ import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.text.MessageFormat;
@@ -46,8 +47,11 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         // add token and sn
         String token = getToken(responseHTML);
         String sn = getSN(responseHTML);
+        //token用来发起评论相关的请求
         bodyElement.attr("token", token);
         bodyElement.attr("sn", sn);
+        //评论是否关闭
+        bodyElement.attr("cmtClosed", Boolean.toString(checkCommentClosed(document)));
 
         writeDisk(baseDir, bodyElement.outerHtml());
 
@@ -132,6 +136,7 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         contentJSONObject.put("where", whereElement.getElementsByTag("a").isEmpty() ? whereElement.text() : whereElement.getElementsByTag("a").first().text());
         contentJSONObject.put("token", bodyElement.attr("token"));
         contentJSONObject.put("sn", bodyElement.attr("sn"));
+        contentJSONObject.put("cmtClosed", bodyElement.attr("cmtClosed"));
         contentJSONObject.put("sid", getArticleSid());
         contentJSONObject.put("title", titleElement.text());
         contentJSONObject.put("time", dateElement.text());
@@ -183,6 +188,11 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         int length= "88747".length();
         return responseHTML.substring(start, start+length);
 
+    }
+
+    private boolean checkCommentClosed(Element bodyElement){
+        Elements elements = bodyElement.select("img#seccode");
+        return elements.isEmpty();
     }
 
 }

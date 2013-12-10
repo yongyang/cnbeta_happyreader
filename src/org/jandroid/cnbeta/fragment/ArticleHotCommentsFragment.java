@@ -178,6 +178,11 @@ public class ArticleHotCommentsFragment extends AbstractListFragment<Comment> {
         super.onStart();
     }
 
+    public void setCommentClosed() {
+        emptyView.setText("评论功能已关闭");
+        clearData();
+    }
+
     private void supportComment(final LinearLayout supportLinearLayout, final TextView supportTextView, final TextView scoreTextView, final Comment comment, final boolean isSupport) {
         ((BaseActivity) getActivity()).executeAsyncTaskMultiThreading(new SupportCommentAsyncTask() {
             @Override

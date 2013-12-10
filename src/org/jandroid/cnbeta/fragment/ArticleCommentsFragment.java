@@ -339,11 +339,9 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
 
     // return parent position or self position
     private int getParentPosition(int position, long parentId) {
-        int parentPos = position;
         int index = position;
         while (index < getDataSize()) {
             if (getData(index).getTid() == parentId) {
-                parentPos = index;
                 break;
             }
             index++;
@@ -389,6 +387,11 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
     public void onResume() {
         super.onResume();
         updateTypeFace(footerPagingView.getRootView());
+    }
+
+    public void setCommentClosed() {
+        emptyView.setText("评论功能已关闭");
+        clearData();
     }
 
 }

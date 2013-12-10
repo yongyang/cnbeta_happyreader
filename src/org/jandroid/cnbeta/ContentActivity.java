@@ -106,7 +106,12 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
                     reload(); // will reload comments, and update comment Numbers
                     break;
                 case R.id.comment_item:
-                    Utils.openPublishCommentActivityForResult(this, getContent().getSid());
+                    if(getContent().isCommentClosed()) {
+                        ToastUtils.showShortToast(ContentActivity.this, "评论功能已关闭");
+                    }
+                    else {
+                        Utils.openPublishCommentActivityForResult(this, getContent().getSid());
+                    }
                     break;
             }
         }
@@ -210,9 +215,13 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
     }
 
     public void goArticle(BaseArticle article){
-        Utils.openContentActivity(this, article, articleList);
+        Utils.openContentActivity(this, article, new ArrayList<BaseArticle>(articleList));
         this.finish();
         this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
+    public void setCommentClosed() {
+        commentsFragment.setCommentClosed();
+        hotCommentsFragment.setCommentClosed();
+    }
 }

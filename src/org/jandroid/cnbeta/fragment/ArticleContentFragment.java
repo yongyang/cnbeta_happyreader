@@ -277,13 +277,18 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 loaded = true;
-                navigationBar.setVisibility(View.VISIBLE);
                 contentWebView.setVisibility(View.VISIBLE);
                 progressBarLayout.setVisibility(View.GONE);
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        navigationBar.setVisibility(View.VISIBLE);
+                    }
+                }, 200);
 
                 //Stat to load comments and view_num, comment_num etc
                 //!!!NOTE: this is the best point to start to load comments, after content page loaded
-                if (reloadComments) { // don't reload comment onResume's loadDataUrl
+
+                if(!content.isCommentClosed() && reloadComments) { // 评论未关闭，// don't reload comment onResume's loadDataUrl
                     handler.post(new Runnable() {
                         public void run() {
                             if (theActivity != null) { // in case activity finished
@@ -397,16 +402,6 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        if (contentWebView != null) {
-            //NOTE!!! This will pause all WebView, and then the ImageViewerActivity can NOT load image
-//            contentWebView.pauseTimers();
-            contentWebView.onPause();
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         ContentActivity contentActivity = ((ContentActivity) theActivity);
@@ -424,14 +419,12 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
             }
 
             if (contentWebView != null) {
-                contentWebView.resumeTimers();
-                contentWebView.onResume();
                 FontUtils.updateTextSize(contentActivity, contentWebView, R.dimen.webview_default_text_size, fontSizeOffset);
 
                 //判断字体是否有变动，才重新加载 webview
                 if (contentActivity.isFontChanged() && loaded) {
                     this.reloadComments = false;
-                    contentWebView.loadDataWithBaseURL(null, getStyledHTMLContent(content), "text/html", "UTF-8", "about:blank");
+                    contentWebView.loadDataWithBaseURL("http://www.cnbeta.com", getStyledHTMLContent(content), "text/html", "UTF-8", "about:blank");
                 }
             }
         }
@@ -450,7 +443,6 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
             // javascript, etc) is a very big mess.
             // The following steps are to counter most of the issues seen on
             // internals still going on after the webview is destroyed.
-            contentWebView.pauseTimers();
             contentWebView.stopLoading();
             contentWebView.clearCache(true);
             contentWebView.clearHistory();
@@ -531,9 +523,16 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
                 titleTextView.setSelected(true);
                 timeTextView.setText(content.getTime());
                 whereTextView.setText(content.getWhere());
-                contentWebView.loadDataWithBaseURL(null, getStyledHTMLContent(content), "text/html", "UTF-8", "about:blank");
+
+                if(content.isCommentClosed()) {
+                    ContentActivity contentActivity = ((ContentActivity) theActivity);
+                    contentActivity.setCommentClosed();
+                }
+
+                contentWebView.loadDataWithBaseURL("http://www.cnbeta.com", getStyledHTMLContent(content), "text/html", "UTF-8", "about:blank");
             }
         });
+
     }
 
     private String getStyledHTMLContent(Content content) {

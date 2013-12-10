@@ -32,7 +32,9 @@ public class Content implements Serializable {
 
     // 重新 format 之后的 html 内容
     private String content;
-    
+
+    private boolean isCommentClosed = false;
+
     public Content(Map<String, Object> jsonObject) {
         parseJSON(jsonObject);
     }
@@ -45,6 +47,7 @@ public class Content implements Serializable {
         setWhere(jsonObject.get("where").toString());
         setContent(jsonObject.get("content").toString());
         setToken(jsonObject.get("token").toString());
+        setCommentClosed(Boolean.valueOf(jsonObject.get("cmtClosed").toString()));
     }
 
     public long getSid() {
@@ -135,5 +138,13 @@ public class Content implements Serializable {
 
     public void setJoinNum(int joinNum) {
         this.joinNum = joinNum;
+    }
+
+    public boolean isCommentClosed() {
+        return isCommentClosed;
+    }
+
+    public void setCommentClosed(boolean isCommentClosed) {
+        this.isCommentClosed = isCommentClosed;
     }
 }
