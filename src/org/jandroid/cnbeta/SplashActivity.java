@@ -41,7 +41,7 @@ public class SplashActivity extends BaseActivity {
             case WAP:
             case NONE:
             default:
-                ToastUtils.showShortToast(this, "无法连接网络，只能访问离线数据");
+                ToastUtils.showShortToast(this, "无法连接网络，访问离线数据");
 //                infoTextView.setText("无法连接网络，只能访问本地数据");
         }
 
@@ -61,7 +61,7 @@ public class SplashActivity extends BaseActivity {
             public void run() {
                 startMainActivity();
             }
-        }, 3000);
+        }, 2000);
    	}
 
    	private void startMainActivity() {
