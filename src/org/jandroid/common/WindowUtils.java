@@ -42,12 +42,13 @@ public class WindowUtils {
 
         View maskView = new TextView(activity);
         maskView.setBackgroundColor(bgColor);
+
         mWindowManager.addView(maskView, lp);
         return maskView;
     }
 
     public static void removeMaskView(Activity activity, View maskView) {
         WindowManager mWindowManager = SystemUtils.getWindowManager(activity);
-        mWindowManager.removeView(maskView);
+        mWindowManager.removeViewImmediate(maskView);
     }
 }

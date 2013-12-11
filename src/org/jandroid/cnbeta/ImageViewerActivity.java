@@ -1,5 +1,6 @@
 package org.jandroid.cnbeta;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.Menu;
@@ -10,23 +11,25 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageButton;
 import org.jandroid.cnbeta.loader.ImageBytesLoader;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.JavaScriptObject;
 import org.jandroid.common.ThemeActivity;
+import org.jandroid.common.WindowUtils;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
 public class ImageViewerActivity extends CnBetaThemeActivity {
 
-    private ViewGroup rootContainer;
     private WebView imageWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.image_viewer);
+        this.setFinishOnTouchOutside(true);
 
         byte[] _imageData = {};
         String imageSrc = getIntent().getExtras().getString("src");
@@ -37,10 +40,9 @@ public class ImageViewerActivity extends CnBetaThemeActivity {
             logger.e(e.toString());
         }
         final byte[] imageData = _imageData;
-        rootContainer = (ViewGroup) findViewById(R.id.imageviewer_container);
 
         //右上角的关闭按钮
-        Button closeButton = (Button)findViewById(R.id.closeButton);
+        ImageButton closeButton = (ImageButton)findViewById(R.id.closeButton);
         closeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 finish();
@@ -72,47 +74,23 @@ public class ImageViewerActivity extends CnBetaThemeActivity {
 
     public void updateImage(final String id, final byte[] imageData) {
         // 在android代码中调用javaScript方法
-        handler.postDelayed(new Runnable() {
+        handler.post(new Runnable() {
             public void run() {
                 final String image64 = Base64.encodeToString(imageData, Base64.NO_WRAP);
                 //        imageData = "file://" + ((CnBetaApplication)getActivity().getApplicationContext()).getBaseDir().getAbsolutePath()+"/" + imageData;
-                imageWebView.loadUrl("javascript:(function(){" +
-                        "var img = document.getElementById('" + id + "');"
-                        + "img.src='data:image/*;base64," + image64 + "';" +
-                        "})()");
+
+                String javascript = "(function(){" +
+                                        "var img = document.getElementById('" + id + "');"
+                                        + "img.src='data:image/*;base64," + image64 + "';" +
+                                        "})()";
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { // 19之前用loadUrl调用 javascript
+                    imageWebView.evaluateJavascript(javascript, null);
+                }
+                else {
+                    imageWebView.loadUrl("javascript:" + javascript);
+                }
             }
-        }, 200);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (imageWebView != null) {
-            imageWebView.onPause();
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (imageWebView != null) {
-            imageWebView.onResume();
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(imageWebView != null) {
-            imageWebView.stopLoading();
-            imageWebView.clearCache(true);
-            imageWebView.clearHistory();
-            imageWebView.clearView();
-            imageWebView.freeMemory();
-            imageWebView.destroy();
-            imageWebView = null;
-        }
-        rootContainer.removeAllViews();
+        });
     }
 
     @Override
@@ -125,4 +103,15 @@ public class ImageViewerActivity extends CnBetaThemeActivity {
         return true; // no optionsMenu
 //        return super.onCreateOptionsMenu(menu);
     }
+
+    @Override
+    public int getDarkThemeId() {
+        return R.style.Theme_Dialog_cnBeta_Dark;
+    }
+
+    @Override
+    public int getLightThemeId() {
+        return R.style.Theme_Dialog_cnBeta_Light;
+    }
+
 }

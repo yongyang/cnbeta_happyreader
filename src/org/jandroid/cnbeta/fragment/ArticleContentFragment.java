@@ -3,6 +3,7 @@ package org.jandroid.cnbeta.fragment;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.test.UiThreadTest;
 import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -11,7 +12,9 @@ import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
+import android.webkit.MimeTypeMap;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -20,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import org.apache.commons.io.FilenameUtils;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
@@ -215,6 +219,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
         contentWebView.getSettings().setBuiltInZoomControls(true);
         contentWebView.getSettings().setDisplayZoomControls(false); // but won't display the zoom buttons
         contentWebView.getSettings().setLoadWithOverviewMode(true);
+        contentWebView.getSettings().setUseWideViewPort(true);
         contentWebView.getSettings().setAppCacheEnabled(false);
         contentWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         contentWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
@@ -225,11 +230,13 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
         contentWebView.getSettings().setSavePassword(true);
         contentWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 //        contentWebView.getSettings().setUserAgentString("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36");
-        contentWebView.requestFocus();
-        contentWebView.requestLayout();
-
         // resize big image to fit screen width
         contentWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            contentWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
+        }
+        contentWebView.requestFocus();
+        contentWebView.requestLayout();
 
 //        contentWebView.setBackgroundColor(0xeeeeeeee);
 
@@ -238,7 +245,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
             public void openImage(String imgSrc) {
                 //新开一个 Transparent Activity, 使用 WebView 打开大图
                 Utils.openImageViewerActivity(theActivity, imgSrc);
-                //TODO: try to save image first, in case cache cleared, WONT_FIX
+                //TODO: try to save image first, in case cache cleaned, WONT_FIX
             }
 
             @JavascriptInterface
@@ -251,10 +258,10 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
 
         contentWebView.setWebViewClient(new WebViewClient() {
 
-/*
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
                 //NOTE!!!! 过滤掉这些 url，来自优酷视频，可以去掉广告
+/*
                 if (url.contains("atm.youku.com")
                         || url.contains("stat.youku.com")
                         || url.contains("log.ykimg.com")
@@ -263,10 +270,9 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
                         ) {
                     return new WebResourceResponse("text/plain", "UTF-8", new ByteArrayInputStream("".getBytes()));
                 }
-
+*/
                 return super.shouldInterceptRequest(view, url);
             }
-*/
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -330,13 +336,14 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
                 logger.e("ERROR: " + errorCode + ", " + description + ", " + failingUrl);
 //                ToastUtils.showShortToast(theActivity, "ERROR: " + errorCode + ", " + description + ", " + failingUrl);
             }
+
         });
 
         // 处理消息 和 Alert
         contentWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage cm) {
-                logger.d("onConsoleMessage" + cm.message() + " -- line " + cm.lineNumber() + " of " + cm.sourceId());
+                logger.d("onConsoleMessage: " + cm.message() + " -- line " + cm.lineNumber() + " of " + cm.sourceId());
                 return true;
             }
 
@@ -376,26 +383,24 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
     }
 
 
-    public void updateImage(final String id, final byte[] imageData) {
+    public void updateImage(final String id, final String mimeType, final byte[] imageData) {
         // 在android代码中调用javaScript方法
         handler.post(new Runnable() {
             public void run() {
                 final String image64 = Base64.encodeToString(imageData, Base64.NO_WRAP);
                 //        imageData = "file://" + ((CnBetaApplication)theActivity.getApplicationContext()).getBaseDir().getAbsolutePath()+"/" + imageData;
                 if (contentWebView != null) {
-                    if(Build.VERSION.SDK_INT < 19) { // 19之前用loadUrl调用 javascript
-                        contentWebView.loadUrl("javascript:(function(){" +
-                                "var img = document.getElementById('" + id + "');"
-                                + "img.src='data:image/*;base64," + image64 + "';" +
-                                "})()");
+
+                    String javascript = "(function(){" +
+                                                    "var img = document.getElementById('" + id + "');"
+                                                    + "img.src='data:" + mimeType + ";base64," + image64 + "';" +
+                                                    "})()";
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { // 19之前用loadUrl调用 javascript
+                        contentWebView.evaluateJavascript(javascript, null);
                     }
                     else {
-                        contentWebView.evaluateJavascript("function(){" +
-                                "var img = document.getElementById('" + id + "');"
-                                + "img.src='data:image/*;base64," + image64 + "';" +
-                                "}", null);
+                        contentWebView.loadUrl("javascript:" + javascript);
                     }
-
                 }
             }
         });
@@ -537,8 +542,10 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
 
     private String getStyledHTMLContent(Content content) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<html><head><style type=\"text/css\">");
-
+        sb.append("<html><head>" +
+                "<meta name=\"viewport\" content=\"width=device-width\"/>" +
+                "<style type=\"text/css\">" +
+                "img{max-width: 100%; width:auto; height: auto;}"); //自动调节图像的宽度
 //        设置 introduction 前景 背景色
         ContentActivity contentActivity = ((ContentActivity) theActivity);
         if (contentActivity != null) {
@@ -601,9 +608,10 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
                     }
 
                     public void onSuccess(AsyncResult<byte[]> asyncResult) {
+                        String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(imgSrc));
                         String id = Base64.encodeToString(imgSrc.getBytes(), Base64.NO_WRAP);
                         //update image in WebView by javascript
-                        updateImage(id, asyncResult.getResult());
+                        updateImage(id, mimeType, asyncResult.getResult());
                     }
 
                     public void onFailure(AsyncResult<byte[]> asyncResult) {

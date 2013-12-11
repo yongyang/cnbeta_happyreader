@@ -137,14 +137,14 @@ public class Utils {
 
     public static void openPublishCommentActivityForResult(Activity theActivity, long sid) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable("sid", sid);
+        bundle.putLong("sid", sid);
         Intent intent = IntentUtils.newIntent(theActivity, PublishCommentActivity.class, bundle);
         theActivity.startActivityForResult(intent, 0);
     }
 
     public static void openReplyCommentActivityForResult(Activity theActivity, Comment comment) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable("sid", comment.getSid());
+        bundle.putLong("sid", comment.getSid());
         bundle.putSerializable("comment", comment);
         Intent intent = IntentUtils.newIntent(theActivity, ReplyCommentActivity.class, bundle);
         theActivity.startActivityForResult(intent, 0);

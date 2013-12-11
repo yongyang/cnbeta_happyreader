@@ -143,14 +143,14 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         //NOTE: viewNum, commentNum will be set by ArticleCommentsLoader
 
         //NOTE: parse images in content before load
-        List<String> images = new ArrayList<String>();
+        List<String> imageSrcs = new ArrayList<String>();
 
         //content img 处理
         for(Element imgElement : contentElement.select("section.article_content").first().getElementsByTag("img")) {
 
             // 取出原始的 img src, 交给 ImageLoader去异步加载
             String imgSrc = imgElement.attr("src");
-            images.add(imgSrc);
+            imageSrcs.add(imgSrc);
             //设置id， ImageLoader根据 id 来更新图片
             imgElement.attr("id", Base64.encodeToString(imgSrc.getBytes(), Base64.NO_WRAP));
             //设置一个默认图片
@@ -171,7 +171,7 @@ public class ArticleContentLoader extends AbstractLoader<Content> {
         //必须最后设置 content，以保证img src 已经修改
         contentJSONObject.put("content", contentElement.outerHtml());
         Content content =  new Content(contentJSONObject);
-        content.setImages(images);
+        content.setImages(imageSrcs);
         return content;
     }
 

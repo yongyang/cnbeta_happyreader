@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-
+    <color name="transparent">#00000000</color>
     <color name="black">#ff000000</color>
     <color name="white">#ffffffff</color>
     <color name="red">#ffff0000</color>
@@ -82,7 +82,7 @@
     <item type="color" name="abs__bright_foreground_inverse_holo_dark">@color/abs__bright_foreground_holo_light</item>
     <item type="color" name="abs__bright_foreground_inverse_holo_light">@color/abs__bright_foreground_holo_dark</item>
     <color name="abs__holo_blue_light">#ff33b5e5</color>
-    <color name="transparent">#00000000</color>
+
     <color name="text_num_gray">#ff333333</color>
     <color name="dialog_title_blue">#ff9cccf7</color>
     <color name="lib_possible_result_points">#c0ffff00</color>

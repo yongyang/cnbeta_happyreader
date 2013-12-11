@@ -188,16 +188,6 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
         return contentFragment.getContent();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
     public BaseArticle getPreviousArticle() {
         int i = articleList.indexOf(article);
         if(i>0) {

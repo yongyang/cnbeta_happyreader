@@ -36,15 +36,11 @@ public abstract class ThemeActivity extends BaseActivity {
 
     protected void onThemeChanged() {
         logger.d("onThemeChanged");
-/*
-        finish();
-        overridePendingTransition(0, 0);
-        Intent intent = new Intent(this, this.getClass());
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-*/
-        recreate();
+        handler.post(new Runnable() {
+            public void run() {
+                recreate();
+            }
+        });
     }
 
     @Override
@@ -64,25 +60,36 @@ public abstract class ThemeActivity extends BaseActivity {
         super.onResume();
         // update theme when changed, will call recreate
         if (isThemeChanged()) {
-            recreate();
-        }
 
+            // user handler.post to ensure recreate after resume finished
+            handler.post(new Runnable() {
+                public void run() {
+                    recreate();
+                }
+            });
+
+        }
         updateMaskView();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        // now syncfont, now isFontChanged return false
+        // now syncfont, then isFontChanged return false, font should have been updated in onResume
         syncFont();
     }
 
     protected void onStop() {
         super.onStop();
-        if (maskView != null) {
-            WindowUtils.removeMaskView(this, maskView);
-            maskView = null;
-        }
+        //在stop或者destroy的时候，一定要调用，否则可以内存溢出
+//        removeMaskView();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //在stop或者destroy的时候，一定要调用，否则可以内存溢出
+        removeMaskView();
     }
 
     protected void syncThemeId() {
@@ -107,14 +114,14 @@ public abstract class ThemeActivity extends BaseActivity {
         // if isEyeFriendlyModeEnable
         if (isMaskViewEnabled()) {
             if (this.maskView != null) {
-                if(((ColorDrawable)maskView.getBackground()).getColor() != getMaskViewBackgroundColor()) {
-                // maskView bg color changed, re-add
+                if (((ColorDrawable) maskView.getBackground()).getColor() != getMaskViewBackgroundColor()) {
+                    // maskView bg color changed, re-add
                     WindowUtils.removeMaskView(this, maskView);
                     maskView = null;
                     this.maskView = WindowUtils.addMaskView(this, getMaskViewBackgroundColor());
                 }
             }
-           else {
+            else {
                 this.maskView = WindowUtils.addMaskView(this, getMaskViewBackgroundColor());
             }
         }
@@ -123,6 +130,13 @@ public abstract class ThemeActivity extends BaseActivity {
                 WindowUtils.removeMaskView(this, maskView);
                 maskView = null;
             }
+        }
+    }
+
+    public void removeMaskView() {
+        if (maskView != null) {
+            WindowUtils.removeMaskView(this, maskView);
+            maskView = null;
         }
     }
 
@@ -137,7 +151,6 @@ public abstract class ThemeActivity extends BaseActivity {
     public void setThemeId(int themeId) {
         this.themeId = themeId;
     }
-
 
     public void updateTextSize(TextView textView, int dimResourceId) {
         FontUtils.updateTextSize(this, textView, dimResourceId, getFontSizeOffset());
@@ -154,9 +167,8 @@ public abstract class ThemeActivity extends BaseActivity {
 
     public void updateTypeFace(View rootView) {
         Typeface typeface = FontUtils.loadTypeface(this, this.getPrefsFontPath());
-        if(typeface != null) {
+        if (typeface != null) {
             FontUtils.updateFont(rootView, typeface);
         }
     }
-
 }

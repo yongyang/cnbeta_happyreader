@@ -6,7 +6,7 @@
 
     <uses-sdk
             android:minSdkVersion="14"
-            android:targetSdkVersion="18"/>
+            android:targetSdkVersion="19"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -66,10 +66,8 @@
                 android:launchMode="singleTask"/>
         <activity
                 android:name=".ImageViewerActivity"
-                android:launchMode="singleTask"
                 android:theme="@style/Theme_Dialog_cnBeta_Light"
                 android:configChanges="orientation|screenSize|layoutDirection"
-                android:hardwareAccelerated="true"
                 />
         <!--android:launchMode="singleTask" startActivityForResult不能是 singleTask singleInstance-->
         <activity
