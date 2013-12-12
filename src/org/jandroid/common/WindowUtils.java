@@ -21,10 +21,10 @@ import static android.view.WindowManager.LayoutParams;
 public class WindowUtils {
 
     public static View addMaskView(Activity activity) {
-        return addMaskView(activity, 0x70000000);
+        return addMaskView(activity, 0x50000000);
     }
 
-    // 0x70000000
+    // 0x50000000
     public static View addMaskView(Activity activity, String hexBgColor) {
         return addMaskView(activity, NumberUtils.hexColor2Int(hexBgColor));
     }

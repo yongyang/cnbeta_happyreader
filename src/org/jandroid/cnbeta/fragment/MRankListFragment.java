@@ -98,6 +98,7 @@ public class MRankListFragment extends AbstractAsyncListFragment<MRankArticle> {
                 tvRank.setText(rank + ". ");
                 TextView tvTitle = (TextView) convertView.findViewById(R.id.title);
                 tvTitle.setText(article.getTitle());
+                checkRead(article, tvTitle);
 
                 int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
                 FontUtils.updateTextSize(getActivity(), tvRank, R.dimen.listitem_rank_no_text_size, fontSizeOffset);

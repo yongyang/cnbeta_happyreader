@@ -25,40 +25,20 @@ public class FontUtils {
     private static String lastFont = "default";
     private static Typeface lastTypeface;
 
-    public static TTFParser parseFontFile(File file) throws IOException {
-        TTFParser parser = new TTFParser();
-        parser.parse(file);
-        return parser;
-    }
 
-    public static Typeface loadTypeface(Activity activity, String fontPath) {
-        //默认字体
-        if(fontPath == null || fontPath.isEmpty() || fontPath.equals("default")){
-            return Typeface.DEFAULT;
+    public static void italicFont(final View root) {
+        if (root instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup)root).getChildCount(); i++) {
+                View v = ((ViewGroup)root).getChildAt(i);
+                italicFont(v);
+            }
         }
         else {
-            try {
-                if (!fontPath.equals(lastFont)) {
-                    Typeface typeface;
-                    if (fontPath.contains("/android_asset/")) {
-                        typeface = Typeface.createFromAsset(activity.getAssets(), fontPath.substring("file:///android_asset/".length()));
-                    }
-                    else {
-                        typeface = Typeface.createFromFile(new File(fontPath.substring("file://".length())));
-                    }
-                    lastFont = fontPath;
-                    lastTypeface = typeface;
-
-                }
-                return lastTypeface;
-            }
-            catch (Exception e) {
-                ToastUtils.showShortToast(activity, "读取字体时发生异常, " + e.toString());
-                return null;
+            if(root instanceof TextView) {
+                ((TextView)root).getPaint().setTextSkewX(-0.20f);
             }
         }
     }
-
 
     public static void updateFont(final View root, final Typeface typeface) {
         if(typeface == null) return;
@@ -93,6 +73,41 @@ public class FontUtils {
     public static void updateText(Context theContext, TextView textView, int dimResourceId, int spOffsetSize, Typeface typeface) {
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, PixelUtils.pixelsToSp(theContext, theContext.getResources().getDimension(dimResourceId)) + spOffsetSize);
         updateFont(textView, typeface);
+    }
+
+
+    public static TTFParser parseFontFile(File file) throws IOException {
+        TTFParser parser = new TTFParser();
+        parser.parse(file);
+        return parser;
+    }
+
+    public static Typeface loadTypeface(Activity activity, String fontPath) {
+        //默认字体
+        if(fontPath == null || fontPath.isEmpty() || fontPath.equals("default")){
+            return Typeface.DEFAULT;
+        }
+        else {
+            try {
+                if (!fontPath.equals(lastFont)) {
+                    Typeface typeface;
+                    if (fontPath.contains("/android_asset/")) {
+                        typeface = Typeface.createFromAsset(activity.getAssets(), fontPath.substring("file:///android_asset/".length()));
+                    }
+                    else {
+                        typeface = Typeface.createFromFile(new File(fontPath.substring("file://".length())));
+                    }
+                    lastFont = fontPath;
+                    lastTypeface = typeface;
+
+                }
+                return lastTypeface;
+            }
+            catch (Exception e) {
+                ToastUtils.showShortToast(activity, "读取字体时发生异常, " + e.toString());
+                return null;
+            }
+        }
     }
 
 

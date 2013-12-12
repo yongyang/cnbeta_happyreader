@@ -31,7 +31,7 @@ public abstract class ThemeActivity extends BaseActivity {
     protected abstract boolean isMaskViewEnabled();
 
     protected int getMaskViewBackgroundColor() {
-        return 0x70000000;
+        return 0x50000000;
     }
 
     protected void onThemeChanged() {

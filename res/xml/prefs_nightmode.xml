@@ -10,7 +10,7 @@
                 android:dialogTitle="选择亮度级别"
                 android:entries="@array/brightNameArray"
                 android:entryValues="@array/brightValueArray"
-                android:defaultValue="default"
+                android:defaultValue="0x50000000"
                 />
     </PreferenceCategory>
 </PreferenceScreen>

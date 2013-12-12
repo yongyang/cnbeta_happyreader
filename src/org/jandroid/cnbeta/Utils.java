@@ -50,6 +50,10 @@ public class Utils {
                 historyArticle.setTitle(article.getTitle());
                 historyArticle.setDate(DateFormatUtils.getDefault().format(new Date()));
                 try {
+                    //write to application immediately
+                    CnBetaApplication application = (CnBetaApplication)theActivity.getApplication();
+                    application.addHistoryArticle(historyArticle);
+                    // write to disk
                     new HistoryArticleListLoader().writeHistory(((CnBetaApplicationContext) theActivity.getApplicationContext()).getHistoryDir(), historyArticle);
                 }
                 catch (final Exception e) {
@@ -81,6 +85,10 @@ public class Utils {
                 historyArticle.setTitle(title);
                 historyArticle.setDate(DateFormatUtils.getDefault().format(new Date()));
                 try {
+                    //write to application immediately
+                    CnBetaApplication application = (CnBetaApplication)theActivity.getApplication();
+                    application.addHistoryArticle(historyArticle);
+                    // write to disk
                     new HistoryArticleListLoader().writeHistory(((CnBetaApplicationContext) theActivity.getApplicationContext()).getHistoryDir(), historyArticle);
                 }
                 catch (final Exception e) {

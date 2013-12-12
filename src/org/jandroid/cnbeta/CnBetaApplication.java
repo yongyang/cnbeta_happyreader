@@ -6,6 +6,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.view.MenuItem;
 import org.apache.commons.io.FileUtils;
+import org.jandroid.cnbeta.entity.BaseArticle;
+import org.jandroid.cnbeta.entity.HistoryArticle;
 import org.jandroid.common.EnvironmentUtils;
 import org.jandroid.common.Logger;
 import org.jandroid.common.ToastUtils;
@@ -13,6 +15,8 @@ import org.jandroid.common.ToastUtils;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -29,6 +33,8 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     private PrefsObject cnBetaPreferences;
 
     private boolean isDarkThemeEnabled = false;
+
+    private Set<Long> readArticleSids = new HashSet<Long>();
 
     @Override
     public void onCreate() {
@@ -212,5 +218,17 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
 
     public void setDarkThemeEnabled(boolean isDarkThemeEnabled) {
         this.isDarkThemeEnabled = isDarkThemeEnabled;
+    }
+
+    public void addHistoryArticle(HistoryArticle... historyArticles) {
+        if(historyArticles != null) {
+            for(HistoryArticle historyArticle : historyArticles) {
+                readArticleSids.add(historyArticle.getSid());
+            }
+        }
+    }
+
+    public boolean isArticleRead(long sid) {
+        return readArticleSids.contains(sid);
     }
 }

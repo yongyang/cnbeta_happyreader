@@ -55,7 +55,7 @@ public class PrefsObject {
     }
 
     public String getNightModeBrightness() {
-        return prefs.getString(application.getString(R.string.pref_key_nightmode_brightness), "0x70000000");
+        return prefs.getString(application.getString(R.string.pref_key_nightmode_brightness), "0x50000000");
     }
 
     public int getNightModeBrightnessInteger() {

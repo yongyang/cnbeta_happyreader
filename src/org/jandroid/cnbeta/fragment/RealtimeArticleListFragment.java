@@ -81,6 +81,8 @@ public class RealtimeArticleListFragment extends AbstractAsyncListFragment<Realt
                 RealtimeArticle article = getData(position);
                 TextView tvTitle = (TextView) convertView.findViewById(R.id.title);
                 tvTitle.setText(article.getTitle());
+                checkRead(article, tvTitle);
+
                 TextView tvHometextShowShort2 = (TextView) convertView.findViewById(R.id.hometext_show_short2);
                 tvHometextShowShort2.setText(article.getHometextShowShort2());
                 TextView tvTime = (TextView) convertView.findViewById(R.id.time);

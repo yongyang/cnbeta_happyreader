@@ -49,6 +49,8 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
                 EditorRecommend editorRecommend = getData(position);
                 TextView tvTitle = (TextView) convertView.findViewById(R.id.title);
                 tvTitle.setText(editorRecommend.getTitle());
+                checkRead(editorRecommend, tvTitle);
+
                 TextView tvHomeText = (TextView) convertView.findViewById(R.id.hometext);
                 tvHomeText.setText(editorRecommend.getHometextShowShort());
 

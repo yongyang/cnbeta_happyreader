@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
+import org.jandroid.cnbeta.entity.BaseArticle;
 import org.jandroid.common.ThemeFragment;
 
 import java.text.DateFormat;
@@ -138,4 +139,14 @@ public abstract class AbstractListFragment<T> extends ThemeFragment implements A
     protected abstract BaseAdapter newAdapter();
 
     public abstract void onItemClick(AdapterView<?> parent, View view, int position, long id);
+
+    protected void checkRead(BaseArticle article, TextView textView) {
+        if(getCnBetaApplicationContext().isArticleRead(article.getSid())) {
+            textView.getPaint().setStrikeThruText(true);
+        }
+        else {
+            textView.getPaint().setStrikeThruText(false);
+        }
+    }
+
 }

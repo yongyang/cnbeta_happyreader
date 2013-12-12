@@ -20,8 +20,12 @@ public class AnimateUtils {
      * @param toY    终止y坐标
      */
     public static void move(View v, int startX, int toX, int startY, int toY) {
+        move(v, startX, toX, startY, toY, 2000);
+    }
+
+    public static void move(View v, int startX, int toX, int startY, int toY, int duration) {
         TranslateAnimation animation = new TranslateAnimation(startX, toX, startY, toY);
-        animation.setDuration(5000);
+        animation.setDuration(duration);
         animation.setFillAfter(true);
         v.startAnimation(animation);
     }

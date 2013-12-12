@@ -230,6 +230,8 @@ public class TopicArticleListFragment extends AbstractAsyncListFragment<TopicArt
                 TopicArticle article = getData(position);
                 TextView tvTitleShow = (TextView) convertView.findViewById(R.id.title_show);
                 tvTitleShow.setText(article.getTitleShow());
+                checkRead(article, tvTitleShow);
+
                 TextView tvHometextShowShort2 = (TextView) convertView.findViewById(R.id.hometext_show_short2);
                 tvHometextShowShort2.setText(article.getHometextShowShort2());
                 TextView tvComments = (TextView) convertView.findViewById(R.id.comments);

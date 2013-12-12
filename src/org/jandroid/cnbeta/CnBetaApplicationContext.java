@@ -2,6 +2,8 @@ package org.jandroid.cnbeta;
 
 import android.app.Activity;
 import android.view.MenuItem;
+import org.jandroid.cnbeta.entity.BaseArticle;
+import org.jandroid.cnbeta.entity.HistoryArticle;
 
 import java.io.File;
 
@@ -29,5 +31,9 @@ public interface CnBetaApplicationContext {
     boolean isDarkThemeEnabled();
 
     void setDarkThemeEnabled(boolean enable);
+
+    void addHistoryArticle(HistoryArticle... historyArticles);
+    boolean isArticleRead(long sid);
+
 
 }

@@ -2,7 +2,11 @@ package org.jandroid.cnbeta.fragment;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StrikethroughSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -10,6 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
@@ -18,10 +23,12 @@ import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HasAsyncDelegate;
 import org.jandroid.cnbeta.async.ImageBytesAsyncTask;
 import org.jandroid.cnbeta.entity.Article;
+import org.jandroid.cnbeta.entity.BaseArticle;
 import org.jandroid.cnbeta.loader.AbstractListLoader;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.BaseActivity;
+import org.jandroid.common.FontUtils;
 import org.jandroid.common.adapter.AsyncImageAdapter;
 import org.jandroid.common.async.AsyncResult;
 
@@ -199,6 +206,8 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
                 Article article = getData(position);
                 TextView tvTitleShow = (TextView) convertView.findViewById(R.id.title_show);
                 tvTitleShow.setText(article.getTitleShow());
+                checkRead(article, tvTitleShow);
+
                 TextView tvHometextShowShort = (TextView) convertView.findViewById(R.id.hometext);
                 tvHometextShowShort.setText(article.getHometextShowShort());
                 TextView tvComments = (TextView) convertView.findViewById(R.id.comments);
