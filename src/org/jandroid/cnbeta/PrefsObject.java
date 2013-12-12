@@ -3,32 +3,27 @@ package org.jandroid.cnbeta;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
-import org.jandroid.common.FontUtils;
 import org.jandroid.common.NumberUtils;
-import org.jandroid.common.ToastUtils;
-
-import java.io.File;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-public class CnBetaPreferences {
+public class PrefsObject {
 
     private Application application;
     private SharedPreferences prefs;
 
 
-    private static CnBetaPreferences instance;
+    private static PrefsObject instance;
 
-    private CnBetaPreferences(Application application) {
+    private PrefsObject(Application application) {
         this.application = application;
         prefs = application.getSharedPreferences(application.getPackageName() + "_preferences", Context.MODE_PRIVATE);
     }
 
-    public synchronized static CnBetaPreferences getInstance(Application application) {
+    public synchronized static PrefsObject getInstance(Application application) {
         if (instance == null) {
-            instance = new CnBetaPreferences(application);
+            instance = new PrefsObject(application);
         }
         return instance;
     }
@@ -67,4 +62,11 @@ public class CnBetaPreferences {
         return NumberUtils.hexColor2Int(getNightModeBrightness());
     }
 
+    public boolean isImageEnabledOnPhoneNetwork() {
+        return prefs.getBoolean(application.getString(R.string.pref_key_enableImageOnMobileNetwork), true);
+    }
+
+    public boolean isPluginEnabledOnPhoneNetwork() {
+        return prefs.getBoolean(application.getString(R.string.pref_key_enablePluginOnMobileNetwork), false);
+    }
 }

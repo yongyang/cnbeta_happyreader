@@ -1,5 +1,6 @@
 package org.jandroid.cnbeta.async;
 
+import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.loader.AbstractLoader;
 import org.jandroid.cnbeta.loader.ImageBytesLoader;
 
@@ -14,6 +15,16 @@ public abstract class ImageBytesAsyncTask extends AbstractLoaderAsyncTask<byte[]
     @Override
     protected boolean isLocalLoadFirst() {
         return true;
+    }
+
+    @Override
+    protected boolean isLocalLoadOnly() {
+        CnBetaApplicationContext applicationContext = getAsyncContext().getCnBetaApplicationContext();
+        //设置了移动网络不加载图片
+        if(applicationContext.isMobileNetworkConnected() && !applicationContext.getCnBetaPreferences().isImageEnabledOnPhoneNetwork()) {
+            return true;
+        }
+        return super.isLocalLoadOnly();
     }
 
     @Override

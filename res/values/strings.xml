@@ -59,6 +59,8 @@
     <string name="pref_key_customFont">customFont</string>
     <string name="pref_key_fontSizeOffset">fontSizeOffset</string>
     <string name="pref_key_signature">signature</string>
+    <string name="pref_key_enableImageOnMobileNetwork">loadImageOnPhoneNetwork</string>
+    <string name="pref_key_enablePluginOnMobileNetwork">enablePluginOnPhoneNetwork</string>
 
     <string name="pref_key_nightmode_brightness">nightModeBrightness</string>
 

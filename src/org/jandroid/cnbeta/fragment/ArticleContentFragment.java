@@ -214,7 +214,12 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
         //支持视频，需安装 Flash Player
         contentWebView.getSettings().setFixedFontFamily("sans");
         contentWebView.getSettings().setFantasyFontFamily("sans");
+
         contentWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
+        CnBetaApplicationContext applicationContext = getCnBetaApplicationContext();
+        if(applicationContext.isMobileNetworkConnected() && !applicationContext.getCnBetaPreferences().isPluginEnabledOnPhoneNetwork()) {
+            contentWebView.getSettings().setPluginState(WebSettings.PluginState.OFF);
+        }
         contentWebView.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY); // no scroll
         contentWebView.getSettings().setBuiltInZoomControls(true);
         contentWebView.getSettings().setDisplayZoomControls(false); // but won't display the zoom buttons
@@ -222,13 +227,9 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
         contentWebView.getSettings().setUseWideViewPort(true);
         contentWebView.getSettings().setAppCacheEnabled(false);
         contentWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        contentWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
         contentWebView.getSettings().setLoadsImagesAutomatically(true);
         contentWebView.getSettings().setBlockNetworkImage(true);
         contentWebView.getSettings().setDefaultTextEncodingName("UTF-8");
-        contentWebView.getSettings().setLightTouchEnabled(true);
-        contentWebView.getSettings().setSavePassword(true);
-        contentWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 //        contentWebView.getSettings().setUserAgentString("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36");
         // resize big image to fit screen width
         contentWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);

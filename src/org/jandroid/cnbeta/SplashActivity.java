@@ -67,4 +67,7 @@ public class SplashActivity extends BaseActivity {
    	private void startMainActivity() {
         Utils.openMainActivity(this);
    	}
+
+    //TODO: 初始化阅读记录，用来给已读文章加颜色
+    //TODO: logo动画
 }

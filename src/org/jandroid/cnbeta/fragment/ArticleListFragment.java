@@ -3,7 +3,6 @@ package org.jandroid.cnbeta.fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -12,19 +11,17 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
-import org.jandroid.cnbeta.CnBetaPreferences;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.ArticleListAsyncTask;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HasAsyncDelegate;
-import org.jandroid.cnbeta.async.ImageAsyncTask;
+import org.jandroid.cnbeta.async.ImageBytesAsyncTask;
 import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.loader.AbstractListLoader;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.BaseActivity;
-import org.jandroid.common.FontUtils;
 import org.jandroid.common.adapter.AsyncImageAdapter;
 import org.jandroid.common.async.AsyncResult;
 
@@ -151,11 +148,11 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
 
             @Override
             protected void loadImageAsync(final String imageUrl, final OnAsyncImageLoadListener onAsyncImageLoadListener) {
-                ((BaseActivity) getActivity()).executeAsyncTaskMultiThreading(new ImageAsyncTask() {
+                ((BaseActivity) getActivity()).executeAsyncTaskMultiThreading(new ImageBytesAsyncTask() {
 
                     @Override
-                    public HasAsync<Bitmap> getAsyncContext() {
-                        return new HasAsync<Bitmap>() {
+                    public HasAsync<byte[]> getAsyncContext() {
+                        return new HasAsync<byte[]>() {
                             public CnBetaApplicationContext getCnBetaApplicationContext() {
                                 return ArticleListFragment.this.getCnBetaApplicationContext();
                             }
@@ -166,12 +163,13 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
                             public void onProgressDismiss() {
                             }
 
-                            public void onFailure(AsyncResult<Bitmap> bitmapAsyncResult) {
+                            public void onFailure(AsyncResult<byte[]> bitmapAsyncResult) {
                                 onAsyncImageLoadListener.onLoadFailed(bitmapAsyncResult.getErrorMsg(), bitmapAsyncResult.getException());
                             }
 
-                            public void onSuccess(AsyncResult<Bitmap> bitmapAsyncResult) {
-                                onAsyncImageLoadListener.onLoaded(bitmapAsyncResult.getResult());
+                            public void onSuccess(AsyncResult<byte[]> bitmapAsyncResult) {
+                                byte[] bytes = bitmapAsyncResult.getResult();
+                                onAsyncImageLoadListener.onLoaded(BitmapFactory.decodeByteArray(bytes, 0 , bytes.length));
                             }
                         };
                     }

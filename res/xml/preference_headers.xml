@@ -3,33 +3,40 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
     <header
             android:fragment=
-                    "org.jandroid.cnbeta.CnBetaPreferenceActivity$PrefsUIFragment"
+                    "org.jandroid.cnbeta.PrefsActivity$PrefsUIFragment"
             android:title="字体设置 "
             android:summary="选择字体，设置字体大小等">
     </header>
 
     <header
             android:fragment=
-                    "org.jandroid.cnbeta.CnBetaPreferenceActivity$PrefsPostFragment"
+                    "org.jandroid.cnbeta.PrefsActivity$PrefsNetworkFragment"
+            android:title="网络设置"
+            android:summary="与网络流量相关的设置">
+    </header>
+
+    <header
+            android:fragment=
+                    "org.jandroid.cnbeta.PrefsActivity$PrefsPostFragment"
             android:title="评论设置 "
             android:summary="设置评论签名档等">
     </header>
 
     <header
             android:fragment=
-                    "org.jandroid.cnbeta.CnBetaPreferenceActivity$PrefsCacheFragment"
+                    "org.jandroid.cnbeta.PrefsActivity$PrefsCacheFragment"
             android:title="缓存设置"
             android:summary="设置与缓存相关的选项及手动清理缓存"/>
     <header
             android:fragment=
-                    "org.jandroid.cnbeta.CnBetaPreferenceActivity$PrefsHistoryFragment"
+                    "org.jandroid.cnbeta.PrefsActivity$PrefsHistoryFragment"
             android:title="历史设置"
             android:summary="设置与历史记录相关的选项及手动清理">
     </header>
 
     <header
             android:fragment=
-                    "org.jandroid.cnbeta.CnBetaPreferenceActivity$PrefsNightModeFragment"
+                    "org.jandroid.cnbeta.PrefsActivity$PrefsNightModeFragment"
             android:title="夜间模式"
             android:summary="设置夜间模式亮度等">
     </header>

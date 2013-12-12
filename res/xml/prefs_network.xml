@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="网络流量设置">
+        <CheckBoxPreference
+                android:key="@string/pref_key_enableImageOnMobileNetwork"
+                android:title="连接手机网络时下载图片"
+                android:summaryOn="当前选项：下载图片"
+                android:summaryOff="当前选项：不下载，已缓存图片仍会显示"
+                android:defaultValue="true"/>
+
+        <CheckBoxPreference
+                android:key="@string/pref_key_enablePluginOnMobileNetwork"
+                android:title="连接手机网络时播放视频"
+                android:summaryOn="当前选项：播放视频"
+                android:summaryOff="当前选项：不播放视频"
+                android:defaultValue="false"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>

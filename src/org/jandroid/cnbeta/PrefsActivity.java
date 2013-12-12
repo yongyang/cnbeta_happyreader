@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CnBetaPreferenceActivity extends PreferenceActivity {
+public class PrefsActivity extends PreferenceActivity {
     private Handler handler = new Handler();
 
     private View maskView;
@@ -101,7 +101,7 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
             Preference button = findPreference(getString(R.string.pref_key_cleanCache));
             button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference arg0) {
-                    ((CnBetaPreferenceActivity)getActivity()).cleanCache();
+                    ((PrefsActivity)getActivity()).cleanCache();
                     return true;
                 }
             });
@@ -134,7 +134,7 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
             Preference brightPref = findPreference(getString(R.string.pref_key_nightmode_brightness));
             brightPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    CnBetaPreferenceActivity prefsActivity = ((CnBetaPreferenceActivity)getActivity());
+                    PrefsActivity prefsActivity = ((PrefsActivity)getActivity());
                     CnBetaApplicationContext applicationContext = prefsActivity.getCnBetaApplicationContext();
                     if(applicationContext.isDarkThemeEnabled()) {
                         if (prefsActivity.maskView != null) {
@@ -145,6 +145,14 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
                     return true;
                 }
             });
+        }
+    }
+
+    public static class PrefsNetworkFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.prefs_network);
         }
     }
 
@@ -266,7 +274,7 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
 
             @Override
             protected void onPreExecute() {
-                ToastUtils.showShortToast(CnBetaPreferenceActivity.this, "正在清除缓存，请稍等...");
+                ToastUtils.showShortToast(PrefsActivity.this, "正在清除缓存，请稍等...");
             }
 
             @Override
@@ -278,10 +286,10 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
             protected void onPostExecute(Boolean aBoolean) {
                 super.onPostExecute(aBoolean);
                 if (aBoolean) {
-                    ToastUtils.showShortToast(CnBetaPreferenceActivity.this, "缓存清除成功！");
+                    ToastUtils.showShortToast(PrefsActivity.this, "缓存清除成功！");
                 }
                 else {
-                    ToastUtils.showShortToast(CnBetaPreferenceActivity.this, "缓存清除失败，请重启软件后重试！");
+                    ToastUtils.showShortToast(PrefsActivity.this, "缓存清除失败，请重启软件后重试！");
                 }
             }
         }.execute();
@@ -293,7 +301,7 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
 
             @Override
             protected void onPreExecute() {
-                ToastUtils.showShortToast(CnBetaPreferenceActivity.this, "正在清除历史记录，请稍等...");
+                ToastUtils.showShortToast(PrefsActivity.this, "正在清除历史记录，请稍等...");
             }
 
             @Override
@@ -305,10 +313,10 @@ public class CnBetaPreferenceActivity extends PreferenceActivity {
             protected void onPostExecute(Boolean aBoolean) {
                 super.onPostExecute(aBoolean);
                 if (aBoolean) {
-                    ToastUtils.showShortToast(CnBetaPreferenceActivity.this, "历史记录清除成功！");
+                    ToastUtils.showShortToast(PrefsActivity.this, "历史记录清除成功！");
                 }
                 else {
-                    ToastUtils.showShortToast(CnBetaPreferenceActivity.this, "历史记录清除失败，请重启软件后重试！");
+                    ToastUtils.showShortToast(PrefsActivity.this, "历史记录清除失败，请重启软件后重试！");
                 }
             }
         }.execute();

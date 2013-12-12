@@ -97,7 +97,7 @@ public class PublishCommentActivity extends CnBetaThemeActivity {
     protected void onResume() {
         super.onResume();
 
-        CnBetaPreferences pref = ((CnBetaApplicationContext)getApplicationContext()).getCnBetaPreferences();
+        PrefsObject pref = ((CnBetaApplicationContext)getApplicationContext()).getCnBetaPreferences();
         FontUtils.updateTextSize(this, commentTextView, R.dimen.listitem_comment_text_size, pref.getFontSizeOffset());
         FontUtils.updateTextSize(this, captchaTextView, R.dimen.listitem_comment_text_size, pref.getFontSizeOffset());
         FontUtils.updateTextSize(this, cancelTextView, R.dimen.listitem_title_text_size, pref.getFontSizeOffset());

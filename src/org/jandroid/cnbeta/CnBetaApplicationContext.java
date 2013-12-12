@@ -2,7 +2,6 @@ package org.jandroid.cnbeta;
 
 import android.app.Activity;
 import android.view.MenuItem;
-import android.view.View;
 
 import java.io.File;
 
@@ -12,6 +11,8 @@ import java.io.File;
 public interface CnBetaApplicationContext {
 
     boolean isNetworkConnected();
+
+    boolean isMobileNetworkConnected();
 
     boolean isSdCardMounted();
 
@@ -23,7 +24,7 @@ public interface CnBetaApplicationContext {
 
     boolean onOptionsItemSelected(Activity theActivity, MenuItem item);
 
-    CnBetaPreferences getCnBetaPreferences();
+    PrefsObject getCnBetaPreferences();
 
     boolean isDarkThemeEnabled();
 

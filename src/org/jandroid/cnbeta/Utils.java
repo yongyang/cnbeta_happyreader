@@ -23,7 +23,6 @@ import org.jandroid.common.autoupdate.AbstractVersionUpdateService;
 import org.jandroid.common.autoupdate.VersionInfo;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -158,7 +157,7 @@ public class Utils {
     }
 
     public static void openPreferenceActivity(Activity theActivity) {
-        Intent intent = IntentUtils.newIntent(theActivity, CnBetaPreferenceActivity.class);
+        Intent intent = IntentUtils.newIntent(theActivity, PrefsActivity.class);
         theActivity.startActivity(intent);
         theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }

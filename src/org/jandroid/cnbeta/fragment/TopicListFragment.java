@@ -13,12 +13,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
-import org.jandroid.cnbeta.CnBetaPreferences;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.TopicActivity;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HasAsyncDelegate;
-import org.jandroid.cnbeta.async.ImageAsyncTask;
+import org.jandroid.cnbeta.async.ImageBytesAsyncTask;
 import org.jandroid.cnbeta.async.TopicListAsyncTask;
 import org.jandroid.cnbeta.entity.Topic;
 import org.jandroid.cnbeta.view.PagingView;
@@ -145,11 +144,11 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
 
             @Override
             protected void loadImageAsync(final String imageUrl, final OnAsyncImageLoadListener onAsyncImageLoadListener) {
-                ((BaseActivity) getActivity()).executeAsyncTaskMultiThreading(new ImageAsyncTask() {
+                ((BaseActivity) getActivity()).executeAsyncTaskMultiThreading(new ImageBytesAsyncTask() {
 
                     @Override
-                    public HasAsync<Bitmap> getAsyncContext() {
-                        return new HasAsync<Bitmap>() {
+                    public HasAsync<byte[]> getAsyncContext() {
+                        return new HasAsync<byte[]>() {
                             public CnBetaApplicationContext getCnBetaApplicationContext() {
                                 return TopicListFragment.this.getCnBetaApplicationContext();
                             }
@@ -160,12 +159,13 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
                             public void onProgressDismiss() {
                             }
 
-                            public void onFailure(AsyncResult<Bitmap> bitmapAsyncResult) {
+                            public void onFailure(AsyncResult<byte[]> bitmapAsyncResult) {
                                 onAsyncImageLoadListener.onLoadFailed(bitmapAsyncResult.getErrorMsg(), bitmapAsyncResult.getException());
                             }
 
-                            public void onSuccess(AsyncResult<Bitmap> bitmapAsyncResult) {
-                                onAsyncImageLoadListener.onLoaded(bitmapAsyncResult.getResult());
+                            public void onSuccess(AsyncResult<byte[]> bitmapAsyncResult) {
+                                byte[] bytes = bitmapAsyncResult.getResult();
+                                onAsyncImageLoadListener.onLoaded(BitmapFactory.decodeByteArray(bytes, 0 , bytes.length));
                             }
                         };
                     }

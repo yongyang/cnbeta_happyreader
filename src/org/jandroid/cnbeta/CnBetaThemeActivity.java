@@ -78,12 +78,12 @@ public abstract class CnBetaThemeActivity extends ThemeActivity {
 
     @Override
     protected String getPrefsFontPath() {
-        return CnBetaPreferences.getInstance(getApplication()).getCustomFont();
+        return PrefsObject.getInstance(getApplication()).getCustomFont();
     }
 
     @Override
     protected int getFontSizeOffset() {
-        return CnBetaPreferences.getInstance(getApplication()).getFontSizeOffset();
+        return PrefsObject.getInstance(getApplication()).getFontSizeOffset();
     }
 
     @Override

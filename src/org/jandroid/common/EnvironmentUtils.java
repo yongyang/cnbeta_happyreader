@@ -63,6 +63,17 @@ public class EnvironmentUtils {
         return !(connectionStatus.equals(ConnectionStatus.NONE) || connectionStatus.equals(ConnectionStatus.WAP));
     }
 
+    public static boolean checkMobileNetworkConnected(Context theContext) {
+        ConnectionStatus connectionStatus = getConnectionStatus(theContext);
+        return connectionStatus.equals(ConnectionStatus.MOBILE);
+    }
+
+
+    public static boolean checkWIFINetworkConnected(Context theContext) {
+        ConnectionStatus connectionStatus = getConnectionStatus(theContext);
+        return connectionStatus.equals(ConnectionStatus.WIFI);
+    }
+
 
     /**
      * 检测sdcard是否可用

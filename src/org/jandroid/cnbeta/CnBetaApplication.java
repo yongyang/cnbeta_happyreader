@@ -5,13 +5,10 @@ import android.app.Application;
 import android.os.Environment;
 import android.os.Handler;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 import org.apache.commons.io.FileUtils;
 import org.jandroid.common.EnvironmentUtils;
 import org.jandroid.common.Logger;
 import org.jandroid.common.ToastUtils;
-import org.jandroid.common.WindowUtils;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -29,14 +26,14 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     //当网络变化时, 要显示 Toast 提示用户
     private boolean hasNetwork = false;
 
-    private CnBetaPreferences cnBetaPreferences;
+    private PrefsObject cnBetaPreferences;
 
     private boolean isDarkThemeEnabled = false;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        cnBetaPreferences = CnBetaPreferences.getInstance(this);
+        cnBetaPreferences = PrefsObject.getInstance(this);
     }
 
     public boolean isNetworkConnected() {
@@ -50,6 +47,11 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         }
         hasNetwork = connected;
         return hasNetwork;
+    }
+
+
+    public boolean isMobileNetworkConnected() {
+        return EnvironmentUtils.checkMobileNetworkConnected(this);
     }
 
     public boolean isSdCardMounted() {
@@ -200,7 +202,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         return FileUtils.deleteQuietly(getFontsDir());
     }
 
-    public CnBetaPreferences getCnBetaPreferences() {
+    public PrefsObject getCnBetaPreferences() {
         return cnBetaPreferences;
     }
 
