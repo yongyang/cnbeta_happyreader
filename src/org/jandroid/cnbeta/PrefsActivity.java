@@ -259,7 +259,7 @@ public class PrefsActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.prefs_post);
             final EditTextPreference sigPreference = (EditTextPreference)findPreference(getString(R.string.pref_key_signature));
-            sigPreference.setSummary("当前签名档: " + ((CnBetaApplication)getActivity().getApplicationContext()).getCnBetaPreferences().getSignature());
+            sigPreference.setSummary("当前签名档: " + ((CnBetaApplication)getActivity().getApplicationContext()).getPrefsObject().getSignature());
             sigPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     sigPreference.setSummary("当前签名档: " + newValue);
@@ -367,7 +367,7 @@ public class PrefsActivity extends PreferenceActivity {
     }
 
     protected int getMaskViewBackgroundColor() {
-        return getCnBetaApplicationContext().getCnBetaPreferences().getNightModeBrightnessInteger();
+        return getCnBetaApplicationContext().getPrefsObject().getNightModeBrightnessInteger();
     }
 
     public CnBetaApplicationContext getCnBetaApplicationContext() {

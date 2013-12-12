@@ -2,7 +2,6 @@ package org.jandroid.cnbeta;
 
 import android.app.ActionBar;
 import android.app.Fragment;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -82,7 +81,7 @@ public abstract class CnBetaActionTabFragmentActivity extends CnBetaThemeActivit
         super.onResume();
 
         // update action tab text font
-        Typeface typeface = FontUtils.loadTypeface(this, ((CnBetaApplicationContext) getApplicationContext()).getCnBetaPreferences().getCustomFont());
+        Typeface typeface = FontUtils.loadTypeface(this, ((CnBetaApplicationContext) getApplicationContext()).getPrefsObject().getCustomFont());
         if(typeface != null) {
             for (int i = 0; i < getActionBar().getTabCount(); i++) {
                 FontUtils.updateFont(getActionBar().getTabAt(i).getCustomView(), typeface);

@@ -35,7 +35,7 @@ public class ReplyCommentActivity extends PublishCommentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        PrefsObject pref = ((CnBetaApplicationContext)getApplicationContext()).getCnBetaPreferences();
+        PrefsObject pref = ((CnBetaApplicationContext)getApplicationContext()).getPrefsObject();
         FontUtils.updateTextSize(this, replyCommentTitleTextView, R.dimen.listitem_comment_text_size, pref.getFontSizeOffset());
     }
 }

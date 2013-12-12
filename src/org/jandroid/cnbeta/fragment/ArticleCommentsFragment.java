@@ -175,7 +175,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                     }
                 }
 
-                int fontSizeOffset = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+                int fontSizeOffset = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getPrefsObject().getFontSizeOffset();
                 FontUtils.updateTextSize(getActivity(), positionTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), nameTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), hostNameTextView, R.dimen.listitem_description_text_size, fontSizeOffset);

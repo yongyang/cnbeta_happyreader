@@ -72,7 +72,7 @@ public class HistoryCommentListFragment extends AbstractAsyncListFragment<Histor
                 TextView dateTextView = (TextView) convertView.findViewById(R.id.date);
                 dateTextView.setText(comment.getDate());
 
-                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getPrefsObject().getFontSizeOffset();
                 FontUtils.updateTextSize(getActivity(), toTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_description_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), tvComment, R.dimen.listitem_description_text_size, fontSizeOffset);

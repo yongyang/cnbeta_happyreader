@@ -66,10 +66,10 @@ public class HistoryArticleListFragment extends AbstractAsyncListFragment<Histor
                 TextView dateTextView = (TextView) convertView.findViewById(R.id.date);
                 dateTextView.setText(article.getDate());
 
-                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getPrefsObject().getFontSizeOffset();
                 FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), dateTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
-                PrefsObject pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences();
+                PrefsObject pref = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getPrefsObject();
 
                 updateTypeFace(convertView);
                 return convertView;

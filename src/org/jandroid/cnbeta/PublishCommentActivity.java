@@ -97,7 +97,7 @@ public class PublishCommentActivity extends CnBetaThemeActivity {
     protected void onResume() {
         super.onResume();
 
-        PrefsObject pref = ((CnBetaApplicationContext)getApplicationContext()).getCnBetaPreferences();
+        PrefsObject pref = ((CnBetaApplicationContext)getApplicationContext()).getPrefsObject();
         FontUtils.updateTextSize(this, commentTextView, R.dimen.listitem_comment_text_size, pref.getFontSizeOffset());
         FontUtils.updateTextSize(this, captchaTextView, R.dimen.listitem_comment_text_size, pref.getFontSizeOffset());
         FontUtils.updateTextSize(this, cancelTextView, R.dimen.listitem_title_text_size, pref.getFontSizeOffset());
@@ -167,7 +167,7 @@ public class PublishCommentActivity extends CnBetaThemeActivity {
             @Override
             protected String getCommentContent() {
                 //签名档
-                String signature = ((CnBetaApplicationContext)getApplicationContext()).getCnBetaPreferences().getSignature();
+                String signature = ((CnBetaApplicationContext)getApplicationContext()).getPrefsObject().getSignature();
                 return signature.isEmpty() ? commentTextView.getText().toString() : commentTextView.getText().toString() + signature;
             }
 

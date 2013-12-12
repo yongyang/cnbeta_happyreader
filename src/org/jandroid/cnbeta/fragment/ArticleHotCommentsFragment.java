@@ -16,21 +16,16 @@ import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
-import org.jandroid.cnbeta.async.ArticleCommentsAsyncTask;
 import org.jandroid.cnbeta.async.HasAsync;
-import org.jandroid.cnbeta.async.HasAsyncDelegate;
 import org.jandroid.cnbeta.async.SupportCommentAsyncTask;
 import org.jandroid.cnbeta.entity.Comment;
-import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.loader.SupportCommentPoster;
-import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.FontUtils;
 import org.jandroid.common.async.AsyncResult;
 import org.json.simple.JSONObject;
 
 import java.util.Collections;
-import java.util.List;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -151,7 +146,7 @@ public class ArticleHotCommentsFragment extends AbstractListFragment<Comment> {
                     parentCommentTextView.setText("");
                 }
 
-                int fontSizeOffset = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+                int fontSizeOffset = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getPrefsObject().getFontSizeOffset();
                 FontUtils.updateTextSize(getActivity(), positionTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), nameTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), hostNameTextView, R.dimen.listitem_description_text_size, fontSizeOffset);

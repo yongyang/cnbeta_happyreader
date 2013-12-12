@@ -21,7 +21,7 @@ public abstract class ImageBytesAsyncTask extends AbstractLoaderAsyncTask<byte[]
     protected boolean isLocalLoadOnly() {
         CnBetaApplicationContext applicationContext = getAsyncContext().getCnBetaApplicationContext();
         //设置了移动网络不加载图片
-        if(applicationContext.isMobileNetworkConnected() && !applicationContext.getCnBetaPreferences().isImageEnabledOnPhoneNetwork()) {
+        if(applicationContext.isMobileNetworkConnected() && !applicationContext.getPrefsObject().isImageEnabledOnPhoneNetwork()) {
             return true;
         }
         return super.isLocalLoadOnly();

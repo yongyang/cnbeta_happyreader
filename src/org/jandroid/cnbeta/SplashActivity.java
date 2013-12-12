@@ -1,18 +1,14 @@
 package org.jandroid.cnbeta;
 
-import android.app.Application;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import org.jandroid.cnbeta.entity.HistoryArticle;
-import org.jandroid.cnbeta.loader.HistoryArticleListLoader;
+import android.widget.ProgressBar;
 import org.jandroid.common.AnimateUtils;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.EnvironmentUtils;
 import org.jandroid.common.ToastUtils;
-
-import java.util.List;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -21,7 +17,8 @@ public class SplashActivity extends BaseActivity {
 
 //    private TextView infoTextView;
 
-    View logoBanner;
+    private View logoBanner;
+    private ProgressBar splashProgressBar;
 
    	@Override
    	protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +29,8 @@ public class SplashActivity extends BaseActivity {
 //        infoTextView = (TextView)findViewById(R.id.infoTextView);
 
         logoBanner = findViewById(R.id.logoBanner);
+        splashProgressBar = (ProgressBar)findViewById(R.id.splashProgressBar);
+        splashProgressBar.setVisibility(View.VISIBLE);
 
         checkEnvironment();
    	}
@@ -67,24 +66,16 @@ public class SplashActivity extends BaseActivity {
 
    	protected void onResume() {
    		super.onResume();
-        AnimateUtils.move(logoBanner, (int)logoBanner.getX(), (int)logoBanner.getX(), (int)logoBanner.getY() - 200, (int)logoBanner.getY(), 1500);
+        AnimateUtils.move(logoBanner, (int)logoBanner.getX(), (int)logoBanner.getX(), (int)logoBanner.getY() - 200, (int)logoBanner.getY(), 1200);
         handler.postDelayed(new Runnable() {
             public void run() {
-                CnBetaApplication application = (CnBetaApplication)getApplication();
-                try {
-                    // add all read history article sid
-                    List<HistoryArticle> historyArticles = new HistoryArticleListLoader().fromDisk(application.getHistoryDir());
-                    application.addHistoryArticle(historyArticles.toArray(new HistoryArticle[historyArticles.size()]));
-                }
-                catch (Exception e) {
-                    ToastUtils.showShortToast(SplashActivity.this, "加载阅读历史失败，请尝试清空历史记录！");
-                }
                 startMainActivity();
             }
         }, 2000);
    	}
 
    	private void startMainActivity() {
+        splashProgressBar.setVisibility(View.GONE);
         Utils.openMainActivity(this);
    	}
 

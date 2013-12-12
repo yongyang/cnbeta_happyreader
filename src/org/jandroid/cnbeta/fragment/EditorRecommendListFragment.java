@@ -57,7 +57,7 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
                 TextView tvTime = (TextView) convertView.findViewById(R.id.time);
                 tvTime.setText(editorRecommend.getTime());
 
-                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getPrefsObject().getFontSizeOffset();
                 FontUtils.updateTextSize(getActivity(), tvTitle, R.dimen.listitem_title_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), tvHomeText, R.dimen.listitem_description_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), tvTime, R.dimen.listitem_status_text_size, fontSizeOffset);

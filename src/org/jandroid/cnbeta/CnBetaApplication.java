@@ -6,8 +6,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.view.MenuItem;
 import org.apache.commons.io.FileUtils;
-import org.jandroid.cnbeta.entity.BaseArticle;
 import org.jandroid.cnbeta.entity.HistoryArticle;
+import org.jandroid.cnbeta.loader.HistoryArticleListLoader;
 import org.jandroid.common.EnvironmentUtils;
 import org.jandroid.common.Logger;
 import org.jandroid.common.ToastUtils;
@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,7 +31,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     //当网络变化时, 要显示 Toast 提示用户
     private boolean hasNetwork = false;
 
-    private PrefsObject cnBetaPreferences;
+    private PrefsObject prefsObject;
 
     private boolean isDarkThemeEnabled = false;
 
@@ -39,7 +40,15 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     @Override
     public void onCreate() {
         super.onCreate();
-        cnBetaPreferences = PrefsObject.getInstance(this);
+        prefsObject = PrefsObject.getInstance(this);
+
+        try {
+            List<HistoryArticle> historyArticles = new HistoryArticleListLoader().fromDisk(this.getHistoryDir());
+            this.addHistoryArticle(historyArticles.toArray(new HistoryArticle[historyArticles.size()]));
+        }
+        catch (Exception e) {
+            ToastUtils.showShortToast(this, "加载阅读历史失败，请尝试清空历史记录！");
+        }
     }
 
     public boolean isNetworkConnected() {
@@ -166,11 +175,11 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     }
 
     public void onExit() {
-        if (cnBetaPreferences.isAutoCleanCache()) {
+        if (prefsObject.isAutoCleanCache()) {
             cleanCache();
         }
 
-        if (cnBetaPreferences.isAutoCleanHistory()) {
+        if (prefsObject.isAutoCleanHistory()) {
             cleanHistory();
         }
 
@@ -208,8 +217,8 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         return FileUtils.deleteQuietly(getFontsDir());
     }
 
-    public PrefsObject getCnBetaPreferences() {
-        return cnBetaPreferences;
+    public PrefsObject getPrefsObject() {
+        return prefsObject;
     }
 
     public boolean isDarkThemeEnabled() {

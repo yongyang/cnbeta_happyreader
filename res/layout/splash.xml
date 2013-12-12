@@ -12,7 +12,7 @@
             android:orientation="vertical"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dip"
+            android:layout_marginTop="20dip"
             android:gravity="center">
         <ImageView
                 android:layout_width="wrap_content"
@@ -37,6 +37,7 @@
             android:gravity="center">
 
         <ProgressBar
+                android:id="@+id/splashProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="?android:progressBarStyleLarge"

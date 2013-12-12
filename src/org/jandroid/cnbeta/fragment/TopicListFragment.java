@@ -200,7 +200,7 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
                 // queue to image load list or set a cached bitmap if has been cached
                 ivLogo.setImageBitmap(queueImageView(position, ivLogo, article.getLogo()));
 
-                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+                int fontSizeOffset = ((CnBetaApplicationContext)getActivity().getApplicationContext()).getPrefsObject().getFontSizeOffset();
                 FontUtils.updateTextSize(getActivity(), tvName, R.dimen.listitem_status_text_size, fontSizeOffset);
 
                 updateTypeFace(convertView);

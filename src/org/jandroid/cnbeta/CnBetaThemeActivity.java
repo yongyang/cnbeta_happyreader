@@ -11,7 +11,6 @@ public abstract class CnBetaThemeActivity extends ThemeActivity {
 
     private Menu optionsMenu;
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -103,6 +102,6 @@ public abstract class CnBetaThemeActivity extends ThemeActivity {
 
     @Override
     protected int getMaskViewBackgroundColor() {
-        return getCnBetaApplicationContext().getCnBetaPreferences().getNightModeBrightnessInteger();
+        return getCnBetaApplicationContext().getPrefsObject().getNightModeBrightnessInteger();
     }
 }

@@ -26,7 +26,7 @@ public interface CnBetaApplicationContext {
 
     boolean onOptionsItemSelected(Activity theActivity, MenuItem item);
 
-    PrefsObject getCnBetaPreferences();
+    PrefsObject getPrefsObject();
 
     boolean isDarkThemeEnabled();
 

@@ -3,7 +3,6 @@ package org.jandroid.cnbeta.fragment;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.test.UiThreadTest;
 import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,7 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import org.apache.commons.io.FilenameUtils;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.ContentActivity;
 import org.jandroid.cnbeta.R;
@@ -217,7 +215,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
 
         contentWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
         CnBetaApplicationContext applicationContext = getCnBetaApplicationContext();
-        if(applicationContext.isMobileNetworkConnected() && !applicationContext.getCnBetaPreferences().isPluginEnabledOnPhoneNetwork()) {
+        if(applicationContext.isMobileNetworkConnected() && !applicationContext.getPrefsObject().isPluginEnabledOnPhoneNetwork()) {
             contentWebView.getSettings().setPluginState(WebSettings.PluginState.OFF);
         }
         contentWebView.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY); // no scroll
@@ -412,7 +410,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
         super.onResume();
         ContentActivity contentActivity = ((ContentActivity) theActivity);
         if (contentActivity != null) {
-            int fontSizeOffset = ((CnBetaApplicationContext) contentActivity.getApplicationContext()).getCnBetaPreferences().getFontSizeOffset();
+            int fontSizeOffset = ((CnBetaApplicationContext) contentActivity.getApplicationContext()).getPrefsObject().getFontSizeOffset();
             //TODO: update font size if changed
             FontUtils.updateTextSize(contentActivity, titleTextView, R.dimen.listitem_title_text_size, fontSizeOffset);
             FontUtils.updateTextSize(contentActivity, timeTextView, R.dimen.listitem_status_text_size, fontSizeOffset);
@@ -560,7 +558,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
         }
 
         // 设置 custom Font
-        String customFont = getCnBetaApplicationContext().getCnBetaPreferences().getCustomFont();
+        String customFont = getCnBetaApplicationContext().getPrefsObject().getCustomFont();
         if (customFont != null && !customFont.isEmpty() && !customFont.equals("default")) {
             sb.append("@font-face{ font-family: customFont; src:url('" + customFont + "');" + "} body {font-family: customFont, serif;}");
         }
