@@ -37,8 +37,6 @@ import java.util.List;
  */
 public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> {
 
-    //TODO: 如果有评论数目，但是没有取回评论，则显示评论已关闭. 检测 joinNumber !=0, 但是 commentList.length()==0
-
     private PagingView footerPagingView;
 
     @Override
@@ -326,7 +324,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                                 clearData();
                                 super.onSuccess(listAsyncResult);
                                 // scroll to top
-                                mListView.setSelection(0);
+                                mListView.setSelection(getDataSize()-1);
                             }
                         };
                     }
