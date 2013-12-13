@@ -21,6 +21,7 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
@@ -39,6 +40,7 @@ import java.io.InputStream;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
@@ -98,9 +100,21 @@ public class CnBetaHttpClient {
         schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
 
         ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager(httpParams, schemeRegistry);
-        HttpClient httpClient = new DefaultHttpClient(cm, httpParams);
+        DefaultHttpClient httpClient = new DefaultHttpClient(cm, httpParams);
         // 设置 cookie 策略
         httpClient.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BROWSER_COMPATIBILITY);
+        httpClient.setCookieStore(new BasicCookieStore(){
+            @Override
+            public synchronized boolean clearExpired(Date date) {
+                // do not clear cookies
+                return false;
+            }
+
+            @Override
+            public synchronized void clear() {
+                // do not clear cookies
+            }
+        });
 
         // 是否需要设置cookie store
         // Create a local instance of cookie store

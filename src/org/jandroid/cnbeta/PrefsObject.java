@@ -69,4 +69,8 @@ public class PrefsObject {
     public boolean isPluginEnabledOnPhoneNetwork() {
         return prefs.getBoolean(application.getString(R.string.pref_key_enablePluginOnMobileNetwork), false);
     }
+
+    public boolean isCommentListOrderReverse() {
+        return prefs.getBoolean(application.getString(R.string.pref_key_commentListOrderReverse), false);
+    }
 }

@@ -142,9 +142,10 @@ public class Utils {
         theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
-    public static void openPublishCommentActivityForResult(Activity theActivity, long sid) {
+    public static void openPublishCommentActivityForResult(Activity theActivity, long sid, String token) {
         Bundle bundle = new Bundle();
         bundle.putLong("sid", sid);
+        bundle.putString("token", token);
         Intent intent = IntentUtils.newIntent(theActivity, PublishCommentActivity.class, bundle);
         theActivity.startActivityForResult(intent, 0);
     }

@@ -33,7 +33,8 @@ public class PublishCommentPoster extends AbstractLoader<JSONObject> {
     pid:7792468
 */
 // {"status":"success","result":"comment done"}
-    
+
+    //TODO: 把 YII_CSRF_TOKEN 保存到 Content 对象中，以免Cookie丢失，无法发布评论
     private static String URL_TEMPLATE = "http://www.cnbeta.com/comment";
         
     //只支持匿名
@@ -46,26 +47,32 @@ public class PublishCommentPoster extends AbstractLoader<JSONObject> {
     private long pid = 0;
     
     private String seccode;
-    
+    private String token;
     
     //匿名新发布
-    public PublishCommentPoster(long sid, String commentContent, String seccode) {
+    public PublishCommentPoster(long sid, String commentContent, String seccode, String token) {
         this.sid = sid;
         this.commentContent = commentContent;
         this.seccode = seccode;
+        this.token = token;
     }
     
     //匿名回复
-    public PublishCommentPoster(long sid, String commentContent, long pid, String seccode) {
+    public PublishCommentPoster(long sid, String commentContent, long pid, String seccode, String token) {
         this.sid = sid;
         this.pid = pid;
         this.commentContent = commentContent;
         this.seccode = seccode;
+        this.token = token;
     }
 
 
     public long getSid() {
         return sid;
+    }
+
+    public String getToken() {
+        return token;
     }
 
     public String getCommentContent() {
@@ -101,7 +108,9 @@ public class PublishCommentPoster extends AbstractLoader<JSONObject> {
         datas.put("content", getCommentContent());
         datas.put("seccode", getSeccode());
         //需要这个 token 来执行 support/against
-        datas.put("YII_CSRF_TOKEN", CnBetaHttpClient.getInstance().getCookie("YII_CSRF_TOKEN"));
+        // 将 token 保存在 Content中，更安全
+        datas.put("YII_CSRF_TOKEN", getToken());
+//        datas.put("YII_CSRF_TOKEN", CnBetaHttpClient.getInstance().getCookie("YII_CSRF_TOKEN"));
         
         String response = CnBetaHttpClient.getInstance().httpPost(URL_TEMPLATE, headers, datas, requestContext);
         response = UnicodeUtils.unicode2Chinese(response);

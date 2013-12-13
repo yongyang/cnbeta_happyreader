@@ -19,6 +19,7 @@ public abstract class PublishCommentAsyncTask extends AbstractLoaderAsyncTask<JS
     }
 
     protected abstract String getSeccode();
+    protected abstract String getToken();
     
     @Override
     protected boolean isRemoteLoadOnly() {
@@ -27,6 +28,6 @@ public abstract class PublishCommentAsyncTask extends AbstractLoaderAsyncTask<JS
 
     @Override
     public AbstractLoader<JSONObject> getLoader() {
-        return new PublishCommentPoster(getSid(), getCommentContent(), getPid(), getSeccode());
+        return new PublishCommentPoster(getSid(), getCommentContent(), getPid(), getSeccode(), getToken());
     }
 }

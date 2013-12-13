@@ -297,7 +297,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
                     handler.post(new Runnable() {
                         public void run() {
                             if (theActivity != null) { // in case activity finished
-                                ((ContentActivity) theActivity).reloadComments();
+                                ((ContentActivity) theActivity).loadComments();
                             }
                         }
                     });
@@ -364,7 +364,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        reloadContent();
+        loadContent();
     }
 
     public Content getContent() {
@@ -475,7 +475,7 @@ public class ArticleContentFragment extends ThemeFragment implements HasAsync<Co
         }
     }
 
-    public void reloadContent() {
+    public void loadContent() {
         reloadComments = true;
         executeAsyncTaskMultiThreading(new ArticleContentAsyncTask() {
 

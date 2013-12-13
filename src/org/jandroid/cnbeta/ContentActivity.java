@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import org.jandroid.cnbeta.entity.Article;
 import org.jandroid.cnbeta.entity.BaseArticle;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
@@ -19,8 +18,6 @@ import org.jandroid.common.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -103,14 +100,14 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
         if (!super.onOptionsItemSelected(mi) && !((CnBetaApplicationContext) getApplicationContext()).onOptionsItemSelected(this, mi)) {
             switch (mi.getItemId()) {
                 case R.id.refresh_item:
-                    reload(); // will reload comments, and update comment Numbers
+                    load(); // will reload comments, and update comment Numbers
                     break;
                 case R.id.comment_item:
                     if(getContent().isCommentClosed()) {
                         ToastUtils.showShortToast(ContentActivity.this, "评论功能已关闭");
                     }
                     else {
-                        Utils.openPublishCommentActivityForResult(this, getContent().getSid());
+                        Utils.openPublishCommentActivityForResult(this, getContent().getSid(), getContent().getToken());
                     }
                     break;
             }
@@ -118,13 +115,13 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
         return true;
     }
 
-    private void reload() {
-        contentFragment.reloadContent();
+    private void load() {
+        contentFragment.loadContent();
     }
 
     // call by ArticleContentFragment
-    public void reloadComments() {
-        commentsFragment.reloadData();
+    public void loadComments() {
+        commentsFragment.loadData();
     }
 
     @Override
@@ -144,7 +141,7 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
                         historyComment.setDate(DateFormatUtils.getDefault().format(new Date()));
 
                         try {
-                            new HistoryCommentListLoader().writeHistory(((CnBetaApplicationContext) getApplicationContext()).getHistoryDir(), historyComment);
+                            new HistoryCommentListLoader().writeHistory(getCnBetaApplicationContext().getHistoryDir(), historyComment);
                         }
                         catch (final Exception e) {
                             handler.post(new Runnable() {
@@ -164,8 +161,9 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
     private void newPostedComment(Comment comment) {
         contentFragment.newPostedComment(comment);
         commentsFragment.newPostedComment(comment);
-        if (this.getActionBar().getSelectedNavigationIndex() == 0) { // 选中 comment fragment
-            this.getActionBar().setSelectedNavigationItem(1);
+        int tabPingLunIndex = Arrays.binarySearch(tabs, R.string.tab_pinglun);
+        if (this.getActionBar().getSelectedNavigationIndex() != tabPingLunIndex) { // 选中 comment fragment
+            this.getActionBar().setSelectedNavigationItem(tabPingLunIndex);
         }
     }
 
@@ -173,13 +171,7 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
         contentFragment.updateCommentNumbers();
     }
 
-    public void updateHotComments(List<Comment> comments) {
-        List<Comment> hotComments = new ArrayList<Comment>();
-        for(Comment comment : comments){
-            if(comment.isHot()) {
-                hotComments.add(comment);
-            }
-        }
+    public void updateHotComments(List<Comment> hotComments) {
         // update hot comments
         hotCommentsFragment.setDatas(hotComments);
     }
@@ -213,5 +205,9 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
     public void setCommentClosed() {
         commentsFragment.setCommentClosed();
         hotCommentsFragment.setCommentClosed();
+    }
+
+    public String getToken(){
+        return contentFragment.getContent().getToken();
     }
 }

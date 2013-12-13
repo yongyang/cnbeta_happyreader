@@ -14,10 +14,8 @@ public abstract class ArticleCommentsAsyncTask extends AbstractLoaderAsyncTask<L
 
     protected abstract Content getArticleContent();
 
-    protected abstract int getPage();
-
     @Override
     public AbstractLoader<List<Comment>> getLoader() {
-        return new ArticleCommentsLoader(getArticleContent(), getPage());
+        return new ArticleCommentsLoader(getArticleContent());
     }
 }

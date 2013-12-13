@@ -23,12 +23,13 @@ import org.jandroid.cnbeta.async.SupportCommentAsyncTask;
 import org.jandroid.cnbeta.entity.Comment;
 import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.loader.SupportCommentPoster;
-import org.jandroid.cnbeta.view.PagingView;
+import org.jandroid.cnbeta.view.RefreshView;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.FontUtils;
 import org.jandroid.common.async.AsyncResult;
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,7 +38,7 @@ import java.util.List;
  */
 public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> {
 
-    private PagingView footerPagingView;
+    private RefreshView footbarRefreshView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,21 +60,17 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        footerPagingView = PagingView.load(getActivity().getLayoutInflater(), R.layout.listvew_footbar_paging);
+        footbarRefreshView = RefreshView.load(getActivity().getLayoutInflater(), R.layout.listview_footbar_refresh);
 
-        ((ListView) mListView).addFooterView(footerPagingView.getRootView());
+        ((ListView) mListView).addFooterView(footbarRefreshView.getRootView());
 
-        footerPagingView.setOnClickListener(new View.OnClickListener() {
+        footbarRefreshView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                loadData();
+                reloadData();
             }
         });
 
         super.onActivityCreated(savedInstanceState);
-    }
-
-    private int getCommentCount() {
-        return ((ContentActivity) getActivity()).getContent().getJoinNum();
     }
 
     @Override
@@ -93,12 +90,17 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
 
             public View getView(final int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
-                    convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_comment_item, null);
+                    convertView = theActivity.getLayoutInflater().inflate(R.layout.listview_comment_item, null);
                 }
-                final Comment comment = (Comment) getItem(position);
                 TextView positionTextView = (TextView) convertView.findViewById(R.id.position);
 
-                positionTextView.setText("" + (getCommentCount() - position));
+                final Comment comment = getCommentByPosition(position);
+                if (getCnBetaApplicationContext().getPrefsObject().isCommentListOrderReverse()) {
+                    positionTextView.setText("" + (1 + position));
+                }
+                else {
+                    positionTextView.setText("" + (getDataSize() - position));
+                }
 
                 TextView nameTextView = (TextView) convertView.findViewById(R.id.name);
                 nameTextView.setText(comment.getName());
@@ -125,12 +127,30 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                 final LinearLayout supportLinearLayout = (LinearLayout) convertView.findViewById(R.id.supportLinearLayout);
                 final LinearLayout againstLinearLayout = (LinearLayout) convertView.findViewById(R.id.againstLinearLayout);
 
+                if (comment.getPid() == 0) { // 没有父评论
+                    parentCommentTextView.setText("");
+                    parentCommentTextView.setVisibility(View.GONE);
+                }
+                else { // 有父评论
+                    final int parentIndex = getParentIndexByPosition(position, comment.getPid());
+                    if (parentIndex < getDataSize()) { //多页时，避免调至还未加载的评论
+                        parentCommentTextView.setText(getData(parentIndex).getComment());
+                        parentCommentTextView.setVisibility(View.VISIBLE);
+
+                        final int parentPosition = getPositionByIndex(parentIndex);
+                        parentCommentTextView.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                mListView.setItemChecked(parentPosition, true);
+                                mListView.setSelection(parentPosition);
+                            }
+                        });
+                    }
+                }
+
                 if (comment.getTid() == 0) { //新发表的评论，只是暂存，无法支持和反对
                     supportAgainstLinearLayout.setVisibility(View.INVISIBLE);
                     supportLinearLayout.setEnabled(false);
                     againstLinearLayout.setEnabled(false);
-                    parentCommentTextView.setText("");
-                    parentCommentTextView.setVisibility(View.GONE);
                 }
                 else {
                     supportAgainstLinearLayout.setVisibility(View.VISIBLE);
@@ -156,26 +176,9 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                             supportComment(againstLinearLayout, againstTextView, reasonTextView, comment, false);
                         }
                     });
-                    if (comment.getPid() == 0) { // 没有父评论
-                        parentCommentTextView.setVisibility(View.GONE);
-                        parentCommentTextView.setText("");
-                    }
-                    else { // 有父评论
-                        final int parentPos = getParentPosition(position, comment.getPid());
-                        if(parentPos != position && parentPos < getDataSize()) { //多页时，避免调至还未加载的评论
-                            parentCommentTextView.setText(getData(parentPos).getComment());
-                            parentCommentTextView.setVisibility(View.VISIBLE);
-                            parentCommentTextView.setOnClickListener(new View.OnClickListener() {
-                                public void onClick(View v) {
-                                    mListView.setItemChecked(parentPos, true);
-                                    mListView.setSelection(parentPos);
-                                }
-                            });
-                        }
-                    }
                 }
 
-                int fontSizeOffset = ((CnBetaApplicationContext) getActivity().getApplicationContext()).getPrefsObject().getFontSizeOffset();
+                int fontSizeOffset = getCnBetaApplicationContext().getPrefsObject().getFontSizeOffset();
                 FontUtils.updateTextSize(getActivity(), positionTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), nameTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
                 FontUtils.updateTextSize(getActivity(), hostNameTextView, R.dimen.listitem_description_text_size, fontSizeOffset);
@@ -192,9 +195,43 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
         };
     }
 
+    // return parent position or self position
+    private int getParentIndexByPosition(int position, long parentId) {
+        int index = getIndexByPosition(position);
+        while (index < getDataSize()) { //向后搜索
+            if (getData(index).getTid() == parentId) {
+                break;
+            }
+            index++;
+        }
+        return index;
+    }
+
+    private int getIndexByPosition(int position) {
+        if (getCnBetaApplicationContext().getPrefsObject().isCommentListOrderReverse()) {
+            return getDataSize() - position - 1;
+        }
+        else {
+            return position;
+        }
+    }
+
+    private int getPositionByIndex(int index) {
+        if (getCnBetaApplicationContext().getPrefsObject().isCommentListOrderReverse()) {
+            return getDataSize() - index - 1;
+        }
+        else {
+            return index;
+        }
+    }
+
+    private Comment getCommentByPosition(int position) {
+        return getData(getIndexByPosition(position));
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Comment comment = getData(position);
+        final Comment comment = getCommentByPosition(position);
         Utils.openReplyCommentActivityForResult(getActivity(), comment);
     }
 
@@ -208,6 +245,11 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
             @Override
             protected Comment getComment() {
                 return comment;
+            }
+
+            @Override
+            protected String getToken() {
+                return ((ContentActivity)theActivity).getToken();
             }
 
             @Override
@@ -286,11 +328,6 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                     }
 
                     @Override
-                    protected int getPage() {
-                        return footerPagingView.getNextPage();
-                    }
-
-                    @Override
                     public HasAsync<List<Comment>> getAsyncContext() {
                         return new HasAsyncDelegate<List<Comment>>(ArticleCommentsFragment.this);
                     }
@@ -311,80 +348,76 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
                     }
 
                     @Override
-                    protected int getPage() {
-                        footerPagingView.resetPage();
-                        return footerPagingView.getNextPage();
-                    }
-
-                    @Override
                     public HasAsync<List<Comment>> getAsyncContext() {
                         return new HasAsyncDelegate<List<Comment>>(ArticleCommentsFragment.this) {
                             @Override
                             public void onSuccess(AsyncResult<List<Comment>> listAsyncResult) {
-                                clearData();
-                                super.onSuccess(listAsyncResult);
-                                // scroll to top
-                                mListView.setSelection(getDataSize()-1);
+                                ArticleCommentsFragment.this.onSuccess(listAsyncResult);
+                                // scroll
+                                handler.post(new Runnable() {
+                                    public void run() {
+                                        mListView.setItemChecked(getPositionByIndex(0), true);
+                                        mListView.setSelection(getPositionByIndex(0));
+                                    }
+                                }
+                                );
                             }
-                        };
+                        }
+
+                                ;
                     }
                 }
+
                 );
             }
         }
     }
 
-
-    // return parent position or self position
-    private int getParentPosition(int position, long parentId) {
-        int index = position;
-        while (index < getDataSize()) {
-            if (getData(index).getTid() == parentId) {
-                break;
-            }
-            index++;
-        }
-        return index;
-    }
-
-
-    public void newPostedComment(Comment comment) {
-        addData(0, comment); // 放在最上面
-        adapter.notifyDataSetChanged();
-        mListView.setSelection(0);
-    }
-
     @Override
     public void onSuccess(AsyncResult<List<Comment>> listAsyncResult) {
-        super.onSuccess(listAsyncResult);
-        footerPagingView.increasePage();
-        // update comment count in ContentFragment
-        if (footerPagingView.getPage() == 1) { // 仅第一页需要 update comment numbers
-            if(getActivity() != null) {
-                ((ContentActivity) getActivity()).updateCommentNumbers();
+        if (getActivity() != null) {
+            ((ContentActivity) getActivity()).updateCommentNumbers();
+
+            List<Comment> hotComments = new ArrayList<Comment>();
+            for (Comment comment : listAsyncResult.getResult()) {
+                if (comment.isHot()) {
+                    hotComments.add(comment);
+                }
             }
+            ((ContentActivity) getActivity()).updateHotComments(hotComments);
         }
-        if(getActivity() != null) {
-            ((ContentActivity) getActivity()).updateHotComments(listAsyncResult.getResult());
-        }
+
+        clearData();
+        super.onSuccess(listAsyncResult);
     }
 
     @Override
     public void onProgressShow() {
         super.onProgressShow();
-        footerPagingView.onProgressShow();
+        footbarRefreshView.onProgressShow();
     }
 
     @Override
     public void onProgressDismiss() {
         super.onProgressDismiss();
-        footerPagingView.onProgressDismiss();
+        footbarRefreshView.onProgressDismiss();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        updateTypeFace(footerPagingView.getRootView());
+        updateTypeFace(footbarRefreshView.getRootView());
+    }
+
+    public void newPostedComment(Comment comment) {
+        addData(0, comment);
+        adapter.notifyDataSetChanged();
+        handler.post(new Runnable() {
+            public void run() {
+                mListView.setItemChecked(getPositionByIndex(0), true);
+                mListView.setSelection(getPositionByIndex(0));
+            }
+        });
     }
 
     public void setCommentClosed() {

@@ -77,9 +77,9 @@ public class ArticleHotCommentsFragment extends AbstractListFragment<Comment> {
 
             public View getView(final int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
-                    convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_comment_item, null);
+                    convertView = theActivity.getLayoutInflater().inflate(R.layout.listview_comment_item, null);
                 }
-                final Comment comment = (Comment) getItem(position);
+                final Comment comment = getCommentByPosition(position);
                 TextView positionTextView = (TextView) convertView.findViewById(R.id.position);
                 positionTextView.setText("" + (getCommentCount() - position));
                 //最热评论 不显示楼号
@@ -163,9 +163,20 @@ public class ArticleHotCommentsFragment extends AbstractListFragment<Comment> {
         };
     }
 
+    private Comment getCommentByPosition(int position){
+        final Comment comment;
+        if(getCnBetaApplicationContext().getPrefsObject().isCommentListOrderReverse()){
+            comment = getData(getDataSize() - position -1);
+        }
+        else {
+            comment = getData(position);
+        }
+        return comment;
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Comment comment = getData(position);
+        final Comment comment = getCommentByPosition(position);
         Utils.openReplyCommentActivityForResult(getActivity(), comment);
     }
 
@@ -184,6 +195,11 @@ public class ArticleHotCommentsFragment extends AbstractListFragment<Comment> {
             @Override
             protected Comment getComment() {
                 return comment;
+            }
+
+            @Override
+            protected String getToken() {
+                return ((ContentActivity)theActivity).getToken();
             }
 
             @Override

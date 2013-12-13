@@ -13,17 +13,18 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
  */
-
-//TODO: 显示热评！！！，数据可取自 hotlist 字段
 
 public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
     //当comments 数目较多有分页时，comment_num 可能与实际的 comment 数目不同，此时怎么确定具体的楼好呢？可能要用到 join_num
@@ -45,19 +46,37 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
 
     private Content content;
 
-    private int page =0;
+    private Set<String> hotCommentTids = new HashSet<String>();
 
-    public ArticleCommentsLoader(Content content, int page) {
+    private int page = 1;
+
+    public ArticleCommentsLoader(Content content) {
         this.content = content;
-        this.page = page;
     }
 
     public int getPage() {
         return page;
     }
 
+    public void setPage(int page) {
+        this.page = page;
+    }
+
     @Override
     public List<Comment> httpLoad(File baseDir, RequestContext requestContext) throws Exception {
+        List<Comment> comments = new ArrayList<Comment>();
+        setPage(1);
+        comments.addAll(httpLoadPage(baseDir, requestContext));
+        int pageCount = (int)(Math.ceil(((double)content.getJoinNum()) / 100));
+        for(int i=2; i<= pageCount; i++) {
+            setPage(i);
+            comments.addAll(httpLoadPage(baseDir, requestContext));
+        }
+        //返回 updated Content
+        return comments;
+    }
+
+    private List<Comment> httpLoadPage(File baseDir, RequestContext requestContext) throws Exception {
         Map<String, String> headers = new HashMap<String, String>();
         //should add this "X-Requested-With" header, so remote return result
         //httpget.addHeader("X-Requested-With", "XMLHttpRequest");
@@ -73,35 +92,41 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
         datas.put("op", generateOP());
 
         String response = CnBetaHttpClient.getInstance().httpPost(URL_TEMPLATE, headers, datas, requestContext);
-        
-        //if failed
-        if(response.indexOf("error") > 0){
-            throw new LoaderException(response );
+        if (response.indexOf("error") > 0) {
+            throw new LoaderException(response);
         }
 //        String responseJSONString = response.substring(response.indexOf('(') + 1, response.lastIndexOf(')'));
         JSONObject responseJSON = (JSONObject) JSONValue.parse(response);
         Object resultBase64String = responseJSON.get("result");
         String resultJSONString = new String(Base64.decode(resultBase64String.toString(), Base64.DEFAULT), "UTF-8");
-        resultJSONString = UnicodeUtils.unicode2Chinese(resultJSONString.substring(resultJSONString.indexOf('{'), resultJSONString.lastIndexOf('}')+1));
-        JSONObject resultJSON = (JSONObject) JSONValue.parse(resultJSONString);
-        List<Comment> comments = parseResultJSON(resultJSON);
-        checkEmptyResult(comments);
+        resultJSONString = UnicodeUtils.unicode2Chinese(resultJSONString.substring(resultJSONString.indexOf('{'), resultJSONString.lastIndexOf('}') + 1));
         writeDisk(baseDir, resultJSONString);
-        //返回 updated Content
-        return comments;
+        JSONObject resultJSON = (JSONObject) JSONValue.parse(resultJSONString);
+        return parseResultJSON(resultJSON);
     }
 
     @Override
     public List<Comment> fromDisk(File baseDir) throws Exception {
-        String resultJSONString = readDisk(baseDir);
-        JSONObject resultJSON = (JSONObject) JSONValue.parse(resultJSONString);
-        List<Comment> comments = parseResultJSON(resultJSON);
-        checkEmptyResult(comments);
+        List<Comment> comments = new ArrayList<Comment>();
+        setPage(1);
+        comments.addAll(fromDiskPage(baseDir));
+        int pageCount = (int)(Math.ceil(((double)content.getJoinNum()) / 100));
+        for(int i=2; i<= pageCount; i++) {
+            setPage(i);
+            comments.addAll(fromDiskPage(baseDir));
+        }
+        //返回 updated Content
         return comments;
     }
 
+    private List<Comment> fromDiskPage(File baseDir)  throws Exception {
+        String resultJSONString = readDisk(baseDir);
+        JSONObject resultJSON = (JSONObject) JSONValue.parse(resultJSONString);
+        return parseResultJSON(resultJSON);
+    }
+
     protected void checkEmptyResult(List<Comment> result) throws Exception {
-        if(getPage() > 1 && result.isEmpty()) {
+        if (getPage() > 1 && result.isEmpty()) {
             throw new NoDataInfoException("没有数据啦!");
         }
     }
@@ -111,24 +136,23 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
 
         //阅读和评论次数
         if(getPage() == 1) {//仅第一页有 comment_num
+            content.setToken(resultJSON.get("token").toString());
             content.setViewNum(Integer.parseInt(resultJSON.get("view_num").toString()));
             content.setCommentNum(Integer.parseInt(resultJSON.get("comment_num").toString()));
             content.setJoinNum(Integer.parseInt(resultJSON.get("join_num").toString()));
         }
 
-        List<String> hotCommentTids = new ArrayList<String>();
-        JSONArray hotListJSONArray = (JSONArray)resultJSON.get("hotlist");
-        for(Object hotCommentJSONObject : hotListJSONArray){
-            hotCommentTids.add(((JSONObject)hotCommentJSONObject).get("tid").toString());
+        JSONArray hotListJSONArray = (JSONArray) resultJSON.get("hotlist");
+        for (Object hotCommentJSONObject : hotListJSONArray) {
+            hotCommentTids.add(((JSONObject) hotCommentJSONObject).get("tid").toString());
         }
 
-        JSONObject commentStoreJSONObject = (JSONObject)resultJSON.get("cmntstore");
-
-        for(Object scommentObject : (JSONArray)resultJSON.get("cmntlist")){
-            JSONObject scommentJSONObject = (JSONObject)scommentObject;
+        JSONObject commentStoreJSONObject = (JSONObject) resultJSON.get("cmntstore");
+        for (Object scommentObject : (JSONArray) resultJSON.get("cmntlist")) {
+            JSONObject scommentJSONObject = (JSONObject) scommentObject;
             String tid = scommentJSONObject.get("tid").toString();
-            JSONObject commentJSONObject = (JSONObject)commentStoreJSONObject.get(tid);
-            if(hotCommentTids.contains(tid)) {
+            JSONObject commentJSONObject = (JSONObject) commentStoreJSONObject.get(tid);
+            if (hotCommentTids.contains(tid)) {
                 commentJSONObject.put("hot", true); // 最热评论
             }
             else {
@@ -150,10 +174,10 @@ public class ArticleCommentsLoader extends AbstractLoader<List<Comment>> {
         return "comment_" + content.getSid() + "_" + getPage();
     }
 
-    private String generateOP() throws Exception {
-        String encoded = Base64.encodeToString((getPage() +"," + content.getSid() + "," + content.getSn()).getBytes("UTF-8"), Base64.NO_WRAP);
-        for(int i=0; i<8; i++){
-            encoded += b64.charAt((int)(Math.random() * b64.length()));
+    private String generateOP() throws UnsupportedEncodingException{
+        String encoded = Base64.encodeToString((getPage() + "," + content.getSid() + "," + content.getSn()).getBytes("UTF-8"), Base64.NO_WRAP);
+        for (int i = 0; i < 8; i++) {
+            encoded += b64.charAt((int) (Math.random() * b64.length()));
         }
         // 两次 url encode，主要为转换 "="
         encoded = URLEncoder.encode(encoded, "UTF-8");

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.entity.BaseArticle;
+import org.jandroid.common.FontUtils;
 import org.jandroid.common.ThemeFragment;
 
 import java.text.DateFormat;
@@ -142,10 +143,12 @@ public abstract class AbstractListFragment<T> extends ThemeFragment implements A
 
     protected void checkRead(BaseArticle article, TextView textView) {
         if(getCnBetaApplicationContext().isArticleRead(article.getSid())) {
-            textView.getPaint().setStrikeThruText(true);
+//            textView.getPaint().setStrikeThruText(true);
+            FontUtils.italicFont(textView);
         }
         else {
-            textView.getPaint().setStrikeThruText(false);
+//            textView.getPaint().setStrikeThruText(false);
+            FontUtils.unitalicFont(textView);
         }
     }
 

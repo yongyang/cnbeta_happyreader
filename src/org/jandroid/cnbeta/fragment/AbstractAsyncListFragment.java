@@ -37,8 +37,8 @@ public abstract class AbstractAsyncListFragment<T> extends AbstractListFragment<
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //init reload data
-        reloadData();
+        //init load data
+        loadData();
     }
 
     public CnBetaApplicationContext getCnBetaApplicationContext() {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">cnBeta乐读</string>
-    <string name="app_version_name">3.3.0</string>
+    <string name="app_version_name">3.5.0</string>
     <string name="author">作者: yy.young@gmail.com</string>
     <string name="copyright">Copyright 2013 jandroid.org</string>
 
@@ -45,7 +45,7 @@
     <string name="tab_hot">人气榜</string>
     <string name="tab_argue">争议榜</string>
     <string name="tab_recommend">推荐榜</string>
-    <string name="tab_topics">选择主题</string>
+    <string name="tab_topics">主题分类</string>
     <string name="tab_topic_articles">资讯列表</string>
     <string name="tab_history_article">我的阅读</string>
     <string name="tab_history_comment">我的评论</string>
@@ -63,5 +63,6 @@
     <string name="pref_key_enablePluginOnMobileNetwork">enablePluginOnPhoneNetwork</string>
 
     <string name="pref_key_nightmode_brightness">nightModeBrightness</string>
+    <string name="pref_key_commentListOrderReverse">commentReverseOrder</string>
 
 </resources>

@@ -48,10 +48,12 @@ public class SupportCommentPoster extends AbstractLoader<JSONObject> {
     
     private Op op;
 
+    private String token;
 
-    public SupportCommentPoster(Comment comment, Op op) {
+    public SupportCommentPoster(Comment comment, Op op, String token) {
         this.comment = comment;
         this.op = op;
+        this.token = token;
     }
 
     public Comment getComment() {
@@ -60,6 +62,10 @@ public class SupportCommentPoster extends AbstractLoader<JSONObject> {
 
     public Op getOp() {
         return op;
+    }
+
+    public String getToken() {
+        return token;
     }
 
     @Override
@@ -78,7 +84,8 @@ public class SupportCommentPoster extends AbstractLoader<JSONObject> {
         datas.put("sid", "" + getComment().getSid());
         datas.put("tid", "" + getComment().getTid());
         //需要这个 token 来执行 support/against
-        datas.put("YII_CSRF_TOKEN", CnBetaHttpClient.getInstance().getCookie("YII_CSRF_TOKEN"));
+        datas.put("YII_CSRF_TOKEN", getToken());
+//        datas.put("YII_CSRF_TOKEN", CnBetaHttpClient.getInstance().getCookie("YII_CSRF_TOKEN"));
         
         
         String response = CnBetaHttpClient.getInstance().httpPost(URL_TEMPLATE, headers, datas, requestContext);

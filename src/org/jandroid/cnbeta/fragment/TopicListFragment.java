@@ -104,7 +104,7 @@ public class TopicListFragment extends AbstractAsyncListFragment<Topic> {
     public void onActivityCreated(Bundle savedInstanceState) {
 
 
-        footerPagingView = PagingView.load(getActivity().getLayoutInflater(), footerContainer, R.layout.listvew_footbar_paging);
+        footerPagingView = PagingView.load(getActivity().getLayoutInflater(), footerContainer, R.layout.listview_footbar_paging);
 
 //        ((ListView)mListView).addFooterView(footerPagingView.getRootView());
 

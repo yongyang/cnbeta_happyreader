@@ -14,6 +14,8 @@ public abstract class SupportCommentAsyncTask extends AbstractLoaderAsyncTask<JS
     
     protected abstract SupportCommentPoster.Op getOp();
 
+    protected abstract String getToken();
+
     @Override
     protected boolean isRemoteLoadOnly() {
         return true;
@@ -21,6 +23,6 @@ public abstract class SupportCommentAsyncTask extends AbstractLoaderAsyncTask<JS
 
     @Override
     public AbstractLoader<JSONObject> getLoader() {
-        return new SupportCommentPoster(getComment(), getOp());
+        return new SupportCommentPoster(getComment(), getOp(), getToken());
     }
 }

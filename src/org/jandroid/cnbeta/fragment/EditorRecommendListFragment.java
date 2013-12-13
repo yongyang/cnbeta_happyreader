@@ -113,7 +113,7 @@ public class EditorRecommendListFragment extends AbstractAsyncListFragment<Edito
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        footerPagingView = PagingView.load(getActivity().getLayoutInflater(), R.layout.listvew_footbar_paging);
+        footerPagingView = PagingView.load(getActivity().getLayoutInflater(), R.layout.listview_footbar_paging);
 
         ((ListView)mListView).addFooterView(footerPagingView.getRootView());
 

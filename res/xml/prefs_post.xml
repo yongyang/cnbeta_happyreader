@@ -3,6 +3,13 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="签名档">
+        <CheckBoxPreference
+                android:key="@string/pref_key_commentListOrderReverse"
+                android:title="评论列表排列顺序"
+                android:summaryOn="顶楼为1楼"
+                android:summaryOff="底楼为1楼"
+                android:defaultValue="false"/>
+
         <EditTextPreference
                 android:key="@string/pref_key_signature"
                 android:title="设置签名档"

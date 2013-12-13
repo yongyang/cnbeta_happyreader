@@ -30,7 +30,7 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
-        footerPagingView = PagingView.load(getActivity().getLayoutInflater(), R.layout.listvew_footbar_paging);
+        footerPagingView = PagingView.load(getActivity().getLayoutInflater(), R.layout.listview_footbar_paging);
         ((ListView)mListView).addFooterView(footerPagingView.getRootView());
 
         footerPagingView.setOnClickListener(new View.OnClickListener() {

@@ -35,6 +35,7 @@ public class PublishCommentActivity extends CnBetaThemeActivity {
     TextView sendTextView;
 
     protected long sid;
+    protected String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,10 @@ public class PublishCommentActivity extends CnBetaThemeActivity {
         setContentView(getLayoutResourceId());
 
         sid = getIntent().getLongExtra("sid", 0);
+        token = getIntent().getStringExtra("token");
+        if(sid == 0 || token ==null || token.isEmpty()) {
+            logger.w("No sid or token!");
+        }
 
         captchaImageView = (ImageView)findViewById(R.id.seccode_image);
 
@@ -79,8 +84,12 @@ public class PublishCommentActivity extends CnBetaThemeActivity {
         return R.layout.comment_publish;
     }
 
-    public long getArticleSid() {
+    public long getSid() {
         return sid;
+    }
+
+    public String getToken() {
+        return token;
     }
 
     public long getParentCommentTid() {
@@ -111,7 +120,7 @@ public class PublishCommentActivity extends CnBetaThemeActivity {
         executeAsyncTaskMultiThreading(new CaptchaAsyncTask() {
             @Override
             protected long getSid() {
-                return getArticleSid();
+                return PublishCommentActivity.this.getSid();
             }
 
             @Override
@@ -156,7 +165,7 @@ public class PublishCommentActivity extends CnBetaThemeActivity {
         executeAsyncTaskMultiThreading(new PublishCommentAsyncTask() {
             @Override
             protected long getSid() {
-                return getArticleSid();
+                return PublishCommentActivity.this.getSid();
             }
 
             @Override
@@ -174,6 +183,11 @@ public class PublishCommentActivity extends CnBetaThemeActivity {
             @Override
             protected String getSeccode() {
                 return captchaTextView.getText().toString();
+            }
+
+            @Override
+            protected String getToken() {
+                return PublishCommentActivity.this.getToken();
             }
 
             @Override
@@ -210,6 +224,7 @@ public class PublishCommentActivity extends CnBetaThemeActivity {
                             newComment.setName("匿名人士");
                             newComment.setComment(getCommentContent());
                             newComment.setSid(getSid());
+                            newComment.setPid(getParentCommentTid());
                             newComment.setDate(DateFormatUtils.getDefault().format(new Date()));
                             //设置结果给 ContentActivity, 新comment 将添加到 comments list 中，并刷新 List
                             Intent intent = new Intent();

@@ -2,11 +2,7 @@ package org.jandroid.cnbeta.fragment;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.StrikethroughSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -14,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import org.jandroid.cnbeta.CnBetaApplication;
 import org.jandroid.cnbeta.CnBetaApplicationContext;
 import org.jandroid.cnbeta.R;
 import org.jandroid.cnbeta.Utils;
@@ -23,12 +18,10 @@ import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.HasAsyncDelegate;
 import org.jandroid.cnbeta.async.ImageBytesAsyncTask;
 import org.jandroid.cnbeta.entity.Article;
-import org.jandroid.cnbeta.entity.BaseArticle;
 import org.jandroid.cnbeta.loader.AbstractListLoader;
 import org.jandroid.cnbeta.loader.ArticleListLoader;
 import org.jandroid.cnbeta.view.PagingView;
 import org.jandroid.common.BaseActivity;
-import org.jandroid.common.FontUtils;
 import org.jandroid.common.adapter.AsyncImageAdapter;
 import org.jandroid.common.async.AsyncResult;
 
@@ -115,7 +108,7 @@ public class ArticleListFragment extends AbstractAsyncListFragment<Article> {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        footerPagingView = PagingView.load(getActivity().getLayoutInflater(), R.layout.listvew_footbar_paging);
+        footerPagingView = PagingView.load(getActivity().getLayoutInflater(), R.layout.listview_footbar_paging);
 
         ((ListView)mListView).addFooterView(footerPagingView.getRootView());
 

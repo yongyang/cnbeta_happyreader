@@ -15,7 +15,7 @@
                 android:title="移动网络时是否播放视频"
                 android:summaryOn="播放视频"
                 android:summaryOff="不播放视频"
-                android:defaultValue="false"/>
+                android:defaultValue="true"/>
 
     </PreferenceCategory>
 </PreferenceScreen>

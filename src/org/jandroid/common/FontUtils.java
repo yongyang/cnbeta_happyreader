@@ -26,6 +26,21 @@ public class FontUtils {
     private static Typeface lastTypeface;
 
 
+    public static void unitalicFont(final View root) {
+        if (root instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup)root).getChildCount(); i++) {
+                View v = ((ViewGroup)root).getChildAt(i);
+                unitalicFont(v);
+            }
+        }
+        else {
+            if(root instanceof TextView) {
+                ((TextView)root).getPaint().setTextSkewX(0f);
+            }
+        }
+
+    }
+
     public static void italicFont(final View root) {
         if (root instanceof ViewGroup) {
             for (int i = 0; i < ((ViewGroup)root).getChildCount(); i++) {
