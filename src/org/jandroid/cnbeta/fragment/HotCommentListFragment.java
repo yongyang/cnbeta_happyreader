@@ -105,6 +105,7 @@ public class HotCommentListFragment extends AbstractAsyncListFragment<HotComment
                 commentTextView.setText("" + hotComment.getComment());
                 TextView titleShowTextView = (TextView) convertView.findViewById(R.id.titleShow);
                 titleShowTextView.setText("" + hotComment.getTitleShow());
+                checkRead(hotComment, titleShowTextView);
 
                 TextView dateTextView = (TextView) convertView.findViewById(R.id.date);
                 dateTextView.setText(hotComment.getDate());
