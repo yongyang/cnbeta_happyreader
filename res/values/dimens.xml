@@ -4,7 +4,7 @@
     <dimen name="listitem_logo_height">72dip</dimen>
     <dimen name="listitem_default_text_size">16sp</dimen>
     <dimen name="listitem_title_text_size">17sp</dimen>
-    <dimen name="listitem_comment_text_size">16sp</dimen>
+    <dimen name="listitem_comment_text_size">15sp</dimen>
     <dimen name="listitem_description_text_size">15sp</dimen>
     <dimen name="listitem_status_text_size">12sp</dimen>
     <dimen name="listitem_rank_no_text_size">19sp</dimen>
