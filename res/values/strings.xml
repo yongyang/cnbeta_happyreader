@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">cnBeta乐读</string>
-    <string name="app_version_name">3.5.0</string>
+    <string name="app_version_name">3.3.0</string>
     <string name="author">作者: yy.young@gmail.com</string>
     <string name="copyright">Copyright 2013 jandroid.org</string>
 
