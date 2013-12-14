@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import org.jandroid.cnbeta.entity.BaseArticle;
 import org.jandroid.cnbeta.entity.Comment;
+import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.entity.HistoryArticle;
 import org.jandroid.cnbeta.loader.HistoryArticleListLoader;
 import org.jandroid.cnbeta.service.CheckVersionService;
@@ -142,18 +143,19 @@ public class Utils {
         theActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
-    public static void openPublishCommentActivityForResult(Activity theActivity, long sid, String token) {
+    public static void openPublishCommentActivityForResult(Activity theActivity, Content content) {
         Bundle bundle = new Bundle();
-        bundle.putLong("sid", sid);
-        bundle.putString("token", token);
+        bundle.putLong("sid", content.getSid());
+        bundle.putString("token", content.getToken());
         Intent intent = IntentUtils.newIntent(theActivity, PublishCommentActivity.class, bundle);
         theActivity.startActivityForResult(intent, 0);
     }
 
-    public static void openReplyCommentActivityForResult(Activity theActivity, Comment comment) {
+    public static void openReplyCommentActivityForResult(Activity theActivity, Comment comment, Content content) {
         Bundle bundle = new Bundle();
         bundle.putLong("sid", comment.getSid());
         bundle.putSerializable("comment", comment);
+        bundle.putString("token", content.getToken());
         Intent intent = IntentUtils.newIntent(theActivity, ReplyCommentActivity.class, bundle);
         theActivity.startActivityForResult(intent, 0);
     }

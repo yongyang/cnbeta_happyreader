@@ -107,7 +107,7 @@ public class ContentActivity extends CnBetaActionTabFragmentActivity {
                         ToastUtils.showShortToast(ContentActivity.this, "评论功能已关闭");
                     }
                     else {
-                        Utils.openPublishCommentActivityForResult(this, getContent().getSid(), getContent().getToken());
+                        Utils.openPublishCommentActivityForResult(this, getContent());
                     }
                     break;
             }

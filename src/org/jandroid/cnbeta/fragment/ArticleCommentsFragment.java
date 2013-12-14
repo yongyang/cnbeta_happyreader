@@ -26,6 +26,7 @@ import org.jandroid.cnbeta.loader.SupportCommentPoster;
 import org.jandroid.cnbeta.view.RefreshView;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.FontUtils;
+import org.jandroid.common.ToastUtils;
 import org.jandroid.common.async.AsyncResult;
 import org.json.simple.JSONObject;
 
@@ -232,7 +233,12 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Comment comment = getCommentByPosition(position);
-        Utils.openReplyCommentActivityForResult(getActivity(), comment);
+        if(comment.getTid() != 0) {
+            Utils.openReplyCommentActivityForResult(theActivity, comment, ((ContentActivity)theActivity).getContent());
+        }
+        else { //新发暂存评论
+            ToastUtils.showShortToast(theActivity, "该评论暂时无法回复，请刷新重试");
+        }
     }
 
     @Override

@@ -19,6 +19,7 @@ import org.jandroid.cnbeta.Utils;
 import org.jandroid.cnbeta.async.HasAsync;
 import org.jandroid.cnbeta.async.SupportCommentAsyncTask;
 import org.jandroid.cnbeta.entity.Comment;
+import org.jandroid.cnbeta.entity.Content;
 import org.jandroid.cnbeta.loader.SupportCommentPoster;
 import org.jandroid.common.BaseActivity;
 import org.jandroid.common.FontUtils;
@@ -177,7 +178,7 @@ public class ArticleHotCommentsFragment extends AbstractListFragment<Comment> {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Comment comment = getCommentByPosition(position);
-        Utils.openReplyCommentActivityForResult(getActivity(), comment);
+        Utils.openReplyCommentActivityForResult(theActivity, comment, ((ContentActivity)theActivity).getContent());
     }
 
     @Override
