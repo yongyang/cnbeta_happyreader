@@ -237,7 +237,7 @@ public class ArticleCommentsFragment extends AbstractAsyncListFragment<Comment> 
             Utils.openReplyCommentActivityForResult(theActivity, comment, ((ContentActivity)theActivity).getContent());
         }
         else { //新发暂存评论
-            ToastUtils.showShortToast(theActivity, "该评论暂时无法回复，请刷新重试");
+            ToastUtils.showShortToast(theActivity, "该评论暂时无法回复，请刷新后重试");
         }
     }
 
