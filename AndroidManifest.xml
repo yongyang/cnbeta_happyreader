@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.jandroid.cnbeta"
-          android:versionCode="16"
+          android:versionCode="17"
           android:versionName="@string/app_version_name">
 
     <uses-sdk
@@ -17,7 +17,8 @@
             android:name="CnBetaApplication"
             android:theme="@style/Theme_cnBeta_Light"
             android:label="@string/app_name"
-            android:icon="@drawable/ic_launcher">
+            android:icon="@drawable/ic_launcher"
+            android:allowBackup="true">
         <!--for test case -->
         <!--<uses-library android:name="android.test.runner"/>-->
 
@@ -60,7 +61,8 @@
                 android:name=".ContentActivity"
                 android:label="@string/label_article_content"
                 android:configChanges="orientation|screenSize|layoutDirection"
-                android:hardwareAccelerated="true"/>
+                android:hardwareAccelerated="true"
+                />
         <activity
                 android:name=".HistoryActivity"
                 android:label="@string/label_history"
@@ -76,35 +78,34 @@
         <!--android:launchMode="singleTask" startActivityForResult不能是 singleTask singleInstance-->
         <activity
                 android:name=".PublishCommentActivity"
-                android:launchMode="singleTask"
                 android:theme="@style/Theme_Dialog_cnBeta_Light"
                 android:configChanges="orientation|screenSize|layoutDirection"
                 />
         <!--android:launchMode="singleTask" startActivityForResult不能是 singleTask singleInstance-->
         <activity
                 android:name=".ReplyCommentActivity"
-                android:launchMode="singleTask"
                 android:theme="@style/Theme_Dialog_cnBeta_Light"
                 android:configChanges="orientation|screenSize|layoutDirection"
                 />
-
         <activity
                 android:name=".PrefsActivity"
                 android:configChanges="orientation|screenSize|layoutDirection"
-                android:label="参数设置"/>
-
+                android:label="参数设置"
+                />
         <activity
                 android:name=".AboutActivity"
                 android:launchMode="singleTask"
                 android:configChanges="orientation|screenSize|layoutDirection"
-                android:label="关于"/>
-
+                android:label="关于"
+                />
         <service android:name=".service.CheckVersionService"
                  android:configChanges="orientation|screenSize|layoutDirection"
-                 android:label="版本检测" />
+                 android:label="版本检测"
+                />
         <service android:name=".service.VersionUpdateService"
                  android:configChanges="orientation|screenSize|layoutDirection"
-                 android:label="版本升级" />
+                 android:label="版本升级"
+                />
     </application>
 
     <!--for test case-->
