@@ -78,7 +78,12 @@ public class PrefsActivity extends PreferenceActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem mi) {
-        return ((CnBetaApplication) getApplicationContext()).onOptionsItemSelected(this, mi);
+        return getCnBetaApplicationContext().onOptionsItemSelected(this, mi);
+    }
+
+    @Override
+    protected boolean isValidFragment(String fragmentName) {
+        return fragmentName.contains("jandroid");
     }
 
     // 重写该该方法，负责加载页面布局文件
@@ -322,13 +327,6 @@ public class PrefsActivity extends PreferenceActivity {
         }.execute();
 
     }
-
-    @Override
-    public void finish() {
-        super.finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-    }
-
 
     protected void setupTheme(){
         //setTheme

@@ -35,13 +35,15 @@
                 android:name=".MainActivity"
                 android:label="@string/app_name"
                 android:configChanges="orientation|screenSize|layoutDirection"
-                android:launchMode="singleTask">
+                android:launchMode="singleTask"
+                >
         </activity>
         <activity
                 android:name=".TypesActivity"
                 android:label="@string/app_name"
                 android:configChanges="orientation|screenSize|layoutDirection"
-                android:launchMode="singleTask"/>
+                android:launchMode="singleTask"
+                />
         <activity
                 android:name=".MRankActivity"
                 android:label="@string/ranks"
@@ -62,22 +64,26 @@
         <activity
                 android:name=".HistoryActivity"
                 android:label="@string/label_history"
+                android:launchMode="singleTask"
                 android:configChanges="orientation|screenSize|layoutDirection"
-                android:launchMode="singleTask"/>
+                />
         <activity
                 android:name=".ImageViewerActivity"
                 android:theme="@style/Theme_Dialog_cnBeta_Light"
+                android:launchMode="singleTask"
                 android:configChanges="orientation|screenSize|layoutDirection"
                 />
         <!--android:launchMode="singleTask" startActivityForResult不能是 singleTask singleInstance-->
         <activity
                 android:name=".PublishCommentActivity"
+                android:launchMode="singleTask"
                 android:theme="@style/Theme_Dialog_cnBeta_Light"
                 android:configChanges="orientation|screenSize|layoutDirection"
                 />
         <!--android:launchMode="singleTask" startActivityForResult不能是 singleTask singleInstance-->
         <activity
                 android:name=".ReplyCommentActivity"
+                android:launchMode="singleTask"
                 android:theme="@style/Theme_Dialog_cnBeta_Light"
                 android:configChanges="orientation|screenSize|layoutDirection"
                 />
@@ -89,6 +95,7 @@
 
         <activity
                 android:name=".AboutActivity"
+                android:launchMode="singleTask"
                 android:configChanges="orientation|screenSize|layoutDirection"
                 android:label="关于"/>
 
