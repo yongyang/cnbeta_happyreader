@@ -93,7 +93,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
             }
         }
 
-        // .nomedia make gallery ignore this folder
+        // .nomedia makes gallery ignore this folder
         File nomediaFile = new File(baseDir, ".nomedia");
         if (baseDir !=null && baseDir.exists() && baseDir.isDirectory() && !nomediaFile.exists()) {
             try {
