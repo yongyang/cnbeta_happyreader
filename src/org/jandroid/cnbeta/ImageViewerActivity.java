@@ -5,18 +5,13 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.ImageButton;
 import org.jandroid.cnbeta.loader.ImageBytesLoader;
-import org.jandroid.common.BaseActivity;
 import org.jandroid.common.JavaScriptObject;
-import org.jandroid.common.ThemeActivity;
-import org.jandroid.common.WindowUtils;
 
 /**
  * @author <a href="mailto:jfox.young@gmail.com">Young Yang</a>
@@ -34,7 +29,7 @@ public class ImageViewerActivity extends CnBetaThemeActivity {
         byte[] _imageData = {};
         String imageSrc = getIntent().getExtras().getString("src");
         try {
-            _imageData = new ImageBytesLoader(imageSrc).diskLoad(((CnBetaApplication) getApplicationContext()).getLocalCacheDir());
+            _imageData = new ImageBytesLoader(imageSrc).diskLoad(((CnBetaApplication) getApplicationContext()).getCacheDir());
         }
         catch (Exception e) {
             logger.e(e.toString());

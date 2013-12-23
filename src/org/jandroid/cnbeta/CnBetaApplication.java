@@ -84,7 +84,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
             baseDir = this.getFilesDir();
         }
 
-        if (baseDir !=null && (!baseDir.exists() || baseDir.isFile())) {
+        if (baseDir != null && (!baseDir.exists() || baseDir.isFile())) {
             try {
                 FileUtils.forceMkdir(baseDir);
             }
@@ -95,7 +95,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
 
         // .nomedia makes gallery ignore this folder
         File nomediaFile = new File(baseDir, ".nomedia");
-        if (baseDir !=null && baseDir.exists() && baseDir.isDirectory() && !nomediaFile.exists()) {
+        if (baseDir != null && baseDir.exists() && baseDir.isDirectory() && !nomediaFile.exists()) {
             try {
                 FileUtils.write(nomediaFile, "");
             }
@@ -110,37 +110,43 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
         //Fonts 只能安装在 Context Dir 才能被访问
         File baseDir = getFilesDir();
         File fontsDir = new File(baseDir, "fonts");
-        try {
-            FileUtils.forceMkdir(fontsDir);
-        }
-        catch (IOException e) {
-            logger.w("Couldn't make fonts dir", e);
+        if (!fontsDir.exists() || fontsDir.isFile()) {
+            try {
+                FileUtils.forceMkdir(fontsDir);
+            }
+            catch (IOException e) {
+                logger.w("Couldn't make fonts dir", e);
+            }
         }
         return fontsDir;
     }
 
-    public File getLocalCacheDir() {
+    public File getCacheDir() {
         File baseDir = getBaseDir();
-        File fontsDir = new File(baseDir, "cache");
-        try {
-            FileUtils.forceMkdir(fontsDir);
+        File cacheDir = new File(baseDir, "cache");
+        if (!cacheDir.exists() || cacheDir.isFile()) {
+            try {
+                FileUtils.forceMkdir(cacheDir);
+            }
+            catch (IOException e) {
+                logger.w("Couldn't make cache dir", e);
+            }
         }
-        catch (IOException e) {
-            logger.w("Couldn't make cache dir", e);
-        }
-        return fontsDir;
+        return cacheDir;
     }
 
     public File getHistoryDir() {
         File baseDir = getBaseDir();
-        File fontsDir = new File(baseDir, "history");
-        try {
-            FileUtils.forceMkdir(fontsDir);
+        File historyDir = new File(baseDir, "history");
+        if (!historyDir.exists() || historyDir.isFile()) {
+            try {
+                FileUtils.forceMkdir(historyDir);
+            }
+            catch (IOException e) {
+                logger.w("Couldn't make cache dir", e);
+            }
         }
-        catch (IOException e) {
-            logger.w("Couldn't make cache dir", e);
-        }
-        return fontsDir;
+        return historyDir;
     }
 
     /**
@@ -220,7 +226,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
             FileUtils.deleteQuietly(file);
         }
 
-        return FileUtils.deleteQuietly(getLocalCacheDir());
+        return FileUtils.deleteQuietly(getCacheDir());
 
     }
 

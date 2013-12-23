@@ -44,7 +44,7 @@ public abstract class AbstractLoaderAsyncTask<R> extends BaseAsyncTask<R> implem
 //    public abstract CnBetaApplicationContext getCnBetaApplicationContext();
 
     protected File getLocalCacheDir() {
-        return getAsyncContext().getCnBetaApplicationContext().getLocalCacheDir();
+        return getAsyncContext().getCnBetaApplicationContext().getCacheDir();
     }
 
     protected R run(Object... params) throws Exception {

@@ -20,7 +20,7 @@ public interface CnBetaApplicationContext {
 
     File getFontsDir();
 
-    File getLocalCacheDir();
+    File getCacheDir();
 
     File getHistoryDir();
 
