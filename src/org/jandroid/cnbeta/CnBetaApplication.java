@@ -83,11 +83,25 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
             //内置存储器
             baseDir = this.getFilesDir();
         }
-        try {
-            FileUtils.forceMkdir(baseDir);
+
+        if (baseDir !=null && (!baseDir.exists() || baseDir.isFile())) {
+            try {
+                FileUtils.forceMkdir(baseDir);
+            }
+            catch (IOException e) {
+                logger.w("Couldn't make base dir: " + baseDir, e);
+            }
         }
-        catch (IOException e) {
-            logger.w("Couldn't make base dir", e);
+
+        // .nomedia make gallery ignore this folder
+        File nomediaFile = new File(baseDir, ".nomedia");
+        if (baseDir !=null && baseDir.exists() && baseDir.isDirectory() && !nomediaFile.exists()) {
+            try {
+                FileUtils.write(nomediaFile, "");
+            }
+            catch (IOException e) {
+                logger.w("Couldn't make .nomedia on base dir: " + baseDir, e);
+            }
         }
         return baseDir;
     }
@@ -131,6 +145,7 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
 
     /**
      * 在这里统一处理标准菜单项目
+     *
      * @param theActivity
      * @param item
      * @return true consumed, false not
@@ -230,8 +245,8 @@ public class CnBetaApplication extends Application implements CnBetaApplicationC
     }
 
     public void addHistoryArticle(HistoryArticle... historyArticles) {
-        if(historyArticles != null) {
-            for(HistoryArticle historyArticle : historyArticles) {
+        if (historyArticles != null) {
+            for (HistoryArticle historyArticle : historyArticles) {
                 readArticleSids.add(historyArticle.getSid());
             }
         }
